@@ -70,27 +70,27 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { IMixinState } from "@/types/mixinsTypes";
+import Vue from 'vue';
+import { IMixinState } from '@/types/mixinsTypes';
 
 export default Vue.extend({
-  name: "LoginForm",
+  name: 'LoginForm',
   data() {
     return {
       btnLoading: false as boolean,
       loginForm: {
-        email: "" as string,
-        password: "" as string,
+        email: '' as string,
+        password: '' as string,
       },
       validation: {
         email: [
           {
             required: true,
-            type: "email",
-            message: "Please enter valid email",
-            trigger: ["blur", "change"],
+            type: 'email',
+            message: 'Please enter valid email',
+            trigger: ['blur', 'change'],
           },
-          { min: 5, message: "Length should be 5 or more", trigger: "blur" },
+          { min: 5, message: 'Length should be 5 or more', trigger: 'blur' },
         ],
       },
     };
@@ -101,15 +101,11 @@ export default Vue.extend({
         if (valid) {
           this.login();
           this.btnLoading = false;
-          // this.$message.success({
-          //   message: "You have successfully loggedin",
-          //   type: "success",
-          // });
         } else {
           this.btnLoading = false;
           (this as any as IMixinState).getNotification(
-            "Make sure all required fields are filled",
-            "error"
+            'Make sure all required fields are filled',
+            'error'
           );
         }
       });
@@ -117,7 +113,7 @@ export default Vue.extend({
     login() {
       this.btnLoading = true;
       this.$auth
-        .loginWith("local", {
+        .loginWith('local', {
           data: {
             email: this.loginForm.email,
             password: this.loginForm.password,
@@ -129,14 +125,14 @@ export default Vue.extend({
           (this as any as IMixinState).$message({
             showClose: true,
             message: response.data.message,
-            type: "success",
+            type: 'success',
           });
 
           this.$auth.setUserToken(token);
           this.$auth.setUser(user);
-          this.$auth.$storage.setLocalStorage("user_data", user);
+          this.$auth.$storage.setLocalStorage('user_data', user);
 
-          this.$emit("closeLoginModal");
+          this.$emit('closeLoginModal');
         })
         .catch((error: any) => {
           this.btnLoading = false;
@@ -145,7 +141,7 @@ export default Vue.extend({
     },
     facebookSignIn() {
       this.$auth
-        .loginWith("facebook")
+        .loginWith('facebook')
         .then((response: any) => {
           // const { user, token } = response.data.data;
           console.log(response);
@@ -165,7 +161,7 @@ export default Vue.extend({
     },
     googleSignIn() {
       this.$auth
-        .loginWith("google")
+        .loginWith('google')
         .then((response: any) => {
           // const { user, token } = response.data.data;
           console.log(response);
