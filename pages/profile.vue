@@ -362,14 +362,12 @@ export default Vue.extend({
     async updateUser(): Promise<void> {
       this.loading = true;
       const data = {
-        avatar: this.avatar ? this.avatar : this.listing.avatar,
+        avatar: this.avatar ? this.avatar : null,
         dob: this.listing.dob,
         email: this.listing.email,
         first_name: this.listing.first_name,
         id_card_type: this.listing.id_card_type,
-        id_card_upload: this.identification
-          ? this.identification
-          : this.listing.identification,
+        id_card_upload: this.identification ? this.identification : null,
         last_name: this.listing.last_name,
         phone_number: this.listing.phone_number,
         id_card_number: this.listing.id_card_number,
