@@ -87,10 +87,6 @@ export default Vue.extend({
       required: true,
       type: Array,
     },
-    noListings: {
-      required: true,
-      type: String,
-    },
   },
   name: "PropertyList",
   data() {
@@ -120,9 +116,6 @@ export default Vue.extend({
       } catch (error) {
         (this as any as IMixinState).catchError(error);
       }
-    },
-    getImage(pic: string): string {
-      return require("../../assets/img/" + pic);
     },
     openPropertyDetails(property: any): void {
       console.log(property);

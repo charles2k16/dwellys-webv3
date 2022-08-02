@@ -5,7 +5,7 @@
         <div class="d-flex">
           <img
             v-if="listing.avatar"
-            :src="url + listing.avatar"
+            :src="url() + '/' + listing.avatar"
             alt="avatar"
             class="profile_img"
           />
@@ -73,14 +73,13 @@
                     <el-col :xs="24" :sm="24" :md="24">
                       <p class="info_label">Date of birth</p>
 
-                      <!-- <p class="profile_info">{{ listing.dob }}</p> -->
+                      <p class="profile_info pb-10">{{ listing.dob }}</p>
                       <el-input v-model="listing.date" type="date"> </el-input>
                     </el-col>
                   </el-row>
                 </div>
               </div>
               <hr class="hr_rule" />
-
               <div class="d-flex pt-20 pb-20">
                 <div class="profile_label">
                   <p class="info_label">Contact information</p>
@@ -144,13 +143,13 @@
                     <p class="info_label">ID card photo</p>
                     <img
                       v-if="!identification"
-                      :src="url + listing.id_card_upload"
+                      :src="url() + '/' + listing.id_card_upload"
                       alt=""
                       class="profile_id_card"
                     />
                     <img
                       v-else
-                      :src="url + listing.id_card_upload"
+                      :src="url() + '/' + listing.id_card_upload"
                       alt=""
                       class="profile_id_card"
                     />
@@ -255,6 +254,7 @@ import Vue from "vue";
 import VuePhoneNumberInput from "vue-phone-number-input";
 import "vue-phone-number-input/dist/vue-phone-number-input.css";
 import { IMixinState } from "@/types/mixinsTypes";
+import url from "../url";
 
 export default Vue.extend({
   name: "settings",
@@ -267,9 +267,7 @@ export default Vue.extend({
         callback(new Error("Please input the password"));
       } else {
         if ((this as any).passwords.confirm_password !== "") {
-          (this as any).$refs.property_account.validateField(
-            "confirm_password"
-          );
+          (this as any).$refs.passwords.validateField("confirm_password");
         }
         callback();
       }
@@ -299,7 +297,6 @@ export default Vue.extend({
       avatar:
         "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" as any,
       editInfo: false as any,
-      url: "http://localhost:8000/",
       listing: {} as any,
       options: ["SSNIT", "Passport", "Voter"],
       countries: [],
@@ -317,9 +314,11 @@ export default Vue.extend({
     this.fetchData();
     const countries = await this.$countriesApi.index();
     this.countries = countries.data;
-    console.log(this.$auth.strategy.token.get("token"));
   },
   methods: {
+    url() {
+      return url();
+    },
     async fetchData() {
       const user = this.$auth.$storage.getLocalStorage("user_data");
       console.log(user);
@@ -410,15 +409,17 @@ export default Vue.extend({
         const response = await this.$passwordApi.create({
           ...this.passwords,
           user_id: this.listing.id,
-          token: "",
         });
         console.log(response);
 
-        (this as any as IMixinState).$confirm(response.message, {
-          confirmButtonText: "OK",
-          cancelButtonText: "Cancel",
-          type: "success",
-        });
+        (this as any as IMixinState).$confirm(
+          "Password Changed Successfully!",
+          {
+            confirmButtonText: "OK",
+            cancelButtonText: "Cancel",
+            type: "success",
+          }
+        );
         this.loading = false;
       } catch (error) {
         this.loading = false;

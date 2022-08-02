@@ -243,5 +243,3 @@ $small_screen: 426px;
   }
 }
 </style>
-
-// https://www.getpostman.com/collections/509fe1fee94ba39e47fb
