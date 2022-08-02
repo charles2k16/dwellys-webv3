@@ -78,7 +78,8 @@
           </div>
         </div>
         <div class="property_content_container">
-          <div class="property_content">
+          <!-- <p style="color: red" v-if="specErr">{{ specErr }}</p> -->
+          <div class="property_content pt-10">
             <div v-for="spec in propertySpecs.specifications" :key="spec.id">
               <div class="property_main_content">
                 <div class="d-flex_column">
@@ -95,27 +96,52 @@
               </div>
             </div>
             <div
-              v-for="spec in propertyUpload.other_specifications"
+              v-for="(spec, index) in propertyUpload.other_specifications"
               :key="spec.id"
             >
               <div class="other_specs">
-                <div class="inner_specs">
-                  <div class="d-flex_column">
-                    <el-input
-                      v-model="spec.name"
-                      placeholder="Please specify if other"
-                    >
-                    </el-input>
+                <div>
+                  <div class="inner_specs">
+                    <div class="d-flex_column">
+                      <el-input
+                        v-model="spec.name"
+                        placeholder="Please specify if other"
+                      >
+                      </el-input>
+                    </div>
+                    <div class="d-flex">
+                      <el-input-number
+                        :min="0"
+                        :disabled="!spec.name"
+                        size="small"
+                        v-model="spec.number"
+                      >
+                        {{ spec.number }}
+                      </el-input-number>
+                    </div>
+                    <!-- <p
+                    v-if="index != 0"
+                    class="w-50 d-flex justify_end m-10"
+                    style="color: red"
+                    @click="removeSpec(index)"
+                  >
+                    <i
+                      class="el-icon-delete-solid"
+                      style="font-weight: 600"
+                    ></i>
+                  </p> -->
                   </div>
-                  <div class="d-flex">
-                    <el-input-number
-                      :min="0"
-                      size="small"
-                      v-model="spec.number"
-                    >
-                      {{ spec.number }}
-                    </el-input-number>
-                  </div>
+                  <p
+                    v-if="index != 0"
+                    class="d-flex justify_end p-20"
+                    style="color: red"
+                    @click="removeSpec(index)"
+                  >
+                    <i
+                      class="el-icon-delete-solid"
+                      style="font-weight: 600"
+                    ></i>
+                  </p>
                 </div>
                 <p>
                   For other living areas, please specify, eg, Patio, lounge,
@@ -329,6 +355,7 @@ export default Vue.extend({
       pageLoad: false as boolean,
       propLoad: false as boolean,
       propertySelected: false as boolean,
+      specErr: "" as string,
       selectedProperty: "",
       btnLoading: false as boolean,
       propertyTypes: [],
@@ -363,6 +390,10 @@ export default Vue.extend({
 
   async created() {
     try {
+      const categories = await this.$listingCategoriesApi.index();
+      this.categories = categories.data;
+      console.log(this.categories);
+
       const propertyTypes = await this.$propertyTypesApi.index();
       this.propertyTypes = propertyTypes.data;
       this.propertyTypes ? (this.pageLoad = false) : (this.pageLoad = true);
@@ -375,10 +406,6 @@ export default Vue.extend({
       this.countries = countries.data;
       console.log(this.countries);
 
-      const categories = await this.$listingCategoriesApi.index();
-      this.categories = categories.data;
-      console.log(this.categories);
-
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(this.showPosition);
       }
@@ -386,7 +413,7 @@ export default Vue.extend({
       console.log(error);
       if (error?.response?.data) {
         (this as any as IMixinState).getNotification(
-          "You do not have property account!",
+          "Please, login as an agent!",
           "warning"
         );
       }
@@ -408,7 +435,7 @@ export default Vue.extend({
         this.propertyUpload.property_amenities_id.length > 0
       ) {
         valid = true;
-      } else if (this.step == 4) {
+      } else if (this.step == 4 && this.listing_photos.length > 0) {
         valid = true;
       } else if (
         this.step == 5 &&
@@ -430,6 +457,9 @@ export default Vue.extend({
     },
   },
   methods: {
+    removeSpec(index: number) {
+      this.propertyUpload.other_specifications.splice(index, 1);
+    },
     getImage(pic: any): string {
       return "http://localhost:8000/" + pic;
     },
@@ -492,13 +522,23 @@ export default Vue.extend({
 
       if (this.step == 3 && this.propertySpecs) {
         this.propertySpecs.specifications.filter((spec: any) =>
-          this.propertyUpload.specifications.push({
-            number: spec.number,
-            property_type_specification_id: spec.id,
-          })
+          spec.number > 0
+            ? this.propertyUpload.specifications.push({
+                number: spec.number,
+                property_type_specification_id: spec.id,
+              })
+            : this.noSpecifications()
         );
       }
       console.log(this.propertyUpload);
+    },
+    noSpecifications() {
+      this.step = 2;
+      (this as any as IMixinState).$message({
+        showClose: true,
+        message: "Add number of specifications to continue",
+        type: "error",
+      });
     },
     getCountry(e: any) {
       console.log(e);

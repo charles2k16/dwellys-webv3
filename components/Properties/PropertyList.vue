@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row :gutter="20">
+    <el-row :gutter="20" v-if="listings.length > 0">
       <el-col
         :xs="24"
         :sm="12"
@@ -71,18 +71,25 @@
         </el-card>
       </el-col>
     </el-row>
+    <div v-else class="d-flex justify_center p-20">
+      <h2>No Properties</h2>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-// import { IMixinState } from "../../types/mixinsTypes";
+import { IMixinState } from "../../types/mixinsTypes";
 
 export default Vue.extend({
   props: {
     listings: {
       required: true,
       type: Array,
+    },
+    noListings: {
+      required: true,
+      type: String,
     },
   },
   name: "PropertyList",
@@ -92,7 +99,7 @@ export default Vue.extend({
     };
   },
   methods: {
-    favProperty(fav: any) {
+    async favProperty(fav: any) {
       let singleProperty = Object.assign([], this.favProperties);
       if (this.favProperties) {
         let favIndex = this.favProperties.indexOf(fav);
@@ -100,7 +107,19 @@ export default Vue.extend({
           ? this.favProperties.splice(favIndex, 1)
           : this.favProperties.push(fav);
       }
-      console.log(this.favProperties);
+      try {
+        const favoriteResponse = await this.$userFavoriteApi.create({
+          listing_id: fav.id,
+        });
+        console.log(favoriteResponse);
+        (this as any as IMixinState).$message({
+          showClose: true,
+          message: "Added property to favourite!",
+          type: "success",
+        });
+      } catch (error) {
+        (this as any as IMixinState).catchError(error);
+      }
     },
     getImage(pic: string): string {
       return require("../../assets/img/" + pic);

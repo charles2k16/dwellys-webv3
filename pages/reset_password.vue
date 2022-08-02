@@ -13,12 +13,17 @@
       <div class="reset_div mt-20">
         <el-form
           ref="userAccount"
-          v-model="email"
+          :model="name"
           class="client"
+          :rules="validation"
           label-position="top"
         >
-          <el-form-item label="Email address">
-            <el-input v-model="email" type="email" placeholder="Enter email">
+          <el-form-item label="Email address" prop="email">
+            <el-input
+              v-model="name.email"
+              type="email"
+              placeholder="Enter email"
+            >
             </el-input>
           </el-form-item>
         </el-form>
@@ -26,6 +31,7 @@
           <el-button
             type="primary"
             class="submit_register_button"
+            :loading="loading"
             @click="submitEmail"
             >Send a link to reset password</el-button
           >
@@ -36,17 +42,79 @@
 </template>
 
 <script lang="ts">
+import { IMixinState } from "@/types/mixinsTypes";
 import Vue from "vue";
 export default Vue.extend({
   name: "ForgottenPage",
 
   data() {
     return {
-      email: "" as string,
+      name: {
+        email: "" as string,
+      },
+      loading: false,
+      validation: {
+        email: [
+          {
+            required: true,
+            type: "email",
+            message: "Please enter valid email",
+            trigger: ["blur", "change"],
+          },
+          { min: 5, message: "Length should be 5 or more", trigger: "blur" },
+        ],
+      },
     };
   },
   methods: {
-    submitEmail() {},
+    submitEmail() {
+      this.loading = true;
+      // (this as any).$refs.name.validate((valid: boolean) => {
+      //   if (valid) {
+      this.signUp();
+      console.log(this.name, "name");
+      // this.$router.replace("/login");
+      // }
+      // else {
+      //   this.loading = false;
+      //   (this as any as IMixinState).getNotification(
+      //     "Make sure your email is correct!",
+      //     "error"
+      //   );
+      // }
+      // });
+    },
+    async signUp(): Promise<void> {
+      try {
+        const register = await this.$forgottenPassApi.create(this.name);
+        console.log(register);
+        this.loading = false;
+        this.$confirm(
+          register.message,
+          "Check your email for further instructions",
+          {
+            confirmButtonText: "Continue",
+            type: "success",
+          }
+        ).then(() => {
+          this.$router.push("/login");
+        });
+      } catch (error: any) {
+        this.loading = false;
+        if (error?.response?.data) {
+          this.$confirm(
+            error?.response?.data?.message,
+            "Your email is incorrect!",
+            {
+              confirmButtonText: "Continue",
+              type: "success",
+            }
+          );
+        }
+        this.name.email = "";
+        (this as any as IMixinState).catchError(error);
+      }
+    },
   },
 });
 </script>

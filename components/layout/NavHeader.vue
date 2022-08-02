@@ -12,7 +12,7 @@
         <section class="pr-20">
           <NuxtLink to="/">Property valuation</NuxtLink>
         </section>
-        <section class="pl-10">
+        <section class="pl-10" v-if="userData.user_type != 'lister'">
           <NuxtLink to="/property_account">Become an agent</NuxtLink>
         </section>
       </div>
@@ -45,7 +45,7 @@
           <div class="drawer_content px-20">
             <div class="d-flex_column">
               <span class="login-avatar">
-                {{ userData.first_name ? userData.first_name : "Login" }}
+                {{ hasUserData ? userData.first_name : "Login" }}
                 <img
                   v-if="hasUserData"
                   :src="src + userData.avatar"
@@ -62,7 +62,11 @@
               <section @click="drawer = false" class="pb-20">
                 <NuxtLink to="/">Property valuation</NuxtLink>
               </section>
-              <section @click="drawer = false" class="pb-20">
+              <section
+                @click="drawer = false"
+                class="pb-20"
+                v-if="userData.user_type != 'lister'"
+              >
                 <NuxtLink to="/property_account">Become an agent</NuxtLink>
               </section>
               <section @click="drawer = false" class="pb-20">
@@ -96,7 +100,7 @@
               <p class="py-10" @click="showLoginModal">Login</p>
             </el-dropdown-item>
 
-            <el-dropdown-item>
+            <el-dropdown-item v-if="!$auth.loggedIn">
               <p class="py-10" @click="$router.push('/register')">Register</p>
             </el-dropdown-item>
 
@@ -110,7 +114,7 @@
                 <NuxtLink to="/property_upload">Property Upload</NuxtLink>
               </section>
             </el-dropdown-item>
-            <el-dropdown-item>
+            <el-dropdown-item v-if="userData.user_type != 'lister'">
               <section class="py-10">
                 <NuxtLink to="/property_account">Become an agent</NuxtLink>
               </section>
@@ -161,7 +165,7 @@ export default Vue.extend({
   },
   computed: {
     hasUserData() {
-      return this.$auth.user.first_name !== null;
+      return this.$auth.user !== null;
     },
   },
   methods: {

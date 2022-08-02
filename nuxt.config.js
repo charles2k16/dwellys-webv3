@@ -76,9 +76,9 @@ export default {
   //   port: 8000,
   // },
 
-  // router: {
-  //   middleware: ['auth'],
-  // },
+  router: {
+    middleware: ["auth"],
+  },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {

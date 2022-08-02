@@ -64,6 +64,7 @@
           <div class="section pt-20" v-loading="pageLoad">
             <PropertyList :type="tab.label" :listings="listings" />
           </div>
+          <div></div>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -74,6 +75,7 @@
 import Vue from "vue";
 
 export default Vue.extend({
+  auth: false,
   name: "IndexPage",
   data() {
     return {

@@ -14,4 +14,8 @@ export default (ctx, inject) => {
   inject("listingApi", apiService("/listings"));
   inject("listingCategoriesApi", apiService("/listingcategories"));
   inject("listingImagesApi", apiService("/listingimages"));
+  inject("forgottenPassApi", apiService("/forgotpassword"));
+  inject("userFavoriteApi", apiService("/toggleuserfavoritelisting"));
+  inject("userApi", apiService("/users"));
+  inject("passwordApi", apiService("/passwordreset"));
 };

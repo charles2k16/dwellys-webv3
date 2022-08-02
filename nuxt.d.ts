@@ -36,10 +36,14 @@ declare module "vue/types/vue" {
     $listingApi: apiService;
     $listingCategoriesApi: apiService;
     $listingImagesApi: apiService;
-    $router: any
-    $auth: any
-    $alert: any
-    $confirm: any
+    $forgottenPassApi: apiService;
+    $userFavoriteApi: apiService;
+    $userApi: apiService;
+    $passwordApi: apiService;
+    $router: any;
+    $auth: any;
+    $alert: any;
+    $confirm: any;
     // $refs: { [key: string]: Vue | Element | (Vue | Element)[] | Function | undefined; }
   }
 }
