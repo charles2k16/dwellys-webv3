@@ -1,20 +1,25 @@
 <template>
   <div class="section">
-    <div v-if="houses.length > 0">
+    <div v-if="user_listings.length > 0">
       <el-row class="house_section" :gutter="20" v-loading="pageLoad">
         <el-col
           :xs="24"
           :sm="12"
           :md="6"
-          v-for="(house, index) in houses"
+          v-for="(listing, index) in user_listings"
           :key="index"
           class="pb-20"
         >
           <el-card shadow="hover" class="property_container">
-            <div class="property_image" :style="background_style(house.img)">
+            <div
+              class="property_image"
+              :style="
+                background_style(listing.listing_detail.feature_image_url)
+              "
+            >
               <div class="d-flex justify_between property_labels p-10">
                 <p>
-                  {{ house.name }}
+                  {{ listing.listing_detail.name }}
                 </p>
                 <span class="material-icons fav"> favorite_border </span>
               </div>
@@ -25,12 +30,11 @@
             <div class="card_body">
               <!-- amount -->
               <p class="house_amount">
-                <!-- ${{ property.listing_detail.price }} -->400 /mth
+                ${{ listing.listing_detail.price }}/mth
               </p>
               <p class="house_plot">
-                <!-- {{ property.listing_detail.region }},
-              {{ property.listing_detail.city }} -->
-                locations
+                {{ listing.listing_detail.region }},
+                {{ listing.listing_detail.city }}
               </p>
             </div>
             <div class="card_footer">
@@ -74,10 +78,10 @@ import Vue from "vue";
 export default Vue.extend({
   name: "ProfileListings",
   props: {
-    // listing: {
-    //   required: true,
-    //   type: Object,
-    // },
+    user_listings: {
+      required: true,
+      type: Array,
+    },
   },
   data() {
     return {

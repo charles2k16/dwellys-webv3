@@ -40,6 +40,7 @@ declare module "vue/types/vue" {
     $userFavoriteApi: apiService;
     $userApi: apiService;
     $passwordApi: apiService;
+    $userUpdateApi: apiService;
     $router: any;
     $auth: any;
     $alert: any;

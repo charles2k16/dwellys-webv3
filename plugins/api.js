@@ -17,5 +17,6 @@ export default (ctx, inject) => {
   inject("forgottenPassApi", apiService("/forgotpassword"));
   inject("userFavoriteApi", apiService("/toggleuserfavoritelisting"));
   inject("userApi", apiService("/users"));
+  inject("userUpdateApi", apiService("/auth/account"));
   inject("passwordApi", apiService("/passwordreset"));
 };

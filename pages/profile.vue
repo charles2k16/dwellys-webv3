@@ -4,8 +4,12 @@
       <div class="profile_header">
         <div class="d-flex">
           <img
-            v-if="listing.avatar"
-            :src="url() + '/' + listing.avatar"
+            v-if="
+              lister.avatar &&
+              avatar ===
+                'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+            "
+            :src="url() + '/' + lister.avatar"
             alt="avatar"
             class="profile_img"
           />
@@ -13,10 +17,10 @@
           <img v-else :src="avatar" alt="avatar dummy" class="profile_img" />
           <div class="pl-20 pt-20">
             <p class="pb-5" style="font-size: 22px; font-weight: 600">
-              {{ listing.first_name }} {{ listing.last_name }}
+              {{ lister.first_name }} {{ lister.last_name }}
             </p>
             <p class="pb-10">
-              <small>{{ listing.email }} </small>
+              <small>{{ lister.email }} </small>
             </p>
             <el-upload
               class="upload-demo"
@@ -32,8 +36,13 @@
         </div>
       </div>
       <el-tabs v-model="activeName" @tab-click="handleClick" class="nav_scroll">
-        <el-tab-pane label="Listings" name="first" class="new_tab">
-          <ProfileListings :listing="listing" :noListing="noListing" />
+        <el-tab-pane
+          v-if="lister.user_type == 'lister'"
+          label="listers"
+          name="first"
+          class="new_tab"
+        >
+          <ProfileListings :user_listings="user_listings" />
         </el-tab-pane>
         <el-tab-pane label="Profile" name="second" class="settings_body">
           <el-form class="d-flex">
@@ -48,10 +57,10 @@
                     <el-col :xs="24" :sm="24" :md="12">
                       <p class="info_label">First Name</p>
                       <!-- <p v-if="!editInfo" class="profile_info">
-                        {{ listing.first_name }}
+                        {{ lister.first_name }}
                       </p> -->
                       <el-input
-                        v-model="listing.first_name"
+                        v-model="lister.first_name"
                         placeholder="First name"
                       >
                       </el-input>
@@ -59,10 +68,10 @@
                     <el-col :xs="24" :sm="24" :md="12">
                       <p class="info_label">Last Name</p>
                       <!-- <p v-if="!editInfo" class="profile_info">
-                        {{ listing.last_name }}
+                        {{ lister.last_name }}
                       </p> -->
                       <el-input
-                        v-model="listing.last_name"
+                        v-model="lister.last_name"
                         placeholder="Last Name"
                       >
                       </el-input>
@@ -73,8 +82,10 @@
                     <el-col :xs="24" :sm="24" :md="24">
                       <p class="info_label">Date of birth</p>
 
-                      <p class="profile_info pb-10">{{ listing.dob }}</p>
-                      <el-input v-model="listing.date" type="date"> </el-input>
+                      <p class="profile_info pb-10">
+                        {{ lister.dob }}
+                      </p>
+                      <el-input v-model="lister.date" type="date"> </el-input>
                     </el-col>
                   </el-row>
                 </div>
@@ -86,39 +97,40 @@
                 </div>
                 <div class="details_div">
                   <p>Email address</p>
-                  <!-- <p class="profile_info">{{ listing.email }}</p> -->
+                  <!-- <p class="profile_info">{{ lister.email }}</p> -->
                   <el-input
-                    v-model="listing.email"
+                    v-model="lister.email"
                     type="email"
                     placeholder="Enter email"
                   >
                   </el-input>
                   <div class="pt-20 pb-10">
                     <p class="info_label pb-5">Phone number</p>
-                    <p v-if="!editInfo" class="profile_info">
-                      {{ listing.phone_number }}
+                    <p class="profile_info">
+                      {{ lister.phone_number }}
                     </p>
                   </div>
                   <vue-phone-number-input
-                    v-model="listing.number"
+                    v-model="phone"
                     :border-radius="7"
                     default-country-code="GH"
+                    @update="onPhoneUpdate"
                   />
                 </div>
               </div>
               <hr class="hr_rule" />
               <div
                 class="d-flex pt-20 pb-20"
-                v-if="listing.user_type == 'lister'"
+                v-if="lister.user_type == 'lister'"
               >
                 <div class="profile_label">
                   <p class="info_label">ID Verification</p>
                 </div>
                 <div class="details_div">
                   <p class="info_label pb-5">ID Type</p>
-                  <!-- <p class="profile_info">{{ listing.id_card_type }}</p> -->
+                  <!-- <p class="profile_info">{{ lister.id_card_type }}</p> -->
                   <el-select
-                    v-model="listing.id_card_type"
+                    v-model="lister.id_card_type"
                     placeholder="Select ID type"
                   >
                     <el-option
@@ -132,7 +144,7 @@
                   <div class="py-10">
                     <p class="info_label pb-5">ID card number</p>
                     <el-input
-                      v-model="listing.id_card_number"
+                      v-model="lister.id_card_number"
                       placeholder="Enter ID number"
                       class="py-10"
                     >
@@ -143,13 +155,13 @@
                     <p class="info_label">ID card photo</p>
                     <img
                       v-if="!identification"
-                      :src="url() + '/' + listing.id_card_upload"
+                      :src="url() + '/' + lister.id_card_upload"
                       alt=""
                       class="profile_id_card"
                     />
                     <img
                       v-else
-                      :src="url() + '/' + listing.id_card_upload"
+                      :src="identification"
                       alt=""
                       class="profile_id_card"
                     />
@@ -203,7 +215,8 @@
                   </p>
                   <el-form
                     class="pb-30"
-                    :rules="passwordValidation"
+                    ref="passwords"
+                    :rules="validation"
                     :model="passwords"
                   >
                     <el-form-item label="New Password" prop="password">
@@ -236,7 +249,7 @@
                   :type="'primary'"
                   :loading="loading"
                   class="btn_sm"
-                  @click="updateUser"
+                  @click="submit_password"
                   >Update password
                 </el-button>
               </div>
@@ -255,6 +268,7 @@ import VuePhoneNumberInput from "vue-phone-number-input";
 import "vue-phone-number-input/dist/vue-phone-number-input.css";
 import { IMixinState } from "@/types/mixinsTypes";
 import url from "../url";
+import moment from "@nuxtjs/moment";
 
 export default Vue.extend({
   name: "settings",
@@ -282,14 +296,14 @@ export default Vue.extend({
       }
     };
     return {
-      activeName: "first" as string,
+      activeName: "second" as string,
       dummy_avatar: "../assets/img/avatar.png" as string,
       home: "" as string,
+      phone: "",
       passwords: {
         new_password: "" as string,
         confirm_password: "" as string,
       },
-      noListing: "" as string,
       current_password: "" as string,
       loading: false as boolean,
       identification: "" as any,
@@ -297,10 +311,13 @@ export default Vue.extend({
       avatar:
         "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" as any,
       editInfo: false as any,
-      listing: {} as any,
+      user_listings: [],
+      lister: {
+        country_id: "39a40751-d7d2-4346-99e5-b0235b520ce5" as string,
+      } as any,
       options: ["SSNIT", "Passport", "Voter"],
       countries: [],
-      passwordValidation: {
+      validation: {
         password: [
           { validator: validatePass, trigger: "blur", required: true },
         ],
@@ -319,21 +336,25 @@ export default Vue.extend({
     url() {
       return url();
     },
+    birthDate(date: any) {
+      this.$moment(date.format("MMM DD, YY"));
+    },
     async fetchData() {
       const user = this.$auth.$storage.getLocalStorage("user_data");
       console.log(user);
       const userId = user.id;
-      const listing = await this.$userApi.show(userId);
-      console.log(listing, "user details");
-      // this.loadListing(listings.data);
-      this.listing = listing.data.user;
+      const lister = await this.$userApi.show(userId);
+      console.log(lister, "user details");
+      // this.loadlister(listers.data);
+      this.user_listings = lister.data.listings;
+      this.lister = lister.data.user;
     },
     onPhoneUpdate(e: any) {
       console.log(e);
-      this.listing.phone_number = e.formattedNumber;
+      this.lister.phone_number = e.formattedNumber;
       this.countries.filter((country: any) =>
         country.short_name == e.countryCode
-          ? (this.listing.country_id = country.id)
+          ? (this.lister.country_id = country.id)
           : ""
       );
     },
@@ -361,19 +382,29 @@ export default Vue.extend({
 
     async updateUser(): Promise<void> {
       this.loading = true;
+      // console.log(this.lister);
       const data = {
-        avatar: this.avatar ? this.avatar : null,
-        dob: this.listing.dob,
-        email: this.listing.email,
-        first_name: this.listing.first_name,
-        id_card_type: this.listing.id_card_type,
+        avatar:
+          this.avatar !=
+          "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+            ? this.avatar
+            : null,
+        dob: this.lister.dob,
+        email: this.lister.email,
+        first_name: this.lister.first_name,
+        id_card_type: this.lister.id_card_type,
         id_card_upload: this.identification ? this.identification : null,
-        last_name: this.listing.last_name,
-        phone_number: this.listing.phone_number,
-        id_card_number: this.listing.id_card_number,
+        last_name: this.lister.last_name,
+        phone_number: this.lister.phone_number,
+        id_card_number: this.lister.id_card_number,
+        country_id: this.lister.country_id
+          ? this.lister.country_id
+          : this.lister.country.id,
+        user_type: this.lister.user_type,
       };
+      console.log(data);
       try {
-        const register = await this.$userApi.update(this.listing.id, data);
+        const register = await this.$userUpdateApi.update("update", data);
         this.loading = false;
         this.$confirm("Update successfully!", {
           confirmButtonText: "Continue",
@@ -406,7 +437,7 @@ export default Vue.extend({
       try {
         const response = await this.$passwordApi.create({
           ...this.passwords,
-          user_id: this.listing.id,
+          user_id: this.lister.id,
         });
         console.log(response);
 

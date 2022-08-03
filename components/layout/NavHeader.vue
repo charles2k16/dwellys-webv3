@@ -12,7 +12,10 @@
         <section class="pr-20">
           <NuxtLink to="/">Property valuation</NuxtLink>
         </section>
-        <section class="pl-10" v-if="userData.user_type != 'lister'">
+        <section
+          class="pl-10"
+          v-if="hasUserData && userData.user_type != 'lister'"
+        >
           <NuxtLink to="/property_account">Become an agent</NuxtLink>
         </section>
       </div>
@@ -56,7 +59,18 @@
                 <img src="~/assets/img/user_icon.png" alt="icon" v-else />
               </span>
 
-              <section @click="drawer = false" class="pb-20 mt-20">
+              <section
+                v-if="$auth.loggedIn"
+                @click="drawer = false"
+                class="pb-20 mt-20"
+              >
+                <NuxtLink to="/register">Profile</NuxtLink>
+              </section>
+              <section
+                v-if="!$auth.loggedIn"
+                @click="drawer = false"
+                class="pb-20 mt-20"
+              >
                 <NuxtLink to="/register">Register</NuxtLink>
               </section>
               <section @click="drawer = false" class="pb-20">
@@ -65,12 +79,20 @@
               <section
                 @click="drawer = false"
                 class="pb-20"
-                v-if="userData.user_type != 'lister'"
+                v-if="hasUserData && userData.user_type != 'lister'"
               >
                 <NuxtLink to="/property_account">Become an agent</NuxtLink>
               </section>
               <section @click="drawer = false" class="pb-20">
                 <NuxtLink to="/messages">Messages</NuxtLink>
+              </section>
+              <section
+                v-if="$auth.loggedIn"
+                @click="$auth.logout()"
+                class="pb-20"
+                style="color: red"
+              >
+                Logout
               </section>
             </div>
           </div>
@@ -84,7 +106,10 @@
         <el-dropdown trigger="click">
           <span class="el-dropdown-link">
             <span class="login-avatar">
-              {{ userData.first_name ? userData.first_name : "Login" }}
+              {{
+                hasUserData &&
+                (userData.first_name ? userData.first_name : "Login")
+              }}
               <img
                 v-if="hasUserData"
                 :src="src + userData.avatar"
@@ -99,22 +124,29 @@
             <el-dropdown-item v-if="!$auth.loggedIn">
               <p class="py-10" @click="showLoginModal">Login</p>
             </el-dropdown-item>
-
             <el-dropdown-item v-if="!$auth.loggedIn">
               <p class="py-10" @click="$router.push('/register')">Register</p>
             </el-dropdown-item>
-
+            <el-dropdown-item v-if="$auth.loggedIn">
+              <section class="py-10">
+                <NuxtLink to="/profile">Profile</NuxtLink>
+              </section>
+            </el-dropdown-item>
             <el-dropdown-item>
               <section class="py-10">
                 <NuxtLink to="/">Property valuation</NuxtLink>
               </section>
             </el-dropdown-item>
-            <el-dropdown-item v-if="userData.user_type == 'lister'">
+            <el-dropdown-item
+              v-if="hasUserData && userData.user_type == 'lister'"
+            >
               <section class="py-10">
                 <NuxtLink to="/property_upload">Property Upload</NuxtLink>
               </section>
             </el-dropdown-item>
-            <el-dropdown-item v-if="userData.user_type != 'lister'">
+            <el-dropdown-item
+              v-if="hasUserData && userData.user_type != 'lister'"
+            >
               <section class="py-10">
                 <NuxtLink to="/property_account">Become an agent</NuxtLink>
               </section>
@@ -153,7 +185,7 @@ export default Vue.extend({
     };
   },
   created() {
-    // console.log(this.$auth);
+    console.log(this.$auth);
     console.log(this.$auth.$storage.getLocalStorage("user_data"));
     if (this.$auth.user !== null) {
       this.userData = this.$auth.$storage.getLocalStorage("user_data");
@@ -167,6 +199,9 @@ export default Vue.extend({
     hasUserData() {
       return this.$auth.user !== null;
     },
+    // userType() {
+    //   return this.userData.user_type === "lister";
+    // },
   },
   methods: {
     showLoginModal(): void {
