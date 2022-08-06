@@ -405,6 +405,8 @@ export default Vue.extend({
       console.log(data);
       try {
         const register = await this.$userUpdateApi.update("update", data);
+        console.log(register);
+
         this.loading = false;
         this.$confirm("Update successfully!", {
           confirmButtonText: "Continue",

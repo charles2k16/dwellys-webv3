@@ -335,7 +335,6 @@
 
 <script lang="ts">
 import Vue from "vue";
-import VuePhoneNumberInput from "vue-phone-number-input";
 import "vue-phone-number-input/dist/vue-phone-number-input.css";
 import { IMixinState } from "@/types/mixinsTypes";
 import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
@@ -343,7 +342,6 @@ import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
 export default Vue.extend({
   name: "AccountPage",
   components: {
-    VuePhoneNumberInput,
     ApplicationHandler,
   },
 

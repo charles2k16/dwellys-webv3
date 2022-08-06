@@ -48,7 +48,6 @@
           <div class="drawer_content px-20">
             <div class="d-flex_column">
               <span class="login-avatar">
-                {{ hasUserData ? userData.first_name : "Login" }}
                 <img
                   v-if="hasUserData"
                   :src="src + userData.avatar"
@@ -58,7 +57,7 @@
 
                 <img src="~/assets/img/user_icon.png" alt="icon" v-else />
               </span>
-
+              <section @click="showLoginModal" class="mt-10">Login</section>
               <section
                 v-if="$auth.loggedIn"
                 @click="drawer = false"
@@ -106,10 +105,6 @@
         <el-dropdown trigger="click">
           <span class="el-dropdown-link">
             <span class="login-avatar">
-              {{
-                hasUserData &&
-                (userData.first_name ? userData.first_name : "Login")
-              }}
               <img
                 v-if="hasUserData"
                 :src="src + userData.avatar"
@@ -245,7 +240,7 @@ a {
   justify-content: center;
   border: 1px solid #e2e8f0;
   background: #f8fafc;
-  padding: 5px 10px;
+  padding: 5px 5px;
   border-radius: 20px;
 
   .user_avatar {
