@@ -18,13 +18,14 @@
     </el-form>
     <div class="d-flex justify_end pt-20">
       <el-button type="info">Cancel</el-button>
-      <el-button type="primary">Send message</el-button>
+      <el-button type="primary" @click="sendMessage">Send message</el-button>
     </div>
   </el-row>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
+import { IMixinState } from "@/types/mixinsTypes";
 
 export default Vue.extend({
   name: "SendMessage",
@@ -34,7 +35,20 @@ export default Vue.extend({
     };
   },
   methods: {
-    login() {},
+    sendMessage() {
+      if (this.$auth.loggedIn) {
+        (this as any as IMixinState).getNotification(
+          "Message Sent Successfully!",
+          "success"
+        );
+        this.$emit("closeMessageModal");
+      } else {
+        (this as any as IMixinState).getNotification(
+          "Login to send agent a message!",
+          "warning"
+        );
+      }
+    },
   },
 });
 </script>

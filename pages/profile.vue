@@ -22,6 +22,9 @@
             <p class="pb-10">
               <small>{{ lister.email }} </small>
             </p>
+            <p class="py-5">
+              <el-tag> {{ lister.user_type }} </el-tag>
+            </p>
             <el-upload
               class="upload-demo"
               action="#"
@@ -38,7 +41,7 @@
       <el-tabs v-model="activeName" @tab-click="handleClick" class="nav_scroll">
         <el-tab-pane
           v-if="lister.user_type == 'lister'"
-          label="listers"
+          label="Properties Uploaded"
           name="first"
           class="new_tab"
         >
@@ -185,7 +188,7 @@
                 :loading="loading"
                 class="btn_sm"
                 @click="updateUser"
-                >Change information
+                >Save information
               </el-button>
             </div>
           </el-form>
@@ -313,6 +316,14 @@ export default Vue.extend({
       editInfo: false as any,
       user_listings: [],
       lister: {
+        id: "" as string,
+        first_name: "" as string,
+        last_name: "" as string,
+        dob: "" as string,
+        phone_number: "",
+        user_type: "",
+        email: "",
+        avatar: "",
         country_id: "39a40751-d7d2-4346-99e5-b0235b520ce5" as string,
       } as any,
       options: ["SSNIT", "Passport", "Voter"],
@@ -340,14 +351,25 @@ export default Vue.extend({
       this.$moment(date.format("MMM DD, YY"));
     },
     async fetchData() {
-      const user = this.$auth.$storage.getLocalStorage("user_data");
-      console.log(user);
-      const userId = user.id;
-      const lister = await this.$userApi.show(userId);
-      console.log(lister, "user details");
+      const user = this.$auth.user;
+      // const lister = await this.$userApi.show(userId);
+      // console.log(lister, "user details");
       // this.loadlister(listers.data);
-      this.user_listings = lister.data.listings;
-      this.lister = lister.data.user;
+      // this.user_listings = lister.data;
+      // this.lister = lister.data.user;
+      console.log(user, "user");
+
+      this.lister = {
+        id: user.id,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        dob: user.dob,
+        phone_number: user.phone_number,
+        user_type: user.user_type,
+        email: user.email,
+        avatar: user.avatar,
+        country_id: user.country.id,
+      };
     },
     onPhoneUpdate(e: any) {
       console.log(e);
@@ -397,23 +419,23 @@ export default Vue.extend({
         last_name: this.lister.last_name,
         phone_number: this.lister.phone_number,
         id_card_number: this.lister.id_card_number,
-        country_id: this.lister.country_id
-          ? this.lister.country_id
-          : this.lister.country.id,
+        country_id: this.lister.country_id,
         user_type: this.lister.user_type,
       };
       console.log(data);
       try {
-        const register = await this.$userUpdateApi.update("update", data);
-        console.log(register);
+        const profileResponse = await this.$userUpdateApi.update(
+          "update",
+          data
+        );
+        console.log("profile response", profileResponse);
+        this.$auth.setUser(profileResponse.data.user);
 
         this.loading = false;
-        this.$confirm("Update successfully!", {
-          confirmButtonText: "Continue",
-          type: "success",
-        }).then(() => {
-          // this.$router.push('/login');
-        });
+        (this as any as IMixinState).getNotification(
+          "Update successfull!",
+          "success"
+        );
       } catch (error) {
         this.loading = false;
         (this as any as IMixinState).catchError(error);

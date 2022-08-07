@@ -1,7 +1,9 @@
 <template>
   <div class="login_content">
     <div class="login_form">
-      <!-- <div class="px-20"> -->
+      <p v-if="errorInfo" style="color: red">
+        {{ errorInfo }}
+      </p>
       <el-form
         ref="loginForm"
         :model="loginForm"
@@ -28,7 +30,7 @@
           <el-button
             type="primary"
             class="btn_lg"
-            @click="login"
+            @click="signIn"
             :loading="btnLoading"
             >Continue</el-button
           >
@@ -70,78 +72,101 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import { IMixinState } from '@/types/mixinsTypes';
+import Vue from "vue";
+import { IMixinState } from "@/types/mixinsTypes";
 
 export default Vue.extend({
-  name: 'LoginForm',
+  name: "LoginForm",
   data() {
     return {
       btnLoading: false as boolean,
+      errorInfo: "" as string,
       loginForm: {
-        email: '' as string,
-        password: '' as string,
+        email: "" as string,
+        password: "" as string,
       },
       validation: {
         email: [
           {
             required: true,
-            type: 'email',
-            message: 'Please enter valid email',
-            trigger: ['blur', 'change'],
+            type: "email",
+            message: "Please enter valid email",
+            trigger: ["blur", "change"],
           },
-          { min: 5, message: 'Length should be 5 or more', trigger: 'blur' },
+          { min: 5, message: "Length should be 5 or more", trigger: "blur" },
         ],
       },
     };
   },
   methods: {
     signIn() {
+      this.btnLoading = true;
       (this as any).$refs.loginForm.validate((valid: boolean) => {
         if (valid) {
-          this.login();
-          this.btnLoading = false;
+          this.checkUserVerification();
         } else {
           this.btnLoading = false;
           (this as any as IMixinState).getNotification(
-            'Make sure all required fields are filled',
-            'error'
+            "Make sure all required fields are filled",
+            "error"
           );
         }
       });
     },
-    login() {
-      this.btnLoading = true;
+    login(response: any) {
+      const { user, token } = response.data.data;
+      console.log(user, token, "response");
+
+      this.$auth.setUserToken(token);
+      this.$auth.setUser(user);
+      this.$emit("closeLoginModal");
+      (this as any as IMixinState).$message({
+        showClose: true,
+        message: response.data.message,
+        type: "success",
+      });
+    },
+    checkUserVerification() {
       this.$auth
-        .loginWith('local', {
+        .loginWith("local", {
           data: {
             email: this.loginForm.email,
             password: this.loginForm.password,
           },
         })
         .then((response: any) => {
-          const { user, token } = response.data.data;
-          console.log(response.data);
-          (this as any as IMixinState).$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'success',
-          });
-
-          this.$auth.setUserToken(token);
-          this.$auth.setUser(user);
-          this.$auth.$storage.setLocalStorage('user_data', user);
-
-          this.$emit('closeLoginModal');
+          this.btnLoading = false;
+          const message = response.data.message;
+          if (
+            message ==
+            "An email has been set to you in order to complete your registration"
+          ) {
+            this.errorInfo =
+              "An email has been set to you in order to complete your registration";
+            (this as any as IMixinState).getNotification(
+              "Verify your email address to continue",
+              "warning"
+            );
+          } else {
+            this.login(response);
+            this.errorInfo = "";
+          }
         })
         .catch((error: any) => {
           this.btnLoading = false;
           (this as any as IMixinState).catchError(error);
+          if (error?.response?.data) {
+            // this.errorInfo = "Invalid Credentials";
+            (this as any as IMixinState).getNotification(
+              error?.response?.data.message,
+              "error"
+            );
+          }
         });
     },
     facebookSignIn() {
       this.$auth
-        .loginWith('facebook')
+        .loginWith("facebook")
         .then((response: any) => {
           // const { user, token } = response.data.data;
           console.log(response);
@@ -161,7 +186,7 @@ export default Vue.extend({
     },
     googleSignIn() {
       this.$auth
-        .loginWith('google')
+        .loginWith("google")
         .then((response: any) => {
           // const { user, token } = response.data.data;
           console.log(response);

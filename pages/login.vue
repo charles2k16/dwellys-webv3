@@ -10,7 +10,6 @@
       :model="loginForm"
       label-position="top"
       :rules="validation"
-      v-loading="btnLoading"
     >
       <el-form-item label="Email address" prop="email">
         <el-input
@@ -105,7 +104,6 @@ export default Vue.extend({
 
       this.$auth.setUserToken(token);
       this.$auth.setUser(user);
-      this.$auth.$storage.setLocalStorage("user_data", user);
       (this as any as IMixinState).$message({
         showClose: true,
         message: response.data.message,
@@ -143,7 +141,7 @@ export default Vue.extend({
           if (error?.response?.data) {
             (this as any as IMixinState).getNotification(
               error?.response?.data.message,
-              "warning"
+              "error"
             );
           }
         });

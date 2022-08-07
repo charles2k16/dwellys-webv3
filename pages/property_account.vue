@@ -244,6 +244,7 @@ import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
 import { IMixinState } from "@/types/mixinsTypes";
 
 export default Vue.extend({
+  auth: false,
   name: "AccountPage",
   components: {
     VuePhoneNumberInput,
@@ -410,7 +411,6 @@ export default Vue.extend({
       (this as any).$refs.property_account.validate((valid: boolean) => {
         if (valid) {
           this.signUp();
-          this.$router.replace("/login");
         } else {
           this.btnLoading = false;
           (this as any as IMixinState).getNotification(
@@ -432,6 +432,7 @@ export default Vue.extend({
           type: "success",
         });
         this.btnLoading = false;
+        this.$router.replace("/login");
       } catch (error) {
         this.btnLoading = false;
         (this as any as IMixinState).catchError(error);

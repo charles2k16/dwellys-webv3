@@ -244,10 +244,6 @@ export default Vue.extend({
           // this.$router.push('/login');
           this.$router.push({
             name: "profile",
-            query: {
-              true: 0,
-              verify: this.registerForm.email,
-            },
           });
         });
       } catch (error) {

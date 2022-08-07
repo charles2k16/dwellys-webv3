@@ -10,7 +10,7 @@
       <template slot="title">
         <h3 class="">Login or sign in</h3>
       </template>
-      <LoginForm @closeLoginModal="closeLoginModal" />
+      <LoginForm @closeLoginModal="showLoginModal = false" />
     </el-dialog>
 
     <el-dialog
@@ -22,10 +22,10 @@
       <template slot="title">
         <h3>Upload your photo</h3>
       </template>
-      <PropertyPhotoUpload @avatar="ownerAvatar" />
+      <PropertyPhotoUpload @avatar="userAvatar" />
     </el-dialog>
     <el-dialog
-      :visible.sync="ownerModal"
+      :visible.sync="messageModal"
       width="40%"
       :destroy-on-close="true"
       custom-class="mobile-modal"
@@ -33,7 +33,7 @@
       <template slot="title">
         <h3>Send a message</h3>
       </template>
-      <SendMessage />
+      <SendMessage @closeMessageModal="messageModal = false" />
     </el-dialog>
   </div>
 </template>
@@ -47,16 +47,12 @@ export default Vue.extend({
       loginEmail: "" as string,
       showLoginModal: false as boolean,
       photoModal: false as boolean,
-      ownerModal: false as boolean,
+      messageModal: false as boolean,
     };
   },
   methods: {
     showLogin(): void {
       this.showLoginModal = true;
-    },
-    closeLoginModal(email: string): void {
-      this.loginEmail = email;
-      this.showLoginModal = false;
     },
     showPhotoModal(): void {
       this.photoModal = true;
@@ -64,13 +60,13 @@ export default Vue.extend({
     closePhotoModal(): void {
       this.photoModal = false;
     },
-    showOwnerModal(): void {
-      this.ownerModal = true;
+    showmessageModal(): void {
+      this.messageModal = true;
     },
-    closeOwnerModal(): void {
-      this.ownerModal = false;
+    closemessageModal(): void {
+      this.messageModal = false;
     },
-    ownerAvatar(file: Object) {
+    userAvatar(file: Object) {
       this.$emit("avatar", file);
       this.photoModal = false;
     },

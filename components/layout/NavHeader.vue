@@ -1,23 +1,20 @@
 <template>
-  <div class="header">
+  <div class="header section">
     <ApplicationHandler ref="modalHandler" />
     <!-- {{ $auth }} -->
-    <div class="header_wrapper section">
+    <div class="header_wrapper span">
       <div style="display: flex; align-items: center">
         <NuxtLink to="/">
           <img src="~/assets/img/logo.png" />
         </NuxtLink>
       </div>
       <div class="header_content hidden-sm-and-down">
-        <section class="pr-20">
+        <span class="pr-20">
           <NuxtLink to="/">Property valuation</NuxtLink>
-        </section>
-        <section
-          class="pl-10"
-          v-if="hasUserData && userData.user_type != 'lister'"
-        >
+        </span>
+        <span class="pl-10">
           <NuxtLink to="/property_account">Become an agent</NuxtLink>
-        </section>
+        </span>
       </div>
       <div class="drawer hidden-md-and-up">
         <svg
@@ -48,69 +45,80 @@
           <div class="drawer_content px-20">
             <div class="d-flex_column">
               <span class="login-avatar">
-                <img
-                  v-if="hasUserData"
-                  :src="src + userData.avatar"
-                  alt="avatar"
-                  class="user_avatar"
-                />
+                <span v-if="$auth.loggedIn" class="d-flex">
+                  <span class="mt-10 mr-5">
+                    {{ $auth.user.first_name }}
+                  </span>
+                  <img
+                    :src="src + $auth.user.avatar"
+                    alt="avatar"
+                    class="user_avatar"
+                  />
+                </span>
 
                 <img src="~/assets/img/user_icon.png" alt="icon" v-else />
               </span>
-              <section @click="showLoginModal" class="mt-10">Login</section>
-              <section
+              <span v-if="!$auth.loggedIn" @click="showLoginModal" class="mt-10"
+                >Login</span
+              >
+              <span
                 v-if="$auth.loggedIn"
                 @click="drawer = false"
                 class="pb-20 mt-20"
               >
                 <NuxtLink to="/register">Profile</NuxtLink>
-              </section>
-              <section
+              </span>
+              <span
                 v-if="!$auth.loggedIn"
                 @click="drawer = false"
                 class="pb-20 mt-20"
               >
                 <NuxtLink to="/register">Register</NuxtLink>
-              </section>
-              <section @click="drawer = false" class="pb-20">
+              </span>
+              <span @click="drawer = false" class="pb-20">
                 <NuxtLink to="/">Property valuation</NuxtLink>
-              </section>
-              <section
-                @click="drawer = false"
-                class="pb-20"
-                v-if="hasUserData && userData.user_type != 'lister'"
-              >
+              </span>
+              <span v-if="$auth.loggedIn">
+                <span class="py-10" v-if="$auth.user.user_type == 'lister'">
+                  <NuxtLink to="/property_upload">Property Upload</NuxtLink>
+                </span>
+              </span>
+              <span @click="drawer = false" class="pb-20">
                 <NuxtLink to="/property_account">Become an agent</NuxtLink>
-              </section>
-              <section @click="drawer = false" class="pb-20">
+              </span>
+              <span v-if="$auth.loggedIn" @click="drawer = false" class="pb-20">
                 <NuxtLink to="/messages">Messages</NuxtLink>
-              </section>
-              <section
+              </span>
+              <span
                 v-if="$auth.loggedIn"
                 @click="$auth.logout()"
                 class="pb-20"
                 style="color: red"
               >
                 Logout
-              </section>
+              </span>
             </div>
           </div>
         </el-drawer>
       </div>
       <div class="header_content hidden-sm-and-down">
-        <section class="pr-20">
+        <span v-if="$auth.loggedIn" class="pr-20">
           <NuxtLink to="/messages">Messages</NuxtLink>
-        </section>
+        </span>
 
         <el-dropdown trigger="click">
           <span class="el-dropdown-link">
             <span class="login-avatar">
-              <img
-                v-if="hasUserData"
-                :src="src + userData.avatar"
-                alt="avatar"
-                class="user_avatar"
-              />
+              <span v-if="$auth.loggedIn" class="d-flex">
+                <span class="mt-10 mr-5">
+                  {{ $auth.user.first_name }}
+                </span>
+                <img
+                  :src="src + $auth.user.avatar"
+                  alt="avatar"
+                  class="user_avatar"
+                />
+              </span>
 
               <img src="~/assets/img/user_icon.png" alt="icon" v-else />
             </span>
@@ -123,33 +131,27 @@
               <p class="py-10" @click="$router.push('/register')">Register</p>
             </el-dropdown-item>
             <el-dropdown-item v-if="$auth.loggedIn">
-              <section class="py-10">
+              <span class="py-10">
                 <NuxtLink to="/profile">Profile</NuxtLink>
-              </section>
+              </span>
             </el-dropdown-item>
             <el-dropdown-item>
-              <section class="py-10">
+              <span class="py-10">
                 <NuxtLink to="/">Property valuation</NuxtLink>
-              </section>
+              </span>
             </el-dropdown-item>
-            <el-dropdown-item
-              v-if="hasUserData && userData.user_type == 'lister'"
-            >
-              <section class="py-10">
+            <el-dropdown-item v-if="$auth.loggedIn">
+              <span class="py-10" v-if="$auth.user.user_type == 'lister'">
                 <NuxtLink to="/property_upload">Property Upload</NuxtLink>
-              </section>
+              </span>
             </el-dropdown-item>
-            <el-dropdown-item
-              v-if="hasUserData && userData.user_type != 'lister'"
-            >
-              <section class="py-10">
+            <el-dropdown-item>
+              <span class="py-10">
                 <NuxtLink to="/property_account">Become an agent</NuxtLink>
-              </section>
+              </span>
             </el-dropdown-item>
             <el-dropdown-item v-if="$auth.loggedIn" style="color: red">
-              <p class="py-10" @click="$auth.logout()">
-                Logout
-              </p></el-dropdown-item
+              <p class="py-10" @click="logout">Logout</p></el-dropdown-item
             >
           </el-dropdown-menu>
         </el-dropdown>
@@ -172,6 +174,7 @@ export default Vue.extend({
   data() {
     return {
       userData: {} as any,
+      userReady: false,
       user_type: "" as any,
       src: "http://localhost:8000/",
       user: "login" as string,
@@ -179,24 +182,19 @@ export default Vue.extend({
       direction: "rtl",
     };
   },
+
   created() {
     console.log(this.$auth);
-    console.log(this.$auth.$storage.getLocalStorage("user_data"));
-    if (this.$auth.user !== null) {
-      this.userData = this.$auth.$storage.getLocalStorage("user_data");
+    // Object.keys(this.$auth.user).length === 0 ||
+    if (this.$auth.user == null) {
+      this.userReady = false;
+    } else {
+      this.userReady = true;
     }
   },
-  beforeUpdate() {
-    console.log(this.$auth.$storage.getLocalStorage("user_data"));
-    this.userData = this.$auth.$storage.getLocalStorage("user_data");
-  },
-  computed: {
-    hasUserData() {
-      return this.$auth.user !== null;
-    },
-    // userType() {
-    //   return this.userData.user_type === "lister";
-    // },
+  updated() {
+    // console.log(this.$auth.$storage.getLocalStorage("user_data"));
+    // this.userData = this.$auth.$storage.getLocalStorage("user_data");
   },
   methods: {
     showLoginModal(): void {
@@ -207,10 +205,16 @@ export default Vue.extend({
       this.drawer = false;
       console.log(done);
     },
+    logout() {
+      this.$auth.logout();
+      this.userReady = false;
+    },
   },
 });
 </script>
 <style lang="scss" scoped>
+$small_screen: 426px;
+$laptop_screen: 1024px;
 a {
   color: #334155;
 }
@@ -221,6 +225,10 @@ a {
 .header_wrapper {
   display: flex;
   justify-content: space-between;
+  @media (max-width: $laptop_screen) {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
 }
 .header_content {
   display: flex;
@@ -240,17 +248,13 @@ a {
   justify-content: center;
   border: 1px solid #e2e8f0;
   background: #f8fafc;
-  padding: 5px 5px;
+  padding: 5px 10px;
   border-radius: 20px;
 
   .user_avatar {
     border-radius: 50%;
     height: 35px;
     width: 35px;
-  }
-
-  img {
-    margin-left: 10px;
   }
 }
 .login_text {

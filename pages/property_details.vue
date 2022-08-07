@@ -195,6 +195,7 @@ import Vue from "vue";
 import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
 
 export default Vue.extend({
+   auth: false,
   name: "PropertyDetails",
   components: {
     ApplicationHandler,
