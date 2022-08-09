@@ -10,7 +10,7 @@
       </div>
       <div class="header_content hidden-sm-and-down">
         <span class="pr-20">
-          <NuxtLink to="/">Property valuation</NuxtLink>
+          <NuxtLink to="/">Property valuationn</NuxtLink>
         </span>
         <span class="pl-10">
           <NuxtLink to="/property_account">Become an agent</NuxtLink>
@@ -167,12 +167,12 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import "element-ui/lib/theme-chalk/display.css";
-import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
+import Vue from 'vue';
+import 'element-ui/lib/theme-chalk/display.css';
+import ApplicationHandler from '@/handlers/ApplicationHandler.vue';
 
 export default Vue.extend({
-  name: "NavHeader",
+  name: 'NavHeader',
   components: {
     ApplicationHandler,
   },
@@ -180,11 +180,11 @@ export default Vue.extend({
     return {
       userData: {} as any,
       userReady: false,
-      user_type: "" as any,
-      src: "http://localhost:8000/",
-      user: "login" as string,
+      user_type: '' as any,
+      src: 'http://localhost:8000/',
+      user: 'login' as string,
       drawer: false as boolean,
-      direction: "rtl",
+      direction: 'rtl',
     };
   },
 
