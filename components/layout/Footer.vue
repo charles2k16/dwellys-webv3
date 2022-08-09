@@ -27,18 +27,18 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue';
 
 export default Vue.extend({
-  name: "Footer",
+  name: 'Footer',
   data() {
     return {
-      user: "login",
+      user: 'login',
     };
   },
   methods: {
     showLoginModal(): void {
-      console.log("show");
+      console.log('show');
       (this as any).$refs.loginAction.showLogin(this.user);
     },
   },
