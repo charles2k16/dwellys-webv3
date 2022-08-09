@@ -49,7 +49,7 @@
       <el-tabs v-model="activeName" @tab-click="handleClick" class="nav_scroll">
         <el-tab-pane
           v-if="lister.user_type == 'lister'"
-          label="My Adverts"
+          label="My Properties"
           name="first"
           class="new_tab"
         >
