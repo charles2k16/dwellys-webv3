@@ -241,15 +241,15 @@
             <el-col :sm="12" class="pb-20 d-flex_column pr-20">
               <span>Select Country</span>
               <el-select
-                v-model="country"
+                v-model="propertyUpload.country_id"
                 placeholder="Select"
                 class="region pt-10"
-                @change="getCountry($event)"
               >
                 <el-option
                   v-for="country in countries"
                   :key="country.id"
-                  :value="country.full_name"
+                  :value="country.id"
+                  :label="country.full_name"
                 >
                 </el-option>
               </el-select>
@@ -334,13 +334,13 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import "vue-phone-number-input/dist/vue-phone-number-input.css";
-import { IMixinState } from "@/types/mixinsTypes";
-import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
+import Vue from 'vue';
+import 'vue-phone-number-input/dist/vue-phone-number-input.css';
+import { IMixinState } from '@/types/mixinsTypes';
+import ApplicationHandler from '@/handlers/ApplicationHandler.vue';
 
 export default Vue.extend({
-  name: "AccountPage",
+  name: 'AccountPage',
   components: {
     ApplicationHandler,
   },
@@ -348,19 +348,19 @@ export default Vue.extend({
   data() {
     return {
       step: 1 as number,
-      country: "" as string,
-      category: " " as string,
+      country: '' as string,
+      category: ' ' as string,
       pageLoad: false as boolean,
       propLoad: false as boolean,
       propertySelected: false as boolean,
-      specErr: "" as string,
-      selectedProperty: "",
+      specErr: '' as string,
+      selectedProperty: '',
       btnLoading: false as boolean,
       propertyTypes: [],
       propertySpecs: {
         specifications: [] as Array<object>,
       },
-      regions: ["Greater Accra", "Ashanti Region", ""],
+      regions: ['Greater Accra', 'Ashanti Region', ''],
       categories: [],
       amenities: [],
 
@@ -368,20 +368,20 @@ export default Vue.extend({
       countries: [],
       listing_photos: [] as any,
       propertyUpload: {
-        name: "" as string,
-        property_type_id: "" as string,
-        country_id: "" as string,
-        listing_category_id: "" as string,
-        latitude: "5.627703749893443" as string,
-        longitude: "-0.08697846429555343" as string,
+        name: '' as string,
+        property_type_id: '' as string,
+        country_id: '' as string,
+        listing_category_id: '' as string,
+        latitude: '5.627703749893443' as string,
+        longitude: '-0.08697846429555343' as string,
         specifications: [] as Array<object>,
         property_amenities_id: [] as Array<string>,
-        description: "" as string,
+        description: '' as string,
         price: 0 as number,
-        location: "Accra Central",
-        region: "Greater Accra",
-        city: "Accra",
-        other_specifications: [{ name: "", number: 0 }],
+        location: 'Accra Central',
+        region: 'Greater Accra',
+        city: 'Accra',
+        other_specifications: [{ name: '', number: 0 }],
       },
     };
   },
@@ -389,13 +389,13 @@ export default Vue.extend({
   async created() {
     if (this.$auth.user.is_id_card_verified != 1) {
       (this as any as IMixinState)
-        .$confirm("You are not verified yet to post properties", {
-          confirmButtonText: "OK",
-          cancelButtonText: "Cancel",
-          type: "error",
+        .$confirm('You are not verified yet to post properties', {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
+          type: 'error',
         })
         .then(() => {
-          this.$router.replace("/");
+          this.$router.replace('/');
         });
     }
     try {
@@ -422,8 +422,8 @@ export default Vue.extend({
       console.log(error);
       if (error?.response?.data) {
         (this as any as IMixinState).getNotification(
-          "Please, login as an agent!",
-          "warning"
+          'Please, login as an agent!',
+          'warning'
         );
       }
     }
@@ -433,8 +433,8 @@ export default Vue.extend({
       let valid = false;
       if (
         this.step == 1 &&
-        this.propertyUpload.property_type_id != "" &&
-        this.propertyUpload.listing_category_id != ""
+        this.propertyUpload.property_type_id != '' &&
+        this.propertyUpload.listing_category_id != ''
       ) {
         valid = true;
       } else if (this.step == 2) {
@@ -448,10 +448,10 @@ export default Vue.extend({
         valid = true;
       } else if (
         this.step == 5 &&
-        this.propertyUpload.country_id != "" &&
-        this.propertyUpload.location != "" &&
-        this.propertyUpload.region != "" &&
-        this.propertyUpload.city != ""
+        this.propertyUpload.country_id != '' &&
+        this.propertyUpload.location != '' &&
+        this.propertyUpload.region != '' &&
+        this.propertyUpload.city != ''
       ) {
         valid = true;
       }
@@ -470,10 +470,10 @@ export default Vue.extend({
       this.propertyUpload.other_specifications.splice(index, 1);
     },
     getImage(pic: any): string {
-      return "http://localhost:8000/" + pic;
+      return 'http://localhost:8000/' + pic;
     },
     getSvg(pic: string): string {
-      return require("../assets/svg/" + pic);
+      return require('../assets/svg/' + pic);
     },
     getPrice(price: any) {
       this.propertyUpload.price = price;
@@ -483,12 +483,12 @@ export default Vue.extend({
       reader.readAsDataURL(event.target.files[0]);
       reader.onloadend = () => {
         // reader.result;
-        let img = { tag: "front", is_featured: false, photo: reader.result };
+        let img = { tag: 'front', is_featured: false, photo: reader.result };
         this.listing_photos.push(img);
       };
     },
     addSpecSection() {
-      let newSection = { name: "", number: 0 };
+      let newSection = { name: '', number: 0 };
       this.propertyUpload.other_specifications.push(newSection);
     },
     handlePreview() {},
@@ -545,8 +545,8 @@ export default Vue.extend({
       this.step = 2;
       (this as any as IMixinState).$message({
         showClose: true,
-        message: "Add number of specifications to continue",
-        type: "error",
+        message: 'Add number of specifications to continue',
+        type: 'error',
       });
     },
     getCountry(e: any) {
@@ -554,7 +554,7 @@ export default Vue.extend({
       this.countries.filter((country: any) =>
         country.full_name == e
           ? (this.propertyUpload.country_id = country.id)
-          : ""
+          : ''
       );
     },
     getCategory(e: any) {
@@ -562,7 +562,7 @@ export default Vue.extend({
       this.categories.filter((category: any) =>
         category.name == e
           ? (this.propertyUpload.listing_category_id = category.id)
-          : ""
+          : ''
       );
     },
     showPosition(position: any) {
@@ -576,7 +576,7 @@ export default Vue.extend({
         const propertyResponse = await this.$listingApi.create(
           this.propertyUpload
         );
-        console.log("property upload", propertyResponse);
+        console.log('property upload', propertyResponse);
         const imageListing = await this.$listingImagesApi.create({
           listing_id: propertyResponse.data.id,
           listing_photos: this.listing_photos,
@@ -588,11 +588,11 @@ export default Vue.extend({
         (this as any as IMixinState).$message({
           showClose: true,
           message: propertyResponse.message,
-          type: "success",
+          type: 'success',
         });
-        this.$router.replace("/");
+        this.$router.replace('/');
       } catch (error) {
-        console.log(error, "error");
+        console.log(error, 'error');
         (this as any as IMixinState).catchError(error);
       }
     },
