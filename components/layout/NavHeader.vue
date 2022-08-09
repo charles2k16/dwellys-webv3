@@ -181,7 +181,10 @@ export default Vue.extend({
       userData: {} as any,
       userReady: false,
       user_type: '' as any,
-      src: 'https://newapi.dwellys.com/',
+      src:
+        process.env.NODE_ENV === 'development'
+          ? 'http://localhost:8000/'
+          : 'https://newapi.dwellys.com/',
       user: 'login' as string,
       drawer: false as boolean,
       direction: 'rtl',
