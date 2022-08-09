@@ -21,7 +21,18 @@
                 <p>
                   {{ listing.listing_detail.name }}
                 </p>
-                <span class="material-icons fav"> favorite_border </span>
+                <el-dropdown trigger="click">
+                  <span class="el-dropdown-link">
+                    <i class="el-icon-more"> </i>
+                  </span>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item>Edit</el-dropdown-item>
+                    <el-dropdown-item>Publish</el-dropdown-item>
+                    <el-dropdown-item style="color: red"
+                      >Delete</el-dropdown-item
+                    >
+                  </el-dropdown-menu>
+                </el-dropdown>
               </div>
             </div>
             <!-- <nuxt-link
@@ -41,24 +52,38 @@
               <div class="pl-5">
                 <div class="d-flex align_center">
                   <img src="~/assets/svg/bed.png" class="property_img pr-10" />
-                  <b>3</b>
+                  <b>{{ listing.property_specifications[0].number }} </b>
                 </div>
-                <p>Bedrooms</p>
+                <p>
+                  {{ listing.property_specifications[0].specification.name }}
+                </p>
               </div>
               <div class="house_bathroom">
                 <div class="d-flex align_center">
                   <img src="~/assets/svg/bath.png" class="property_img pr-10" />
-                  <b>4</b>
+                  <b>{{ listing.property_specifications[1].number }}</b>
                 </div>
-                <p>Bathrooms</p>
+                <p>
+                  {{ listing.property_specifications[1].specification.name }}
+                </p>
               </div>
               <div>
                 <div class="d-flex align_center">
                   <img src="~/assets/svg/tv.png" class="property_img pr-10" /><b
-                    >1</b
+                    >{{
+                      listing.property_specifications[2]
+                        ? listing.property_specifications[1].number
+                        : 0
+                    }}</b
                   >
                 </div>
-                <p>Living area</p>
+                <p>
+                  {{
+                    listing.property_specifications[2]
+                      ? listing.property_specifications[1].specification.name
+                      : 0
+                  }}
+                </p>
               </div>
             </div>
             <!-- </nuxt-link> -->
@@ -66,8 +91,15 @@
         </el-col>
       </el-row>
     </div>
-    <div v-else class="d-flex justify_center p-20">
-      <h2>No Properties</h2>
+    <div v-else class="no_properties p-20">
+      <h2 class="pb-10">
+        There ar no properties yet.<br />Create your first now!
+      </h2>
+      <NuxtLink to="/property_upload"
+        ><el-button type="primary"
+          ><i class="el-icon-plus mr-10"></i>Create</el-button
+        ></NuxtLink
+      >
     </div>
   </div>
 </template>
@@ -100,4 +132,20 @@ export default Vue.extend({
 });
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.no_properties {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  h2 {
+    line-height: 2rem;
+  }
+}
+.el-icon-more {
+  color: white;
+  background: black;
+  border-radius: 20px;
+  padding: 5px;
+}
+</style>

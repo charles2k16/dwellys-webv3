@@ -360,7 +360,7 @@ export default Vue.extend({
           { validator: validatePass2, trigger: "blur", required: true },
         ],
       },
-      options: ["SSNIT", "Passport", "Voter"],
+      options: ["SSNIT", "PASSPORT", "VOTER"],
       user: "" as string,
       countries: [],
     };

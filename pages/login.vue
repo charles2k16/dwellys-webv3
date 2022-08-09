@@ -104,12 +104,12 @@ export default Vue.extend({
 
       this.$auth.setUserToken(token);
       this.$auth.setUser(user);
+      this.$router.push("/");
       (this as any as IMixinState).$message({
         showClose: true,
         message: response.data.message,
         type: "success",
       });
-      this.$router.push("/");
     },
     checkUserVerification() {
       this.$auth

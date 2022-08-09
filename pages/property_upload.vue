@@ -387,6 +387,17 @@ export default Vue.extend({
   },
 
   async created() {
+    if (this.$auth.user.is_id_card_verified != 1) {
+      (this as any as IMixinState)
+        .$confirm("You are not verified yet to post properties", {
+          confirmButtonText: "OK",
+          cancelButtonText: "Cancel",
+          type: "error",
+        })
+        .then(() => {
+          this.$router.replace("/");
+        });
+    }
     try {
       const categories = await this.$listingCategoriesApi.index();
       this.categories = categories.data;
@@ -565,7 +576,7 @@ export default Vue.extend({
         const propertyResponse = await this.$listingApi.create(
           this.propertyUpload
         );
-        console.log(propertyResponse);
+        console.log("property upload", propertyResponse);
         const imageListing = await this.$listingImagesApi.create({
           listing_id: propertyResponse.data.id,
           listing_photos: this.listing_photos,

@@ -256,3 +256,11 @@
 .el-message-box__title span {
   font-size: 17px;
 }
+
+.el-dropdown-link {
+  cursor: pointer;
+}
+.el-tabs--top .el-tabs__item.is-top:nth-child(2) {
+  width: fit-content;
+  padding-left: 10px;
+}

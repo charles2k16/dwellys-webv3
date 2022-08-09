@@ -18,5 +18,5 @@ export default (ctx, inject) => {
   inject("userFavoriteApi", apiService("/toggleuserfavoritelisting"));
   inject("userApi", apiService("/users"));
   inject("userUpdateApi", apiService("/auth/account"));
-  inject("passwordApi", apiService("/passwordreset"));
+  inject("passwordApi", apiService("/updatepassword"));
 };

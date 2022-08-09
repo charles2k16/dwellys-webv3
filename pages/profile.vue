@@ -1,6 +1,12 @@
 <template>
   <div class="section profile">
     <div class="pt-20">
+      <div v-if="lister.is_id_card_verified == 0" class="not_approved_message">
+        <p>
+          {{ not_approved_message }}
+        </p>
+      </div>
+
       <div class="profile_header">
         <div class="d-flex">
           <img
@@ -22,9 +28,7 @@
             <p class="pb-10">
               <small>{{ lister.email }} </small>
             </p>
-            <p class="py-5">
-              <el-tag> {{ lister.user_type }} </el-tag>
-            </p>
+
             <el-upload
               class="upload-demo"
               action="#"
@@ -37,6 +41,10 @@
             </el-upload>
           </div>
         </div>
+        <p class="py-5 user_type">
+          <span>User Type</span>
+          <el-tag> {{ lister.user_type }} </el-tag>
+        </p>
       </div>
       <el-tabs v-model="activeName" @tab-click="handleClick" class="nav_scroll">
         <el-tab-pane
@@ -48,9 +56,9 @@
           <ProfileListings :user_listings="user_listings" />
         </el-tab-pane>
         <el-tab-pane label="Profile" name="second" class="settings_body">
-          <el-form class="d-flex">
+          <el-form class="profile_info_container d-flex">
             <div class="w-90">
-              <div class="d-flex pb-20 pt-20">
+              <div class="info_section d-flex pb-20 pt-20">
                 <div class="profile_label">
                   <p>Personal information</p>
                 </div>
@@ -68,7 +76,7 @@
                       >
                       </el-input>
                     </el-col>
-                    <el-col :xs="24" :sm="24" :md="12">
+                    <el-col :xs="24" :sm="24" :md="12" class="last_name">
                       <p class="info_label">Last Name</p>
                       <!-- <p v-if="!editInfo" class="profile_info">
                         {{ lister.last_name }}
@@ -94,7 +102,7 @@
                 </div>
               </div>
               <hr class="hr_rule" />
-              <div class="d-flex pt-20 pb-20">
+              <div class="info_section d-flex pt-20 pb-20">
                 <div class="profile_label">
                   <p class="info_label">Contact information</p>
                 </div>
@@ -122,67 +130,8 @@
                 </div>
               </div>
               <hr class="hr_rule" />
-              <div
-                class="d-flex pt-20 pb-20"
-                v-if="lister.user_type == 'lister'"
-              >
-                <div class="profile_label">
-                  <p class="info_label">ID Verification</p>
-                </div>
-                <div class="details_div">
-                  <p class="info_label pb-5">ID Type</p>
-                  <!-- <p class="profile_info">{{ lister.id_card_type }}</p> -->
-                  <el-select
-                    v-model="lister.id_card_type"
-                    placeholder="Select ID type"
-                  >
-                    <el-option
-                      v-for="item in options"
-                      :key="item"
-                      :label="item"
-                      :value="item"
-                    >
-                    </el-option>
-                  </el-select>
-                  <div class="py-10">
-                    <p class="info_label pb-5">ID card number</p>
-                    <el-input
-                      v-model="lister.id_card_number"
-                      placeholder="Enter ID number"
-                      class="py-10"
-                    >
-                    </el-input>
-                  </div>
-
-                  <div class="pt-20">
-                    <p class="info_label">ID card photo</p>
-                    <img
-                      v-if="!identification"
-                      :src="url() + '/' + lister.id_card_upload"
-                      alt=""
-                      class="profile_id_card"
-                    />
-                    <img
-                      v-else
-                      :src="identification"
-                      alt=""
-                      class="profile_id_card"
-                    />
-                    <el-upload
-                      class="upload-demo"
-                      action="#"
-                      :multiple="false"
-                      :auto-upload="false"
-                      :on-change="getID"
-                      :show-file-list="false"
-                    >
-                      <el-button type="info">Change ID</el-button>
-                    </el-upload>
-                  </div>
-                </div>
-              </div>
             </div>
-            <div class="mt-20 w-20">
+            <div class="save_btn mt-20">
               <el-button
                 :type="'primary'"
                 :loading="loading"
@@ -194,11 +143,11 @@
           </el-form>
         </el-tab-pane>
         <el-tab-pane label="Security" name="third" class="settings_body">
-          <div class="d-flex pt-20 pb-20">
+          <div class="security pt-20 pb-20">
             <div class="profile_label">
               <p class="info_label">Change your password</p>
             </div>
-            <div class="w-30">
+            <div class="security_details">
               <div>
                 <div class="pb-30">
                   <p class="info_label">Current password</p>
@@ -303,6 +252,7 @@ export default Vue.extend({
       dummy_avatar: "../assets/img/avatar.png" as string,
       home: "" as string,
       phone: "",
+      not_approved_message: "",
       passwords: {
         new_password: "" as string,
         confirm_password: "" as string,
@@ -342,6 +292,18 @@ export default Vue.extend({
     this.fetchData();
     const countries = await this.$countriesApi.index();
     this.countries = countries.data;
+    if (this.lister.is_id_card_verified == 0) {
+      this.not_approved_message = `Hi ${this.lister.first_name}, Your account is being approved. We will send you an email once it's approved, Thank you.`;
+
+      (this as any as IMixinState).$confirm(
+        `Hi ${this.lister.first_name}, Your account is being approved. We will send you an email once it's approved, Thank you.`,
+        {
+          confirmButtonText: "OK",
+          cancelButtonText: "Cancel",
+          type: "warning",
+        }
+      );
+    }
   },
   methods: {
     url() {
@@ -352,11 +314,10 @@ export default Vue.extend({
     },
     async fetchData() {
       const user = this.$auth.user;
-      // const lister = await this.$userApi.show(userId);
-      // console.log(lister, "user details");
+      const lister = await this.$userApi.show(user.id);
+      console.log(lister, "user details");
       // this.loadlister(listers.data);
-      // this.user_listings = lister.data;
-      // this.lister = lister.data.user;
+      this.user_listings = lister.data.listings;
       console.log(user, "user");
 
       this.lister = {
@@ -368,6 +329,7 @@ export default Vue.extend({
         user_type: user.user_type,
         email: user.email,
         avatar: user.avatar,
+        is_id_card_verified: user.is_id_card_verified,
         country_id: user.country.id,
       };
     },
@@ -414,11 +376,8 @@ export default Vue.extend({
         dob: this.lister.dob,
         email: this.lister.email,
         first_name: this.lister.first_name,
-        id_card_type: this.lister.id_card_type,
-        id_card_upload: this.identification ? this.identification : null,
         last_name: this.lister.last_name,
         phone_number: this.lister.phone_number,
-        id_card_number: this.lister.id_card_number,
         country_id: this.lister.country_id,
         user_type: this.lister.user_type,
       };
@@ -460,8 +419,9 @@ export default Vue.extend({
     async updatePassword(): Promise<void> {
       try {
         const response = await this.$passwordApi.create({
-          ...this.passwords,
-          user_id: this.lister.id,
+          current_password: this.current_password,
+          new_password: this.passwords.new_password,
+          confirm_password: this.passwords.confirm_password,
         });
         console.log(response);
 
@@ -484,21 +444,87 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+$small_screen: 426px;
+$medium_screen: 769px;
+.not_approved_message {
+  text-align: center;
+  color: white;
+  margin: 0 auto;
+  widows: 70%;
+  p {
+    background: hsla(0, 100%, 64%, 0.9);
+    // border: 2px solid hsla(0, 89%, 57%, 0.9);
+    border-radius: 20px;
+    padding: 10px 0;
+    i {
+      color: orange;
+      font-size: 20px;
+      padding-right: 10px;
+    }
+    @media (max-width: $medium_screen) {
+      padding: 10px;
+    }
+  }
+}
 .profile_header {
   padding: 20px 0;
+  display: flex;
+  justify-content: space-between;
+  @media (max-width: $small_screen) {
+    flex-direction: column;
+  }
   .profile_img {
     border-radius: 50%;
     width: 100%;
     max-width: 160px;
     height: 160px;
   }
+  .user_type {
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+    @media (max-width: $small_screen) {
+      width: 30%;
+    }
+    .el-tag {
+      margin-top: 10px;
+      font-size: 16px;
+      width: fit-content;
+    }
+  }
 }
-.account_form {
-  padding-top: 20px;
+.profile_info_container {
+  @media (max-width: $medium_screen) {
+    flex-direction: column;
+  }
+  @media (max-width: $small_screen) {
+  }
+  .info_section {
+    @media (max-width: $small_screen) {
+      flex-direction: column;
+    }
+  }
+  .details_div {
+    max-width: 500px;
+    width: 100%;
+    padding-top: 5px;
+    @media (max-width: $small_screen) {
+      padding-top: 0;
+    }
+    .last_name {
+      @media (max-width: $small_screen) {
+        padding-top: 5px;
+      }
+    }
+  }
 }
-.details_div {
-  max-width: 500px;
-  width: 100%;
+
+.save_btn {
+  display: flex;
+  justify-content: flex-end;
+  .btn_sm {
+    height: fit-content;
+  }
 }
 
 .profile_info {
@@ -520,10 +546,31 @@ export default Vue.extend({
 .profile_label {
   width: 20%;
   padding-right: 30px;
+  padding-top: 5px;
   margin-right: 10px;
+  @media (max-width: $small_screen) {
+    width: 100%;
+    padding-bottom: 5px;
+    padding-top: 0;
+  }
   p {
     color: #000000;
     font-weight: 600;
+  }
+}
+.security {
+  display: flex;
+  @media (max-width: $small_screen) {
+    flex-direction: column;
+  }
+  .security_details {
+    width: 30%;
+    @media (max-width: $medium_screen) {
+      width: 60%;
+    }
+    @media (max-width: $small_screen) {
+      width: 100%;
+    }
   }
 }
 </style>

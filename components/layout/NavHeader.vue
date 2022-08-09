@@ -46,14 +46,17 @@
             <div class="d-flex_column">
               <span class="login-avatar">
                 <span v-if="$auth.loggedIn" class="d-flex">
-                  <span class="mt-10 mr-5">
+                  <span class="pt-10 pr-5">
                     {{ $auth.user.first_name }}
                   </span>
+
                   <img
+                    v-if="$auth.user.avatar"
                     :src="src + $auth.user.avatar"
                     alt="avatar"
                     class="user_avatar"
                   />
+                  <img src="~/assets/img/user_icon.png" alt="icon" v-else />
                 </span>
 
                 <img src="~/assets/img/user_icon.png" alt="icon" v-else />
@@ -64,29 +67,29 @@
               <span
                 v-if="$auth.loggedIn"
                 @click="drawer = false"
-                class="pb-20 mt-20"
+                class="pb-10 pt-20"
               >
                 <NuxtLink to="/register">Profile</NuxtLink>
               </span>
               <span
                 v-if="!$auth.loggedIn"
                 @click="drawer = false"
-                class="pb-20 mt-20"
+                class="pb-10"
               >
                 <NuxtLink to="/register">Register</NuxtLink>
               </span>
-              <span @click="drawer = false" class="pb-20">
+              <span @click="drawer = false" class="pb-10">
                 <NuxtLink to="/">Property valuation</NuxtLink>
               </span>
-              <span v-if="$auth.loggedIn">
-                <span class="py-10" v-if="$auth.user.user_type == 'lister'">
+              <span class="pb-10" v-if="$auth.loggedIn">
+                <span v-if="$auth.user.user_type == 'lister'">
                   <NuxtLink to="/property_upload">Property Upload</NuxtLink>
                 </span>
               </span>
-              <span @click="drawer = false" class="pb-20">
+              <span @click="drawer = false" class="pb-10">
                 <NuxtLink to="/property_account">Become an agent</NuxtLink>
               </span>
-              <span v-if="$auth.loggedIn" @click="drawer = false" class="pb-20">
+              <span v-if="$auth.loggedIn" @click="drawer = false" class="pb-10">
                 <NuxtLink to="/messages">Messages</NuxtLink>
               </span>
               <span
@@ -110,14 +113,16 @@
           <span class="el-dropdown-link">
             <span class="login-avatar">
               <span v-if="$auth.loggedIn" class="d-flex">
-                <span class="mt-10 mr-5">
+                <span class="pt-10 pr-5">
                   {{ $auth.user.first_name }}
                 </span>
                 <img
+                  v-if="$auth.user.avatar"
                   :src="src + $auth.user.avatar"
                   alt="avatar"
                   class="user_avatar"
                 />
+                <img src="~/assets/img/user_icon.png" alt="icon" v-else />
               </span>
 
               <img src="~/assets/img/user_icon.png" alt="icon" v-else />
