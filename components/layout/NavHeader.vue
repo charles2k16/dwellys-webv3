@@ -181,7 +181,7 @@ export default Vue.extend({
       userData: {} as any,
       userReady: false,
       user_type: '' as any,
-      src: 'http://localhost:8000/',
+      src: 'https://newapi.dwellys.com/',
       user: 'login' as string,
       drawer: false as boolean,
       direction: 'rtl',

@@ -92,7 +92,7 @@
       </el-row>
     </div>
     <div v-else class="no_properties p-20">
-      <hp class="pb-10"> You have no listings or proeprties uploaded yet. </hp>
+      <p class="pb-10">You have no listings or proeprties uploaded yet.</p>
       <NuxtLink to="/property_upload"
         ><el-button type="primary" size="mini"
           ><i class="el-icon-plus mr-10"></i>Upload Property</el-button

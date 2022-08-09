@@ -155,7 +155,7 @@
           <div v-if="step == 2">
             <div class="property_forms pb-20">
               <div class="account_label">
-                <h4>Validate account</h4>
+                <h4>Validatation</h4>
                 <p class="pt-5">
                   We need to verify your information. Please submit a copy of
                   your government ID to process your application
@@ -388,6 +388,7 @@ export default Vue.extend({
       reader.readAsDataURL(file.raw);
       reader.onloadend = () => {
         this.property_account.id_card_upload = reader.result;
+        (this as any as IMixinState).getNotification('Id uploaded', 'success');
       };
     },
     showPhotoModal() {
