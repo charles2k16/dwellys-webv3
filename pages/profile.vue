@@ -24,9 +24,12 @@
           <div class="pl-20 pt-20">
             <p class="pb-5" style="font-size: 22px; font-weight: 600">
               {{ lister.first_name }} {{ lister.last_name }}
+              <el-tag size="mini" type="warning" effect="dark">
+                {{ lister.user_type }}</el-tag
+              >
             </p>
             <p class="pb-10">
-              <small>{{ lister.email }} </small>
+              <span>{{ lister.email }} </span>
             </p>
 
             <el-upload
@@ -37,19 +40,20 @@
               :on-change="getAvatar"
               :show-file-list="false"
             >
-              <el-button type="info">Edit profile</el-button>
+              <el-button type="info" size="mini">Update Photo</el-button>
             </el-upload>
           </div>
         </div>
         <p class="py-5 user_type">
-          <span>User Type</span>
-          <el-tag> {{ lister.user_type }} </el-tag>
+          <el-tag v-if="lister.is_id_card_verified == 0" type="danger"
+            >Not Verified</el-tag
+          >
         </p>
       </div>
       <el-tabs v-model="activeName" @tab-click="handleClick" class="nav_scroll">
         <el-tab-pane
           v-if="lister.user_type == 'lister'"
-          label="My Adverts"
+          label="My Listings"
           name="first"
           class="new_tab"
         >
@@ -214,33 +218,33 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue';
 // import { products } from '@/assets/data/index.js'
-import VuePhoneNumberInput from "vue-phone-number-input";
-import "vue-phone-number-input/dist/vue-phone-number-input.css";
-import { IMixinState } from "@/types/mixinsTypes";
-import url from "../url";
-import moment from "@nuxtjs/moment";
+import VuePhoneNumberInput from 'vue-phone-number-input';
+import 'vue-phone-number-input/dist/vue-phone-number-input.css';
+import { IMixinState } from '@/types/mixinsTypes';
+import url from '../url';
+import moment from '@nuxtjs/moment';
 
 export default Vue.extend({
-  name: "settings",
+  name: 'settings',
   components: {
     VuePhoneNumberInput,
   },
   data() {
     var validatePass = (rule: any, value: string, callback: any) => {
-      if (value === "") {
-        callback(new Error("Please input the password"));
+      if (value === '') {
+        callback(new Error('Please input the password'));
       } else {
-        if ((this as any).passwords.confirm_password !== "") {
-          (this as any).$refs.passwords.validateField("confirm_password");
+        if ((this as any).passwords.confirm_password !== '') {
+          (this as any).$refs.passwords.validateField('confirm_password');
         }
         callback();
       }
     };
     var validatePass2 = (rule: any, value: string, callback: any) => {
-      if (value === "") {
-        callback(new Error("Please input the password again"));
+      if (value === '') {
+        callback(new Error('Please input the password again'));
       } else if (value !== (this as any).passwords.new_password) {
         callback(new Error("Password don't match!"));
       } else {
@@ -248,42 +252,42 @@ export default Vue.extend({
       }
     };
     return {
-      activeName: "second" as string,
-      dummy_avatar: "../assets/img/avatar.png" as string,
-      home: "" as string,
-      phone: "",
-      not_approved_message: "",
+      activeName: 'second' as string,
+      dummy_avatar: '../assets/img/avatar.png' as string,
+      home: '' as string,
+      phone: '',
+      not_approved_message: '',
       passwords: {
-        new_password: "" as string,
-        confirm_password: "" as string,
+        new_password: '' as string,
+        confirm_password: '' as string,
       },
-      current_password: "" as string,
+      current_password: '' as string,
       loading: false as boolean,
-      identification: "" as any,
+      identification: '' as any,
       step: 1,
       avatar:
-        "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" as any,
+        'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png' as any,
       editInfo: false as any,
       user_listings: [],
       lister: {
-        id: "" as string,
-        first_name: "" as string,
-        last_name: "" as string,
-        dob: "" as string,
-        phone_number: "",
-        user_type: "",
-        email: "",
-        avatar: "",
-        country_id: "39a40751-d7d2-4346-99e5-b0235b520ce5" as string,
+        id: '' as string,
+        first_name: '' as string,
+        last_name: '' as string,
+        dob: '' as string,
+        phone_number: '',
+        user_type: '',
+        email: '',
+        avatar: '',
+        country_id: '39a40751-d7d2-4346-99e5-b0235b520ce5' as string,
       } as any,
-      options: ["SSNIT", "Passport", "Voter"],
+      options: ['SSNIT', 'Passport', 'Voter'],
       countries: [],
       validation: {
         password: [
-          { validator: validatePass, trigger: "blur", required: true },
+          { validator: validatePass, trigger: 'blur', required: true },
         ],
         confirm_password: [
-          { validator: validatePass2, trigger: "blur", required: true },
+          { validator: validatePass2, trigger: 'blur', required: true },
         ],
       },
     };
@@ -298,9 +302,9 @@ export default Vue.extend({
       (this as any as IMixinState).$confirm(
         `Hi ${this.lister.first_name}, Your account is being approved. We will send you an email once it's approved, Thank you.`,
         {
-          confirmButtonText: "OK",
-          cancelButtonText: "Cancel",
-          type: "warning",
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
+          type: 'warning',
         }
       );
     }
@@ -310,15 +314,15 @@ export default Vue.extend({
       return url();
     },
     birthDate(date: any) {
-      this.$moment(date.format("MMM DD, YY"));
+      this.$moment(date.format('MMM DD, YY'));
     },
     async fetchData() {
       const user = this.$auth.user;
       const lister = await this.$userApi.show(user.id);
-      console.log(lister, "user details");
+      console.log(lister, 'user details');
       // this.loadlister(listers.data);
       this.user_listings = lister.data.listings;
-      console.log(user, "user");
+      console.log(user, 'user');
 
       this.lister = {
         id: user.id,
@@ -339,7 +343,7 @@ export default Vue.extend({
       this.countries.filter((country: any) =>
         country.short_name == e.countryCode
           ? (this.lister.country_id = country.id)
-          : ""
+          : ''
       );
     },
     handleClick(tab: string, event: object) {
@@ -370,7 +374,7 @@ export default Vue.extend({
       const data = {
         avatar:
           this.avatar !=
-          "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+          'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
             ? this.avatar
             : null,
         dob: this.lister.dob,
@@ -384,16 +388,16 @@ export default Vue.extend({
       console.log(data);
       try {
         const profileResponse = await this.$userUpdateApi.update(
-          "update",
+          'update',
           data
         );
-        console.log("profile response", profileResponse);
+        console.log('profile response', profileResponse);
         this.$auth.setUser(profileResponse.data.user);
 
         this.loading = false;
         (this as any as IMixinState).getNotification(
-          "Update successfull!",
-          "success"
+          'Update successfull!',
+          'success'
         );
       } catch (error) {
         this.loading = false;
@@ -409,8 +413,8 @@ export default Vue.extend({
         } else {
           this.loading = false;
           (this as any as IMixinState).getNotification(
-            "Make sure all required fields are filled",
-            "error"
+            'Make sure all required fields are filled',
+            'error'
           );
           return false;
         }
@@ -426,11 +430,11 @@ export default Vue.extend({
         console.log(response);
 
         (this as any as IMixinState).$confirm(
-          "Password Changed Successfully!",
+          'Password Changed Successfully!',
           {
-            confirmButtonText: "OK",
-            cancelButtonText: "Cancel",
-            type: "success",
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel',
+            type: 'success',
           }
         );
         this.loading = false;
@@ -474,10 +478,13 @@ $medium_screen: 769px;
     flex-direction: column;
   }
   .profile_img {
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
-    width: 100%;
-    max-width: 160px;
-    height: 160px;
+    @media (max-width: $small_screen) {
+      width: 100px;
+      height: 100px;
+    }
   }
   .user_type {
     display: flex;
