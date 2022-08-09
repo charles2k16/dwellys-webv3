@@ -246,8 +246,8 @@
                 class="region pt-10"
               >
                 <el-option
-                  v-for="country in countries"
-                  :key="country.id"
+                  v-for="(country, index) in countries"
+                  :key="index"
                   :value="country.id"
                   :label="country.full_name"
                 >
@@ -348,7 +348,6 @@ export default Vue.extend({
   data() {
     return {
       step: 1 as number,
-      country: '' as string,
       category: ' ' as string,
       pageLoad: false as boolean,
       propLoad: false as boolean,
@@ -363,7 +362,6 @@ export default Vue.extend({
       regions: ['Greater Accra', 'Ashanti Region', ''],
       categories: [],
       amenities: [],
-
       pricingPlans: [],
       countries: [],
       listing_photos: [] as any,
@@ -397,11 +395,12 @@ export default Vue.extend({
         .then(() => {
           this.$router.replace('/');
         });
+
+      return;
     }
     try {
       const categories = await this.$listingCategoriesApi.index();
       this.categories = categories.data;
-      console.log(this.categories);
 
       const propertyTypes = await this.$propertyTypesApi.index();
       this.propertyTypes = propertyTypes.data;
@@ -409,7 +408,6 @@ export default Vue.extend({
 
       const listingPlans = await this.$listingPlansApi.index();
       this.pricingPlans = listingPlans.data;
-      console.log(listingPlans);
 
       const countries = await this.$countriesApi.index();
       this.countries = countries.data;
@@ -548,14 +546,6 @@ export default Vue.extend({
         message: 'Add number of specifications to continue',
         type: 'error',
       });
-    },
-    getCountry(e: any) {
-      console.log(e);
-      this.countries.filter((country: any) =>
-        country.full_name == e
-          ? (this.propertyUpload.country_id = country.id)
-          : ''
-      );
     },
     getCategory(e: any) {
       console.log(e);
