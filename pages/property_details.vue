@@ -39,7 +39,7 @@
 
           <p class="align_center">
             <span class="material-icons mr-5"> schedule </span>Last updated,
-            {{ $moment(propertyDetails.updated_at).format("MMMM Do YYYY") }}
+            {{ $moment(propertyDetails.updated_at).format('MMMM Do YYYY') }}
           </p>
         </div>
         <div class="details_plot">
@@ -61,14 +61,14 @@
                 .listing_images"
               :key="index"
             >
-              <img :src="url() + '/' + image.photo" class="carousel_image" />
+              <img :src="apiUrl + '/' + image.photo" class="carousel_image" />
             </el-carousel-item>
           </el-carousel>
         </el-col>
 
         <el-col :xs="8" :sm="8" :md="4" v-if="hasMorePhotos">
           <div class="thumbnail">
-            <img :src="url() + '/' + image.photo" class="_image" />
+            <img :src="apiUrl + '/' + image.photo" class="_image" />
           </div>
         </el-col>
       </el-row>
@@ -129,7 +129,7 @@
                 </p>
                 <div class="d-flex mt-20" v-if="propertyDetails.listing_detail">
                   <img
-                    :src="url() + '/' + propertyDetails.lister.avatar"
+                    :src="apiUrl + '/' + propertyDetails.lister.avatar"
                     class="agent_avatar"
                   />
                   <div class="ml-20">
@@ -192,33 +192,33 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
-import url from "../url";
+import Vue from 'vue';
+import ApplicationHandler from '@/handlers/ApplicationHandler.vue';
+import url from '../url';
 
 export default Vue.extend({
   auth: false,
-  name: "PropertyDetails",
+  name: 'PropertyDetails',
   components: {
     ApplicationHandler,
   },
   data() {
     return {
-      activeName: "first" as string,
-      image: "" as any,
+      activeName: 'first' as string,
+      image: '' as any,
       propertyDetails: {} as any,
-      home: "" as string,
+      home: '' as string,
       sendForm: {
         amount: null,
         recipient_amt: null,
-        payment_method: "" as string,
+        payment_method: '' as string,
       },
       payOptions: [
-        { value: ":brijwallet", label: ":brij wallet" },
-        { value: ":brijEx", label: ":brijEx" },
-        { value: "M-PESA", label: "M-PESA" },
+        { value: ':brijwallet', label: ':brij wallet' },
+        { value: ':brijEx', label: ':brijEx' },
+        { value: 'M-PESA', label: 'M-PESA' },
       ],
-      user: "",
+      user: '',
     };
   },
   async created() {
@@ -245,7 +245,7 @@ export default Vue.extend({
     //     return moment(date).format("MMMM Do YYYY");
     //   },
     showOwner(): void {
-      console.log("show");
+      console.log('show');
       (this as any).$refs.propertyAction.showOwnerModal(this.user);
     },
   },
@@ -328,7 +328,7 @@ $small_screen: 426px;
       margin-left: 15px;
 
       &::before {
-        content: "\2022";
+        content: '\2022';
         color: red;
         font-weight: bold;
         display: inline-block;
