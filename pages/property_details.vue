@@ -61,13 +61,14 @@
                 .listing_images"
               :key="index"
             >
-              <img :src="src + image.photo" class="carousel_image" />
+              <img :src="url() + '/' + image.photo" class="carousel_image" />
             </el-carousel-item>
           </el-carousel>
         </el-col>
+
         <el-col :xs="8" :sm="8" :md="4" v-if="hasMorePhotos">
           <div class="thumbnail">
-            <img :src="src + image.photo" class="_image" />
+            <img :src="url() + '/' + image.photo" class="_image" />
           </div>
         </el-col>
       </el-row>
@@ -128,7 +129,7 @@
                 </p>
                 <div class="d-flex mt-20" v-if="propertyDetails.listing_detail">
                   <img
-                    :src="src + propertyDetails.lister.avatar"
+                    :src="url() + '/' + propertyDetails.lister.avatar"
                     class="agent_avatar"
                   />
                   <div class="ml-20">
@@ -193,16 +194,16 @@
 <script lang="ts">
 import Vue from "vue";
 import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
+import url from "../url";
 
 export default Vue.extend({
-   auth: false,
+  auth: false,
   name: "PropertyDetails",
   components: {
     ApplicationHandler,
   },
   data() {
     return {
-      src: "http://localhost:8000/",
       activeName: "first" as string,
       image: "" as any,
       propertyDetails: {} as any,
@@ -231,6 +232,9 @@ export default Vue.extend({
     },
   },
   methods: {
+    url() {
+      return url();
+    },
     handleClick(tab: string, event: object) {
       console.log(tab, event);
     },

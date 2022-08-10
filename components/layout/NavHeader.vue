@@ -52,7 +52,7 @@
 
                   <img
                     v-if="$auth.user.avatar"
-                    :src="src + $auth.user.avatar"
+                    :src="url() + '/' + $auth.user.avatar"
                     alt="avatar"
                     class="user_avatar"
                   />
@@ -167,12 +167,13 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import 'element-ui/lib/theme-chalk/display.css';
-import ApplicationHandler from '@/handlers/ApplicationHandler.vue';
+import Vue from "vue";
+import "element-ui/lib/theme-chalk/display.css";
+import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
+import url from "../../url";
 
 export default Vue.extend({
-  name: 'NavHeader',
+  name: "NavHeader",
   components: {
     ApplicationHandler,
   },
@@ -180,14 +181,14 @@ export default Vue.extend({
     return {
       userData: {} as any,
       userReady: false,
-      user_type: '' as any,
+      user_type: "" as any,
       src:
-        process.env.NODE_ENV === 'development'
-          ? 'http://localhost:8000/'
-          : 'https://newapi.dwellys.com/',
-      user: 'login' as string,
+        process.env.NODE_ENV === "development"
+          ? "http://localhost:8000/"
+          : "https://newapi.dwellys.com/",
+      user: "login" as string,
       drawer: false as boolean,
-      direction: 'rtl',
+      direction: "rtl",
     };
   },
 
@@ -200,11 +201,10 @@ export default Vue.extend({
       this.userReady = true;
     }
   },
-  updated() {
-    // console.log(this.$auth.$storage.getLocalStorage("user_data"));
-    // this.userData = this.$auth.$storage.getLocalStorage("user_data");
-  },
   methods: {
+    url() {
+      return url();
+    },
     showLoginModal(): void {
       this.drawer = false;
       (this as any).$refs.modalHandler.showLogin(this.user);
