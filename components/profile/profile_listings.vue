@@ -26,7 +26,11 @@
                     <i class="el-icon-more"> </i>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>Edit</el-dropdown-item>
+                    <el-dropdown-item
+                      ><NuxtLink :to="`/edit_listing/${listing.id}`"
+                        >Edit</NuxtLink
+                      ></el-dropdown-item
+                    >
                     <el-dropdown-item>Publish</el-dropdown-item>
                     <el-dropdown-item style="color: red"
                       >Delete</el-dropdown-item
@@ -72,7 +76,7 @@
                   <img src="~/assets/svg/tv.png" class="property_img pr-10" /><b
                     >{{
                       listing.property_specifications[2]
-                        ? listing.property_specifications[1].number
+                        ? listing.property_specifications[2].number
                         : 0
                     }}</b
                   >
@@ -80,7 +84,7 @@
                 <p>
                   {{
                     listing.property_specifications[2]
-                      ? listing.property_specifications[1].specification.name
+                      ? listing.property_specifications[2].specification.name
                       : 0
                   }}
                 </p>
@@ -103,10 +107,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue from "vue";
 
 export default Vue.extend({
-  name: 'ProfileListings',
+  name: "ProfileListings",
   props: {
     user_listings: {
       required: true,
@@ -115,7 +119,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      email: '' as string,
+      email: "" as string,
       pageLoad: false,
       houses: [
         // { img: "Frame2.png", name: "property" },
