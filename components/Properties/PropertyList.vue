@@ -72,14 +72,14 @@
       </el-col>
     </el-row>
     <div v-else class="d-flex justify_center p-20">
-      <h2>No Properties</h2>
+      <p>No Properties found</p>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { IMixinState } from "../../types/mixinsTypes";
+import Vue from 'vue';
+import { IMixinState } from '../../types/mixinsTypes';
 
 export default Vue.extend({
   props: {
@@ -88,7 +88,7 @@ export default Vue.extend({
       type: Array,
     },
   },
-  name: "PropertyList",
+  name: 'PropertyList',
   data() {
     return {
       favProperties: [] as Array<object>,
@@ -110,8 +110,8 @@ export default Vue.extend({
         console.log(favoriteResponse);
         (this as any as IMixinState).$message({
           showClose: true,
-          message: "Added property to favourite!",
-          type: "success",
+          message: 'Added property to favourite!',
+          type: 'success',
         });
       } catch (error) {
         (this as any as IMixinState).catchError(error);
@@ -120,7 +120,7 @@ export default Vue.extend({
     openPropertyDetails(property: any): void {
       console.log(property);
       this.$router.push({
-        name: "property_details",
+        name: 'property_details',
         params: { property: property.id },
         query: {
           name: property.listing_detail.name,

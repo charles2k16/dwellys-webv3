@@ -92,12 +92,10 @@
       </el-row>
     </div>
     <div v-else class="no_properties p-20">
-      <h2 class="pb-10">
-        There ar no properties yet.<br />Create your first now!
-      </h2>
+      <p class="pb-10">You have no listings or proeprties uploaded yet.</p>
       <NuxtLink to="/property_upload"
-        ><el-button type="primary"
-          ><i class="el-icon-plus mr-10"></i>Create</el-button
+        ><el-button type="primary" size="mini"
+          ><i class="el-icon-plus mr-10"></i>Upload Property</el-button
         ></NuxtLink
       >
     </div>
@@ -105,10 +103,10 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue';
 
 export default Vue.extend({
-  name: "ProfileListings",
+  name: 'ProfileListings',
   props: {
     user_listings: {
       required: true,
@@ -117,7 +115,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      email: "" as string,
+      email: '' as string,
       pageLoad: false,
       houses: [
         // { img: "Frame2.png", name: "property" },
@@ -138,9 +136,6 @@ export default Vue.extend({
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  h2 {
-    line-height: 2rem;
-  }
 }
 .el-icon-more {
   color: white;

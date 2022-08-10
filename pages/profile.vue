@@ -24,9 +24,12 @@
           <div class="pl-20 pt-20">
             <p class="pb-5" style="font-size: 22px; font-weight: 600">
               {{ lister.first_name }} {{ lister.last_name }}
+              <el-tag size="mini" type="warning" effect="dark">
+                {{ lister.user_type }}</el-tag
+              >
             </p>
             <p class="pb-10">
-              <small>{{ lister.email }} </small>
+              <span>{{ lister.email }} </span>
             </p>
 
             <el-upload
@@ -37,19 +40,20 @@
               :on-change="getAvatar"
               :show-file-list="false"
             >
-              <el-button type="info">Edit profile</el-button>
+              <el-button type="info" size="mini">Update Photo</el-button>
             </el-upload>
           </div>
         </div>
         <p class="py-5 user_type">
-          <span>User Type</span>
-          <el-tag> {{ lister.user_type }} </el-tag>
+          <el-tag v-if="lister.is_id_card_verified == 0" type="danger"
+            >Not Verified</el-tag
+          >
         </p>
       </div>
       <el-tabs v-model="activeName" @tab-click="handleClick" class="nav_scroll">
         <el-tab-pane
           v-if="lister.user_type == 'lister'"
-          label="My Properties"
+          label="My Listings"
           name="first"
           class="new_tab"
         >
@@ -474,10 +478,13 @@ $medium_screen: 769px;
     flex-direction: column;
   }
   .profile_img {
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
-    width: 100%;
-    max-width: 160px;
-    height: 160px;
+    @media (max-width: $small_screen) {
+      width: 100px;
+      height: 100px;
+    }
   }
   .user_type {
     display: flex;
