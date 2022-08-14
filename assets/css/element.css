@@ -248,6 +248,11 @@
   max-width: 350px;
 }
 
+.provider > .el-input {
+  width: 100%;
+  max-width: 600px;
+}
+
 .el-carousel__container {
   position: relative;
   height: 500px;

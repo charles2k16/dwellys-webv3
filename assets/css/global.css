@@ -211,6 +211,10 @@ span {
   padding-top: 20px;
   padding-bottom: 20px;
 }
+.py-30 {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
 .pr-5 {
   padding-right: 5px;
 }
@@ -219,6 +223,9 @@ span {
 }
 .pr-20 {
   padding-right: 20px;
+}
+.pr-30 {
+  padding-right: 30px;
 }
 .pt-20 {
   padding-top: 20px;
@@ -240,6 +247,9 @@ span {
 }
 .pl-20 {
   padding-left: 20px;
+}
+.pl-30 {
+  padding-left: 30px;
 }
 .p-20 {
   padding: 20px;

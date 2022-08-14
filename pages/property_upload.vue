@@ -10,13 +10,12 @@
             >
           </div>
           <div class="block slider">
-            <el-slider v-model="step" disabled :min="1" :max="6"></el-slider>
+            <el-slider v-model="step" disabled :min="1" :max="7"></el-slider>
           </div>
         </div>
 
         <div class="property_content_container" v-loading="pageLoad">
           <div class="d-flex_column pb-20 pt-20 justify_center">
-            <!-- <el-col :sm="32" class="pb-20 d-flex_column pr-20"> -->
             <p><b>Select Category</b></p>
             <el-select
               v-model="category"
@@ -31,7 +30,7 @@
               >
               </el-option>
             </el-select>
-            <!-- </el-col> -->
+            <!-- </el-col>  -->
           </div>
           <div class="property_content">
             <div v-for="property in propertyTypes" :key="property.id">
@@ -52,12 +51,6 @@
                     {{ property.description }}
                   </p>
                 </div>
-                <!-- <div
-                  :style="{
-                    backgroundImage: `url(${getImage(property.photo)})`,
-                  }"
-                  class="property_upload_photo"
-                ></div> -->
                 <img
                   :src="url() + '/' + property.photo"
                   class="property_upload_photo"
@@ -74,7 +67,7 @@
             <small>Number of bedrooms, bathrooms, garage, kitchen, etc</small>
           </div>
           <div class="block slider">
-            <el-slider v-model="step" disabled :min="1" :max="6"></el-slider>
+            <el-slider v-model="step" disabled :min="1" :max="7"></el-slider>
           </div>
         </div>
         <div class="property_content_container">
@@ -165,7 +158,7 @@
             <small>Please check the plausible amenities</small>
           </div>
           <div class="block slider">
-            <el-slider v-model="step" disabled :min="1" :max="6"></el-slider>
+            <el-slider v-model="step" disabled :min="1" :max="7"></el-slider>
           </div>
         </div>
         <div class="grid_content_container">
@@ -196,7 +189,7 @@
             <small>Please check the plausible amenities</small>
           </div>
           <div class="block slider">
-            <el-slider v-model="step" disabled :min="1" :max="6"></el-slider>
+            <el-slider v-model="step" disabled :min="1" :max="7"></el-slider>
           </div>
         </div>
         <div class="property_content_container pb-20">
@@ -233,7 +226,7 @@
             <small>Select the location of the property</small>
           </div>
           <div class="block slider">
-            <el-slider v-model="step" disabled :min="1" :max="6"></el-slider>
+            <el-slider v-model="step" disabled :min="1" :max="7"></el-slider>
           </div>
         </div>
         <div class="property_content_container pb-20">
@@ -298,11 +291,120 @@
             <small>Please check the plausible amenities</small>
           </div>
           <div class="block slider">
-            <el-slider v-model="step" disabled :min="1" :max="6"></el-slider>
+            <el-slider v-model="step" disabled :min="1" :max="7"></el-slider>
           </div>
         </div>
         <div class="plans_price pb-20">
           <PlansPricing :pricingPlans="pricingPlans" @getPlan="getPrice" />
+        </div>
+      </div>
+      <div v-if="step === 7">
+        <div class="payment_container">
+          <div class="payment_section pr-30">
+            <h3>Payment</h3>
+            <el-divider></el-divider>
+            <div>
+              <p>Select payment media</p>
+              <div class="payment_methods">
+                <p
+                  v-for="method in paymentMedia"
+                  :key="method.method"
+                  @click="changePaymentMedia(method.method)"
+                  :style="
+                    media == method.method && {
+                      background: '#1e293b',
+                      'border-radius': '5px',
+                      color: '#fff',
+                    }
+                  "
+                  class="p-10 selected_media"
+                >
+                  <i :class="method.icon"></i>
+                  <span class="pl-5">{{ method.method }} </span>
+                </p>
+              </div>
+              <div v-if="media == 'Pay with Momo'" class="pt-20">
+                <p>For payment using your mobile money wallets</p>
+                <div class="d-flex_column pt-10">
+                  <span class="demo-input-label pl-10 pb-5"
+                    >Service provider</span
+                  >
+                  <el-select
+                    name=""
+                    id=""
+                    class="provider"
+                    placeholder="Please select a service provider"
+                  >
+                    <el-option
+                      v-for="media in paymentMedias"
+                      :key="media"
+                      :value="media"
+                    >
+                      {{ media }}
+                    </el-option>
+                  </el-select>
+                </div>
+                <div class="d-flex_column pt-10">
+                  <span class="demo-input-label pl-10 pb-5">Phone number</span>
+                  <el-input type="number" placeholder="+233 21 324 2334" />
+                </div>
+              </div>
+              <div v-else class="pt-20">
+                <p class="py-10">For payment through bank account.</p>
+                <div class="d-flex_column pt-10">
+                  <span class="demo-input-label pl-10 pb-5"
+                    >Card holder name</span
+                  >
+                  <el-input placeholder="Enter the card holder name" />
+                </div>
+                <div class="d-flex_column pt-10">
+                  <span class="demo-input-label pl-10 pb-5">Card number</span>
+                  <el-input type="number" placeholder="0000 0000 0000 0000" />
+                </div>
+                <div class="d-flex pt-10">
+                  <section class="pr-10">
+                    <span class="demo-input-label pl-10 pb-5"
+                      >Expiry month</span
+                    >
+                    <el-input type="date" placeholder="MM/YY" />
+                  </section>
+                  <section class="pl-10">
+                    <span class="demo-input-label pl-10 pb-5">CVV</span>
+                    <el-input placeholder="CVV" />
+                  </section>
+                </div>
+                <!-- <div class="py-30">
+                <el-button type="primary" class="full_width"
+                  >Proceed to payment</el-button
+                >
+              </div> -->
+              </div>
+            </div>
+          </div>
+          <div class="payment_section pl-30">
+            <div class="discount">
+              <section class="d-flex justify_between pb-5">
+                <span>Discount code</span>
+                <span>**Required</span>
+              </section>
+              <el-input />
+            </div>
+            <div class="property_rental pt-20">
+              <section class="d-flex justify_between">
+                <span>Property Rental</span>
+                <span>$12.567</span>
+              </section>
+              <section class="d-flex justify_between py-10">
+                <h5>Subtotal:</h5>
+                <h5>$24.32</h5>
+              </section>
+            </div>
+          </div>
+        </div>
+        <div class="payment_btn pb-30">
+          <el-button type="primary" class="full_width"
+            >Proceed to payment</el-button
+          >
         </div>
       </div>
       <hr class="hr_rule" />
@@ -316,7 +418,7 @@
           @click="submitUpload"
           :loading="btnLoading"
           :disabled="!submitVal"
-          v-if="step === 6"
+          v-if="step === 7"
           >Submit</el-button
         >
         <el-button
@@ -349,10 +451,16 @@ export default Vue.extend({
   data() {
     return {
       step: 1 as number,
-      category: " " as string,
+      category: "" as string,
       pageLoad: false as boolean,
       propLoad: false as boolean,
       propertySelected: false as boolean,
+      media: "Pay with Momo" as string,
+      paymentMedia: [
+        { method: "Pay with Momo", icon: "el-icon-mobile-phone" },
+        { method: "Pay with card", icon: "el-icon-bank-card" },
+      ],
+      paymentMedias: ["MTN Mobile money", "Vodafone Cash", "Zeepay"],
       specErr: "" as string,
       selectedProperty: "",
       btnLoading: false as boolean,
@@ -453,6 +561,8 @@ export default Vue.extend({
         this.propertyUpload.city != ""
       ) {
         valid = true;
+      } else if (this.step == 6 && this.propertyUpload.price != 0) {
+        valid = true;
       }
       return valid;
     },
@@ -467,6 +577,9 @@ export default Vue.extend({
   methods: {
     url() {
       return url();
+    },
+    changePaymentMedia(method: string) {
+      this.media = method;
     },
     removeSpec(index: number) {
       this.propertyUpload.other_specifications.splice(index, 1);
@@ -753,6 +866,52 @@ $medium_screen: 769px;
   .category {
     width: 70%;
     margin: 0 auto;
+  }
+
+  .payment_container {
+    display: flex;
+    padding-bottom: 30px;
+    @media (max-width: $medium_screen) {
+      flex-direction: column;
+    }
+    .discount {
+      background: #f1f5f9;
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .payment_section {
+      width: 50%;
+      @media (max-width: $medium_screen) {
+        width: 80%;
+        margin: 0 auto;
+        padding-right: 0 !important;
+        padding-left: 0 !important;
+        padding-top: 20px;
+      }
+      @media (max-width: $small_screen) {
+        width: 100%;
+        padding-right: 0 !important;
+        padding-left: 0 !important;
+      }
+      .payment_methods {
+        display: flex;
+        background: #f8fafc;
+        padding-left: 10px;
+        border-radius: 8px;
+        @media (max-width: 320px) {
+          flex-direction: column;
+        }
+      }
+    }
+  }
+  .payment_btn {
+    width: 50%;
+    padding-right: 30px;
+    @media (max-width: $medium_screen) {
+      width: 80%;
+      margin: 0 auto;
+      padding-right: 0;
+    }
   }
 }
 </style>

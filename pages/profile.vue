@@ -318,12 +318,13 @@ export default Vue.extend({
     },
     async fetchData() {
       const user = this.$auth.user;
-      const lister = await this.$userApi.show(user.id);
-      console.log(lister, "user details");
-      // this.loadlister(listers.data);
-      this.user_listings = lister.data.listings;
+      if (user.user_type == "lister") {
+        const lister = await this.$userApi.show(user.id);
+        console.log(lister, "user details");
+        // this.loadlister(listers.data);
+        this.user_listings = lister.data.listings;
+      }
       console.log(user, "user");
-
       this.lister = {
         id: user.id,
         first_name: user.first_name,

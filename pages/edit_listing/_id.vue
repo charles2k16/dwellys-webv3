@@ -1,7 +1,34 @@
 <template>
   <div class="section">
+    <el-dialog
+      title="Tips"
+      :visible.sync="dialogVisible"
+      width="45%"
+      :before-close="handleClose"
+    >
+      <el-upload
+        id="category-image"
+        class="image-upload"
+        drag
+        :on-change="newImage"
+        action="#"
+        multiple
+        :auto-upload="false"
+      >
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">
+          Drop file here or <em>click to upload</em>
+        </div>
+      </el-upload>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="addImages" :loading="loading"
+          >Add Images</el-button
+        >
+      </span>
+    </el-dialog>
     <div class="d-flex justify_between">
-      <div class="d-flex">
+      <div class="d-flex pt-20">
         <!-- <section class="listing_bar"> -->
         <!-- <p>Lister</p> -->
         <!-- <p class="pt-10"> -->
@@ -10,65 +37,104 @@
         <!-- </section> -->
         <section class="listing_bar">
           <p>Listing type</p>
-          <p class="pt-10">
+          <!-- <p class="pt-10">
             <b>{{ listing.property_type && listing.property_type.name }} </b>
-          </p>
+          </p> -->
           <el-input
             v-if="listing.property_type"
             v-model="listing.property_type.name"
           />
         </section>
-        <section class="listing_bar">
+        <section class="listing_bar pl-20">
           <p>Amount</p>
-          <p class="pt-10">
+          <!-- <p class="pt-10">
             <b>{{ listing.listing_detail && listing.listing_detail.price }} </b>
-          </p>
+          </p> -->
+          <el-input
+            v-if="listing.listing_detail"
+            v-model="listing.listing_detail.price"
+          />
         </section>
       </div>
     </div>
     <el-divider></el-divider>
     <div>
-      <div>
+      <!-- <div>
         <p>Listing title</p>
         <p class="pt-10"><b>3 bed room house in Community 25, Tema</b></p>
-        <!-- <el-input v-model="listing.listing_detail.title" /> -->
-      </div>
+        <el-input v-model="listing.listing_detail.title" />
+      </div> -->
       <div class="d-flex pt-30">
-        <section class="pr-30">
+        <section class="pr-20">
           <p>Location</p>
-          <p class="pt-10">
+          <!-- <p class="pt-10">
             <b
               >{{ listing.listing_detail && listing.listing_detail.region }}
             </b>
-          </p>
+          </p> -->
+          <el-input
+            v-if="listing.listing_detail"
+            v-model="listing.listing_detail.region"
+          />
         </section>
         <section class="pl-20">
           <p>Upload Date</p>
-          <p class="pt-10">
-            <b>
-              {{ listing && $moment(listing.created_at).format("MMM DD, YY") }}
-            </b>
-          </p>
+          <div class="d-flex">
+            <p class="pt-10 w-100 pr-10">
+              <b>
+                {{
+                  listing && $moment(listing.created_at).format("MMM DD, YY")
+                }}
+              </b>
+            </p>
+            <el-input type="date" v-if="listing" v-model="listing.created_at" />
+          </div>
         </section>
       </div>
     </div>
-    <section class="pt-30">
+    <section class="pt-30 w-70">
       <p>Description</p>
-      <p>
+      <!-- <p>
         <b>
           {{ listing.listing_detail && listing.listing_detail.description }}</b
         >
-      </p>
+      </p> -->
+      <el-input
+        type="textarea"
+        :rows="2"
+        v-if="listing.listing_detail"
+        v-model="listing.listing_detail.description"
+      />
     </section>
     <div v-if="listing.listing_detail" class="pt-30">
       <p>Images</p>
-      <div class="property_images pt-10">
-        <img
-          v-for="img in listing.listing_detail.listing_images"
-          :key="img.id"
-          :src="url + img.photo"
-        />
+      <p>Select an image as front image</p>
+      <div class="property_images pt-10 pb-10">
+        <div v-for="img in listing.listing_detail.listing_images" :key="img.id">
+          <!-- <el-checkbox v-model="checked">Option</el-checkbox> -->
+          <img
+            :src="url + img.photo"
+            @click="getImage(img.id)"
+            :style="img.id == imageId && 'border: 1px solid green'"
+          />
+          <div class="d-flex justify_end pr-20 pt-5">
+            <!-- <i class="el-icon-edit-outline"></i> -->
+            <i
+              class="el-icon-delete-solid deleteImgIcon"
+              @click="open(img.id)"
+            ></i>
+          </div>
+        </div>
       </div>
+      <el-button type="success" @click="dialogVisible = true"
+        >Add Images</el-button
+      >
+      <!-- <el-upload class="upload-demo" :on-change="newImage" multiple>
+        <el-button size="small" type="primary">Click to upload</el-button>
+        <div slot="tip" class="el-upload__tip">
+          jpg/png files with a size less than 500kb
+        </div>
+      </el-upload> -->
     </div>
     <div class="pt-30">
       <p>Basic information</p>
@@ -124,45 +190,135 @@ export default Vue.extend({
       listing_id: this.$route.params.id,
       listing: {},
       loading: false as boolean,
+      checked: false,
+      imageId: "",
+      dialogVisible: false,
+      photos: [] as Array<object>,
     };
   },
-  async created() {
-    // this.pageLoad = true;
-
-    const listing = await this.$listingApi.show(this.$route.params.id);
-    console.log(listing);
-    // const listing = listings.data.find(
-    // (listing: any) => listing.id === this.listing_id
-    // )
-    this.listing = listing.data;
+  created() {
+    this.fetchData();
   },
   methods: {
-    // async approveLister(listingId: string, status: string) {
-    //   try {
-    //     const listingResponse = await this.$listingsApi.update(
-    //       '/togglestatus',
-    //       {
-    //         listing_id: listingId,
-    //         status,
-    //       }
-    //     )
-    //     console.log(listingResponse)
-    //     // console.log(listingId, active)
-    //     this.loading = false
-    //     ;(this as any as IMixinState).$message({
-    //       showClose: true,
-    //       message: listingResponse.message,
-    //       type: 'success',
-    //     })
-    //   } catch (error: any) {
-    //     console.log(error, 'error')
-    //     ;(this as any as IMixinState).$message({
-    //       showClose: true,
-    //       message: error.message,
-    //       type: 'success',
-    //     })
-    //   }
-    // },
+    async fetchData() {
+      const listing = await this.$listingApi.show(this.$route.params.id);
+      console.log(listing);
+      this.listing = listing.data;
+    },
+    getImage(imageId: string) {
+      this.imageId = imageId;
+      this.checked = true;
+      this.$confirm(
+        "Are you sure you want to set this image as property cover?",
+        {
+          cancelButtonText: "No",
+          confirmButtonText: "Yes",
+        }
+      )
+        .then(() => {
+          this.setFeatureImage(imageId);
+        })
+        .catch((err: any) => {
+          console.log(err);
+        });
+    },
+    newImage(file: any) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file.raw);
+      reader.onloadend = () => {
+        this.photos.push({
+          tag: "front",
+          is_featured: false,
+          photo: reader.result,
+        });
+      };
+    },
+    handleClose(done: any) {
+      this.$confirm("Are you sure to close this dialog?")
+        .then((response: any) => {
+          done();
+        })
+        .catch((err: any) => {});
+    },
+    open(planId: string, planName: string) {
+      console.log(planId, "profile");
+      // const h = this.$createElement
+      this.$confirm("Are you sure you want to delete?", {
+        cancelButtonText: "No, i want to keep",
+        confirmButtonText: "Yes,I want to Delete",
+      })
+        .then(() => {
+          this.deleteImage(planId);
+        })
+        .catch((err: any) => {
+          console.log(err);
+        });
+    },
+    async deleteImage(planId: string) {
+      this.loading = true;
+      try {
+        const ImageResponse = await this.$listingImagesApi.delete(planId);
+
+        console.log(ImageResponse);
+
+        this.loading = false;
+        this.fetchData();
+        (this as any as IMixinState).$message({
+          showClose: true,
+          message: ImageResponse.message,
+          type: "success",
+        });
+      } catch (error) {
+        console.log(error, "error");
+        (this as any as IMixinState).catchError(error);
+      }
+    },
+    async setFeatureImage(imageId: string) {
+      try {
+        const ImageResponse = await this.$listingImagesApi.update("feature", {
+          listing_image_id: imageId,
+        });
+
+        console.log(ImageResponse);
+
+        this.loading = false;
+        this.fetchData();
+        (this as any as IMixinState).$message({
+          showClose: true,
+          message: ImageResponse.message,
+          type: "success",
+        });
+      } catch (error) {
+        console.log(error, "error");
+        (this as any as IMixinState).catchError(error);
+      }
+    },
+    async addImages() {
+      console.log(this.photos);
+      try {
+        const listingResponse = await this.$listingImagesApi.create({
+          listing_id: this.listing_id,
+          listing_photos: this.photos,
+        });
+        console.log(listingResponse);
+        // console.log(listingId, active)
+        this.dialogVisible = false;
+        this.loading = false;
+        this.fetchData();
+        (this as any as IMixinState).$message({
+          showClose: true,
+          message: listingResponse.message,
+          type: "success",
+        });
+      } catch (error: any) {
+        console.log(error, "error");
+        (this as any as IMixinState).$message({
+          showClose: true,
+          message: error.message,
+          type: "success",
+        });
+      }
+    },
   },
 });
 </script>
@@ -204,5 +360,18 @@ export default Vue.extend({
 .user_placeholder {
   background: #d9d9d9;
   border-radius: 50%;
+}
+
+.deleteImgIcon {
+  color: red;
+  font-size: 18px;
+}
+.listing_img {
+  border: 1px solid green;
+  border-radius: 20px;
+}
+
+.el-upload-dragger {
+  width: 500px !important;
 }
 </style>
