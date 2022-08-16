@@ -494,19 +494,19 @@ export default Vue.extend({
   },
 
   async created() {
-    if (this.$auth.user.is_id_card_verified != 1) {
-      (this as any as IMixinState)
-        .$confirm("You are not verified yet to post properties", {
-          confirmButtonText: "OK",
-          cancelButtonText: "Cancel",
-          type: "error",
-        })
-        .then(() => {
-          this.$router.replace("/");
-        });
+    // if (this.$auth.user.is_id_card_verified != 1) {
+    //   (this as any as IMixinState)
+    //     .$confirm("You are not verified yet to post properties", {
+    //       confirmButtonText: "OK",
+    //       cancelButtonText: "Cancel",
+    //       type: "error",
+    //     })
+    //     .then(() => {
+    //       this.$router.replace("/");
+    //     });
 
-      return;
-    }
+    //   return;
+    // }
     try {
       const categories = await this.$listingCategoriesApi.index();
       this.categories = categories.data;

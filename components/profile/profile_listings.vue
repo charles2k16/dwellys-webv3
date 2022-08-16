@@ -33,7 +33,9 @@
                     >
                     <el-dropdown-item>Publish</el-dropdown-item>
                     <el-dropdown-item style="color: red"
-                      >Delete</el-dropdown-item
+                      ><span @click="deleteListingModal(listing.id)">
+                        Delete</span
+                      ></el-dropdown-item
                     >
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -130,7 +132,21 @@ export default Vue.extend({
     };
   },
 
-  methods: {},
+  methods: {
+    deleteListingModal(listing_id: string) {
+      // const h = this.$createElement
+      this.$confirm("Are you sure you want to delete listing?", {
+        cancelButtonText: "No, i want to keep",
+        confirmButtonText: "Yes,I want to delete it",
+      })
+        .then(() => {
+          this.$emit("listing_id", listing_id);
+        })
+        .catch((err: any) => {
+          console.log(err);
+        });
+    },
+  },
 });
 </script>
 

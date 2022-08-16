@@ -1,10 +1,9 @@
 <template>
   <div class="section">
     <el-dialog
-      title="Tips"
+      title="Add Property Image(s)"
       :visible.sync="dialogVisible"
       width="45%"
-      :before-close="handleClose"
     >
       <el-upload
         id="category-image"
@@ -23,7 +22,7 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">Cancel</el-button>
         <el-button type="primary" @click="addImages" :loading="loading"
-          >Add Images</el-button
+          >Add Image(s)</el-button
         >
       </span>
     </el-dialog>
@@ -64,7 +63,7 @@
         <p class="pt-10"><b>3 bed room house in Community 25, Tema</b></p>
         <el-input v-model="listing.listing_detail.title" />
       </div> -->
-      <div class="d-flex pt-30">
+      <div class="d-flex listing_location pt-30">
         <section class="pr-20">
           <p>Location</p>
           <!-- <p class="pt-10">
@@ -77,7 +76,7 @@
             v-model="listing.listing_detail.region"
           />
         </section>
-        <section class="pl-20">
+        <section class="pl-20 date">
           <p>Upload Date</p>
           <div class="d-flex">
             <p class="pt-10 w-100 pr-10">
@@ -92,7 +91,7 @@
         </section>
       </div>
     </div>
-    <section class="pt-30 w-70">
+    <section class="pt-30 listing_description">
       <p>Description</p>
       <!-- <p>
         <b>
@@ -110,7 +109,11 @@
       <p>Images</p>
       <p>Select an image as front image</p>
       <div class="property_images pt-10 pb-10">
-        <div v-for="img in listing.listing_detail.listing_images" :key="img.id">
+        <div
+          v-for="img in listing.listing_detail.listing_images"
+          :key="img.id"
+          class=""
+        >
           <!-- <el-checkbox v-model="checked">Option</el-checkbox> -->
           <img
             :src="url + img.photo"
@@ -127,7 +130,7 @@
         </div>
       </div>
       <el-button type="success" @click="dialogVisible = true"
-        >Add Images</el-button
+        >Add Image(s)</el-button
       >
       <!-- <el-upload class="upload-demo" :on-change="newImage" multiple>
         <el-button size="small" type="primary">Click to upload</el-button>
@@ -159,10 +162,7 @@
       <el-button type="info" @click="approveLister(listing.id, 'inactive')">
         <i class="el-icon-check pr-10"></i>Save Changes</el-button
       >
-      <el-button
-        type="primary"
-        :loading="loading"
-        @click="approveLister(listing.id, 'active')"
+      <el-button type="primary" :loading="loading" @click="deleteListingModal"
         ><i class="el-icon-close pr-10"></i>Delete</el-button
       >
     </div>
@@ -233,13 +233,6 @@ export default Vue.extend({
         });
       };
     },
-    handleClose(done: any) {
-      this.$confirm("Are you sure to close this dialog?")
-        .then((response: any) => {
-          done();
-        })
-        .catch((err: any) => {});
-    },
     open(planId: string, planName: string) {
       console.log(planId, "profile");
       // const h = this.$createElement
@@ -249,6 +242,19 @@ export default Vue.extend({
       })
         .then(() => {
           this.deleteImage(planId);
+        })
+        .catch((err: any) => {
+          console.log(err);
+        });
+    },
+    deleteListingModal() {
+      // const h = this.$createElement
+      this.$confirm("Are you sure you want to delete listing?", {
+        cancelButtonText: "No, i want to keep",
+        confirmButtonText: "Yes,I want to delete it",
+      })
+        .then(() => {
+          this.deleteListingImage();
         })
         .catch((err: any) => {
           console.log(err);
@@ -268,6 +274,26 @@ export default Vue.extend({
           message: ImageResponse.message,
           type: "success",
         });
+      } catch (error) {
+        console.log(error, "error");
+        (this as any as IMixinState).catchError(error);
+      }
+    },
+    async deleteListingImage() {
+      this.loading = true;
+      try {
+        const ListingResponse = await this.$listingApi.delete(this.listing_id);
+
+        console.log(ListingResponse);
+
+        this.loading = false;
+        this.fetchData();
+        (this as any as IMixinState).$message({
+          showClose: true,
+          message: ListingResponse.message,
+          type: "success",
+        });
+        this.$router.replace("/profile");
       } catch (error) {
         console.log(error, "error");
         (this as any as IMixinState).catchError(error);
@@ -330,7 +356,7 @@ export default Vue.extend({
 }
 .property_images {
   display: grid;
-  grid-template-columns: repeat(5, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 
   img {
     // border-radius: 20px;
@@ -371,7 +397,26 @@ export default Vue.extend({
   border-radius: 20px;
 }
 
-.el-upload-dragger {
-  width: 500px !important;
+.image-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.listing_description {
+  width: 70%;
+  @media (max-width: 425px) {
+    width: 100%;
+  }
+}
+
+@media (max-width: 425px) {
+  .listing_location {
+    flex-direction: column;
+    .date {
+      padding-left: 0 !important;
+      padding-top: 10px;
+    }
+  }
 }
 </style>

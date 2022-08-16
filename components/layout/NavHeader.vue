@@ -61,7 +61,7 @@
 
                 <img src="~/assets/img/user_icon.png" alt="icon" v-else />
               </span>
-              <span v-if="!$auth.loggedIn" @click="showLoginModal" class="mt-10"
+              <span v-if="!$auth.loggedIn" @click="showLoginModal" class="py-10"
                 >Login</span
               >
               <span
@@ -167,13 +167,13 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import 'element-ui/lib/theme-chalk/display.css';
-import ApplicationHandler from '@/handlers/ApplicationHandler.vue';
-import url from '../../url';
+import Vue from "vue";
+import "element-ui/lib/theme-chalk/display.css";
+import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
+import url from "../../url";
 
 export default Vue.extend({
-  name: 'NavHeader',
+  name: "NavHeader",
   components: {
     ApplicationHandler,
   },
@@ -181,14 +181,14 @@ export default Vue.extend({
     return {
       userData: {} as any,
       userReady: false,
-      user_type: '' as any,
+      user_type: "" as any,
       src:
-        process.env.NODE_ENV === 'development'
-          ? 'http://localhost:8000/'
-          : 'https://newapi.dwellys.com/',
-      user: 'login' as string,
+        process.env.NODE_ENV === "development"
+          ? "http://localhost:8000/"
+          : "https://newapi.dwellys.com/",
+      user: "login" as string,
       drawer: false as boolean,
-      direction: 'rtl',
+      direction: "rtl",
     };
   },
 

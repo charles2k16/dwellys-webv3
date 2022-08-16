@@ -90,6 +90,23 @@
 }
 
 /* upload */
+
+@media (max-width: 1024px) {
+  .image-upload > .el-upload > .el-upload-dragger {
+    background: #f8fafc;
+    max-width: 420px;
+    /* width: 100%; */
+  }
+}
+
+@media (max-width: 768px) {
+  .image-upload > .el-upload > .el-upload-dragger {
+    background: #f8fafc;
+    max-width: 320px;
+    /* width: 100%; */
+  }
+}
+
 .el-upload-dragger {
   background: #f8fafc;
   width: 570px;

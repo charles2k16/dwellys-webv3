@@ -406,6 +406,25 @@ export default Vue.extend({
       }
     },
 
+    async deleteImage(planId: string) {
+      this.loading = true;
+      try {
+        const ImageResponse = await this.$listingImagesApi.delete(planId);
+
+        console.log(ImageResponse);
+
+        this.loading = false;
+        this.fetchData();
+        (this as any as IMixinState).$message({
+          showClose: true,
+          message: ImageResponse.message,
+          type: "success",
+        });
+      } catch (error) {
+        console.log(error, "error");
+        (this as any as IMixinState).catchError(error);
+      }
+    },
     submit_password() {
       this.loading = true;
       (this as any).$refs.passwords.validate((valid: boolean) => {
