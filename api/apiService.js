@@ -9,6 +9,10 @@ export default ($axios) => (resource) => ({
     return $axios.$get(`${resource}/${id}`);
   },
 
+  query(query) {
+    return $axios.$get(`${resource}${query}`);
+  },
+
   create(payload) {
     return $axios.$post(`${resource}`, payload);
   },

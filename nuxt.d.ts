@@ -24,6 +24,7 @@ interface apiService {
   delete: Function;
   create: Function;
   update: Function;
+  query: Function;
   //  (query: object): Promise<any>
 }
 
@@ -41,6 +42,7 @@ declare module "vue/types/vue" {
     $userApi: apiService;
     $passwordApi: apiService;
     $userUpdateApi: apiService;
+    $querySearchApi: apiService;
     $router: any;
     $auth: any;
     $alert: any;

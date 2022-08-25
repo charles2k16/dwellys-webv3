@@ -14,13 +14,19 @@
             :key="index"
           >
             <div class="search_container">
+              <p v-if="isQuery" class="to_properties" @click="closeQuery">
+                <span class="material-icons">arrow_back</span>
+              </p>
               <el-input
                 v-model="search_value"
                 class="search_input"
                 placeholder="Where do you want to live?"
               >
               </el-input>
-              <el-button type="primary" class="hidden-sm-and-down"
+              <el-button
+                type="primary"
+                class="hidden-sm-and-down"
+                @click="getQuery"
                 >Find your home</el-button
               >
               <el-button
@@ -55,7 +61,15 @@
       </div>
     </div>
     <div>
-      <el-tabs type="border-card">
+      <div v-if="isQuery" class="section pt-20" v-loading="pageLoad">
+        <div v-if="queryList.length > 0">
+          <PropertyList :listings="queryList" />
+        </div>
+        <div v-else class="d-flex justify_center">
+          <h3>No Result Found.</h3>
+        </div>
+      </div>
+      <el-tabs v-else type="border-card">
         <el-tab-pane
           :label="tab.label"
           v-for="(tab, index) in tabOptions"
@@ -96,6 +110,8 @@ export default Vue.extend({
       ],
       listings: [] as Array<object>,
       pageLoad: true as boolean,
+      queryList: [],
+      isQuery: false,
       tabOptions: [
         { label: "All", title: "Rent a home" },
         { label: "House", title: "Rent a house" },
@@ -123,8 +139,30 @@ export default Vue.extend({
       this.listings = data;
       this.pageLoad = false;
     },
+    async getQuery() {
+      if (this.search_value) {
+        try {
+          const query = await this.$querySearchApi.query(this.search_value);
+          console.log(query);
+          this.queryList = query.data;
+          this.isQuery = true;
+        } catch (error: any) {
+          console.log("error", error);
+          if (error?.response?.data) {
+            this.isQuery = true;
+            console.log("from server error", error.response.data.message);
+          }
+        }
+      }
+    },
     handleClick(tab: string) {
       console.log(tab);
+    },
+    closeQuery() {
+      console.log(this.queryList);
+      this.isQuery = false;
+      this.queryList = [];
+      this.search_value = "";
     },
   },
 });
@@ -172,6 +210,12 @@ export default Vue.extend({
         padding: 10px;
       }
     }
+  }
+  .to_properties {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
   }
 }
 </style>

@@ -19,4 +19,5 @@ export default (ctx, inject) => {
   inject("userApi", apiService("/users"));
   inject("userUpdateApi", apiService("/auth/account"));
   inject("passwordApi", apiService("/updatepassword"));
+  inject("querySearchApi", apiService("/searchlisting?search_query="));
 };

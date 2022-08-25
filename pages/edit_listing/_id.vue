@@ -26,6 +26,89 @@
         >
       </span>
     </el-dialog>
+    <el-dialog
+      title="Add Property Specification(s)"
+      :visible.sync="specVisible"
+      width="45%"
+    >
+      <div v-for="spec in propertySpecs" :key="spec.id">
+        <div class="property_main_content">
+          <div class="d-flex_column">
+            <p>
+              <b> {{ spec.name }} </b>
+            </p>
+          </div>
+          <div class="d-flex">
+            <el-input-number :min="0" size="small" v-model="spec.number">
+              {{ spec.number ? spec.number : 0 }}
+              <!-- v-model="propertyUpload.specifications.number" -->
+            </el-input-number>
+          </div>
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="specVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="addSpecs" :loading="loading"
+          >Add Specification(s)</el-button
+        >
+      </span>
+    </el-dialog>
+    <el-dialog
+      title="Add Other Specification(s)"
+      :visible.sync="otherSpecVisible"
+      width="45%"
+    >
+      <!-- <div v-for="spec in propertySpecs" :key="spec.id"> -->
+      <div class="property_main_content">
+        <div class="d-flex_column">
+          <el-input v-model="newOtherSpec.name" />
+        </div>
+        <div class="d-flex">
+          <el-input-number :min="0" size="small" v-model="newOtherSpec.number">
+            {{ newOtherSpec.number ? newOtherSpec.number : 0 }}
+            <!-- v-model="propertyUpload.specifications.number" -->
+          </el-input-number>
+        </div>
+      </div>
+      <!-- </div> -->
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="otherSpecVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="addOtherSpecs" :loading="loading"
+          >Add Other Specification(s)</el-button
+        >
+      </span>
+    </el-dialog>
+    <el-dialog
+      title="Add Property Specification(s)"
+      :visible.sync="amenityVisible"
+      width="45%"
+    >
+      <div class="grid_container">
+        <div v-for="(property, index) in amenities" :key="index">
+          <div
+            class="grid_content"
+            @click="getAmenities(property)"
+            :style="
+              listing.amenities.includes(property)
+                ? { background: '#E2E8F0' }
+                : { background: '#fff' }
+            "
+          >
+            <div class="">
+              <!-- <img :src="getSvg(property.img)" class="pt-10" /> -->
+              <p><i :class="'el-icon-' + property.icon"></i></p>
+              <p class="mt-30">{{ property.name }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="amenityVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="addAmenities" :loading="loading"
+          >Add Amenitie(s)</el-button
+        >
+      </span>
+    </el-dialog>
     <div class="d-flex justify_between">
       <div class="d-flex pt-20">
         <!-- <section class="listing_bar"> -->
@@ -140,26 +223,66 @@
       </el-upload> -->
     </div>
     <div class="pt-30">
-      <p>Basic information</p>
-      <!-- <ul v-for="amenity in listing.amenities" :key="amenity.id">
-        <li>{{ amenity.amenity.name }}</li>
-      </ul> -->
+      <h3>Basic information</h3>
+      <p class="pt-20">Specifications</p>
+      <ul class="specs_container">
+        <li
+          v-for="(specification, index) in listing.property_specifications"
+          :key="specification.id"
+          class="py-10 d-flex"
+        >
+          <!--   w-50 -->
+          <p class="pt-5">{{ specification.specification.name }} -</p>
+          <el-input v-model="specification.number" class="w-50 px-10" />
+          <i
+            class="el-icon-delete-solid deleteImgIcon pt-10"
+            @click="removeSpec(index)"
+          ></i>
+        </li>
+      </ul>
+      <el-button type="success" @click="specVisible = true"
+        >Add Specification(s)</el-button
+      >
+    </div>
+    <div class="pt-30">
+      <p>Other Specifications</p>
+      <ul class="specs_container">
+        <li
+          v-for="(specification, index) in listing.other_specifications"
+          :key="specification.id"
+          class="py-10 d-flex"
+        >
+          <p class="pt-5">{{ specification.name }} -</p>
+          <el-input v-model="specification.number" class="w-50 px-10" />
+          <i
+            class="el-icon-delete-solid deleteImgIcon"
+            @click="removeOtherSpec(index)"
+          ></i>
+        </li>
+      </ul>
+      <el-button type="success" @click="otherSpecVisible = true"
+        >Add Other Specification(s)</el-button
+      >
     </div>
     <div class="pt-30">
       <p>Amenities</p>
-      <ul
-        v-for="amenity in listing.amenities"
-        :key="amenity.id"
-        class="amenites_list"
-      >
-        <li class="d-flex">
+      <ul class="amenites_list">
+        <li
+          v-for="amenity in listing.amenities"
+          :key="amenity.id"
+          class="d-flex"
+        >
+          <!-- 0599610266 -->
           <!-- <img src="../assets/img/ac_unit.png" class="pr-5" /> -->
-          <p>{{ amenity.amenity.name }}</p>
+          <p>{{ amenity.id }}</p>
         </li>
       </ul>
+      <el-button type="success" @click="amenityVisible = true"
+        >Add Amenitie(s)</el-button
+      >
     </div>
     <div class="d-flex justify_end pt-10">
-      <el-button type="info" @click="approveLister(listing.id, 'inactive')">
+      <el-button type="info" @click="updateListing">
         <i class="el-icon-check pr-10"></i>Save Changes</el-button
       >
       <el-button type="primary" :loading="loading" @click="deleteListingModal"
@@ -188,12 +311,21 @@ export default Vue.extend({
       activeName: "first" as string,
       image: "" as any,
       listing_id: this.$route.params.id,
-      listing: {},
+      newOtherSpec: {
+        name: "",
+        number: 0,
+      } as any,
+      listing: {} as any,
       loading: false as boolean,
       checked: false,
       imageId: "",
       dialogVisible: false,
+      specVisible: false,
+      amenityVisible: false,
+      otherSpecVisible: false,
       photos: [] as Array<object>,
+      propertySpecs: [] as any,
+      amenities: [] as any,
     };
   },
   created() {
@@ -204,6 +336,35 @@ export default Vue.extend({
       const listing = await this.$listingApi.show(this.$route.params.id);
       console.log(listing);
       this.listing = listing.data;
+
+      const property = await this.$propertyTypesApi.show(
+        listing.data.property_type.id
+      );
+
+      const propertySpecs = property.data.specifications;
+      const propertyAmenities = property.data.amenities;
+      // console.log(propertyAmenities);
+
+      for (let i = 0; i < propertySpecs.length; i++) {
+        if (
+          this.listing.property_specifications[i] == undefined ||
+          this.listing.property_specifications[i].id != propertySpecs[i].id
+        ) {
+          propertySpecs.splice(i, 1);
+        }
+      }
+      this.propertySpecs = propertySpecs;
+      let newAmenities = Object.assign([], this.listing.amenities);
+      let unSelectedAmenities = propertyAmenities.filter((propAmenity: any) => {
+        return newAmenities.filter((newAmenity: any, index: number) =>
+          propAmenity.id == newAmenity.amenity.id
+            ? propertyAmenities.splice(index, 1)
+            : propertyAmenities
+        );
+      });
+
+      console.log(unSelectedAmenities);
+      this.amenities = unSelectedAmenities;
     },
     getImage(imageId: string) {
       this.imageId = imageId;
@@ -233,7 +394,34 @@ export default Vue.extend({
         });
       };
     },
-    open(planId: string, planName: string) {
+    removeSpec(index: number) {
+      console.log("specification id", index);
+      // const h = this.$createElement
+      this.$confirm("Are you sure you want to delete?", {
+        cancelButtonText: "No, i want to keep",
+        confirmButtonText: "Yes,I want to Delete",
+      })
+        .then(() => {
+          this.listing.property_specifications.splice(index, 1);
+        })
+        .catch((err: any) => {
+          console.log(err);
+        });
+    },
+    removeOtherSpec(index: number) {
+      // const h = this.$createElement
+      this.$confirm("Are you sure you want to delete?", {
+        cancelButtonText: "No, i want to keep",
+        confirmButtonText: "Yes,I want to Delete",
+      })
+        .then(() => {
+          this.listing.other_specifications.splice(index, 1);
+        })
+        .catch((err: any) => {
+          console.log(err);
+        });
+    },
+    open(planId: string) {
       console.log(planId, "profile");
       // const h = this.$createElement
       this.$confirm("Are you sure you want to delete?", {
@@ -247,6 +435,18 @@ export default Vue.extend({
           console.log(err);
         });
     },
+    getAmenities(property: any): void {
+      if (this.amenities) {
+        // let findIndex = this.amenities.findIndex((amenity:any) => amenity.id == property.id)
+        // console.log(findIndex)
+        let amenityIndex = this.listing.amenities.indexOf(property);
+        this.listing.amenities.includes(property)
+          ? this.listing.amenities.splice(amenityIndex, 1)
+          : this.listing.amenities.push(property);
+      }
+
+      console.log(this.listing.amenities);
+    },
     deleteListingModal() {
       // const h = this.$createElement
       this.$confirm("Are you sure you want to delete listing?", {
@@ -259,6 +459,34 @@ export default Vue.extend({
         .catch((err: any) => {
           console.log(err);
         });
+    },
+    addSpecs() {
+      console.log(this.propertySpecs);
+      for (let i = 0; i < this.propertySpecs.length; i++) {
+        if (this.propertySpecs[i].number > 0) {
+          this.listing.property_specifications.push(this.propertySpecs[i]);
+        }
+      }
+    },
+    addAmenities() {
+      console.log(this.listing.amenities);
+      this.amenityVisible = false;
+
+      // for (let i = 0; i < this.propertySpecs.length; i++) {
+      //   if (this.propertySpecs[i].number > 0) {
+      //     this.listing.property_specifications.push(this.propertySpecs[i]);
+      //   }
+      // }
+    },
+    addOtherSpecs() {
+      this.listing.other_specifications.push({
+        name: this.newOtherSpec.name,
+        number: this.newOtherSpec.number,
+      });
+      this.otherSpecVisible = false;
+      this.newOtherSpec.name = "";
+      this.newOtherSpec.number = 0;
+      this.listing.other_specifications;
     },
     async deleteImage(planId: string) {
       this.loading = true;
@@ -283,6 +511,41 @@ export default Vue.extend({
       this.loading = true;
       try {
         const ListingResponse = await this.$listingApi.delete(this.listing_id);
+
+        console.log(ListingResponse);
+
+        this.loading = false;
+        this.fetchData();
+        (this as any as IMixinState).$message({
+          showClose: true,
+          message: ListingResponse.message,
+          type: "success",
+        });
+        this.$router.replace("/profile");
+      } catch (error) {
+        console.log(error, "error");
+        (this as any as IMixinState).catchError(error);
+      }
+    },
+    async updateListing() {
+      this.loading = true;
+      try {
+        const ListingResponse = await this.$listingApi.update(this.listing_id, {
+          property_type_id: this.listing.property_type.id,
+          specifications: this.listing.property_specifications,
+          amenities: this.listing.amenities,
+          other_specifications: this.listing.other_specifications,
+          name: this.listing.listing_detail.name,
+          location: this.listing.listing_detail.location,
+          region: this.listing.listing_detail.region,
+          country_id: this.listing.listing_detail.country.id,
+          city: this.listing.listing_detail.city,
+          latitude: this.listing.listing_detail.latitude,
+          longitude: this.listing.listing_detail.longitude,
+          listing_category_id: this.listing.listing_detail.category.id,
+          description: this.listing.listing_detail.description,
+          price: this.listing.listing_detail.price,
+        });
 
         console.log(ListingResponse);
 
@@ -350,6 +613,8 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+$small_screen: 426px;
+$medium_screen: 769px;
 .listing_bar {
   width: 150px;
   padding-right: 10px;
@@ -365,13 +630,20 @@ export default Vue.extend({
     width: 90%;
   }
 }
+.specs_container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 300px));
+  li {
+    list-style-type: none;
+  }
+}
 .amenites_list {
   padding-top: 20px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 300px));
   width: 80%;
 
-  max-width: 500px;
+  // max-width: 500px;
 
   li {
     background: #f1f5f9;
@@ -417,6 +689,46 @@ export default Vue.extend({
       padding-left: 0 !important;
       padding-top: 10px;
     }
+  }
+}
+.property_main_content {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  padding: 15px;
+  cursor: pointer;
+  @media (max-width: $small_screen) {
+    img {
+      display: none;
+    }
+  }
+  .property_description {
+    font-size: 12px;
+  }
+  .property_upload_photo {
+    border-radius: 7px;
+    max-width: 70px;
+    height: 50px;
+    width: 100%;
+  }
+}
+.grid_container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 40px;
+
+  @media (max-width: $small_screen) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .grid_content {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    text-align: center;
+    padding: 20px;
   }
 }
 </style>
