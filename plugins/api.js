@@ -15,11 +15,12 @@ export default (ctx, inject) => {
   inject("listingCategoriesApi", apiService("/listingcategories"));
   inject("listingImagesApi", apiService("/listingimages"));
   inject("forgottenPassApi", apiService("/forgotpassword"));
-  inject("userFavoriteApi", apiService("/toggleuserfavoritelisting"));
+  inject("selectFavoriteApi", apiService("/toggleuserfavoritelisting"));
   inject("userApi", apiService("/users"));
   inject("userUpdateApi", apiService("/auth/account"));
   inject("passwordApi", apiService("/updatepassword"));
   inject("discountApi", apiService("/discounts"));
   inject("SelectdPlanApi", apiService("/listingselectedplans"));
+  inject("userFavoriteApi", apiService("/myfavoritelisting"));
   inject("querySearchApi", apiService("/searchlisting?search_query="));
 };

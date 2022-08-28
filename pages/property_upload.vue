@@ -746,14 +746,18 @@ export default Vue.extend({
       this.step++;
 
       if (this.step == 3 && this.propertySpecs) {
-        this.propertySpecs.specifications.filter((spec: any) =>
-          spec.number > 0
-            ? this.propertyUpload.specifications.push({
-                number: spec.number,
-                property_type_specification_id: spec.id,
-              })
-            : this.noSpecifications()
+        const newSpec = this.propertySpecs.specifications.filter(
+          (spec: any) =>
+            spec.number > 0 &&
+            this.propertyUpload.specifications.push({
+              number: spec.number,
+              property_type_specification_id: spec.id,
+            })
         );
+        if (newSpec.length < 1) {
+          this.noSpecifications();
+        }
+        console.log(newSpec);
       }
       if (
         this.step == 7 &&
@@ -765,7 +769,7 @@ export default Vue.extend({
           this.discount_code = response.data.code;
         });
       }
-      // console.log(this.propertyUpload);
+      console.log(this.propertyUpload.specifications);
     },
     noSpecifications() {
       this.step = 2;
@@ -807,7 +811,12 @@ export default Vue.extend({
         const selectdPlanResponse = await this.$SelectdPlanApi.create(data);
         console.log(selectdPlanResponse);
         this.btnLoading = false;
-        // this.$router.replace("/");
+        (this as any as IMixinState).$message({
+          showClose: true,
+          message: selectdPlanResponse.message,
+          type: "error",
+        });
+        this.$router.replace("/");
       } catch (error: any) {
         console.log(error, "error");
         (this as any as IMixinState).catchError(error);
@@ -861,7 +870,7 @@ $small_screen: 426px;
 $medium_screen: 769px;
 
 .property_upload {
-  padding-top: 120px;
+  padding-top: 80px;
   padding-bottom: 50px;
   @media (max-width: $small_screen) {
     padding: 20px 20px 0;

@@ -141,19 +141,9 @@
     </div>
     <el-divider></el-divider>
     <div>
-      <!-- <div>
-        <p>Listing title</p>
-        <p class="pt-10"><b>3 bed room house in Community 25, Tema</b></p>
-        <el-input v-model="listing.listing_detail.title" />
-      </div> -->
       <div class="d-flex listing_location pt-30">
         <section class="pr-20">
           <p>Location</p>
-          <!-- <p class="pt-10">
-            <b
-              >{{ listing.listing_detail && listing.listing_detail.region }}
-            </b>
-          </p> -->
           <el-input
             v-if="listing.listing_detail"
             v-model="listing.listing_detail.region"
@@ -176,11 +166,6 @@
     </div>
     <section class="pt-30 listing_description">
       <p>Description</p>
-      <!-- <p>
-        <b>
-          {{ listing.listing_detail && listing.listing_detail.description }}</b
-        >
-      </p> -->
       <el-input
         type="textarea"
         :rows="2"
@@ -195,12 +180,12 @@
         <div
           v-for="img in listing.listing_detail.listing_images"
           :key="img.id"
-          class=""
+          class="pb-5"
         >
-          <!-- <el-checkbox v-model="checked">Option</el-checkbox> -->
           <img
             :src="url + img.photo"
             @click="getImage(img.id)"
+            class="img_border"
             :style="img.id == imageId && 'border: 1px solid green'"
           />
           <div class="d-flex justify_end pr-20 pt-5">
@@ -638,11 +623,14 @@ $medium_screen: 769px;
 }
 .property_images {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 300px));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 250px));
+  .img_border {
+    border-radius: 10px;
+  }
 
   img {
     // border-radius: 20px;
-    height: 100px;
+    height: 150px;
     max-width: 300px;
     width: 90%;
   }

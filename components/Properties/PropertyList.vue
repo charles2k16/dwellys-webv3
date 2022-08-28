@@ -5,8 +5,8 @@
         :xs="24"
         :sm="12"
         :md="6"
-        v-for="(property, index) in listings"
-        :key="index"
+        v-for="property in listings"
+        :key="property.id"
         class="pb-20"
       >
         <el-card shadow="hover" class="property_container">
@@ -20,11 +20,11 @@
                 {{ property.listing_detail.category.name }}
               </p>
               <span class="d-flex">
-                <span class="pt-5">{{ property.listing_total_views }} </span>
+                <span class="pt-2">{{ property.listing_total_views }} </span>
                 <span class="material-icons ml-5"> visibility </span>
               </span>
               <span class="fav">
-                <span style="color: #000" class="pt-5"
+                <span style="color: #000" class="pt-2"
                   >{{ property.listing_total_likes }}
                 </span>
                 <span
@@ -114,7 +114,7 @@ export default Vue.extend({
           : this.favProperties.push(fav);
       }
       try {
-        const favoriteResponse = await this.$userFavoriteApi.create({
+        const favoriteResponse = await this.$selectFavoriteApi.create({
           listing_id: fav.id,
         });
         console.log(favoriteResponse);

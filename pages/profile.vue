@@ -20,7 +20,7 @@
             class="profile_img"
           />
 
-          <img v-else :src="avatar" alt="avatar dummy" class="profile_img" />
+          <img v-else :src="avatar" alt="avatar" class="profile_img" />
           <div class="pl-20 pt-20">
             <p class="pb-5" style="font-size: 22px; font-weight: 600">
               {{ lister.first_name }} {{ lister.last_name }}
@@ -286,6 +286,7 @@ export default Vue.extend({
       } as any,
       options: ["SSNIT", "Passport", "Voter"],
       countries: [],
+      userFavorites: [],
       validation: {
         password: [
           { validator: validatePass, trigger: "blur", required: true },
@@ -322,6 +323,10 @@ export default Vue.extend({
     },
     async fetchData() {
       const user = this.$auth.user;
+      const userFavorite = await this.$userFavoriteApi.index();
+      console.log(userFavorite.data);
+      this.userFavorites = userFavorite.data;
+
       if (user.user_type == "lister") {
         const lister = await this.$userApi.show(user.id);
         console.log(lister, "user details");

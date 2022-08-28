@@ -38,13 +38,14 @@ declare module "vue/types/vue" {
     $listingCategoriesApi: apiService;
     $listingImagesApi: apiService;
     $forgottenPassApi: apiService;
-    $userFavoriteApi: apiService;
+    $selectFavoriteApi: apiService;
     $userApi: apiService;
     $passwordApi: apiService;
     $userUpdateApi: apiService;
     $querySearchApi: apiService;
     $discountApi: apiService;
     $SelectdPlanApi: apiService;
+    $userFavoriteApi: apiService;
     $router: any;
     $auth: any;
     $alert: any;

@@ -69,7 +69,7 @@
                 @click="drawer = false"
                 class="pb-10 pt-20"
               >
-                <NuxtLink to="/register">Profile</NuxtLink>
+                <NuxtLink to="/profile">Profile</NuxtLink>
               </span>
               <span
                 v-if="!$auth.loggedIn"
