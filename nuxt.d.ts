@@ -43,6 +43,8 @@ declare module "vue/types/vue" {
     $passwordApi: apiService;
     $userUpdateApi: apiService;
     $querySearchApi: apiService;
+    $discountApi: apiService;
+    $SelectdPlanApi: apiService;
     $router: any;
     $auth: any;
     $alert: any;

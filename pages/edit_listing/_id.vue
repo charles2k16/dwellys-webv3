@@ -232,7 +232,14 @@
           class="py-10 d-flex"
         >
           <!--   w-50 -->
-          <p class="pt-5">{{ specification.specification.name }} -</p>
+          <p class="pt-5">
+            {{
+              specification.name
+                ? specification.name
+                : specification.specification.name
+            }}
+            -
+          </p>
           <el-input v-model="specification.number" class="w-50 px-10" />
           <i
             class="el-icon-delete-solid deleteImgIcon pt-10"
@@ -252,7 +259,14 @@
           :key="specification.id"
           class="py-10 d-flex"
         >
-          <p class="pt-5">{{ specification.name }} -</p>
+          <p class="pt-5">
+            {{
+              specification.name
+                ? specification.name
+                : specification.specification.name
+            }}
+            -
+          </p>
           <el-input v-model="specification.number" class="w-50 px-10" />
           <i
             class="el-icon-delete-solid deleteImgIcon"
@@ -266,7 +280,7 @@
     </div>
     <div class="pt-30">
       <p>Amenities</p>
-      <ul class="amenites_list">
+      <ul class="amenites_list pb-10">
         <li
           v-for="amenity in listing.amenities"
           :key="amenity.id"
@@ -274,7 +288,7 @@
         >
           <!-- 0599610266 -->
           <!-- <img src="../assets/img/ac_unit.png" class="pr-5" /> -->
-          <p>{{ amenity.id }}</p>
+          <p>{{ amenity.name ? amenity.name : amenity.amenity.name }}</p>
         </li>
       </ul>
       <el-button type="success" @click="amenityVisible = true"
@@ -354,17 +368,18 @@ export default Vue.extend({
         }
       }
       this.propertySpecs = propertySpecs;
-      let newAmenities = Object.assign([], this.listing.amenities);
-      let unSelectedAmenities = propertyAmenities.filter((propAmenity: any) => {
-        return newAmenities.filter((newAmenity: any, index: number) =>
-          propAmenity.id == newAmenity.amenity.id
-            ? propertyAmenities.splice(index, 1)
-            : propertyAmenities
-        );
-      });
+      // let newAmenities = Object.assign([], this.listing.amenities);
+      // let unSelectedAmenities = propertyAmenities.filter((propAmenity: any) => {
+      //   console.log(propAmenity);
+      //   return newAmenities.filter((newAmenity: any, index: number) =>
+      //     propAmenity.id == newAmenity.amenity.id
+      //       ? propertyAmenities.splice(index, 1)
+      //       : propertyAmenities
+      //   );
+      // });
 
-      console.log(unSelectedAmenities);
-      this.amenities = unSelectedAmenities;
+      console.log(propertyAmenities);
+      this.amenities = propertyAmenities;
     },
     getImage(imageId: string) {
       this.imageId = imageId;
@@ -436,14 +451,14 @@ export default Vue.extend({
         });
     },
     getAmenities(property: any): void {
-      if (this.amenities) {
-        // let findIndex = this.amenities.findIndex((amenity:any) => amenity.id == property.id)
-        // console.log(findIndex)
-        let amenityIndex = this.listing.amenities.indexOf(property);
-        this.listing.amenities.includes(property)
-          ? this.listing.amenities.splice(amenityIndex, 1)
-          : this.listing.amenities.push(property);
-      }
+      // if (this.amenities) {
+      // let findIndex = this.amenities.findIndex((amenity:any) => amenity.id == property.id)
+      // console.log(findIndex)
+      let amenityIndex = this.listing.amenities.indexOf(property);
+      this.listing.amenities.includes(property)
+        ? this.listing.amenities.splice(amenityIndex, 1)
+        : this.listing.amenities.push(property);
+      // }
 
       console.log(this.listing.amenities);
     },
@@ -467,6 +482,7 @@ export default Vue.extend({
           this.listing.property_specifications.push(this.propertySpecs[i]);
         }
       }
+      this.specVisible = false;
     },
     addAmenities() {
       console.log(this.listing.amenities);
@@ -560,6 +576,7 @@ export default Vue.extend({
       } catch (error) {
         console.log(error, "error");
         (this as any as IMixinState).catchError(error);
+        this.loading = false;
       }
     },
     async setFeatureImage(imageId: string) {
@@ -621,7 +638,7 @@ $medium_screen: 769px;
 }
 .property_images {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 300px));
 
   img {
     // border-radius: 20px;

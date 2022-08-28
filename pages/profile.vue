@@ -146,7 +146,11 @@
             </div>
           </el-form>
         </el-tab-pane>
-        <el-tab-pane label="Security" name="third" class="settings_body">
+        <el-tab-pane label="Favorites" name="third" class="new_tab">
+          <!-- <ProfileListings :user_listings="user_listings" /> -->
+          <PropertyList :listings="user_listings" />
+        </el-tab-pane>
+        <el-tab-pane label="Security" name="fourth" class="settings_body">
           <div class="security pt-20 pb-20">
             <div class="profile_label">
               <p class="info_label">Change your password</p>

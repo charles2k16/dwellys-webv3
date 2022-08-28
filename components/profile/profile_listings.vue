@@ -18,12 +18,12 @@
               "
             >
               <div class="d-flex justify_between property_labels p-10">
-                <p>
+                <p style="color: #fff">
                   {{ listing.listing_detail.name }}
                 </p>
                 <el-dropdown trigger="click">
                   <span class="el-dropdown-link">
-                    <i class="el-icon-more"> </i>
+                    <i class="el-icon-more" style="color: white"> </i>
                   </span>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item
@@ -156,11 +156,5 @@ export default Vue.extend({
   justify-content: center;
   flex-direction: column;
   align-items: center;
-}
-.el-icon-more {
-  color: white;
-  background: black;
-  border-radius: 20px;
-  padding: 5px;
 }
 </style>

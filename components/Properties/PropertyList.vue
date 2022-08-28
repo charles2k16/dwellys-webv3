@@ -16,19 +16,28 @@
             :style="background_style(property.photos)"
           >
             <div class="d-flex justify_between property_labels p-10">
-              <p>
+              <p style="background: white">
                 {{ property.listing_detail.category.name }}
               </p>
-              <span
-                class="material-icons fav"
-                @click="favProperty(property)"
-                :style="
-                  favProperties.includes(property)
-                    ? { color: 'red' }
-                    : { color: 'white' }
-                "
-              >
-                favorite_border
+              <span class="d-flex">
+                <span class="pt-5">{{ property.listing_total_views }} </span>
+                <span class="material-icons ml-5"> visibility </span>
+              </span>
+              <span class="fav">
+                <span style="color: #000" class="pt-5"
+                  >{{ property.listing_total_likes }}
+                </span>
+                <span
+                  class="material-icons ml-5"
+                  @click="favProperty(property)"
+                  :style="
+                    favProperties.includes(property)
+                      ? { color: 'red' }
+                      : { color: 'white' }
+                  "
+                >
+                  favorite
+                </span>
               </span>
             </div>
           </div>
@@ -78,8 +87,9 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import { IMixinState } from '../../types/mixinsTypes';
+import Vue from "vue";
+
+import { IMixinState } from "../../types/mixinsTypes";
 
 export default Vue.extend({
   props: {
@@ -88,7 +98,7 @@ export default Vue.extend({
       type: Array,
     },
   },
-  name: 'PropertyList',
+  name: "PropertyList",
   data() {
     return {
       favProperties: [] as Array<object>,
@@ -110,17 +120,31 @@ export default Vue.extend({
         console.log(favoriteResponse);
         (this as any as IMixinState).$message({
           showClose: true,
-          message: 'Added property to favourite!',
-          type: 'success',
+          message: "Added property to favourite!",
+          type: "success",
         });
-      } catch (error) {
+      } catch (error: any) {
         (this as any as IMixinState).catchError(error);
+        console.log(error?.response);
+        if (error?.response) {
+          this.$confirm("Login or Signup to select favourite", {
+            confirmButtonText: "Login",
+            cancelButtonText: "Signup",
+            type: "success",
+          })
+            .then(() => {
+              this.$router.push("/login");
+            })
+            .catch(() => {
+              this.$router.push("/register");
+            });
+        }
       }
     },
     openPropertyDetails(property: any): void {
       console.log(property);
       this.$router.push({
-        name: 'property_details',
+        name: "property_details",
         params: { property: property.id },
         query: {
           name: property.listing_detail.name,
@@ -146,9 +170,10 @@ export default Vue.extend({
     .property_labels {
       width: 100%;
       z-index: 20;
+      background: rgba(136, 136, 136, 0.7);
 
       p {
-        background: white;
+        // background: white;
         padding: 2px 10px;
         border-radius: 7.34885px;
       }
@@ -195,6 +220,7 @@ export default Vue.extend({
   .fav {
     color: grey;
     cursor: pointer;
+    display: flex;
   }
 }
 </style>

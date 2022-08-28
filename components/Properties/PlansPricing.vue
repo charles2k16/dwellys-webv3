@@ -55,7 +55,7 @@ export default Vue.extend({
     getPlan(newPlan: any) {
       this.selectedPlan = newPlan.name;
 
-      this.$emit("getPlan", newPlan.price);
+      this.$emit("getPlan", newPlan);
     },
   },
 });

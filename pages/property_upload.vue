@@ -10,7 +10,7 @@
             >
           </div>
           <div class="block slider">
-            <el-slider v-model="step" disabled :min="1" :max="7"></el-slider>
+            <el-slider v-model="step" disabled :min="1" :max="8"></el-slider>
           </div>
         </div>
 
@@ -67,7 +67,7 @@
             <small>Number of bedrooms, bathrooms, garage, kitchen, etc</small>
           </div>
           <div class="block slider">
-            <el-slider v-model="step" disabled :min="1" :max="7"></el-slider>
+            <el-slider v-model="step" disabled :min="1" :max="8"></el-slider>
           </div>
         </div>
         <div class="property_content_container">
@@ -158,7 +158,7 @@
             <small>Please check the plausible amenities</small>
           </div>
           <div class="block slider">
-            <el-slider v-model="step" disabled :min="1" :max="7"></el-slider>
+            <el-slider v-model="step" disabled :min="1" :max="8"></el-slider>
           </div>
         </div>
         <div class="grid_content_container">
@@ -189,7 +189,7 @@
             <small>Please check the plausible amenities</small>
           </div>
           <div class="block slider">
-            <el-slider v-model="step" disabled :min="1" :max="7"></el-slider>
+            <el-slider v-model="step" disabled :min="1" :max="8"></el-slider>
           </div>
         </div>
         <div class="property_content_container pb-20">
@@ -226,7 +226,7 @@
             <small>Select the location of the property</small>
           </div>
           <div class="block slider">
-            <el-slider v-model="step" disabled :min="1" :max="7"></el-slider>
+            <el-slider v-model="step" disabled :min="1" :max="8"></el-slider>
           </div>
         </div>
         <div class="property_content_container pb-20">
@@ -287,18 +287,51 @@
       <div v-if="step === 6">
         <div class="center">
           <div class="property_upload_head">
-            <h3>Plans and pricing</h3>
-            <small>Please check the plausible amenities</small>
+            <h3>Discount on Property</h3>
+            <small>Discount of the property</small>
           </div>
           <div class="block slider">
-            <el-slider v-model="step" disabled :min="1" :max="7"></el-slider>
+            <el-slider v-model="step" disabled :min="1" :max="8"></el-slider>
+          </div>
+        </div>
+        <div class="property_content_container pb-20">
+          <el-row class="pb-20">
+            <el-col :sm="12" class="pb-20 pr-5 d-flex_column">
+              <span class="pb-10">Number of Days</span>
+              <el-input
+                v-model="discount.no_of_days"
+                type="number"
+                placeholder="Location"
+              >
+              </el-input>
+            </el-col>
+            <el-col :sm="12" class="pb-20 pl-5 d-flex_column">
+              <span class="pb-10">Percentage Value (%)</span>
+              <el-input
+                v-model="discount.percentage_value"
+                type="number"
+                placeholder="Location"
+              >
+              </el-input>
+            </el-col>
+          </el-row>
+        </div>
+      </div>
+      <div v-if="step === 7">
+        <div class="center">
+          <div class="property_upload_head">
+            <h3>Plans and pricing</h3>
+            <small>Please select Plan and Pricing</small>
+          </div>
+          <div class="block slider">
+            <el-slider v-model="step" disabled :min="1" :max="8"></el-slider>
           </div>
         </div>
         <div class="plans_price pb-20">
           <PlansPricing :pricingPlans="pricingPlans" @getPlan="getPrice" />
         </div>
       </div>
-      <div v-if="step === 7">
+      <div v-if="step === 8">
         <div class="payment_container">
           <div class="payment_section pr-30">
             <h3>Payment</h3>
@@ -334,9 +367,10 @@
                     id=""
                     class="provider"
                     placeholder="Please select a service provider"
+                    v-model="mobile"
                   >
                     <el-option
-                      v-for="media in paymentMedias"
+                      v-for="media in mobile_money"
                       :key="media"
                       :value="media"
                     >
@@ -346,7 +380,11 @@
                 </div>
                 <div class="d-flex_column pt-10">
                   <span class="demo-input-label pl-10 pb-5">Phone number</span>
-                  <el-input type="number" placeholder="+233 21 324 2334" />
+                  <el-input
+                    type="number"
+                    v-model="selectedPlan.mobile_money_number"
+                    placeholder="+233 21 324 2334"
+                  />
                 </div>
               </div>
               <div v-else class="pt-20">
@@ -355,22 +393,44 @@
                   <span class="demo-input-label pl-10 pb-5"
                     >Card holder name</span
                   >
-                  <el-input placeholder="Enter the card holder name" />
+                  <el-input
+                    v-model="selectedPlan.card_payment.name_on_card"
+                    placeholder="Enter the card holder name"
+                  />
                 </div>
                 <div class="d-flex_column pt-10">
-                  <span class="demo-input-label pl-10 pb-5">Card number</span>
-                  <el-input type="number" placeholder="0000 0000 0000 0000" />
+                  <span class="demo-input-label pl-10 pb-5">Card Number</span>
+                  <el-input
+                    type="number"
+                    v-model="selectedPlan.card_payment.card_number"
+                    placeholder="0000 0000 0000 0000"
+                  />
+                  <section class="pt-10">
+                    <span class="demo-input-label pt-5">CVV</span>
+                    <el-input
+                      v-model="selectedPlan.card_payment.cvv"
+                      placeholder="CVV"
+                    />
+                  </section>
                 </div>
                 <div class="d-flex pt-10">
                   <section class="pr-10">
                     <span class="demo-input-label pl-10 pb-5"
                       >Expiry month</span
                     >
-                    <el-input type="date" placeholder="MM/YY" />
+                    <el-input
+                      type="number"
+                      v-model="selectedPlan.card_payment.card_expiry_month"
+                      placeholder="05"
+                    />
                   </section>
-                  <section class="pl-10">
-                    <span class="demo-input-label pl-10 pb-5">CVV</span>
-                    <el-input placeholder="CVV" />
+                  <section class="">
+                    <span class="demo-input-label pl-10 pb-5">Expiry Year</span>
+                    <el-input
+                      type="number"
+                      v-model="selectedPlan.card_payment.card_expiry_year"
+                      placeholder="2022"
+                    />
                   </section>
                 </div>
                 <!-- <div class="py-30">
@@ -385,9 +445,9 @@
             <div class="discount">
               <section class="d-flex justify_between pb-5">
                 <span>Discount code</span>
-                <span>**Required</span>
+                <!-- <span>**Required</span> -->
               </section>
-              <el-input />
+              <el-input v-model="discount_code" disabled />
             </div>
             <div class="property_rental pt-20">
               <section class="d-flex justify_between">
@@ -402,13 +462,17 @@
           </div>
         </div>
         <div class="payment_btn pb-30">
-          <el-button type="primary" class="full_width"
+          <el-button
+            type="primary"
+            :loading="btnLoading"
+            class="full_width"
+            @click="sendPayment"
             >Proceed to payment</el-button
           >
         </div>
       </div>
       <hr class="hr_rule" />
-      <div class="property_upload_btns pt-10">
+      <div class="property_upload_btns pt-10" v-if="step != 8">
         <el-button type="info" @click="toPrev" :disabled="step === 1"
           >Back</el-button
         >
@@ -460,7 +524,8 @@ export default Vue.extend({
         { method: "Pay with Momo", icon: "el-icon-mobile-phone" },
         { method: "Pay with card", icon: "el-icon-bank-card" },
       ],
-      paymentMedias: ["MTN Mobile money", "Vodafone Cash", "Zeepay"],
+      mobile_money: ["MTN Mobile money", "Vodafone Cash", "Zeepay"],
+      mobile: "",
       specErr: "" as string,
       selectedProperty: "",
       btnLoading: false as boolean,
@@ -474,6 +539,27 @@ export default Vue.extend({
       pricingPlans: [],
       countries: [],
       listing_photos: [] as any,
+      discount_code: "",
+      listing_plan_id: "",
+      listing_id: "",
+      discount: {
+        no_of_days: 0,
+        percentage_value: 0,
+      },
+      selectedPlan: {
+        listing_id: "",
+        listing_planid: "",
+        discount_code: "",
+        payment_option: "",
+        card_payment: {
+          cvv: "",
+          name_on_card: "",
+          card_number: "",
+          card_expiry_month: "",
+          card_expiry_year: "",
+        },
+        mobile_money_number: "",
+      },
       propertyUpload: {
         name: "" as string,
         property_type_id: "" as string,
@@ -494,19 +580,6 @@ export default Vue.extend({
   },
 
   async created() {
-    // if (this.$auth.user.is_id_card_verified != 1) {
-    //   (this as any as IMixinState)
-    //     .$confirm("You are not verified yet to post properties", {
-    //       confirmButtonText: "OK",
-    //       cancelButtonText: "Cancel",
-    //       type: "error",
-    //     })
-    //     .then(() => {
-    //       this.$router.replace("/");
-    //     });
-
-    //   return;
-    // }
     try {
       const categories = await this.$listingCategoriesApi.index();
       this.categories = categories.data;
@@ -561,16 +634,36 @@ export default Vue.extend({
         this.propertyUpload.city != ""
       ) {
         valid = true;
-      } else if (this.step == 6 && this.propertyUpload.price != 0) {
+      } else if (this.step == 6) {
+        valid = true;
+      } else if (this.step == 7 && this.propertyUpload.price != 0) {
         valid = true;
       }
       return valid;
     },
     submitVal() {
       let valid = false;
-      if (this.step == 6 && this.propertyUpload.price) {
+      if (this.step == 7 && this.propertyUpload.price) {
         valid = true;
       }
+      // if (
+      //   this.step == 8 &&
+      //   this.media == "Pay with Momo" &&
+      //   this.selectedPlan.mobile_money_number &&
+      //   this.mobile
+      // ) {
+      //   valid = true;
+      // } else if (
+      //   this.step == 8 &&
+      //   this.media == "Pay with card" &&
+      //   this.selectedPlan.card_payment.cvv &&
+      //   this.selectedPlan.card_payment.name_on_card &&
+      //   this.selectedPlan.card_payment.card_number &&
+      //   this.selectedPlan.card_payment.card_expiry_month &&
+      //   this.selectedPlan.card_payment.card_expiry_year
+      // ) {
+      //   valid = true;
+      // }
       return valid;
     },
   },
@@ -579,6 +672,12 @@ export default Vue.extend({
       return url();
     },
     changePaymentMedia(method: string) {
+      this.selectedPlan.card_payment.cvv = "";
+      this.selectedPlan.card_payment.name_on_card = "";
+      this.selectedPlan.card_payment.card_number = "";
+      this.selectedPlan.card_payment.card_expiry_month = "";
+      this.selectedPlan.card_payment.card_expiry_year = "";
+      this.selectedPlan.mobile_money_number = "";
       this.media = method;
     },
     removeSpec(index: number) {
@@ -590,8 +689,10 @@ export default Vue.extend({
     getSvg(pic: string): string {
       return require("../assets/svg/" + pic);
     },
-    getPrice(price: any) {
-      this.propertyUpload.price = price;
+    getPrice(plan: any) {
+      console.log(plan);
+      this.listing_plan_id = plan.id;
+      this.propertyUpload.price = plan.price;
     },
     toggleUpload(event: any) {
       let reader = new FileReader();
@@ -654,7 +755,17 @@ export default Vue.extend({
             : this.noSpecifications()
         );
       }
-      console.log(this.propertyUpload);
+      if (
+        this.step == 7 &&
+        this.discount.no_of_days != 0 &&
+        this.discount.percentage_value != 0
+      ) {
+        this.$discountApi.create(this.discount).then((response: any) => {
+          console.log(response);
+          this.discount_code = response.data.code;
+        });
+      }
+      // console.log(this.propertyUpload);
     },
     noSpecifications() {
       this.step = 2;
@@ -676,10 +787,46 @@ export default Vue.extend({
       this.propertyUpload.latitude = position.coords.latitude;
       this.propertyUpload.longitude = position.coords.longitude;
     },
-    async submitUpload() {
-      console.log(this.propertyUpload);
+    async sendPayment() {
       this.btnLoading = true;
       try {
+        const data = {
+          listing_id: this.listing_id,
+          listing_plan_id: this.listing_plan_id,
+          discount_code: this.discount_code,
+          payment_option:
+            this.media == "Pay with Momo" ? "mobile_money" : "card_payment",
+          card_pament: {
+            cvv: this.selectedPlan.card_payment.cvv,
+            name_on_card: this.selectedPlan.card_payment.name_on_card,
+            card_expiry_month: this.selectedPlan.card_payment.card_expiry_month,
+            card_expiry_year: this.selectedPlan.card_payment.card_expiry_year,
+          },
+          mobile_money_number: this.selectedPlan.mobile_money_number,
+        };
+        const selectdPlanResponse = await this.$SelectdPlanApi.create(data);
+        console.log(selectdPlanResponse);
+        this.btnLoading = false;
+        // this.$router.replace("/");
+      } catch (error: any) {
+        console.log(error, "error");
+        (this as any as IMixinState).catchError(error);
+        this.btnLoading = false;
+
+        if (error?.response?.data) {
+          (this as any as IMixinState).$message({
+            showClose: true,
+            message: error.response.data.message,
+            type: "error",
+          });
+        }
+      }
+    },
+    async submitUpload() {
+      this.btnLoading = true;
+      try {
+        // console.log(this.propertyUpload);
+
         const propertyResponse = await this.$listingApi.create(
           this.propertyUpload
         );
@@ -688,18 +835,20 @@ export default Vue.extend({
           listing_id: propertyResponse.data.id,
           listing_photos: this.listing_photos,
         });
+        console.log(propertyResponse);
 
-        console.log(imageListing);
+        this.listing_id = propertyResponse.data.id;
 
         this.btnLoading = false;
+        this.step++;
         (this as any as IMixinState).$message({
           showClose: true,
           message: propertyResponse.message,
           type: "success",
         });
-        this.$router.replace("/");
       } catch (error) {
         console.log(error, "error");
+        this.btnLoading = false;
         (this as any as IMixinState).catchError(error);
       }
     },
