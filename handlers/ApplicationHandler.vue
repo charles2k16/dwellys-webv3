@@ -60,7 +60,7 @@ export default Vue.extend({
     closePhotoModal(): void {
       this.photoModal = false;
     },
-    showmessageModal(): void {
+    showMessageModal(): void {
       this.messageModal = true;
     },
     closemessageModal(): void {

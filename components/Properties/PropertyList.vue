@@ -143,13 +143,15 @@ export default Vue.extend({
     },
     openPropertyDetails(property: any): void {
       console.log(property);
-      this.$router.push({
-        name: "property_details",
-        params: { property: property.id },
-        query: {
-          name: property.listing_detail.name,
-        },
-      });
+      // this.$router.push({
+      //   name: "property_details",
+      //   params: { property: property.id },
+      // query: {
+      //   name: property.listing_detail.name,
+      //   // id: property.id,
+      // },
+      // });
+      this.$router.push(`property_details/${property.id}`);
     },
   },
 });

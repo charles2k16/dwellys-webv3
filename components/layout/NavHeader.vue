@@ -8,14 +8,11 @@
           <img src="~/assets/img/logo.png" />
         </NuxtLink>
       </div>
-      <div class="header_content hidden-sm-and-down">
-        <span class="pr-20">
-          <NuxtLink to="/">Property valuationn</NuxtLink>
-        </span>
+      <!-- <div class="header_content hidden-sm-and-down">
         <span class="pl-10">
           <NuxtLink to="/property_account">Become an agent</NuxtLink>
         </span>
-      </div>
+      </div> -->
       <div class="drawer hidden-md-and-up">
         <svg
           @click="drawer = true"
@@ -78,9 +75,6 @@
               >
                 <NuxtLink to="/register">Register</NuxtLink>
               </span>
-              <span @click="drawer = false" class="pb-10">
-                <NuxtLink to="/">Property valuation</NuxtLink>
-              </span>
               <span class="pb-10" v-if="$auth.loggedIn">
                 <span v-if="$auth.user.user_type == 'lister'">
                   <NuxtLink to="/property_upload">Property Upload</NuxtLink>
@@ -138,11 +132,6 @@
             <el-dropdown-item v-if="$auth.loggedIn">
               <span class="py-10">
                 <NuxtLink to="/profile">Profile</NuxtLink>
-              </span>
-            </el-dropdown-item>
-            <el-dropdown-item>
-              <span class="py-10">
-                <NuxtLink to="/">Property valuation</NuxtLink>
               </span>
             </el-dropdown-item>
             <el-dropdown-item v-if="$auth.loggedIn">

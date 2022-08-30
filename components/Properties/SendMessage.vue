@@ -17,7 +17,7 @@
       ></el-input>
     </el-form>
     <div class="d-flex justify_end pt-20">
-      <el-button type="info">Cancel</el-button>
+      <el-button type="info" @click="cancelMessage">Cancel</el-button>
       <el-button type="primary" @click="sendMessage">Send message</el-button>
     </div>
   </el-row>
@@ -35,6 +35,9 @@ export default Vue.extend({
     };
   },
   methods: {
+    cancelMessage() {
+      this.$emit("closeMessageModal");
+    },
     sendMessage() {
       if (this.$auth.loggedIn) {
         (this as any as IMixinState).getNotification(

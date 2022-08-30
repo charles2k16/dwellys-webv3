@@ -333,7 +333,7 @@ export default Vue.extend({
   methods: {
     async fetchData() {
       const listing = await this.$listingApi.show(this.$route.params.id);
-      console.log(listing);
+      console.log("listing", listing);
       this.listing = listing.data;
 
       const property = await this.$propertyTypesApi.show(

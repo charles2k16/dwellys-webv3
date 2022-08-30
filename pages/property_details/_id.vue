@@ -39,7 +39,7 @@
 
           <p class="align_center">
             <span class="material-icons mr-5"> schedule </span>Last updated,
-            {{ $moment(propertyDetails.updated_at).format('MMMM Do YYYY') }}
+            {{ $moment(propertyDetails.updated_at).format("MMMM Do YYYY") }}
           </p>
         </div>
         <div class="details_plot">
@@ -192,37 +192,32 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import ApplicationHandler from '@/handlers/ApplicationHandler.vue';
-import url from '../url';
+import Vue from "vue";
+import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
+import url from "../../url";
 
 export default Vue.extend({
   auth: false,
-  name: 'PropertyDetails',
+  name: "PropertyDetails",
   components: {
     ApplicationHandler,
   },
   data() {
     return {
-      activeName: 'first' as string,
-      image: '' as any,
+      activeName: "first" as string,
+      image: "" as any,
       propertyDetails: {} as any,
-      home: '' as string,
+      home: "" as string,
       sendForm: {
         amount: null,
         recipient_amt: null,
-        payment_method: '' as string,
+        payment_method: "" as string,
       },
-      payOptions: [
-        { value: ':brijwallet', label: ':brij wallet' },
-        { value: ':brijEx', label: ':brijEx' },
-        { value: 'M-PESA', label: 'M-PESA' },
-      ],
-      user: '',
+      user: "",
     };
   },
   async created() {
-    const listings = await this.$listingApi.show(this.$route.params.property);
+    const listings = await this.$listingApi.show(this.$route.params.id);
     this.propertyDetails = listings.data;
     console.log(listings);
   },
@@ -245,8 +240,8 @@ export default Vue.extend({
     //     return moment(date).format("MMMM Do YYYY");
     //   },
     showOwner(): void {
-      console.log('show');
-      (this as any).$refs.propertyAction.showOwnerModal(this.user);
+      console.log("show");
+      (this as any).$refs.propertyAction.showMessageModal(this.user);
     },
   },
 });
@@ -328,7 +323,7 @@ $small_screen: 426px;
       margin-left: 15px;
 
       &::before {
-        content: '\2022';
+        content: "\2022";
         color: red;
         font-weight: bold;
         display: inline-block;
