@@ -2,9 +2,9 @@
   <el-row>
     <hr class="hr_rule" />
     <div class="d-flex pb-20 pt-10">
-      <img src="~/assets/img/user_detail_img.png" />
+      <img class="agent_avatar" :src="apiUrl + '/' + user.avatar" />
       <div class="ml-20">
-        <p>Abena Dankwa Have</p>
+        <p>{{ user.first_name }} {{ user.last_name }}</p>
         <p style="font-size: 12px; color: #64748b">Independent agent</p>
       </div>
     </div>
@@ -29,10 +29,20 @@ import { IMixinState } from "@/types/mixinsTypes";
 
 export default Vue.extend({
   name: "SendMessage",
+  props: {
+    user: {
+      required: true,
+      type: Object,
+    },
+  },
   data() {
     return {
       message: "" as string,
     };
+  },
+  created() {
+    const user = this.$auth.user;
+    console.log("auth", user);
   },
   methods: {
     cancelMessage() {
@@ -56,4 +66,12 @@ export default Vue.extend({
 });
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.agent_avatar {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 20px;
+}
+</style>

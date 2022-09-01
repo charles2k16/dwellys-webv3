@@ -324,7 +324,7 @@ export default Vue.extend({
     async fetchData() {
       const user = this.$auth.user;
       const userFavorite = await this.$userFavoriteApi.index();
-      console.log(userFavorite.data);
+      console.log("user fav", userFavorite.data);
       this.userFavorites = userFavorite.data;
 
       if (user.user_type == "lister") {

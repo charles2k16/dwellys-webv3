@@ -183,7 +183,7 @@
           class="pb-5"
         >
           <img
-            :src="url + img.photo"
+            :src="apiUrl + '/' + img.photo"
             @click="getImage(img.id)"
             class="img_border"
             :style="img.id == imageId && 'border: 1px solid green'"
@@ -353,6 +353,7 @@ export default Vue.extend({
         }
       }
       this.propertySpecs = propertySpecs;
+      console.log("specs", propertySpecs);
       // let newAmenities = Object.assign([], this.listing.amenities);
       // let unSelectedAmenities = propertyAmenities.filter((propAmenity: any) => {
       //   console.log(propAmenity);
@@ -363,7 +364,7 @@ export default Vue.extend({
       //   );
       // });
 
-      console.log(propertyAmenities);
+      console.log("amenities", propertyAmenities);
       this.amenities = propertyAmenities;
     },
     getImage(imageId: string) {
@@ -528,13 +529,37 @@ export default Vue.extend({
         (this as any as IMixinState).catchError(error);
       }
     },
+
     async updateListing() {
       this.loading = true;
+      const specifications = this.listing.property_specifications.map(
+        (specification: any) => {
+          return {
+            id: specification.specification ? specification.id : "",
+            property_type_specification_id: specification.specification
+              ? specification.specification.id
+              : specification.id,
+            number: specification.number,
+          };
+        }
+      );
+
+      const amenities = this.listing.amenities.map((amenity: any) => {
+        return {
+          id: amenity.amenity ? amenity.id : "",
+          property_type_amenity_id: amenity.amenity
+            ? amenity.amenity.id
+            : amenity.id,
+          icon: amenity.icon,
+        };
+      });
+      console.log(amenities);
+
       try {
-        const ListingResponse = await this.$listingApi.update(this.listing_id, {
+        const listingResponse = await this.$listingApi.update(this.listing_id, {
           property_type_id: this.listing.property_type.id,
-          specifications: this.listing.property_specifications,
-          amenities: this.listing.amenities,
+          specifications: specifications,
+          amenities: amenities,
           other_specifications: this.listing.other_specifications,
           name: this.listing.listing_detail.name,
           location: this.listing.listing_detail.location,
@@ -548,16 +573,16 @@ export default Vue.extend({
           price: this.listing.listing_detail.price,
         });
 
-        console.log(ListingResponse);
+        console.log(listingResponse);
 
         this.loading = false;
         this.fetchData();
         (this as any as IMixinState).$message({
           showClose: true,
-          message: ListingResponse.message,
+          message: listingResponse.message,
           type: "success",
         });
-        this.$router.replace("/profile");
+        // this.$router.replace("/profile");
       } catch (error) {
         console.log(error, "error");
         (this as any as IMixinState).catchError(error);

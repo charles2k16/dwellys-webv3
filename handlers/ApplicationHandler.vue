@@ -33,7 +33,7 @@
       <template slot="title">
         <h3>Send a message</h3>
       </template>
-      <SendMessage @closeMessageModal="messageModal = false" />
+      <SendMessage :user="user" @closeMessageModal="messageModal = false" />
     </el-dialog>
   </div>
 </template>
@@ -48,6 +48,7 @@ export default Vue.extend({
       showLoginModal: false as boolean,
       photoModal: false as boolean,
       messageModal: false as boolean,
+      user: {} as any,
     };
   },
   methods: {
@@ -60,7 +61,10 @@ export default Vue.extend({
     closePhotoModal(): void {
       this.photoModal = false;
     },
-    showMessageModal(): void {
+    showMessageModal(user: any): void {
+      this.user = user;
+      console.log(user);
+
       this.messageModal = true;
     },
     closemessageModal(): void {

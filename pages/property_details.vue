@@ -47,7 +47,18 @@
             <span class="material-icons mr-5"> share </span>Share
           </p>
           <p class="align_center">
-            <span class="material-icons mr-5"> favorite_border </span>Share
+            <span
+              class="material-icons ml-5"
+              @click="favProperty(propertyDetails)"
+              :style="
+                favProperties.includes(propertyDetails)
+                  ? { color: 'red' }
+                  : { color: 'grey' }
+              "
+            >
+              favorite
+            </span>
+            <span class="pl-5">Like</span>
           </p>
         </div>
       </div>
@@ -194,7 +205,8 @@
 <script lang="ts">
 import Vue from "vue";
 import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
-import url from "../../url";
+import url from "../url";
+import { IMixinState } from "../types/mixinsTypes";
 
 export default Vue.extend({
   auth: false,
@@ -208,6 +220,7 @@ export default Vue.extend({
       image: "" as any,
       propertyDetails: {} as any,
       home: "" as string,
+      favProperties: [] as Array<object>,
       sendForm: {
         amount: null,
         recipient_amt: null,
@@ -217,7 +230,8 @@ export default Vue.extend({
     };
   },
   async created() {
-    const listings = await this.$listingApi.show(this.$route.params.id);
+    console.log("routes", this.$route.query);
+    const listings = await this.$listingApi.show(this.$route.query.id);
     this.propertyDetails = listings.data;
     console.log(listings);
   },
@@ -230,6 +244,40 @@ export default Vue.extend({
     url() {
       return url();
     },
+    async favProperty(fav: any) {
+      if (this.$auth.loggedIn) {
+        let singleProperty = Object.assign([], this.favProperties);
+        if (this.favProperties) {
+          let favIndex = this.favProperties.indexOf(fav);
+          singleProperty.includes(fav)
+            ? this.favProperties.splice(favIndex, 1)
+            : this.favProperties.push(fav);
+        }
+        try {
+          const favoriteResponse = await this.$selectFavoriteApi.create({
+            listing_id: fav.id,
+          });
+          console.log(favoriteResponse);
+          (this as any as IMixinState).$message({
+            showClose: true,
+            message: "Added property to favourite!",
+            type: "success",
+          });
+        } catch (error: any) {}
+      } else {
+        this.$confirm("Login to select favourite", {
+          confirmButtonText: "Login",
+          cancelButtonText: "Cancel",
+          type: "success",
+        })
+          .then(() => {
+            this.$router.push("/login");
+          })
+          .catch(() => {
+            //  console.log()
+          });
+      }
+    },
     handleClick(tab: string, event: object) {
       console.log(tab, event);
     },
@@ -241,7 +289,9 @@ export default Vue.extend({
     //   },
     showOwner(): void {
       console.log("show");
-      (this as any).$refs.propertyAction.showMessageModal(this.user);
+      (this as any).$refs.propertyAction.showMessageModal(
+        this.propertyDetails.lister
+      );
     },
   },
 });

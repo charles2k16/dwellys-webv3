@@ -8,11 +8,11 @@
           <img src="~/assets/img/logo.png" />
         </NuxtLink>
       </div>
-      <!-- <div class="header_content hidden-sm-and-down">
+      <div class="header_content hidden-sm-and-down">
         <span class="pl-10">
           <NuxtLink to="/property_account">Become an agent</NuxtLink>
         </span>
-      </div> -->
+      </div>
       <div class="drawer hidden-md-and-up">
         <svg
           @click="drawer = true"
