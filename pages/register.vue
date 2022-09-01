@@ -172,7 +172,7 @@ export default Vue.extend({
         phone_number: "" as string,
         sign_up_mode: "email" as string,
         user_type: "visitor" as string,
-        country_id: "39a40751-d7d2-4346-99e5-b0235b520ce5" as string,
+        country_id: "" as string,
       },
       validation: {
         email: [
@@ -205,6 +205,11 @@ export default Vue.extend({
   },
   async created() {
     const countries = await this.$countriesApi.index();
+    countries.data.filter((country: any) =>
+      country.short_name == "GH"
+        ? (this.registerForm.country_id = country.id)
+        : ""
+    );
     this.countries = countries.data;
     console.log(this.countries);
   },

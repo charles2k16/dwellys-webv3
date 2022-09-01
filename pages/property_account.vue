@@ -237,15 +237,15 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import VuePhoneNumberInput from 'vue-phone-number-input';
-import 'vue-phone-number-input/dist/vue-phone-number-input.css';
-import ApplicationHandler from '@/handlers/ApplicationHandler.vue';
-import { IMixinState } from '@/types/mixinsTypes';
+import Vue from "vue";
+import VuePhoneNumberInput from "vue-phone-number-input";
+import "vue-phone-number-input/dist/vue-phone-number-input.css";
+import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
+import { IMixinState } from "@/types/mixinsTypes";
 
 export default Vue.extend({
   auth: false,
-  name: 'AccountPage',
+  name: "AccountPage",
   components: {
     VuePhoneNumberInput,
     ApplicationHandler,
@@ -253,20 +253,20 @@ export default Vue.extend({
 
   data() {
     var validatePass = (rule: any, value: string, callback: any) => {
-      if (value === '') {
-        callback(new Error('Please input the password'));
+      if (value === "") {
+        callback(new Error("Please input the password"));
       } else {
-        if ((this as any).property_account.confirm_password !== '') {
+        if ((this as any).property_account.confirm_password !== "") {
           (this as any).$refs.property_account.validateField(
-            'confirm_password'
+            "confirm_password"
           );
         }
         callback();
       }
     };
     var validatePass2 = (rule: any, value: string, callback: any) => {
-      if (value === '') {
-        callback(new Error('Please input the password again'));
+      if (value === "") {
+        callback(new Error("Please input the password again"));
       } else if (value !== (this as any).property_account.password) {
         callback(new Error("Password don't match!"));
       } else {
@@ -276,99 +276,105 @@ export default Vue.extend({
     return {
       active: 0 as number,
       step: 1 as number,
-      phone: '',
+      phone: "",
       btnLoading: false as boolean,
       property_account: {
-        avatar: '' as any,
-        first_name: '' as string,
-        last_name: '' as string,
-        dob: '' as string,
-        sign_up_mode: 'email',
-        email: '' as string,
-        password: '' as string,
-        confirm_password: '' as string,
-        phone_number: '' as string,
-        id_card_type: '' as string,
-        id_card_upload: '' as any,
-        id_card_number: '' as string,
-        country_id: '39a40751-d7d2-4346-99e5-b0235b520ce5' as String,
-        user_type: 'lister',
+        avatar: "" as any,
+        first_name: "" as string,
+        last_name: "" as string,
+        dob: "" as string,
+        sign_up_mode: "email",
+        email: "" as string,
+        password: "" as string,
+        confirm_password: "" as string,
+        phone_number: "" as string,
+        id_card_type: "" as string,
+        id_card_upload: "" as any,
+        id_card_number: "" as string,
+        country_id: "" as String,
+        user_type: "lister",
       },
       account_validation: {
         first_name: [
           {
             required: true,
-            message: 'Please enter your first name',
-            trigger: ['blur', 'change'],
+            message: "Please enter your first name",
+            trigger: ["blur", "change"],
           },
         ],
         last_name: [
           {
             required: true,
-            message: 'Please enter your last name',
-            trigger: ['blur', 'change'],
+            message: "Please enter your last name",
+            trigger: ["blur", "change"],
           },
         ],
         dob: [
           {
             required: true,
-            message: 'Please enter your date of birth',
-            trigger: ['blur', 'change'],
+            message: "Please enter your date of birth",
+            trigger: ["blur", "change"],
           },
         ],
         id_card_number: [
           {
             required: true,
-            message: 'Please enter ID number',
-            trigger: ['blur', 'change'],
+            message: "Please enter ID number",
+            trigger: ["blur", "change"],
           },
         ],
         email: [
           {
             required: true,
-            type: 'email',
-            message: 'Please enter valid email',
-            trigger: ['blur', 'change'],
+            type: "email",
+            message: "Please enter valid email",
+            trigger: ["blur", "change"],
           },
-          { min: 5, message: 'Length should be 5 or more', trigger: 'blur' },
+          { min: 5, message: "Length should be 5 or more", trigger: "blur" },
         ],
         phone_number: [
           {
             required: true,
-            message: 'Please enter your phone number',
-            trigger: ['blur', 'change'],
+            message: "Please enter your phone number",
+            trigger: ["blur", "change"],
           },
         ],
         id_card_type: [
           {
             required: true,
-            message: 'Please select ID type',
-            trigger: 'change',
+            message: "Please select ID type",
+            trigger: "change",
           },
         ],
         id_card_upload: [
           {
             required: true,
-            message: 'Please select an ID card',
-            trigger: 'change',
+            message: "Please select an ID card",
+            trigger: "change",
           },
         ],
         password: [
-          { validator: validatePass, trigger: 'blur', required: true },
+          { validator: validatePass, trigger: "blur", required: true },
         ],
         confirm_password: [
-          { validator: validatePass2, trigger: 'blur', required: true },
+          { validator: validatePass2, trigger: "blur", required: true },
         ],
       },
-      options: ['SSNIT', 'PASSPORT', 'VOTER'],
-      user: '' as string,
+      options: ["SSNIT", "PASSPORT", "VOTER"],
+      user: "" as string,
       countries: [],
     };
   },
   async created() {
     const countries = await this.$countriesApi.index();
+    const all_countries = countries.data.filter((country: any) =>
+      country.short_name == "GH"
+        ? (this.property_account.country_id = country.id)
+        : ""
+    );
     this.countries = countries.data;
-    console.log(countries);
+
+    console.log(this.property_account.country_id);
   },
   methods: {
     toPrev() {
@@ -388,7 +394,7 @@ export default Vue.extend({
       reader.readAsDataURL(file.raw);
       reader.onloadend = () => {
         this.property_account.id_card_upload = reader.result;
-        (this as any as IMixinState).getNotification('Id uploaded', 'success');
+        (this as any as IMixinState).getNotification("Id uploaded", "success");
       };
     },
     showPhotoModal() {
@@ -400,7 +406,7 @@ export default Vue.extend({
       this.countries.filter((country: any) =>
         country.short_name == e.countryCode
           ? (this.property_account.country_id = country.id)
-          : ''
+          : ""
       );
     },
     getAvatar(avatar: any) {
@@ -415,8 +421,8 @@ export default Vue.extend({
         } else {
           this.btnLoading = false;
           (this as any as IMixinState).getNotification(
-            'Make sure all required fields are filled',
-            'error'
+            "Make sure all required fields are filled",
+            "error"
           );
           return false;
         }
@@ -428,13 +434,13 @@ export default Vue.extend({
         console.log(response);
 
         this.$confirm(response.message, {
-          confirmButtonText: 'OK',
-          cancelButtonText: 'Cancel',
-          type: 'success',
+          confirmButtonText: "OK",
+          cancelButtonText: "Cancel",
+          type: "success",
         })
           .then(() => {
             this.btnLoading = false;
-            this.$router.push('/login');
+            this.$router.push("/login");
           })
           .catch(() => {
             this.btnLoading = false;

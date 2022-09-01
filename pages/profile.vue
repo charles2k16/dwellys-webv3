@@ -146,9 +146,9 @@
             </div>
           </el-form>
         </el-tab-pane>
-        <el-tab-pane label="Favorites" name="third" class="new_tab">
+        <el-tab-pane label="My Favorites" name="third" class="new_tab">
           <!-- <ProfileListings :user_listings="user_listings" /> -->
-          <PropertyList :listings="user_listings" />
+          <UserFavorite :listings="userFavorites" />
         </el-tab-pane>
         <el-tab-pane label="Security" name="fourth" class="settings_body">
           <div class="security pt-20 pb-20">
@@ -324,8 +324,9 @@ export default Vue.extend({
     async fetchData() {
       const user = this.$auth.user;
       const userFavorite = await this.$userFavoriteApi.index();
-      console.log("user fav", userFavorite.data);
+
       this.userFavorites = userFavorite.data;
+      console.log("user fav", this.userFavorites);
 
       if (user.user_type == "lister") {
         const lister = await this.$userApi.show(user.id);

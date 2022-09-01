@@ -6,26 +6,28 @@
         :sm="12"
         :md="6"
         v-for="property in listings"
-        :key="property.id"
+        :key="property.listing.id"
         class="pb-20"
       >
         <el-card shadow="hover" class="property_container">
           <div
             class="property_image"
             @click.self="openPropertyDetails(property)"
-            :style="background_style(property.photos)"
+            :style="background_style(property.listing.photos)"
           >
             <div class="d-flex justify_between property_labels p-10">
               <p style="background: white">
-                {{ property.listing_detail.category.name }}
+                {{ property.listing.listing_detail.category.name }}
               </p>
               <span class="d-flex">
-                <span class="pt-2">{{ property.listing_total_views }} </span>
+                <span class="pt-2"
+                  >{{ property.listing.listing_total_views }}
+                </span>
                 <span class="material-icons ml-5"> visibility </span>
               </span>
               <span class="fav">
                 <span style="color: #000" class="pt-2"
-                  >{{ property.listing_total_likes }}
+                  >{{ property.listing.listing_total_likes }}
                 </span>
                 <span
                   class="material-icons ml-5"
@@ -46,16 +48,18 @@
           > -->
           <div class="card_body">
             <!-- amount -->
-            <p class="house_amount">${{ property.listing_detail.price }}/mth</p>
+            <p class="house_amount">
+              ${{ property.listing.listing_detail.price }}/mth
+            </p>
             <p class="house_plot">
-              {{ property.listing_detail.region }},
-              {{ property.listing_detail.city }}
+              {{ property.listing.listing_detail.region }},
+              {{ property.listing.listing_detail.city }}
             </p>
           </div>
           <div class="card_footer">
             <div
               class="pl-5"
-              v-for="specification in property.property_specifications"
+              v-for="specification in property.listing.property_specifications"
               :key="specification.id"
             >
               <div class="d-flex align_center">
@@ -85,7 +89,7 @@
       </el-col>
     </el-row>
     <div v-else class="d-flex justify_center p-20">
-      <p>No Properties found</p>
+      <p>No Favorite found</p>
     </div>
   </div>
 </template>
@@ -102,11 +106,14 @@ export default Vue.extend({
       type: Array,
     },
   },
-  name: "PropertyList",
+  name: "UserFavorite",
   data() {
     return {
       favProperties: [] as Array<object>,
     };
+  },
+  created() {
+    console.log("fave", this.listings);
   },
   methods: {
     async favProperty(fav: any) {
