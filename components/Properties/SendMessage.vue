@@ -5,7 +5,13 @@
       <img class="agent_avatar" :src="apiUrl + '/' + user.avatar" />
       <div class="ml-20">
         <p>{{ user.first_name }} {{ user.last_name }}</p>
-        <p style="font-size: 12px; color: #64748b">Independent agent</p>
+        <p style="font-size: 12px; color: #64748b">
+          {{
+            propertyDetails.lister.user_type == "lister"
+              ? "Independent agent"
+              : "Admin"
+          }}
+        </p>
       </div>
     </div>
     <hr class="hr_rule" />

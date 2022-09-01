@@ -157,7 +157,11 @@
                       >
                     </p>
                     <p style="font-size: 13px; color: #64748b">
-                      Independent agent
+                      {{
+                        propertyDetails.lister.user_type == "lister"
+                          ? "Independent agent"
+                          : "Admin"
+                      }}
                     </p>
                   </div>
                 </div>

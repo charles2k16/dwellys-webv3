@@ -367,7 +367,7 @@ export default Vue.extend({
   },
   async created() {
     const countries = await this.$countriesApi.index();
-    const all_countries = countries.data.filter((country: any) =>
+    countries.data.filter((country: any) =>
       country.short_name == "GH"
         ? (this.property_account.country_id = country.id)
         : ""
