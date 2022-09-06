@@ -7,7 +7,7 @@
           <span>houses</span> and <span>properties</span> for sale and rent
         </h1>
         <div class="discover_line"></div>
-        <el-tabs type="card" @tab-click="handleClick" class="home_search_tabs">
+        <!-- <el-tabs type="card" @tab-click="handleClick" class="home_search_tabs">
           <el-tab-pane
             :label="searchType.label"
             v-for="(searchType, index) in propertySearch"
@@ -37,7 +37,27 @@
               ></el-button>
             </div>
           </el-tab-pane>
-        </el-tabs>
+        </el-tabs> -->
+        <div class="search_container">
+          <p v-if="isQuery" class="to_properties" @click="closeQuery">
+            <span class="material-icons">arrow_back</span>
+          </p>
+          <el-input
+            v-model="search_value"
+            class="search_input"
+            placeholder="What are you looking for?"
+          >
+          </el-input>
+          <el-button type="primary" class="hidden-sm-and-down" @click="getQuery"
+            >Find your home</el-button
+          >
+          <el-button
+            icon="el-icon-search"
+            type="primary"
+            class="hidden-md-and-up"
+            round
+          ></el-button>
+        </div>
         <el-row class="d-flex pt-20">
           <div class="pr-20">
             <p><b>2000+ </b></p>
@@ -76,7 +96,11 @@
           :key="index"
         >
           <div class="section pt-20" v-loading="pageLoad">
-            <PropertyList :type="tab.label" :listings="listings" />
+            <PropertyList
+              :type="tab.label"
+              :listings="listings"
+              :favorites="favorites"
+            />
           </div>
           <div></div>
         </el-tab-pane>
@@ -110,6 +134,7 @@ export default Vue.extend({
       ],
       listings: [] as Array<object>,
       pageLoad: true as boolean,
+      favorites: [],
       queryList: [],
       isQuery: false,
       tabOptions: [
@@ -123,11 +148,21 @@ export default Vue.extend({
     };
   },
   async created() {
-    const listings = await this.$listingApi.index();
-    console.log(listings);
-    this.loadListing(listings.data);
+    if (this.$auth.loggedIn) {
+      this.fetchData();
+    }
+
+    this.fetchData();
+
+    console.log(this.listings);
+    // this.userFavorites = userFavorite.data;
   },
   methods: {
+    async fetchData() {
+      const listings = await this.$listingApi.query("?status=active");
+      console.log(listings);
+      this.loadListing(listings.data);
+    },
     loadListing(properties: any) {
       const data = properties.map((property: any) => {
         property.photos =

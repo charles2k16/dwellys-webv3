@@ -31,12 +31,8 @@
                 </span>
                 <span
                   class="material-icons ml-5"
-                  @click="favProperty(property)"
-                  :style="
-                    favProperties.includes(property)
-                      ? { color: 'red' }
-                      : { color: 'white' }
-                  "
+                  @click="favProperty(property.listing)"
+                  :style="{ color: 'red' }"
                 >
                   favorite
                 </span>
@@ -112,46 +108,9 @@ export default Vue.extend({
       favProperties: [] as Array<object>,
     };
   },
-  created() {
-    console.log("fave", this.listings);
-  },
   methods: {
-    async favProperty(fav: any) {
-      if (this.$auth.loggedIn) {
-        let singleProperty = Object.assign([], this.favProperties);
-        if (this.favProperties) {
-          let favIndex = this.favProperties.indexOf(fav);
-          singleProperty.includes(fav)
-            ? this.favProperties.splice(favIndex, 1)
-            : this.favProperties.push(fav);
-        }
-        try {
-          const favoriteResponse = await this.$selectFavoriteApi.create({
-            listing_id: fav.id,
-          });
-          console.log(favoriteResponse);
-          (this as any as IMixinState).$message({
-            showClose: true,
-            message: "Added property to favourite!",
-            type: "success",
-          });
-        } catch (error: any) {
-          (this as any as IMixinState).catchError(error);
-          console.log(error?.response);
-        }
-      } else {
-        this.$confirm("Login to select favourite", {
-          confirmButtonText: "Login",
-          cancelButtonText: "Cancel",
-          type: "success",
-        })
-          .then(() => {
-            this.$router.push("/login");
-          })
-          .catch(() => {
-            // this.$router.push("/register");
-          });
-      }
+    favProperty(fav: any) {
+      this.$emit("favorite", fav.id);
     },
     openPropertyDetails(property: any): void {
       console.log(property);
@@ -159,8 +118,8 @@ export default Vue.extend({
         name: "property_details",
         // params: { property: property.id },
         query: {
-          name: property.listing_detail.name,
-          id: property.id,
+          name: property.listing.listing_detail.name,
+          id: property.listing.id,
         },
       });
       // this.$router.push(`property_details/${property.id}`);

@@ -15,7 +15,7 @@
               avatar ===
                 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
             "
-            :src="url() + '/' + lister.avatar"
+            :src="apiUrl + '/' + lister.avatar"
             alt="avatar"
             class="profile_img"
           />
@@ -148,7 +148,7 @@
         </el-tab-pane>
         <el-tab-pane label="My Favorites" name="third" class="new_tab">
           <!-- <ProfileListings :user_listings="user_listings" /> -->
-          <UserFavorite :listings="userFavorites" />
+          <UserFavorite :listings="userFavorites" @favorite="toggleFavorite" />
         </el-tab-pane>
         <el-tab-pane label="Security" name="fourth" class="settings_body">
           <div class="security pt-20 pb-20">
@@ -299,6 +299,7 @@ export default Vue.extend({
   },
   async created() {
     this.fetchData();
+    this.fetchFavorites();
     const countries = await this.$countriesApi.index();
     this.countries = countries.data;
     if (this.lister.is_id_card_verified == 0) {
@@ -321,12 +322,14 @@ export default Vue.extend({
     birthDate(date: any) {
       this.$moment(date.format("MMM DD, YY"));
     },
-    async fetchData() {
-      const user = this.$auth.user;
+    async fetchFavorites() {
       const userFavorite = await this.$userFavoriteApi.index();
 
       this.userFavorites = userFavorite.data;
       console.log("user fav", this.userFavorites);
+    },
+    async fetchData() {
+      const user = this.$auth.user;
 
       if (user.user_type == "lister") {
         const lister = await this.$userApi.show(user.id);
@@ -347,6 +350,23 @@ export default Vue.extend({
         is_id_card_verified: user.is_id_card_verified,
         country_id: user.country.id,
       };
+    },
+    async toggleFavorite(id: string) {
+      try {
+        const favoriteResponse = await this.$selectFavoriteApi.create({
+          listing_id: id,
+        });
+        console.log(favoriteResponse);
+        (this as any as IMixinState).$message({
+          showClose: true,
+          message: "Added property to favourite!",
+          type: "success",
+        });
+        this.fetchFavorites();
+      } catch (error: any) {
+        (this as any as IMixinState).catchError(error);
+        console.log(error?.response);
+      }
     },
     onPhoneUpdate(e: any) {
       console.log(e);

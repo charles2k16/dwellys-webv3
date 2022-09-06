@@ -9,6 +9,7 @@
         :key="property.id"
         class="pb-20"
       >
+        <!-- v-if="property.listing_detail.name == type" -->
         <el-card shadow="hover" class="property_container">
           <div
             class="property_image"
@@ -21,7 +22,9 @@
               </p>
               <span class="d-flex">
                 <span class="pt-2">{{ property.listing_total_views }} </span>
-                <span class="material-icons ml-5"> visibility </span>
+                <span style="color: #fff" class="material-icons ml-5">
+                  visibility
+                </span>
               </span>
               <span class="fav">
                 <span style="color: #000" class="pt-2"
@@ -31,7 +34,7 @@
                   class="material-icons ml-5"
                   @click="favProperty(property)"
                   :style="
-                    favProperties.includes(property)
+                    favProperties.some((fav) => fav.id == property.id)
                       ? { color: 'red' }
                       : { color: 'white' }
                   "
@@ -46,6 +49,7 @@
           > -->
           <div class="card_body">
             <!-- amount -->
+            <p style="font-weight: 600">{{ property.listing_detail.name }}</p>
             <p class="house_amount">${{ property.listing_detail.price }}/mth</p>
             <p class="house_plot">
               {{ property.listing_detail.region }},
@@ -101,28 +105,54 @@ export default Vue.extend({
       required: true,
       type: Array,
     },
+    favorites: {
+      required: false,
+      type: Array,
+    },
+    type: {
+      required: true,
+      type: String,
+    },
   },
   name: "PropertyList",
   data() {
     return {
-      favProperties: [] as Array<object>,
+      favProperties: [] as any,
     };
   },
+  async created() {
+    this.fetchFavorites();
+  },
+
   methods: {
+    async fetchFavorites() {
+      if (this.$auth.loggedIn) {
+        const userFavorite = await this.$userFavoriteApi.index();
+        const favorites = userFavorite.data;
+        for (let i = 0; i < favorites.length; i++) {
+          this.favProperties.push(favorites[i].listing);
+        }
+        // this.favProperties = favorites;
+      }
+    },
     async favProperty(fav: any) {
       if (this.$auth.loggedIn) {
         let singleProperty = Object.assign([], this.favProperties);
         if (this.favProperties) {
-          let favIndex = this.favProperties.indexOf(fav);
+          let favIndex = this.favProperties.findIndex(
+            (prop: any) => prop.id == fav.id
+          );
+
           singleProperty.includes(fav)
             ? this.favProperties.splice(favIndex, 1)
             : this.favProperties.push(fav);
         }
+        console.log(this.favProperties);
         try {
           const favoriteResponse = await this.$selectFavoriteApi.create({
             listing_id: fav.id,
           });
-          console.log(favoriteResponse);
+          this.fetchFavorites();
           (this as any as IMixinState).$message({
             showClose: true,
             message: "Added property to favourite!",
@@ -187,7 +217,7 @@ export default Vue.extend({
     }
   }
   .card_body {
-    padding: 10px 20px;
+    padding: 10px;
     .house_amount {
       color: #475569;
     }

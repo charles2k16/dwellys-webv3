@@ -1,7 +1,6 @@
 <template>
   <div class="login_form">
     <h2 class="center pb-20">Login</h2>
-
     <p v-if="showVerifyInfo" style="color: red">
       Verify your email address to continue
     </p>
@@ -82,6 +81,11 @@ export default Vue.extend({
         ],
       },
     };
+  },
+  computed: {
+    user() {
+      return this.$auth.user;
+    },
   },
   methods: {
     signIn() {
@@ -167,8 +171,9 @@ export default Vue.extend({
         });
     },
     googleSignIn() {
+      console.log("google");
       this.$auth
-        .loginWith("google")
+        .loginWith("google", { params: { prompt: "select_account" } })
         .then((response: any) => {
           // const { user, token } = response.data.data;
           console.log(response);

@@ -192,8 +192,8 @@
                     drag
                     action=""
                     :on-change="propertyCard"
-                    :limit="1"
                     :multiple="false"
+                    :on-remove="removeIdCard"
                     class="upload_dragg w-100"
                   >
                     <i class="el-icon-upload"></i>
@@ -202,6 +202,17 @@
                     </div>
                   </el-upload>
                 </el-form-item>
+                <div
+                  v-if="property_account.id_card_upload"
+                  class="d-flex justify_center"
+                >
+                  <img
+                    :src="property_account.id_card_upload"
+                    width="80%"
+                    height="200px"
+                    class="mx-10 mt-10"
+                  />
+                </div>
                 <el-col>
                   <div class="terms_condition py-20">
                     <p>
@@ -390,12 +401,13 @@ export default Vue.extend({
       });
     },
     propertyCard(file: any) {
+      console.log(file);
       let reader = new FileReader();
       reader.readAsDataURL(file.raw);
       reader.onloadend = () => {
         this.property_account.id_card_upload = reader.result;
-        (this as any as IMixinState).getNotification("Id uploaded", "success");
       };
+      console.log(this.property_account.id_card_upload);
     },
     showPhotoModal() {
       (this as any).$refs.propertyAction.showPhotoModal(this.user);

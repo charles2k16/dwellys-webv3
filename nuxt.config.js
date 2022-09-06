@@ -125,7 +125,7 @@ export default {
         endpoints: {
           token: "http://localhost:8000/api/v3/loginwithsocialmedia", // somm backend url to resolve your auth with google and give you the token back
           userInfo: false, // the endpoint to get the user info after you recived the token
-          redirect_uri: "http://localhost:3000",
+          redirect_uri: "http://localhost:1753",
         },
       },
       facebook: {

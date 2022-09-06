@@ -208,14 +208,15 @@
               Drop file here or <em>click to upload</em></label
             >
           </div>
-          <div>
-            <img
-              v-for="image in listing_photos"
-              :key="image.photo"
-              :src="image.photo"
-              width="70px"
-              class="mx-10 mt-10"
-            />
+
+          <div class="uploadImgs">
+            <div v-for="(image, index) in listing_photos" :key="image.photo">
+              <img :src="image.photo" width="70px" class="mx-10 my-10" />
+              <i
+                class="el-icon-delete-solid deleteImgIcon"
+                @click="removeUpload(index)"
+              ></i>
+            </div>
           </div>
         </div>
       </div>
@@ -287,8 +288,8 @@
       <div v-if="step === 6">
         <div class="center">
           <div class="property_upload_head">
-            <h3>Discount on Property</h3>
-            <small>Discount of the property</small>
+            <h3>Property name and price</h3>
+            <!-- <small>Discount of the property</small> -->
           </div>
           <div class="block slider">
             <el-slider v-model="step" disabled :min="1" :max="8"></el-slider>
@@ -297,18 +298,18 @@
         <div class="property_content_container pb-20">
           <el-row class="pb-20">
             <el-col :sm="12" class="pb-20 pr-5 d-flex_column">
-              <span class="pb-10">Number of Days</span>
+              <span class="pb-10">Property Name</span>
               <el-input
-                v-model="discount.no_of_days"
-                type="number"
+                v-model="property.name"
+                type="text"
                 placeholder="Location"
               >
               </el-input>
             </el-col>
             <el-col :sm="12" class="pb-20 pl-5 d-flex_column">
-              <span class="pb-10">Percentage Value (%)</span>
+              <span class="pb-10">Property price</span>
               <el-input
-                v-model="discount.percentage_value"
+                v-model="property.price"
                 type="number"
                 placeholder="Location"
               >
@@ -680,6 +681,9 @@ export default Vue.extend({
       this.selectedPlan.mobile_money_number = "";
       this.media = method;
     },
+    removeUpload(index: number) {
+      this.listing_photos.splice(index, 1);
+    },
     removeSpec(index: number) {
       this.propertyUpload.other_specifications.splice(index, 1);
     },
@@ -692,16 +696,32 @@ export default Vue.extend({
     getPrice(plan: any) {
       console.log(plan);
       this.listing_plan_id = plan.id;
-      this.propertyUpload.price = plan.price;
+      // this.propertyUpload.plan = plan.price;
     },
     toggleUpload(event: any) {
       let reader = new FileReader();
+      // let files = event.target.files;
+      // if (files.length > 1) {
+      //   for (let i = 0; i < files.length; i++) {
+      //     reader.readAsDataURL(files[i]);
+      //     reader.onloadend = () => {
+      //       // reader.result;
+      //       let img = {
+      //         tag: "front",
+      //         is_featured: false,
+      //         photo: reader.result,
+      //       };
+      //       this.listing_photos.push(img);
+      //     };
+      //   }
+      // } else {
       reader.readAsDataURL(event.target.files[0]);
       reader.onloadend = () => {
         // reader.result;
         let img = { tag: "front", is_featured: false, photo: reader.result };
         this.listing_photos.push(img);
       };
+      // }
     },
     addSpecSection() {
       let newSection = { name: "", number: 0 };
@@ -712,7 +732,7 @@ export default Vue.extend({
     async getProperty(newProperty: any) {
       this.propertyUpload.property_type_id = newProperty.id;
       this.propertyUpload.description = newProperty.description;
-      this.propertyUpload.name = newProperty.name;
+      // this.propertyUpload.name = newProperty.name;
       this.selectedProperty = newProperty.name;
 
       const property = await this.$propertyTypesApi.show(newProperty.id);
@@ -1070,6 +1090,15 @@ $medium_screen: 769px;
       margin: 0 auto;
       padding-right: 0;
     }
+  }
+  .uploadImgs {
+    display: grid;
+    align-items: baseline;
+    // width: fit-content;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 120px));
+  }
+  .deleteImgIcon {
+    color: red;
   }
 }
 </style>

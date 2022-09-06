@@ -89,6 +89,10 @@
   font-weight: bold;
 }
 
+.el-upload-list {
+  display: none;
+}
+
 /* upload */
 
 @media (max-width: 1024px) {

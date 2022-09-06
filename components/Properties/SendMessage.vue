@@ -6,11 +6,7 @@
       <div class="ml-20">
         <p>{{ user.first_name }} {{ user.last_name }}</p>
         <p style="font-size: 12px; color: #64748b">
-          {{
-            propertyDetails.lister.user_type == "lister"
-              ? "Independent agent"
-              : "Admin"
-          }}
+          {{ user.user_type == "lister" ? "Independent agent" : "Admin" }}
         </p>
       </div>
     </div>

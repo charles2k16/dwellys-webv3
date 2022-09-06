@@ -8,7 +8,7 @@
           <img src="~/assets/img/logo.png" />
         </NuxtLink>
       </div>
-      <div class="header_content hidden-sm-and-down">
+      <div class="header_content hidden-sm-and-down" v-if="!$auth.loggedIn">
         <span class="pl-10">
           <NuxtLink to="/property_account">Become an agent</NuxtLink>
         </span>
@@ -80,7 +80,11 @@
                   <NuxtLink to="/property_upload">Property Upload</NuxtLink>
                 </span>
               </span>
-              <span @click="drawer = false" class="pb-10">
+              <span
+                @click="drawer = false"
+                class="pb-10"
+                v-if="!$auth.loggedIn"
+              >
                 <NuxtLink to="/property_account">Become an agent</NuxtLink>
               </span>
               <span v-if="$auth.loggedIn" @click="drawer = false" class="pb-10">
@@ -99,9 +103,9 @@
         </el-drawer>
       </div>
       <div class="header_content hidden-sm-and-down">
-        <span v-if="$auth.loggedIn" class="pr-20">
+        <!-- <span v-if="$auth.loggedIn" class="pr-20">
           <NuxtLink to="/messages">Messages</NuxtLink>
-        </span>
+        </span> -->
 
         <el-dropdown trigger="click">
           <span class="el-dropdown-link">
@@ -139,7 +143,7 @@
                 <NuxtLink to="/property_upload">Property Upload</NuxtLink>
               </span>
             </el-dropdown-item>
-            <el-dropdown-item>
+            <el-dropdown-item v-if="!$auth.loggedIn">
               <span class="py-10">
                 <NuxtLink to="/property_account">Become an agent</NuxtLink>
               </span>
