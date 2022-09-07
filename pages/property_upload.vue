@@ -300,18 +300,18 @@
             <el-col :sm="12" class="pb-20 pr-5 d-flex_column">
               <span class="pb-10">Property Name</span>
               <el-input
-                v-model="property.name"
+                v-model="propertyUpload.name"
                 type="text"
-                placeholder="Location"
+                placeholder="E.g Two bed room apartment"
               >
               </el-input>
             </el-col>
             <el-col :sm="12" class="pb-20 pl-5 d-flex_column">
               <span class="pb-10">Property price</span>
               <el-input
-                v-model="property.price"
+                v-model="propertyUpload.price"
                 type="number"
-                placeholder="Location"
+                placeholder="200"
               >
               </el-input>
             </el-col>
@@ -635,9 +635,13 @@ export default Vue.extend({
         this.propertyUpload.city != ""
       ) {
         valid = true;
-      } else if (this.step == 6) {
+      } else if (
+        this.step == 6 &&
+        this.propertyUpload.price != 0 &&
+        this.propertyUpload.name != ""
+      ) {
         valid = true;
-      } else if (this.step == 7 && this.propertyUpload.price != 0) {
+      } else if (this.step == 7 && this.listing_plan_id != "") {
         valid = true;
       }
       return valid;
@@ -779,17 +783,17 @@ export default Vue.extend({
         }
         console.log(newSpec);
       }
-      if (
-        this.step == 7 &&
-        this.discount.no_of_days != 0 &&
-        this.discount.percentage_value != 0
-      ) {
-        this.$discountApi.create(this.discount).then((response: any) => {
-          console.log(response);
-          this.discount_code = response.data.code;
-        });
-      }
-      console.log(this.propertyUpload.specifications);
+      // if (
+      //   this.step == 7 &&
+      //   this.discount.no_of_days != 0 &&
+      //   this.discount.percentage_value != 0
+      // ) {
+      //   this.$discountApi.create(this.discount).then((response: any) => {
+      //     console.log(response);
+      //     this.discount_code = response.data.code;
+      //   });
+      // }
+      console.log(this.propertyUpload);
     },
     noSpecifications() {
       this.step = 2;
