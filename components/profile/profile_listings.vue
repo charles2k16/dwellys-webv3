@@ -19,7 +19,7 @@
             >
               <div class="d-flex justify_between property_labels p-10">
                 <p style="color: #fff">
-                  {{ listing.listing_detail.name }}
+                  {{ listing.listing_detail.category.name }}
                 </p>
                 <el-dropdown trigger="click">
                   <span class="el-dropdown-link">
@@ -41,11 +41,15 @@
                 </el-dropdown>
               </div>
             </div>
-            <!-- <nuxt-link
-            :to="{ name: 'property_details', params: { property: property } }"
-          > -->
+            <div class="aprroval_pending d-flex justify_center">
+              <i class="el-icon-info"></i>
+              <p class="pl-10">Pending Approval</p>
+            </div>
             <div class="card_body">
               <!-- amount -->
+              <p style="font-weight: 600">
+                {{ listing.listing_detail.name }}
+              </p>
               <p class="house_amount">
                 ${{ listing.listing_detail.price }}/mth
               </p>
@@ -55,40 +59,17 @@
               </p>
             </div>
             <div class="card_footer">
-              <div class="pl-5">
+              <div
+                class="pl-5"
+                v-for="specification in listing.property_specifications"
+                :key="specification.id"
+              >
                 <div class="d-flex align_center">
                   <img src="~/assets/svg/bed.png" class="property_img pr-10" />
-                  <b>{{ listing.property_specifications[0].number }} </b>
+                  <b>{{ specification.number }} </b>
                 </div>
                 <p>
-                  {{ listing.property_specifications[0].specification.name }}
-                </p>
-              </div>
-              <div class="house_bathroom">
-                <div class="d-flex align_center">
-                  <img src="~/assets/svg/bath.png" class="property_img pr-10" />
-                  <b>{{ listing.property_specifications[1].number }}</b>
-                </div>
-                <p>
-                  {{ listing.property_specifications[1].specification.name }}
-                </p>
-              </div>
-              <div>
-                <div class="d-flex align_center">
-                  <img src="~/assets/svg/tv.png" class="property_img pr-10" /><b
-                    >{{
-                      listing.property_specifications[2]
-                        ? listing.property_specifications[2].number
-                        : 0
-                    }}</b
-                  >
-                </div>
-                <p>
-                  {{
-                    listing.property_specifications[2]
-                      ? listing.property_specifications[2].specification.name
-                      : 0
-                  }}
+                  {{ specification.specification.name }}
                 </p>
               </div>
             </div>
@@ -156,5 +137,16 @@ export default Vue.extend({
   justify-content: center;
   flex-direction: column;
   align-items: center;
+}
+
+.aprroval_pending {
+  padding: 10px;
+  text-align: center;
+  color: white;
+  // background: #909399;
+  background: var(--color-primary);
+  i {
+    font-size: 20px;
+  }
 }
 </style>

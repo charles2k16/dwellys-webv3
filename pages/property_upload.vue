@@ -590,7 +590,12 @@ export default Vue.extend({
       this.propertyTypes ? (this.pageLoad = false) : (this.pageLoad = true);
 
       const listingPlans = await this.$listingPlansApi.index();
-      this.pricingPlans = listingPlans.data;
+
+      const plans = listingPlans.data.filter(
+        (plan: any) => plan.is_active == 1
+      );
+      console.log(plans);
+      this.pricingPlans = plans;
 
       const countries = await this.$countriesApi.index();
       this.countries = countries.data;

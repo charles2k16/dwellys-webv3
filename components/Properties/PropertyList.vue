@@ -132,7 +132,6 @@ export default Vue.extend({
         for (let i = 0; i < favorites.length; i++) {
           this.favProperties.push(favorites[i].listing);
         }
-        // this.favProperties = favorites;
       }
     },
     async favProperty(fav: any) {

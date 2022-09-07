@@ -292,10 +292,16 @@ export default Vue.extend({
     //     return moment(date).format("MMMM Do YYYY");
     //   },
     showOwner(): void {
-      console.log("show");
-      (this as any).$refs.propertyAction.showMessageModal(
-        this.propertyDetails.lister
-      );
+      if (this.$auth.loggedIn) {
+        (this as any).$refs.propertyAction.showMessageModal(
+          this.propertyDetails.lister
+        );
+      } else {
+        (this as any as IMixinState).getNotification(
+          "Login to send agent a message!",
+          "warning"
+        );
+      }
     },
   },
 });

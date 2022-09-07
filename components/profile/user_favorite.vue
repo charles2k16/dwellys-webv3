@@ -85,7 +85,7 @@
       </el-col>
     </el-row>
     <div v-else class="d-flex justify_center p-20">
-      <p>No Favorite found</p>
+      <h3>No Favorite found</h3>
     </div>
   </div>
 </template>

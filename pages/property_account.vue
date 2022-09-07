@@ -193,7 +193,6 @@
                     action=""
                     :on-change="propertyCard"
                     :multiple="false"
-                    :on-remove="removeIdCard"
                     class="upload_dragg w-100"
                   >
                     <i class="el-icon-upload"></i>

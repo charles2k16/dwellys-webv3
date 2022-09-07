@@ -20,7 +20,11 @@
     </el-form>
     <div class="d-flex justify_end pt-20">
       <el-button type="info" @click="cancelMessage">Cancel</el-button>
-      <el-button type="primary" @click="sendMessage">Send message</el-button>
+      <a :href="`https://wa.me/${contact}?text=${message}`" target="_blank"
+        ><el-button type="primary" @click="sendMessage"
+          >Send message</el-button
+        ></a
+      >
     </div>
   </el-row>
 </template>
@@ -40,10 +44,12 @@ export default Vue.extend({
   data() {
     return {
       message: "" as string,
+      contact: "" as string,
     };
   },
   created() {
     const user = this.$auth.user;
+    this.contact = user.phone_number;
     console.log("auth", user);
   },
   methods: {
@@ -52,10 +58,11 @@ export default Vue.extend({
     },
     sendMessage() {
       if (this.$auth.loggedIn) {
-        (this as any as IMixinState).getNotification(
-          "Message Sent Successfully!",
-          "success"
-        );
+        // window.location.href = "https://wa.me/+233556031977?text=hello%20world"
+        // (this as any as IMixinState).getNotification(
+        //   "Message Sent Successfully!",
+        //   "success"
+        // );
         this.$emit("closeMessageModal");
       } else {
         (this as any as IMixinState).getNotification(
