@@ -41,10 +41,10 @@
                 </el-dropdown>
               </div>
             </div>
-            <div class="aprroval_pending d-flex justify_center">
+            <!-- <div v-if="listing" class="aprroval_pending d-flex justify_center">
               <i class="el-icon-info"></i>
               <p class="pl-10">Pending Approval</p>
-            </div>
+            </div> -->
             <div class="card_body">
               <!-- amount -->
               <p style="font-weight: 600">
