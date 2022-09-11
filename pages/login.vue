@@ -87,6 +87,8 @@ export default Vue.extend({
       return this.$auth.user;
     },
   },
+  created() {},
+
   methods: {
     signIn() {
       this.btnLoading = true;
@@ -108,7 +110,7 @@ export default Vue.extend({
 
       this.$auth.setUserToken(token);
       this.$auth.setUser(user);
-      this.$router.push("/");
+      // this.$router.push("/");
       (this as any as IMixinState).$message({
         showClose: true,
         message: response.data.message,
@@ -151,46 +153,10 @@ export default Vue.extend({
         });
     },
     facebookSignIn() {
-      this.$auth
-        .loginWith("facebook")
-        .then((response: any) => {
-          // const { user, token } = response.data.data;
-          console.log(response);
-          // this.$auth.setUserToken(token);
-          // this.$auth.setUser(user);
-          // this.$emit("closeLoginModal");
-          // this.$message({
-          //   message: response.data.message,
-          //   type: "success",
-          // });
-        })
-        .catch((error: any) => {
-          console.log(error);
-          // this.btnLoading = false;
-          // (this as any as IMixinState).catchError(error);
-        });
+      this.$auth.loginWith("facebook");
     },
     googleSignIn() {
-      console.log("google");
-      this.$auth
-        .loginWith("google", { params: { prompt: "select_account" } })
-        .then((response: any) => {
-          // const { user, token } = response.data.data;
-          console.log(response);
-
-          // this.$auth.setUserToken(token);
-          // this.$auth.setUser(user);
-          // this.$emit("closeLoginModal");
-          // this.$message({
-          //   message: response.data.message,
-          //   type: "success",
-          // });
-        })
-        .catch((error: any) => {
-          console.log(error);
-          // this.btnLoading = false;
-          // (this as any as IMixinState).catchError(error);
-        });
+      this.$auth.loginWith("google");
     },
   },
 });

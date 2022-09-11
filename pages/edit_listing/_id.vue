@@ -313,6 +313,7 @@ export default Vue.extend({
       newOtherSpec: {
         name: "",
         number: 0,
+        id: "",
       } as any,
       listing: {} as any,
       loading: false as boolean,
@@ -484,6 +485,7 @@ export default Vue.extend({
       this.listing.other_specifications.push({
         name: this.newOtherSpec.name,
         number: this.newOtherSpec.number,
+        id: "",
       });
       this.otherSpecVisible = false;
       this.newOtherSpec.name = "";
@@ -544,6 +546,16 @@ export default Vue.extend({
         }
       );
 
+      const other_specifications = this.listing.other_specifications.map(
+        (OtherSpecification: any) => {
+          return {
+            id: OtherSpecification ? OtherSpecification.id : "",
+            name: OtherSpecification.name,
+            number: OtherSpecification.number,
+          };
+        }
+      );
+
       const amenities = this.listing.amenities.map((amenity: any) => {
         return {
           id: amenity.amenity ? amenity.id : "",
@@ -560,7 +572,7 @@ export default Vue.extend({
           property_type_id: this.listing.property_type.id,
           specifications: specifications,
           amenities: amenities,
-          other_specifications: this.listing.other_specifications,
+          other_specifications: other_specifications,
           name: this.listing.listing_detail.name,
           location: this.listing.listing_detail.location,
           region: this.listing.listing_detail.region,

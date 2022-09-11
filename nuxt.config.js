@@ -58,7 +58,6 @@ export default {
     "@nuxtjs/pwa",
     "@nuxtjs/auth-next",
     "nuxt-material-design-icons-iconfont",
-    "@nuxtjs/auth-next",
     "@nuxtjs/moment",
     // "nuxt-material-design-icons",
   ],
@@ -121,11 +120,11 @@ export default {
           "1039031868707-iakjs1b8u7i12s3jb5l11on7uc8flkpr.apps.googleusercontent.com",
         scope: ["profile", "email"],
         codeChallengeMethod: "",
-        responseType: "token id_token",
+        // responseType: "code",
         endpoints: {
           token: "http://localhost:8000/api/v3/loginwithsocialmedia", // somm backend url to resolve your auth with google and give you the token back
           userInfo: false, // the endpoint to get the user info after you recived the token
-          redirect_uri: "http://localhost:1753",
+          redirect_uri: "http://localhost:3000/login",
         },
       },
       facebook: {
