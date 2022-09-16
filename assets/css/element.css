@@ -290,3 +290,12 @@
   width: fit-content;
   padding-left: 10px;
 }
+
+.el-button--primary.is-disabled,
+.el-button--primary.is-disabled:active,
+.el-button--primary.is-disabled:focus,
+.el-button--primary.is-disabled:hover {
+  color: #fff;
+  background-color: var(--disable-button);
+  border-color: var(--disable-button);
+}

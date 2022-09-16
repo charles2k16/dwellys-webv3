@@ -13,14 +13,21 @@
         action="#"
         multiple
         :auto-upload="false"
+        accept="image/x-png,image/jpeg"
       >
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">
           Drop file here or <em>click to upload</em>
         </div>
       </el-upload>
+      <div class="uploadImgs">
+        <div v-for="image in photos" :key="image.photo">
+          <img :src="image.photo" width="70px" class="mx-10 my-10" />
+        </div>
+      </div>
+      <p v-if="imageErr" style="color: red">{{ imageErr }}</p>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">Cancel</el-button>
+        <el-button @click="closeImgUpload">Cancel</el-button>
         <el-button type="primary" @click="addImages" :loading="loading"
           >Add Image(s)</el-button
         >
@@ -61,7 +68,10 @@
       <!-- <div v-for="spec in propertySpecs" :key="spec.id"> -->
       <div class="property_main_content">
         <div class="d-flex_column">
-          <el-input v-model="newOtherSpec.name" />
+          <el-input
+            v-model="newOtherSpec.name"
+            placeholder="E.g storage room"
+          />
         </div>
         <div class="d-flex">
           <el-input-number :min="0" size="small" v-model="newOtherSpec.number">
@@ -197,7 +207,7 @@
           </div>
         </div>
       </div>
-      <el-button type="success" @click="dialogVisible = true"
+      <el-button type="success" @click="dialogVisible = true" class="p-10"
         >Add Image(s)</el-button
       >
       <!-- <el-upload class="upload-demo" :on-change="newImage" multiple>
@@ -232,7 +242,11 @@
           ></i>
         </li>
       </ul>
-      <el-button type="success" @click="specVisible = true"
+      <el-button
+        v-if="propertySpecs > 0"
+        type="success"
+        @click="specVisible = true"
+        class="p-10"
         >Add Specification(s)</el-button
       >
     </div>
@@ -259,7 +273,7 @@
           ></i>
         </li>
       </ul>
-      <el-button type="success" @click="otherSpecVisible = true"
+      <el-button type="success" @click="otherSpecVisible = true" class="p-10"
         >Add Other Specification(s)</el-button
       >
     </div>
@@ -276,12 +290,12 @@
           <p>{{ amenity.name ? amenity.name : amenity.amenity.name }}</p>
         </li>
       </ul>
-      <el-button type="success" @click="amenityVisible = true"
+      <el-button type="success" @click="amenityVisible = true" class="p-10"
         >Add Amenitie(s)</el-button
       >
     </div>
     <div class="d-flex justify_end pt-10">
-      <el-button type="info" @click="updateListing">
+      <el-button type="primary" @click="updateListing">
         <i class="el-icon-check pr-10"></i>Save Changes</el-button
       >
       <el-button type="primary" :loading="loading" @click="deleteListingModal"
@@ -307,6 +321,7 @@ export default Vue.extend({
   data() {
     return {
       url: "http://localhost:8000/",
+      imageErr: "" as string,
       activeName: "first" as string,
       image: "" as any,
       listing_id: this.$route.params.id,
@@ -386,15 +401,25 @@ export default Vue.extend({
         });
     },
     newImage(file: any) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file.raw);
-      reader.onloadend = () => {
-        this.photos.push({
-          tag: "front",
-          is_featured: false,
-          photo: reader.result,
-        });
-      };
+      console.log(file);
+
+      if (file.size >= 5000000) {
+        this.imageErr = "Image must not exceed 5 Mb.";
+      } else {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.raw);
+        reader.onloadend = () => {
+          this.photos.push({
+            tag: "front",
+            is_featured: false,
+            photo: reader.result,
+          });
+        };
+      }
+    },
+    closeImgUpload() {
+      this.dialogVisible = false;
+      this.photos = [];
     },
     removeSpec(index: number) {
       console.log("specification id", index);
@@ -632,6 +657,7 @@ export default Vue.extend({
         // console.log(listingId, active)
         this.dialogVisible = false;
         this.loading = false;
+        this.photos = [];
         this.fetchData();
         (this as any as IMixinState).$message({
           showClose: true,
@@ -772,5 +798,11 @@ $medium_screen: 769px;
     text-align: center;
     padding: 20px;
   }
+}
+.uploadImgs {
+  display: grid;
+  align-items: baseline;
+  // width: fit-content;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 120px));
 }
 </style>

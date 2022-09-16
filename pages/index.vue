@@ -58,7 +58,7 @@
             round
           ></el-button>
         </div>
-        <el-row class="d-flex pt-20">
+        <!-- <el-row class="d-flex pt-20">
           <div class="pr-20">
             <p><b>2000+ </b></p>
             <small>Properties for rent</small>
@@ -77,7 +77,7 @@
             <p><b>1954+</b></p>
             <small>Properties for sale</small>
           </div>
-        </el-row>
+        </el-row> -->
       </div>
     </div>
     <div>

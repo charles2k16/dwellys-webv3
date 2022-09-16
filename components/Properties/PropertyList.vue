@@ -8,6 +8,7 @@
         v-for="property in listings"
         :key="property.id"
         class="pb-20"
+        style="height: 370px"
       >
         <!-- v-if="property.listing_detail.name == type" -->
         <el-card shadow="hover" class="property_container">
@@ -49,12 +50,17 @@
           > -->
           <div class="card_body">
             <!-- amount -->
-            <p style="font-weight: 600">{{ property.listing_detail.name }}</p>
-            <p class="house_amount">${{ property.listing_detail.price }}/mth</p>
-            <p class="house_plot">
-              {{ property.listing_detail.region }},
-              {{ property.listing_detail.city }}
+            <p style="font-weight: 600">
+              {{ truncateString(property.listing_detail.name) }}
             </p>
+            <div class="d-flex justify_between">
+              <p class="house_amount">
+                ${{ property.listing_detail.price }}/mth
+              </p>
+              <p class="house_plot">
+                {{ property.listing_detail.region }}
+              </p>
+            </div>
           </div>
           <div class="card_footer">
             <div
@@ -132,6 +138,13 @@ export default Vue.extend({
         for (let i = 0; i < favorites.length; i++) {
           this.favProperties.push(favorites[i].listing);
         }
+      }
+    },
+    truncateString(str: string) {
+      if (str.length > 20) {
+        return str.slice(0, 20) + "...";
+      } else {
+        return str;
       }
     },
     async favProperty(fav: any) {

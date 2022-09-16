@@ -6,6 +6,7 @@
   --font-primary-md: SFtext_md;
   --font-primary-light: SFtext_light;
   --font-header-reg: SFPro_reg;
+  --disable-button: #de0b0b80;
 }
 
 @font-face {

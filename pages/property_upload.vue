@@ -199,6 +199,7 @@
               @change="toggleUpload"
               style="display: none"
               id="img"
+              accept="image/x-png,image/jpeg"
             />
             <label
               for="img"
@@ -218,6 +219,7 @@
               ></i>
             </div>
           </div>
+          <p v-if="imageErr" style="color: red">{{ imageErr }}</p>
         </div>
       </div>
       <div v-if="step === 5">
@@ -233,7 +235,7 @@
         <div class="property_content_container pb-20">
           <el-row class="pb-20">
             <el-col :sm="12" class="pb-20 d-flex_column pr-20">
-              <span>Select Country</span>
+              <span>Country</span>
               <el-select
                 v-model="propertyUpload.country_id"
                 placeholder="Select"
@@ -247,17 +249,8 @@
                 >
                 </el-option>
               </el-select>
+              <!-- <el-input v-model="country" placeholder="Country"> </el-input> -->
             </el-col>
-            <el-col :sm="12" class="pb-20 d-flex_column">
-              <span class="pb-10">Location</span>
-              <el-input
-                v-model="propertyUpload.location"
-                placeholder="Location"
-              >
-              </el-input>
-            </el-col>
-          </el-row>
-          <el-row class="pb-20">
             <el-col :sm="12" class="pb-20 d-flex_column pr-20">
               <span>Select Region</span>
               <el-select
@@ -266,21 +259,29 @@
                 class="region pt-10"
               >
                 <el-option
-                  v-for="region in regions"
+                  v-for="region in Object.keys(regions)"
                   :key="region"
                   :value="region"
                 >
                 </el-option>
               </el-select>
             </el-col>
-            <el-col :sm="12" class="d-flex_column">
-              <span>City</span>
-              <el-input
-                v-model="propertyUpload.city"
-                placeholder="City"
-                class="pt-10"
+          </el-row>
+          <el-row class="pb-20">
+            <el-col :sm="12" class="pb-20 d-flex_column">
+              <span class="pb-10">Location</span>
+              <el-select
+                v-model="propertyUpload.location"
+                placeholder="Location"
+                class="region pt-10"
               >
-              </el-input>
+                <el-option
+                  v-for="region in regions[propertyUpload.region]"
+                  :key="region"
+                  :value="region"
+                >
+                </el-option>
+              </el-select>
             </el-col>
           </el-row>
         </div>
@@ -296,8 +297,8 @@
           </div>
         </div>
         <div class="property_content_container pb-20">
-          <el-row class="pb-20">
-            <el-col :sm="12" class="pb-20 pr-5 d-flex_column">
+          <el-row class="pb-20 d-flex_column">
+            <el-col :sm="12" class="pb-20 w-100 pr-5 d-flex_column">
               <span class="pb-10">Property Name</span>
               <el-input
                 v-model="propertyUpload.name"
@@ -306,16 +307,30 @@
               >
               </el-input>
             </el-col>
-            <el-col :sm="12" class="pb-20 pl-5 d-flex_column">
-              <span class="pb-10">Property price</span>
+            <el-col :sm="12" class="pb-20 pl-5 w-100 d-flex_column">
+              <span class="pb-10">Property Price</span>
               <el-input
                 v-model="propertyUpload.price"
                 type="number"
                 placeholder="200"
               >
+                <template slot="prepend">GH&#8373; </template>
+                <template slot="append" v-if="category == 'Rent'"
+                  >per month</template
+                >
               </el-input>
             </el-col>
           </el-row>
+          <div>
+            <span class="pb-10">Property Description</span>
+            <el-input
+              type="textarea"
+              :rows="2"
+              placeholder="Please property description"
+              v-model="propertyUpload.description"
+            >
+            </el-input>
+          </div>
         </div>
       </div>
       <div v-if="step === 7">
@@ -506,21 +521,26 @@ import "vue-phone-number-input/dist/vue-phone-number-input.css";
 import { IMixinState } from "@/types/mixinsTypes";
 import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
 import url from "../url";
+import regionsAndCities from "~/static/regions.json";
 
 export default Vue.extend({
-  name: "AccountPage",
+  name: "PropertyUpload",
   components: {
     ApplicationHandler,
+    // regionsAndCities,
   },
 
   data() {
     return {
       step: 1 as number,
+      // regions: {},
       category: "" as string,
       pageLoad: false as boolean,
+      country: "Ghana" as string,
       propLoad: false as boolean,
       propertySelected: false as boolean,
       media: "Pay with Momo" as string,
+      imageErr: "" as string,
       paymentMedia: [
         { method: "Pay with Momo", icon: "el-icon-mobile-phone" },
         { method: "Pay with card", icon: "el-icon-bank-card" },
@@ -534,7 +554,7 @@ export default Vue.extend({
       propertySpecs: {
         specifications: [] as Array<object>,
       },
-      regions: ["Greater Accra", "Ashanti Region", ""],
+      regions: [] as Array<string>,
       categories: [],
       amenities: [],
       pricingPlans: [],
@@ -564,7 +584,7 @@ export default Vue.extend({
       propertyUpload: {
         name: "" as string,
         property_type_id: "" as string,
-        country_id: "" as string,
+        country_id: "39a40751-d7d2-4346-99e5-b0235b520ce5" as string,
         listing_category_id: "" as string,
         latitude: "5.627703749893443" as string,
         longitude: "-0.08697846429555343" as string,
@@ -572,9 +592,8 @@ export default Vue.extend({
         property_amenities_id: [] as Array<string>,
         description: "" as string,
         price: 0 as number,
-        location: "Accra Central",
+        location: "",
         region: "Greater Accra",
-        city: "Accra",
         other_specifications: [{ name: "", number: 0 }],
       },
     };
@@ -584,6 +603,15 @@ export default Vue.extend({
     try {
       const categories = await this.$listingCategoriesApi.index();
       this.categories = categories.data;
+
+      const authors = await regionsAndCities;
+      this.regions = authors;
+
+      const getOne = Object.keys(authors);
+      const values = authors["Ahafo"];
+      // console.log(getOne);
+
+      console.log(values);
 
       const propertyTypes = await this.$propertyTypesApi.index();
       this.propertyTypes = propertyTypes.data;
@@ -634,10 +662,8 @@ export default Vue.extend({
         valid = true;
       } else if (
         this.step == 5 &&
-        this.propertyUpload.country_id != "" &&
         this.propertyUpload.location != "" &&
-        this.propertyUpload.region != "" &&
-        this.propertyUpload.city != ""
+        this.propertyUpload.region != ""
       ) {
         valid = true;
       } else if (
@@ -678,6 +704,9 @@ export default Vue.extend({
     },
   },
   methods: {
+    // RegionsAndCities() {
+    //   return this.regionsAndCities
+    // },
     url() {
       return url();
     },
@@ -708,29 +737,19 @@ export default Vue.extend({
       // this.propertyUpload.plan = plan.price;
     },
     toggleUpload(event: any) {
-      let reader = new FileReader();
-      // let files = event.target.files;
-      // if (files.length > 1) {
-      //   for (let i = 0; i < files.length; i++) {
-      //     reader.readAsDataURL(files[i]);
-      //     reader.onloadend = () => {
-      //       // reader.result;
-      //       let img = {
-      //         tag: "front",
-      //         is_featured: false,
-      //         photo: reader.result,
-      //       };
-      //       this.listing_photos.push(img);
-      //     };
-      //   }
-      // } else {
-      reader.readAsDataURL(event.target.files[0]);
-      reader.onloadend = () => {
-        // reader.result;
-        let img = { tag: "front", is_featured: false, photo: reader.result };
-        this.listing_photos.push(img);
-      };
-      // }
+      console.log(event.target.files[0]);
+      const file = event.target.files[0];
+      if (file.size >= 5000000) {
+        this.imageErr = "Each image must not exceed 5 Mb.";
+      } else {
+        this.imageErr = "";
+        let reader = new FileReader();
+        reader.readAsDataURL(event.target.files[0]);
+        reader.onloadend = () => {
+          let img = { tag: "front", is_featured: false, photo: reader.result };
+          this.listing_photos.push(img);
+        };
+      }
     },
     addSpecSection() {
       let newSection = { name: "", number: 0 };
@@ -740,7 +759,6 @@ export default Vue.extend({
     handleRemove() {},
     async getProperty(newProperty: any) {
       this.propertyUpload.property_type_id = newProperty.id;
-      this.propertyUpload.description = newProperty.description;
       // this.propertyUpload.name = newProperty.name;
       this.selectedProperty = newProperty.name;
 
