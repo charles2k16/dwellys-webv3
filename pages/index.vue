@@ -45,7 +45,7 @@
           <el-input
             v-model="search_value"
             class="search_input"
-            placeholder="What are you looking for?"
+            placeholder="Search for property"
           >
           </el-input>
           <el-button type="primary" class="hidden-sm-and-down" @click="getQuery"
@@ -110,26 +110,26 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue';
 
 export default Vue.extend({
   auth: false,
-  name: "IndexPage",
+  name: 'IndexPage',
   data() {
     return {
-      search_value: "",
+      search_value: '',
       propertySearch: [
         {
-          label: "Buy",
-          value: "buy",
+          label: 'Buy',
+          value: 'buy',
         },
         {
-          label: "Rent",
-          value: "rent",
+          label: 'Rent',
+          value: 'rent',
         },
         {
-          label: "Lease",
-          value: "lease",
+          label: 'Lease',
+          value: 'lease',
         },
       ],
       listings: [] as Array<object>,
@@ -138,12 +138,12 @@ export default Vue.extend({
       queryList: [],
       isQuery: false,
       tabOptions: [
-        { label: "All", title: "Rent a home" },
-        { label: "House", title: "Rent a house" },
-        { label: "Apartment", title: "Rent an Apartment" },
-        { label: "Town house", title: "Rent a Town house" },
-        { label: " Office", title: " Rent an office" },
-        { label: "Land", title: " Buy a land" },
+        { label: 'All', title: 'Rent a home' },
+        { label: 'House', title: 'Rent a house' },
+        { label: 'Apartment', title: 'Rent an Apartment' },
+        { label: 'Town house', title: 'Rent a Town house' },
+        { label: ' Office', title: ' Rent an office' },
+        { label: 'Land', title: ' Buy a land' },
       ],
     };
   },
@@ -159,7 +159,7 @@ export default Vue.extend({
   },
   methods: {
     async fetchData() {
-      const listings = await this.$listingApi.query("?status=active");
+      const listings = await this.$listingApi.query('?status=active');
       console.log(listings);
       this.loadListing(listings.data);
     },
@@ -168,7 +168,7 @@ export default Vue.extend({
         property.photos =
           property.listing_detail.feature_image_url != null
             ? property.listing_detail.feature_image_url
-            : "no photo";
+            : 'no photo';
         return property;
       });
       this.listings = data;
@@ -182,10 +182,10 @@ export default Vue.extend({
           this.queryList = query.data;
           this.isQuery = true;
         } catch (error: any) {
-          console.log("error", error);
+          console.log('error', error);
           if (error?.response?.data) {
             this.isQuery = true;
-            console.log("from server error", error.response.data.message);
+            console.log('from server error', error.response.data.message);
           }
         }
       }
@@ -197,7 +197,7 @@ export default Vue.extend({
       console.log(this.queryList);
       this.isQuery = false;
       this.queryList = [];
-      this.search_value = "";
+      this.search_value = '';
     },
   },
 });
@@ -207,7 +207,7 @@ export default Vue.extend({
 .home {
   color: var(--text-white);
   .home_landing_page {
-    background-image: url("~/assets/img/home.png");
+    background-image: url('~/assets/img/home.png');
     background-repeat: no-repeat;
     background-size: 100% 440px;
     height: 440px;
