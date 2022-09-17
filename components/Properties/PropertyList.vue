@@ -2,40 +2,42 @@
   <div>
     <el-row :gutter="20" v-if="listings.length > 0">
       <el-col
-        :xs="24"
+        :xs="12"
         :sm="12"
         :md="6"
         v-for="property in listings"
         :key="property.id"
-        class="pb-20"
-        style="height: 370px"
+        style="height: 400px"
       >
         <!-- v-if="property.listing_detail.name == type" -->
-        <el-card shadow="hover" class="property_container">
+        <el-card
+          shadow="hover"
+          class="property_container"
+          @click.self="openPropertyDetails(property)"
+        >
           <div
             class="property_image"
-            @click.self="openPropertyDetails(property)"
             :style="background_style(property.photos)"
           >
             <div class="d-flex justify_between property_labels p-10">
               <p style="background: white">
                 {{ property.listing_detail.category.name }}
               </p>
-              <span class="d-flex">
+              <!-- <span class="d-flex">
                 <span class="pt-2">{{ property.listing_total_views }} </span>
                 <span style="color: #fff" class="material-icons ml-5">
                   visibility
                 </span>
-              </span>
+              </span> -->
               <span class="fav">
-                <span style="color: #000" class="pt-2"
+                <!-- <span style="color: #000" class="pt-2"
                   >{{ property.listing_total_likes }}
-                </span>
+                </span> -->
                 <span
                   class="material-icons ml-5"
                   @click="favProperty(property)"
                   :style="
-                    favProperties.some((fav) => fav.id == property.id)
+                    favProperties.some(fav => fav.id == property.id)
                       ? { color: 'red' }
                       : { color: 'white' }
                   "
@@ -49,16 +51,18 @@
             :to="{ name: 'property_details', params: { property: property } }"
           > -->
           <div class="card_body">
-            <!-- amount -->
-            <p style="font-weight: 600">
+            <p class="house_amount">
+              GH₵ {{ property.listing_detail.price }}/<span class="month"
+                >mth</span
+              >
+            </p>
+            <p class="property_name">
               {{ truncateString(property.listing_detail.name) }}
             </p>
             <div class="d-flex justify_between">
-              <p class="house_amount">
-                ${{ property.listing_detail.price }}/mth
-              </p>
               <p class="house_plot">
-                {{ property.listing_detail.region }}
+                {{ property.listing_detail.region }},
+                {{ property.listing_detail.location }}
               </p>
             </div>
           </div>
@@ -101,9 +105,8 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-
-import { IMixinState } from "../../types/mixinsTypes";
+import Vue from 'vue';
+import { IMixinState } from '../../types/mixinsTypes';
 
 export default Vue.extend({
   props: {
@@ -120,7 +123,7 @@ export default Vue.extend({
       type: String,
     },
   },
-  name: "PropertyList",
+  name: 'PropertyList',
   data() {
     return {
       favProperties: [] as any,
@@ -141,8 +144,8 @@ export default Vue.extend({
       }
     },
     truncateString(str: string) {
-      if (str.length > 20) {
-        return str.slice(0, 20) + "...";
+      if (str.length > 30) {
+        return str.slice(0, 30) + '...';
       } else {
         return str;
       }
@@ -167,21 +170,21 @@ export default Vue.extend({
           this.fetchFavorites();
           (this as any as IMixinState).$message({
             showClose: true,
-            message: "Added property to favourite!",
-            type: "success",
+            message: 'Added property to favourite!',
+            type: 'success',
           });
         } catch (error: any) {
           (this as any as IMixinState).catchError(error);
           console.log(error?.response);
         }
       } else {
-        this.$confirm("Login to select favourite", {
-          confirmButtonText: "Login",
-          cancelButtonText: "Cancel",
-          type: "success",
+        this.$confirm('Login to select favourite', {
+          confirmButtonText: 'Login',
+          cancelButtonText: 'Cancel',
+          type: 'success',
         })
           .then(() => {
-            this.$router.push("/login");
+            this.$router.push('/login');
           })
           .catch(() => {
             // this.$router.push("/register");
@@ -191,20 +194,19 @@ export default Vue.extend({
     openPropertyDetails(property: any): void {
       console.log(property);
       this.$router.push({
-        name: "property_details",
+        name: 'property_details',
         // params: { property: property.id },
         query: {
           name: property.listing_detail.name,
           id: property.id,
         },
       });
-      // this.$router.push(`property_details/${property.id}`);
     },
   },
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .property_container {
   border: 1px solid #e2e8f0;
   border-radius: 8px;
@@ -219,10 +221,8 @@ export default Vue.extend({
     .property_labels {
       width: 100%;
       z-index: 20;
-      background: rgba(136, 136, 136, 0.7);
 
       p {
-        // background: white;
         padding: 2px 10px;
         border-radius: 7.34885px;
       }
@@ -230,8 +230,18 @@ export default Vue.extend({
   }
   .card_body {
     padding: 10px;
+
+    .property_name {
+      // font-family: var(--font-primary-md), sans-serif;
+      font-size: 15px;
+    }
     .house_amount {
       color: #475569;
+      font-family: var(--font-primary-md), sans-serif;
+      .month {
+        font-size: 13px;
+        font-family: var(--font-primary-md), sans-serif;
+      }
     }
     .house_plot {
       color: #64748b;
@@ -241,8 +251,9 @@ export default Vue.extend({
   .card_footer {
     display: flex;
     justify-content: space-around;
-    padding: 10px 0;
+    padding: 5px 0;
     border-top: 1px solid #e2e8f0;
+    background: #f8fafc;
     .property_img {
       width: 25px;
     }
@@ -267,9 +278,12 @@ export default Vue.extend({
     }
   }
   .fav {
-    color: grey;
     cursor: pointer;
     display: flex;
+    align-items: center;
+    background: rgba(248, 250, 252, 0.44);
+    border-radius: 100%;
+    padding: 4px 4px 3px 0px;
   }
 }
 </style>

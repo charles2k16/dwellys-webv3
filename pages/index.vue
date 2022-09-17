@@ -80,8 +80,8 @@
         </el-row> -->
       </div>
     </div>
-    <div>
-      <div v-if="isQuery" class="section pt-20" v-loading="pageLoad">
+    <div class="section">
+      <div v-if="isQuery" class="pt-20" v-loading="pageLoad">
         <div v-if="queryList.length > 0">
           <PropertyList :listings="queryList" />
         </div>
@@ -117,7 +117,7 @@ export default Vue.extend({
   name: 'IndexPage',
   data() {
     return {
-      search_value: '',
+      search_value: '' as string,
       propertySearch: [
         {
           label: 'Buy',
@@ -134,9 +134,9 @@ export default Vue.extend({
       ],
       listings: [] as Array<object>,
       pageLoad: true as boolean,
-      favorites: [],
+      favorites: [] as Array<object>,
       queryList: [],
-      isQuery: false,
+      isQuery: false as boolean,
       tabOptions: [
         { label: 'All', title: 'Rent a home' },
         { label: 'House', title: 'Rent a house' },
@@ -144,7 +144,7 @@ export default Vue.extend({
         { label: 'Town house', title: 'Rent a Town house' },
         { label: ' Office', title: ' Rent an office' },
         { label: 'Land', title: ' Buy a land' },
-      ],
+      ] as any,
     };
   },
   async created() {
@@ -209,8 +209,8 @@ export default Vue.extend({
   .home_landing_page {
     background-image: url('~/assets/img/home.png');
     background-repeat: no-repeat;
-    background-size: 100% 440px;
-    height: 440px;
+    background-size: 100% 400px;
+    height: 400px;
     padding: 30px 0;
     .landing_content {
       display: flex;
@@ -222,11 +222,11 @@ export default Vue.extend({
         width: 100%;
         max-width: 490px;
         font-weight: 200;
-        line-height: 32px;
+        line-height: 34px;
         z-index: 10;
         span {
           font-weight: 700;
-          font-size: 30px;
+          font-size: 32px;
         }
       }
       .discover_line {

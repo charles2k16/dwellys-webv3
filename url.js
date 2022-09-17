@@ -1,7 +1,7 @@
 let url = () => {
   let url;
   if (process.env.NODE_ENV === 'development') {
-    url = `http://127.0.0.1:8000`;
+    url = `https://newapi.dwellys.com`;
   } else {
     url = `https://newapi.dwellys.com`;
   }

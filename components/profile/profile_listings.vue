@@ -90,10 +90,10 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue';
 
 export default Vue.extend({
-  name: "ProfileListings",
+  name: 'ProfileListings',
   props: {
     user_listings: {
       required: true,
@@ -102,7 +102,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      email: "" as string,
+      email: '' as string,
       pageLoad: false,
       houses: [
         // { img: "Frame2.png", name: "property" },
@@ -116,12 +116,12 @@ export default Vue.extend({
   methods: {
     deleteListingModal(listing_id: string) {
       // const h = this.$createElement
-      this.$confirm("Are you sure you want to delete listing?", {
-        cancelButtonText: "No, i want to keep",
-        confirmButtonText: "Yes,I want to delete it",
+      this.$confirm('Are you sure you want to delete listing?', {
+        cancelButtonText: 'No, i want to keep',
+        confirmButtonText: 'Yes,I want to delete it',
       })
         .then(() => {
-          this.$emit("listing_id", listing_id);
+          this.$emit('listing_id', listing_id);
         })
         .catch((err: any) => {
           console.log(err);
@@ -131,7 +131,7 @@ export default Vue.extend({
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .no_properties {
   display: flex;
   justify-content: center;

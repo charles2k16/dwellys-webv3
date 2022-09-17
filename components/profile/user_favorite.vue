@@ -91,9 +91,9 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue';
 
-import { IMixinState } from "../../types/mixinsTypes";
+import { IMixinState } from '../../types/mixinsTypes';
 
 export default Vue.extend({
   props: {
@@ -102,7 +102,7 @@ export default Vue.extend({
       type: Array,
     },
   },
-  name: "UserFavorite",
+  name: 'UserFavorite',
   data() {
     return {
       favProperties: [] as Array<object>,
@@ -110,12 +110,12 @@ export default Vue.extend({
   },
   methods: {
     favProperty(fav: any) {
-      this.$emit("favorite", fav.id);
+      this.$emit('favorite', fav.id);
     },
     openPropertyDetails(property: any): void {
       console.log(property);
       this.$router.push({
-        name: "property_details",
+        name: 'property_details',
         // params: { property: property.id },
         query: {
           name: property.listing.listing_detail.name,
@@ -128,7 +128,7 @@ export default Vue.extend({
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .property_container {
   border: 1px solid #e2e8f0;
   border-radius: 8px;

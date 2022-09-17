@@ -2,7 +2,7 @@
   <div class="header section">
     <ApplicationHandler ref="modalHandler" />
     <!-- {{ $auth }} -->
-    <div class="header_wrapper span">
+    <div class="header_wrapper">
       <div style="display: flex; align-items: center">
         <NuxtLink to="/">
           <img src="~/assets/img/logo.png" />
@@ -10,7 +10,7 @@
       </div>
       <div class="header_content hidden-sm-and-down" v-if="!$auth.loggedIn">
         <span class="pl-10">
-          <NuxtLink to="/property_account">Become an agent</NuxtLink>
+          <NuxtLink to="/property_account">Sell your property now</NuxtLink>
         </span>
       </div>
       <div class="drawer hidden-md-and-up">
@@ -32,82 +32,13 @@
           <line x1="10" y1="12" x2="20" y2="12" />
           <line x1="6" y1="18" x2="20" y2="18" />
         </svg>
-
-        <el-drawer
-          size="60%"
-          :visible.sync="drawer"
-          :direction="direction"
-          :before-close="handleClose"
-        >
-          <div class="drawer_content px-20">
-            <div class="d-flex_column">
-              <span class="login-avatar">
-                <span v-if="$auth.loggedIn" class="d-flex">
-                  <span class="pt-10 pr-5">
-                    {{ $auth.user.first_name }}
-                  </span>
-
-                  <img
-                    v-if="$auth.user.avatar"
-                    :src="src + $auth.user.avatar"
-                    alt="avatar"
-                    class="user_avatar"
-                  />
-                  <img src="~/assets/img/user_icon.png" alt="icon" v-else />
-                </span>
-
-                <img src="~/assets/img/user_icon.png" alt="icon" v-else />
-              </span>
-              <span v-if="!$auth.loggedIn" @click="showLoginModal" class="py-10"
-                >Login</span
-              >
-              <span
-                v-if="$auth.loggedIn"
-                @click="drawer = false"
-                class="pb-10 pt-20"
-              >
-                <NuxtLink to="/profile">Profile</NuxtLink>
-              </span>
-              <span
-                v-if="!$auth.loggedIn"
-                @click="drawer = false"
-                class="pb-10"
-              >
-                <NuxtLink to="/register">Register</NuxtLink>
-              </span>
-              <span class="pb-10" v-if="$auth.loggedIn">
-                <span v-if="$auth.user.user_type == 'lister'">
-                  <NuxtLink to="/property_upload">Property Upload</NuxtLink>
-                </span>
-              </span>
-              <span
-                @click="drawer = false"
-                class="pb-10"
-                v-if="!$auth.loggedIn"
-              >
-                <NuxtLink to="/property_account">Become an agent</NuxtLink>
-              </span>
-              <span v-if="$auth.loggedIn" @click="drawer = false" class="pb-10">
-                <NuxtLink to="/messages">Messages</NuxtLink>
-              </span>
-              <span
-                v-if="$auth.loggedIn"
-                @click="$auth.logout()"
-                class="pb-20"
-                style="color: red"
-              >
-                Logout
-              </span>
-            </div>
-          </div>
-        </el-drawer>
       </div>
       <div class="header_content hidden-sm-and-down">
         <!-- <span v-if="$auth.loggedIn" class="pr-20">
           <NuxtLink to="/messages">Messages</NuxtLink>
         </span> -->
 
-        <el-dropdown trigger="click">
+        <el-dropdown trigger="hover">
           <span class="el-dropdown-link">
             <span class="login-avatar">
               <span v-if="$auth.loggedIn" class="d-flex">
@@ -123,7 +54,10 @@
                 <img src="~/assets/img/user_icon.png" alt="icon" v-else />
               </span>
 
-              <img src="~/assets/img/user_icon.png" alt="icon" v-else />
+              <span v-else class="align_center" @click="showLoginModal">
+                <span class="mr-10">Login</span>
+                <img src="~/assets/img/user_icon.png" alt="icon" />
+              </span>
             </span>
           </span>
           <el-dropdown-menu slot="dropdown">
@@ -145,7 +79,9 @@
             </el-dropdown-item>
             <el-dropdown-item v-if="!$auth.loggedIn">
               <span class="py-10">
-                <NuxtLink to="/property_account">Become an agent</NuxtLink>
+                <NuxtLink to="/property_account"
+                  >Sell your property now</NuxtLink
+                >
               </span>
             </el-dropdown-item>
             <el-dropdown-item v-if="$auth.loggedIn" style="color: red">
@@ -156,17 +92,96 @@
       </div>
     </div>
     <hr class="hr_rule register_header_line mt-20" />
+
+    <el-drawer
+      size="60%"
+      :visible.sync="drawer"
+      :direction="direction"
+      :before-close="handleClose"
+    >
+      <div class="drawer_content px-20">
+        <div class="d-flex_column">
+          <span class="login-avatar">
+            <span v-if="$auth.loggedIn" class="d-flex">
+              <span class="pt-10 pr-5">
+                {{ $auth.user.first_name }}
+              </span>
+
+              <img
+                v-if="$auth.user.avatar"
+                :src="src + $auth.user.avatar"
+                alt="avatar"
+                class="user_avatar"
+              />
+              <img src="~/assets/img/user_icon.png" alt="icon" v-else />
+            </span>
+
+            <span v-else class="align_center" @click="showLoginModal">
+              <span class="mr-10">Login</span>
+              <img src="~/assets/img/user_icon.png" alt="icon" />
+            </span>
+          </span>
+          <br />
+
+          <div v-if="!$auth.loggedIn">
+            <span @click="showLoginModal" class="py-10 mb-10">Login</span>
+            <br />
+
+            <hr class="hr_rule mt-10" />
+
+            <span @click="drawer = false" class="mt-10 d-block">
+              <NuxtLink to="/register">Register</NuxtLink>
+            </span>
+
+            <hr class="hr_rule mt-10" />
+
+            <span @click="drawer = false" class="mt-10 d-block">
+              <NuxtLink to="/property_account">Sell your property now</NuxtLink>
+            </span>
+          </div>
+
+          <div v-if="$auth.loggedIn">
+            <span @click="drawer = false" class="pb-10 pt-20 d-block">
+              <NuxtLink to="/profile">Profile</NuxtLink>
+            </span>
+
+            <hr class="hr_rule mt-10" />
+
+            <span class="mt-10 d-block">
+              <span v-if="$auth.user.user_type == 'lister'">
+                <NuxtLink to="/property_upload">Property Upload</NuxtLink>
+              </span>
+            </span>
+
+            <hr class="hr_rule mt-10" />
+
+            <span
+              v-if="$auth.loggedIn"
+              @click="$auth.logout()"
+              class="pb-20"
+              style="color: red"
+            >
+              Logout
+            </span>
+          </div>
+
+          <!-- <span v-if="$auth.loggedIn" @click="drawer = false" class="pb-10">
+                <NuxtLink to="/messages">Messages</NuxtLink>
+              </span> -->
+        </div>
+      </div>
+    </el-drawer>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import "element-ui/lib/theme-chalk/display.css";
-import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
-import url from "../../url";
+import Vue from 'vue';
+import 'element-ui/lib/theme-chalk/display.css';
+import ApplicationHandler from '@/handlers/ApplicationHandler.vue';
+import url from '../../url';
 
 export default Vue.extend({
-  name: "NavHeader",
+  name: 'NavHeader',
   components: {
     ApplicationHandler,
   },
@@ -174,14 +189,14 @@ export default Vue.extend({
     return {
       userData: {} as any,
       userReady: false,
-      user_type: "" as any,
+      user_type: '' as any,
       src:
-        process.env.NODE_ENV === "development"
-          ? "http://localhost:8000/"
-          : "https://newapi.dwellys.com/",
-      user: "login" as string,
+        process.env.NODE_ENV === 'development'
+          ? 'http://localhost:8000/'
+          : 'https://newapi.dwellys.com/',
+      user: 'login' as string,
       drawer: false as boolean,
-      direction: "rtl",
+      direction: 'rtl',
     };
   },
 
@@ -220,8 +235,8 @@ a {
   color: #334155;
 }
 .header {
-  line-height: 18px;
-  padding: 20px 0 0;
+  padding: 10px 0 0;
+  height: 60px;
 }
 .header_wrapper {
   display: flex;
