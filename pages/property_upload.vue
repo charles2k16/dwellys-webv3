@@ -27,6 +27,7 @@
                 v-for="category in categories"
                 :key="category.id"
                 :value="category.name"
+                class="py-10"
               >
               </el-option>
             </el-select>

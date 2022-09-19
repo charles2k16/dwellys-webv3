@@ -4,7 +4,7 @@
       <div
         class="plans"
         @click="getPlan(plan)"
-        :style="selectedPlan == plan.name && { border: '1px solid #de0b0b' }"
+        :style="selectedPlan == plan.id && { border: '1px solid #de0b0b' }"
       >
         <h3>{{ plan.name }}</h3>
         <p class="plan_recommend">{{ plan.description }}</p>
@@ -16,17 +16,13 @@
           >Select plan</el-button
         >
         <div class="pt-20 recommendations">
-          <p class="pb-10">
-            <img src="../../assets/svg/check.png" class="pr-10" />Recommended
-            for individuals
-          </p>
-          <p class="pb-10">
-            <img src="../../assets/svg/check.png" class="pr-10" />Recommended
-            for individuals
-          </p>
-          <p class="pb-10">
-            <img src="../../assets/svg/check.png" class="pr-10" />Recommended
-            for individuals
+          <p
+            class="pb-10"
+            v-for="feature in plan.listing_plan_features"
+            :key="feature.id"
+          >
+            <img src="../../assets/svg/check.png" class="pr-10" />
+            {feature}
           </p>
           <img src="../../assets/svg/help.png" class="pt-20" />
         </div>
@@ -53,7 +49,7 @@ export default Vue.extend({
   },
   methods: {
     getPlan(newPlan: any) {
-      this.selectedPlan = newPlan.name;
+      this.selectedPlan = newPlan.id;
 
       this.$emit("getPlan", newPlan);
     },
