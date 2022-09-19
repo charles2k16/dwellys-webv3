@@ -464,11 +464,11 @@
                 <span>Discount code</span>
                 <!-- <span>**Required</span> -->
               </section>
-              <el-input v-model="discount_code" disabled />
+              <el-input v-model="discount_code" />
             </div>
             <div class="property_rental pt-20">
               <section class="d-flex justify_between">
-                <span>Property Rental</span>
+                <span>Property {{ category }}</span>
                 <span>$12.567</span>
               </section>
               <section class="d-flex justify_between py-10">
