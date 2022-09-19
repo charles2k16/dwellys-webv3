@@ -87,6 +87,10 @@
         </div>
         <div v-else class="d-flex justify_center">
           <h3>No Result Found.</h3>
+          <br /><br />
+          <el-button type="primary" size="mini" @click="closeQuery"
+            >Go back Home</el-button
+          >
         </div>
       </div>
       <el-tabs v-else type="border-card">
@@ -194,7 +198,6 @@ export default Vue.extend({
       console.log(tab);
     },
     closeQuery() {
-      console.log(this.queryList);
       this.isQuery = false;
       this.queryList = [];
       this.search_value = '';
