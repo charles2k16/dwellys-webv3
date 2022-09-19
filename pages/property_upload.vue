@@ -517,15 +517,15 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import "vue-phone-number-input/dist/vue-phone-number-input.css";
-import { IMixinState } from "@/types/mixinsTypes";
-import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
-import url from "../url";
-import regionsAndCities from "~/static/regions.json";
+import Vue from 'vue';
+import 'vue-phone-number-input/dist/vue-phone-number-input.css';
+import { IMixinState } from '@/types/mixinsTypes';
+import ApplicationHandler from '@/handlers/ApplicationHandler.vue';
+import url from '../url';
+import regionsAndCities from '~/static/regions.json';
 
 export default Vue.extend({
-  name: "PropertyUpload",
+  name: 'PropertyUpload',
   components: {
     ApplicationHandler,
     // regionsAndCities,
@@ -535,21 +535,21 @@ export default Vue.extend({
     return {
       step: 1 as number,
       // regions: {},
-      category: "" as string,
+      category: '' as string,
       pageLoad: false as boolean,
-      country: "Ghana" as string,
+      country: 'Ghana' as string,
       propLoad: false as boolean,
       propertySelected: false as boolean,
-      media: "Pay with Momo" as string,
-      imageErr: "" as string,
+      media: 'Pay with Momo' as string,
+      imageErr: '' as string,
       paymentMedia: [
-        { method: "Pay with Momo", icon: "el-icon-mobile-phone" },
-        { method: "Pay with card", icon: "el-icon-bank-card" },
+        { method: 'Pay with Momo', icon: 'el-icon-mobile-phone' },
+        { method: 'Pay with card', icon: 'el-icon-bank-card' },
       ],
-      mobile_money: ["MTN Mobile money", "Vodafone Cash", "Zeepay"],
-      mobile: "",
-      specErr: "" as string,
-      selectedProperty: "",
+      mobile_money: ['MTN Mobile money', 'Vodafone Cash', 'Zeepay'],
+      mobile: '',
+      specErr: '' as string,
+      selectedProperty: '',
       btnLoading: false as boolean,
       propertyTypes: [],
       propertySpecs: {
@@ -561,41 +561,42 @@ export default Vue.extend({
       pricingPlans: [],
       countries: [],
       listing_photos: [] as any,
-      discount_code: "",
-      listing_plan_id: "",
-      listing_id: "",
+      discount_code: '',
+      listing_plan_id: '',
+      listing_id: '',
       discount: {
         no_of_days: 0,
         percentage_value: 0,
       },
       selectedPlan: {
-        listing_id: "",
-        listing_planid: "",
-        discount_code: "",
-        payment_option: "",
+        listing_id: '',
+        listing_planid: '',
+        discount_code: '',
+        payment_option: '',
         card_payment: {
-          cvv: "",
-          name_on_card: "",
-          card_number: "",
-          card_expiry_month: "",
-          card_expiry_year: "",
+          cvv: '',
+          name_on_card: '',
+          card_number: '',
+          card_expiry_month: '',
+          card_expiry_year: '',
         },
-        mobile_money_number: "",
+        mobile_money_number: '',
       },
       propertyUpload: {
-        name: "" as string,
-        property_type_id: "" as string,
-        country_id: "39a40751-d7d2-4346-99e5-b0235b520ce5" as string,
-        listing_category_id: "" as string,
-        latitude: "5.627703749893443" as string,
-        longitude: "-0.08697846429555343" as string,
+        name: '' as string,
+        property_type_id: '' as string,
+        country_id: '39a40751-d7d2-4346-99e5-b0235b520ce5' as string,
+        listing_category_id: '' as string,
+        latitude: '5.627703749893443' as string,
+        longitude: '-0.08697846429555343' as string,
         specifications: [] as Array<object>,
         property_amenities_id: [] as Array<string>,
-        description: "" as string,
+        description: '' as string,
         price: 0 as number,
-        location: "",
-        region: "Greater Accra",
-        other_specifications: [{ name: "", number: 0 }],
+        location: '',
+        city: 'accra' as string,
+        region: 'Greater Accra',
+        other_specifications: [{ name: '', number: 0 }],
       },
     };
   },
@@ -609,7 +610,7 @@ export default Vue.extend({
       this.regions = authors;
 
       const getOne = Object.keys(authors);
-      const values = authors["Ahafo"];
+      const values = authors['Ahafo'];
       // console.log(getOne);
 
       console.log(values);
@@ -637,8 +638,8 @@ export default Vue.extend({
       console.log(error);
       if (error?.response?.data) {
         (this as any as IMixinState).getNotification(
-          "Please, login as an agent!",
-          "warning"
+          'Please, login as an agent!',
+          'warning'
         );
       }
     }
@@ -648,8 +649,8 @@ export default Vue.extend({
       let valid = false;
       if (
         this.step == 1 &&
-        this.propertyUpload.property_type_id != "" &&
-        this.propertyUpload.listing_category_id != ""
+        this.propertyUpload.property_type_id != '' &&
+        this.propertyUpload.listing_category_id != ''
       ) {
         valid = true;
       } else if (this.step == 2) {
@@ -663,17 +664,17 @@ export default Vue.extend({
         valid = true;
       } else if (
         this.step == 5 &&
-        this.propertyUpload.location != "" &&
-        this.propertyUpload.region != ""
+        this.propertyUpload.location != '' &&
+        this.propertyUpload.region != ''
       ) {
         valid = true;
       } else if (
         this.step == 6 &&
         this.propertyUpload.price != 0 &&
-        this.propertyUpload.name != ""
+        this.propertyUpload.name != ''
       ) {
         valid = true;
-      } else if (this.step == 7 && this.listing_plan_id != "") {
+      } else if (this.step == 7 && this.listing_plan_id != '') {
         valid = true;
       }
       return valid;
@@ -712,12 +713,12 @@ export default Vue.extend({
       return url();
     },
     changePaymentMedia(method: string) {
-      this.selectedPlan.card_payment.cvv = "";
-      this.selectedPlan.card_payment.name_on_card = "";
-      this.selectedPlan.card_payment.card_number = "";
-      this.selectedPlan.card_payment.card_expiry_month = "";
-      this.selectedPlan.card_payment.card_expiry_year = "";
-      this.selectedPlan.mobile_money_number = "";
+      this.selectedPlan.card_payment.cvv = '';
+      this.selectedPlan.card_payment.name_on_card = '';
+      this.selectedPlan.card_payment.card_number = '';
+      this.selectedPlan.card_payment.card_expiry_month = '';
+      this.selectedPlan.card_payment.card_expiry_year = '';
+      this.selectedPlan.mobile_money_number = '';
       this.media = method;
     },
     removeUpload(index: number) {
@@ -730,7 +731,7 @@ export default Vue.extend({
       return this.url() + pic;
     },
     getSvg(pic: string): string {
-      return require("../assets/svg/" + pic);
+      return require('../assets/svg/' + pic);
     },
     getPrice(plan: any) {
       console.log(plan);
@@ -741,19 +742,19 @@ export default Vue.extend({
       console.log(event.target.files[0]);
       const file = event.target.files[0];
       if (file.size >= 5000000) {
-        this.imageErr = "Each image must not exceed 5 Mb.";
+        this.imageErr = 'Each image must not exceed 5 Mb.';
       } else {
-        this.imageErr = "";
+        this.imageErr = '';
         let reader = new FileReader();
         reader.readAsDataURL(event.target.files[0]);
         reader.onloadend = () => {
-          let img = { tag: "front", is_featured: false, photo: reader.result };
+          let img = { tag: 'front', is_featured: false, photo: reader.result };
           this.listing_photos.push(img);
         };
       }
     },
     addSpecSection() {
-      let newSection = { name: "", number: 0 };
+      let newSection = { name: '', number: 0 };
       this.propertyUpload.other_specifications.push(newSection);
     },
     handlePreview() {},
@@ -823,8 +824,8 @@ export default Vue.extend({
       this.step = 2;
       (this as any as IMixinState).$message({
         showClose: true,
-        message: "Add number of specifications to continue",
-        type: "error",
+        message: 'Add number of specifications to continue',
+        type: 'error',
       });
     },
     getCategory(e: any) {
@@ -832,7 +833,7 @@ export default Vue.extend({
       this.categories.filter((category: any) =>
         category.name == e
           ? (this.propertyUpload.listing_category_id = category.id)
-          : ""
+          : ''
       );
     },
     showPosition(position: any) {
@@ -847,7 +848,7 @@ export default Vue.extend({
           listing_plan_id: this.listing_plan_id,
           discount_code: this.discount_code,
           payment_option:
-            this.media == "Pay with Momo" ? "mobile_money" : "card_payment",
+            this.media == 'Pay with Momo' ? 'mobile_money' : 'card_payment',
           card_pament: {
             cvv: this.selectedPlan.card_payment.cvv,
             name_on_card: this.selectedPlan.card_payment.name_on_card,
@@ -862,11 +863,11 @@ export default Vue.extend({
         (this as any as IMixinState).$message({
           showClose: true,
           message: selectdPlanResponse.message,
-          type: "error",
+          type: 'error',
         });
-        this.$router.replace("/");
+        this.$router.replace('/');
       } catch (error: any) {
-        console.log(error, "error");
+        console.log(error, 'error');
         (this as any as IMixinState).catchError(error);
         this.btnLoading = false;
 
@@ -874,7 +875,7 @@ export default Vue.extend({
           (this as any as IMixinState).$message({
             showClose: true,
             message: error.response.data.message,
-            type: "error",
+            type: 'error',
           });
         }
       }
@@ -887,7 +888,7 @@ export default Vue.extend({
         const propertyResponse = await this.$listingApi.create(
           this.propertyUpload
         );
-        console.log("property upload", propertyResponse);
+        console.log('property upload', propertyResponse);
         const imageListing = await this.$listingImagesApi.create({
           listing_id: propertyResponse.data.id,
           listing_photos: this.listing_photos,
@@ -901,10 +902,10 @@ export default Vue.extend({
         (this as any as IMixinState).$message({
           showClose: true,
           message: propertyResponse.message,
-          type: "success",
+          type: 'success',
         });
       } catch (error) {
-        console.log(error, "error");
+        console.log(error, 'error');
         this.btnLoading = false;
         (this as any as IMixinState).catchError(error);
       }

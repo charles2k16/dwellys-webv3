@@ -51,14 +51,15 @@
             :to="{ name: 'property_details', params: { property: property } }"
           > -->
           <div class="card_body">
-            <p class="house_amount">
-              GH₵ {{ property.listing_detail.price }}/<span class="month"
-                >mth</span
-              >
-            </p>
-            <p class="property_name">
-              {{ truncateString(property.listing_detail.name) }}
-            </p>
+            <div class="d-flex justify_between">
+              <p class="house_amount">
+                GH₵ {{ property.listing_detail.price }}/<span class="month"
+                  >mth</span
+                >
+              </p>
+              <p class="property_name">Houses & Apartments</p>
+            </div>
+
             <div class="d-flex justify_between">
               <p class="house_plot">
                 {{ property.listing_detail.region }},
@@ -233,7 +234,7 @@ export default Vue.extend({
 
     .property_name {
       // font-family: var(--font-primary-md), sans-serif;
-      font-size: 15px;
+      font-size: 11px;
     }
     .house_amount {
       color: #475569;
