@@ -66,7 +66,7 @@
           </div>
           <div class="card_footer">
             <div
-              class="pl-5"
+              class="pl-5 pt-5"
               v-for="specification in property.property_specifications"
               :key="specification.id"
             >
