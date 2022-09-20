@@ -46,7 +46,7 @@
           <img src="~/assets/img/facebook.png" width="25px" />
           <p>Continue with Facebook</p>
         </div>
-        <div class="google" type="info" @click="googleSignIn">
+        <div class="google mt-10" type="info" @click="googleSignIn">
           <img src="~/assets/img/google.png" />
           <p>Continue with Google</p>
         </div>
@@ -72,28 +72,28 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { IMixinState } from "@/types/mixinsTypes";
+import Vue from 'vue';
+import { IMixinState } from '@/types/mixinsTypes';
 
 export default Vue.extend({
-  name: "LoginForm",
+  name: 'LoginForm',
   data() {
     return {
       btnLoading: false as boolean,
-      errorInfo: "" as string,
+      errorInfo: '' as string,
       loginForm: {
-        email: "" as string,
-        password: "" as string,
+        email: '' as string,
+        password: '' as string,
       },
       validation: {
         email: [
           {
             required: true,
-            type: "email",
-            message: "Please enter valid email",
-            trigger: ["blur", "change"],
+            type: 'email',
+            message: 'Please enter valid email',
+            trigger: ['blur', 'change'],
           },
-          { min: 5, message: "Length should be 5 or more", trigger: "blur" },
+          { min: 5, message: 'Length should be 5 or more', trigger: 'blur' },
         ],
       },
     };
@@ -107,28 +107,28 @@ export default Vue.extend({
         } else {
           this.btnLoading = false;
           (this as any as IMixinState).getNotification(
-            "Make sure all required fields are filled",
-            "error"
+            'Make sure all required fields are filled',
+            'error'
           );
         }
       });
     },
     login(response: any) {
       const { user, token } = response.data.data;
-      console.log(user, token, "response");
+      console.log(user, token, 'response');
 
       this.$auth.setUserToken(token);
       this.$auth.setUser(user);
-      this.$emit("closeLoginModal");
+      this.$emit('closeLoginModal');
       (this as any as IMixinState).$message({
         showClose: true,
         message: response.data.message,
-        type: "success",
+        type: 'success',
       });
     },
     checkUserVerification() {
       this.$auth
-        .loginWith("local", {
+        .loginWith('local', {
           data: {
             email: this.loginForm.email,
             password: this.loginForm.password,
@@ -139,17 +139,17 @@ export default Vue.extend({
           const message = response.data.message;
           if (
             message ==
-            "An email has been set to you in order to complete your registration"
+            'An email has been set to you in order to complete your registration'
           ) {
             this.errorInfo =
-              "An email has been set to you in order to complete your registration";
+              'An email has been set to you in order to complete your registration';
             (this as any as IMixinState).getNotification(
-              "Verify your email address to continue",
-              "warning"
+              'Verify your email address to continue',
+              'warning'
             );
           } else {
             this.login(response);
-            this.errorInfo = "";
+            this.errorInfo = '';
           }
         })
         .catch((error: any) => {
@@ -159,14 +159,14 @@ export default Vue.extend({
             // this.errorInfo = "Invalid Credentials";
             (this as any as IMixinState).getNotification(
               error?.response?.data.message,
-              "error"
+              'error'
             );
           }
         });
     },
     facebookSignIn() {
       this.$auth
-        .loginWith("facebook")
+        .loginWith('facebook')
         .then((response: any) => {
           // const { user, token } = response.data.data;
           console.log(response);
@@ -186,7 +186,7 @@ export default Vue.extend({
     },
     googleSignIn() {
       this.$auth
-        .loginWith("google")
+        .loginWith('google')
         .then((response: any) => {
           // const { user, token } = response.data.data;
           console.log(response);
@@ -224,6 +224,7 @@ $small_screen: 426px;
     .media_login {
       display: flex;
       flex-direction: column;
+
       .facebook,
       .google,
       .apple {
@@ -261,7 +262,7 @@ $small_screen: 426px;
     }
   }
   .login_text {
-    background: linear-gradient(137.93deg, #cf0100 23.72%, #8d0100 84.77%);
+    // background: linear-gradient(137.93deg, #cf0100 23.72%, #8d0100 84.77%);
     width: 50%;
     padding: 30px;
     color: white;

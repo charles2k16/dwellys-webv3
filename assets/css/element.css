@@ -256,6 +256,9 @@
 .el-dialog {
   border-radius: 13px;
 }
+.el-dialog.login_modal {
+  background: linear-gradient(90deg, #ffffff 50%, #cf0100 50%);
+}
 
 @media (max-width: 426px) {
   .el-dialog {

@@ -2,7 +2,7 @@
   <div>
     <el-row :gutter="20" v-if="listings.length > 0">
       <el-col
-        :xs="12"
+        :xs="24"
         :sm="12"
         :md="6"
         v-for="property in listings"
@@ -10,14 +10,11 @@
         style="height: 400px"
       >
         <!-- v-if="property.listing_detail.name == type" -->
-        <el-card
-          shadow="hover"
-          class="property_container"
-          @click.self="openPropertyDetails(property)"
-        >
+        <el-card shadow="hover" class="property_container">
           <div
             class="property_image"
             :style="background_style(property.photos)"
+            @click="openPropertyDetails(property)"
           >
             <div class="d-flex justify_between property_labels p-10">
               <p style="background: white">
@@ -57,7 +54,7 @@
                   >mth</span
                 >
               </p>
-              <p class="property_name">Houses & Apartments</p>
+              <p class="property_name">House</p>
             </div>
 
             <div class="d-flex justify_between">
@@ -212,6 +209,7 @@ export default Vue.extend({
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   line-height: 16px;
+  cursor: pointer;
 
   .property_image {
     width: 100%;
