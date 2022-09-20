@@ -90,10 +90,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue from "vue";
 
 export default Vue.extend({
-  name: 'ProfileListings',
+  name: "ProfileListings",
   props: {
     user_listings: {
       required: true,
@@ -102,7 +102,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      email: '' as string,
+      email: "" as string,
       pageLoad: false,
       houses: [
         // { img: "Frame2.png", name: "property" },
@@ -116,12 +116,12 @@ export default Vue.extend({
   methods: {
     deleteListingModal(listing_id: string) {
       // const h = this.$createElement
-      this.$confirm('Are you sure you want to delete listing?', {
-        cancelButtonText: 'No, i want to keep',
-        confirmButtonText: 'Yes,I want to delete it',
+      this.$confirm("Are you sure you want to delete listing?", {
+        cancelButtonText: "No, i want to keep",
+        confirmButtonText: "Yes,I want to delete it",
       })
         .then(() => {
-          this.$emit('listing_id', listing_id);
+          this.$emit("listing_id", listing_id);
         })
         .catch((err: any) => {
           console.log(err);
@@ -131,7 +131,7 @@ export default Vue.extend({
 });
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .no_properties {
   display: flex;
   justify-content: center;
@@ -147,6 +147,73 @@ export default Vue.extend({
   background: var(--color-primary);
   i {
     font-size: 20px;
+  }
+}
+.property_container {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  line-height: 16px;
+
+  .property_image {
+    width: 100%;
+    height: 220px;
+    background-repeat: no-repeat;
+    background-size: 100%;
+
+    .property_labels {
+      width: 100%;
+      z-index: 20;
+      background: rgba(136, 136, 136, 0.7);
+
+      p {
+        // background: white;
+        padding: 2px 10px;
+        border-radius: 7.34885px;
+      }
+    }
+  }
+  .card_body {
+    padding: 10px 20px;
+    .house_amount {
+      color: #475569;
+    }
+    .house_plot {
+      color: #64748b;
+      font-size: 11px;
+    }
+  }
+  .card_footer {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    border-top: 1px solid #e2e8f0;
+    .property_img {
+      width: 25px;
+    }
+
+    p {
+      color: #94a3b8;
+      font-size: 11px;
+    }
+    .house_bathroom {
+      border-left: 1px solid #e2e8f0;
+      border-right: 1px solid #e2e8f0;
+      padding: 0 20px;
+      @media (max-width: 1024px) {
+        padding: 0 10px;
+      }
+      @media (max-width: 768px) {
+        padding: 0 20px;
+      }
+      @media (max-width: 768px) {
+        padding: 0 30px;
+      }
+    }
+  }
+  .fav {
+    color: grey;
+    cursor: pointer;
+    display: flex;
   }
 }
 </style>

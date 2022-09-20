@@ -74,6 +74,7 @@ export default {
     headers: {
       "Access-Control-Allow-Origin": "*",
     },
+    // "http://127.0.0.1:8000/api/v3"
     //  process.env.NODE_ENV !== "production"
     // ? : "https://newapi.dwellys.com/api/v3"
   },

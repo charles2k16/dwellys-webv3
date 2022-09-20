@@ -89,7 +89,7 @@
       </span>
     </el-dialog>
     <el-dialog
-      title="Add Property Specification(s)"
+      title="Add Property Amenitie(s)"
       :visible.sync="amenityVisible"
       width="45%"
     >
@@ -99,7 +99,7 @@
             class="grid_content"
             @click="getAmenities(property)"
             :style="
-              listing.amenities.includes(property)
+              checkAmenity(property)
                 ? { background: '#E2E8F0' }
                 : { background: '#fff' }
             "
@@ -281,13 +281,19 @@
       <p>Amenities</p>
       <ul class="amenites_list pb-10">
         <li
-          v-for="amenity in listing.amenities"
+          v-for="(amenity, index) in listing.amenities"
           :key="amenity.id"
           class="d-flex"
         >
           <!-- 0599610266 -->
           <!-- <img src="../assets/img/ac_unit.png" class="pr-5" /> -->
-          <p>{{ amenity.name ? amenity.name : amenity.amenity.name }}</p>
+          <p class="pr-10" id="amenity_inner">
+            {{ amenity.name ? amenity.name : amenity.amenity.name }}
+          </p>
+          <i
+            class="el-icon-delete-solid deleteImgIcon pl-5 pt-10"
+            @click="removeAmenity(index)"
+          ></i>
         </li>
       </ul>
       <el-button type="success" @click="amenityVisible = true" class="p-10"
@@ -369,19 +375,15 @@ export default Vue.extend({
         }
       }
       this.propertySpecs = propertySpecs;
-      console.log("specs", propertySpecs);
-      // let newAmenities = Object.assign([], this.listing.amenities);
-      // let unSelectedAmenities = propertyAmenities.filter((propAmenity: any) => {
-      //   console.log(propAmenity);
-      //   return newAmenities.filter((newAmenity: any, index: number) =>
-      //     propAmenity.id == newAmenity.amenity.id
-      //       ? propertyAmenities.splice(index, 1)
-      //       : propertyAmenities
-      //   );
-      // });
+      let newAmenities = Object.assign([], this.listing.amenities);
+      let unSelectedAmenities = propertyAmenities.filter((newAme: any) => {
+        let getRest = !newAmenities.some(
+          (propAme: any) => propAme.amenity.id == newAme.id
+        );
+        return getRest;
+      });
 
-      console.log("amenities", propertyAmenities);
-      this.amenities = propertyAmenities;
+      this.amenities = unSelectedAmenities;
     },
     getImage(imageId: string) {
       this.imageId = imageId;
@@ -435,6 +437,18 @@ export default Vue.extend({
           console.log(err);
         });
     },
+    removeAmenity(index: number) {
+      this.$confirm("Are you sure you want to delete?", {
+        cancelButtonText: "No, i want to keep",
+        confirmButtonText: "Yes,I want to Delete",
+      })
+        .then(() => {
+          this.listing.amenities.splice(index, 1);
+        })
+        .catch((err: any) => {
+          console.log(err);
+        });
+    },
     removeOtherSpec(index: number) {
       // const h = this.$createElement
       this.$confirm("Are you sure you want to delete?", {
@@ -464,11 +478,16 @@ export default Vue.extend({
     },
     getAmenities(property: any): void {
       // if (this.amenities) {
-      // let findIndex = this.amenities.findIndex((amenity:any) => amenity.id == property.id)
+      let propertyAmenities = Object.assign([], this.listing.amenities);
+      let findIndex = propertyAmenities.findIndex(
+        (amenity: any) => amenity.id == property.id
+      );
+
       // console.log(findIndex)
-      let amenityIndex = this.listing.amenities.indexOf(property);
+      // let amenityIndex = this.listing.amenities.indexOf(property);
+
       this.listing.amenities.includes(property)
-        ? this.listing.amenities.splice(amenityIndex, 1)
+        ? this.listing.amenities.splice(findIndex, 1)
         : this.listing.amenities.push(property);
       // }
 
@@ -486,6 +505,24 @@ export default Vue.extend({
         .catch((err: any) => {
           console.log(err);
         });
+    },
+    checkAmenity(property: any) {
+      let propertyAmenities = Object.assign([], this.listing.amenities);
+      let find = false;
+      for (let i = 0; i < propertyAmenities.length; i++) {
+        if (
+          propertyAmenities[i].amenity &&
+          propertyAmenities[i].amenity.id == property.id
+        ) {
+          console.log(propertyAmenities[i].name);
+          find = true;
+        } else if (propertyAmenities[i].id == property.id) {
+          console.log(propertyAmenities[i].name);
+          find = true;
+        }
+      }
+
+      return find;
     },
     addSpecs() {
       console.log(this.propertySpecs);
@@ -712,14 +749,16 @@ $medium_screen: 769px;
   width: 80%;
 
   // max-width: 500px;
-
-  li {
+  #amenity_inner {
     background: #f1f5f9;
+    color: #1e293b;
     border-radius: 80px;
+    padding: 10px 20px;
+  }
+  li {
     list-style: none;
     width: fit-content;
-    padding: 10px 20px;
-    color: #1e293b;
+
     font-size: 12px;
   }
 }
