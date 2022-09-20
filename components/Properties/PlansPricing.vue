@@ -12,17 +12,13 @@
         <p class="plan_duration">For {{ plan.no_of_days }} days</p>
         <el-button
           class="plan_btn mb-10"
-          :type="selectedPlan == plan.name ? 'primary' : ''"
+          :type="selectedPlan == plan.id ? 'primary' : ''"
           >Select plan</el-button
         >
         <div class="pt-20 recommendations">
-          <p
-            class="pb-10"
-            v-for="feature in plan.listing_plan_features"
-            :key="feature.id"
-          >
+          <p v-for="feature in plan.listing_plan_features" :key="feature.id">
             <img src="../../assets/svg/check.png" class="pr-10" />
-            {feature}
+            {{ feature.feature }}
           </p>
           <img src="../../assets/svg/help.png" class="pt-20" />
         </div>
@@ -64,6 +60,7 @@ $medium_screen: 768px;
   display: flex;
   flex-direction: column;
   border: 1px solid #e2e8f0;
+  height: 460px;
   border-radius: 10px;
   padding: 25px;
   text-align: center;
