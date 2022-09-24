@@ -60,6 +60,9 @@
             </div>
           </div>
         </div>
+        <div class="map_container">
+          <div id="map" ref="map"></div>
+        </div>
       </div>
       <div v-if="step === 2" v-loading="propLoad">
         <div class="center">
@@ -238,6 +241,7 @@
             <el-slider v-model="step" disabled :min="1" :max="8"></el-slider>
           </div>
         </div>
+        <div id="map" ref="map"></div>
         <div class="property_content_container pb-20">
           <el-row class="pb-20">
             <el-col :sm="12" class="pb-20 d-flex_column pr-20">
@@ -528,8 +532,34 @@ import { IMixinState } from "@/types/mixinsTypes";
 import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
 import url from "../url";
 import regionsAndCities from "~/static/regions.json";
+// const apiKey = process.env.GOOGLE_API_KEY;
 
 export default Vue.extend({
+  // head: {
+  //   script: [
+  //     {
+  //       src: `https://maps.googleapis.com/maps/api/js?key=${apiKey}`,
+  //       hid: "map",
+  //       defer: true,
+  //     },
+  //   ],
+  // },
+  async mounted() {
+    await this.$nextTick();
+    const coords = {
+      lat: this.propertyUpload.latitude,
+      lng: this.propertyUpload.longitude,
+    };
+    const map = new google.maps.Map(this.$refs.map, {
+      center: coords,
+      zoom: 8,
+    });
+    const marker = new google.maps.Marker({
+      position: coords,
+      map: map,
+    });
+    console.log(marker);
+  },
   name: "PropertyUpload",
   components: {
     ApplicationHandler,
@@ -539,6 +569,7 @@ export default Vue.extend({
   data() {
     return {
       step: 1 as number,
+      map: null,
       // regions: {},
       category: "" as string,
       pageLoad: false as boolean,
@@ -600,8 +631,8 @@ export default Vue.extend({
         country_id: "39a40751-d7d2-4346-99e5-b0235b520ce5" as string,
         // "39a40751-d7d2-4346-99e5-b0235b520ce5"
         listing_category_id: "" as string,
-        latitude: "5.627703749893443" as string,
-        longitude: "-0.08697846429555343" as string,
+        latitude: 5.627703749893443 as number,
+        longitude: -0.08697846429555343 as number,
         specifications: [] as any,
         property_amenities_id: [] as Array<string>,
         description: "" as string,
@@ -822,7 +853,7 @@ export default Vue.extend({
       if (specIndex == -1) {
         this.propertyUpload.specifications.push({
           number: num,
-          id: specId,
+          property_type_specification_id: specId,
         });
       } else {
         this.propertyUpload.specifications[specIndex].number = num;
@@ -1136,6 +1167,15 @@ $medium_screen: 769px;
   }
   .deleteImgIcon {
     color: red;
+  }
+}
+.map_container {
+  width: 50%;
+  margin: 20px auto;
+
+  #map {
+    height: 50vh;
+    width: 100%;
   }
 }
 </style>

@@ -19,6 +19,13 @@ export default {
       { name: "format-detection", content: "telephone=023023345" },
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
+    script: [
+      {
+        src: `https://maps.googleapis.com/maps/api/js?key=AIzaSyBCDlQDyEIH49_kfRvoUvx69hw2_RY7WQE&v=weekly`,
+        hid: "map",
+        defer: true,
+      },
+    ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -48,6 +55,7 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/typescript
     "@nuxt/typescript-build",
+    "@nuxtjs/dotenv",
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -57,6 +65,7 @@ export default {
     // https://go.nuxtjs.dev/pwa
     "@nuxtjs/pwa",
     "@nuxtjs/auth-next",
+    // "@nuxtjs/auth",
     "nuxt-material-design-icons-iconfont",
     "@nuxtjs/moment",
     // "nuxt-material-design-icons",
@@ -69,7 +78,7 @@ export default {
     // baseURL: 'https://newapi.dwellys.com/api',
     baseURL:
       process.env.NODE_ENV === "development"
-        ? "https://newapi.dwellys.com/api/v3"
+        ? "http://127.0.0.1:8000/api/v3"
         : "https://newapi.dwellys.com/api",
     headers: {
       "Access-Control-Allow-Origin": "*",
@@ -117,11 +126,10 @@ export default {
         },
       },
       google: {
-        clientId:
-          "1039031868707-iakjs1b8u7i12s3jb5l11on7uc8flkpr.apps.googleusercontent.com",
+        clientId: process.env.GOOGLE_CLIENT_ID,
         scope: ["profile", "email"],
         codeChallengeMethod: "",
-        // responseType: "code",
+        responseType: "code",
         endpoints: {
           token: "http://localhost:8000/api/v3/loginwithsocialmedia", // somm backend url to resolve your auth with google and give you the token back
           userInfo: false, // the endpoint to get the user info after you recived the token
@@ -132,7 +140,7 @@ export default {
         endpoints: {
           token: "http://localhost:8000/api/v3/loginwithsocialmedia",
           userInfo:
-            "https://graph.facebook.com/v6.0/me?fields=id,name,picture{url}",
+            "https://graph.facebook.com/v6.0/me?fields=id,name,email,picture{url}",
         },
         clientId: "3270395229903696",
         scope: ["public_profile", "email"],

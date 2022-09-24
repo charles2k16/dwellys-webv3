@@ -292,19 +292,23 @@
           </p>
           <i
             class="el-icon-delete-solid deleteImgIcon pl-5 pt-10"
-            @click="removeAmenity(index)"
+            @click="removeAmenity(index, amenity)"
           ></i>
         </li>
       </ul>
-      <el-button type="success" @click="amenityVisible = true" class="p-10"
+      <el-button
+        v-if="amenities.length > 0"
+        type="success"
+        @click="amenityVisible = true"
+        class="p-10"
         >Add Amenitie(s)</el-button
       >
     </div>
     <div class="d-flex justify_end pt-10">
-      <el-button type="primary" @click="updateListing">
+      <el-button type="primary" @click="updateListing" :loading="loading">
         <i class="el-icon-check pr-10"></i>Save Changes</el-button
       >
-      <el-button type="primary" :loading="loading" @click="deleteListingModal"
+      <el-button type="primary" @click="deleteListingModal"
         ><i class="el-icon-close pr-10"></i>Delete</el-button
       >
     </div>
@@ -437,7 +441,7 @@ export default Vue.extend({
           console.log(err);
         });
     },
-    removeAmenity(index: number) {
+    removeAmenity(index: number, amenity: any) {
       this.$confirm("Are you sure you want to delete?", {
         cancelButtonText: "No, i want to keep",
         confirmButtonText: "Yes,I want to Delete",
