@@ -5,16 +5,20 @@
         :xs="24"
         :sm="12"
         :md="6"
-        v-for="property in listings"
-        :key="property.listing.id"
+        v-for="(property, index) in listings"
+        :key="index"
         class="pb-20"
       >
-        <el-card shadow="hover" class="property_container">
+        <el-card
+          v-if="property.listing"
+          shadow="hover"
+          class="property_container"
+        >
           <div
             class="property_image"
             @click.self="openPropertyDetails(property)"
-            :style="background_style(property.listing.photos)"
           >
+            <!-- :style="background_style(property.listing.photos)" -->
             <div class="d-flex justify_between property_labels p-10">
               <p style="background: white">
                 {{ property.listing.listing_detail.category.name }}

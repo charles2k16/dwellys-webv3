@@ -91,6 +91,7 @@
 
 <script lang="ts">
 import Vue from "vue";
+import { IMixinState } from "@/types/mixinsTypes";
 
 export default Vue.extend({
   name: "ProfileListings",
@@ -98,6 +99,10 @@ export default Vue.extend({
     user_listings: {
       required: true,
       type: Array,
+    },
+    fetchListings: {
+      required: true,
+      type: Function,
     },
   },
   data() {
@@ -121,11 +126,28 @@ export default Vue.extend({
         confirmButtonText: "Yes,I want to delete it",
       })
         .then(() => {
-          this.$emit("listing_id", listing_id);
+          this.deleteListing(listing_id);
         })
         .catch((err: any) => {
           console.log(err);
         });
+    },
+    async deleteListing(listing_id: string) {
+      try {
+        const ListingResponse = await this.$listingApi.delete(listing_id);
+
+        console.log(ListingResponse);
+
+        this.fetchListings();
+        (this as any as IMixinState).$message({
+          showClose: true,
+          message: ListingResponse.message,
+          type: "success",
+        });
+      } catch (error) {
+        console.log(error, "error");
+        (this as any as IMixinState).catchError(error);
+      }
     },
   },
 });

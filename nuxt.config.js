@@ -21,7 +21,7 @@ export default {
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
     script: [
       {
-        src: `https://maps.googleapis.com/maps/api/js?key=AIzaSyBCDlQDyEIH49_kfRvoUvx69hw2_RY7WQE&v=weekly`,
+        src: `https://maps.googleapis.com/maps/api/js?key=AIzaSyBCDlQDyEIH49_kfRvoUvx69hw2_RY7WQE&region=GH&libraries=places&v=weekly`,
         hid: "map",
         defer: true,
       },
@@ -68,6 +68,7 @@ export default {
     // "@nuxtjs/auth",
     "nuxt-material-design-icons-iconfont",
     "@nuxtjs/moment",
+
     // "nuxt-material-design-icons",
   ],
 

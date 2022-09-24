@@ -308,8 +308,8 @@
       <el-button type="primary" @click="updateListing" :loading="loading">
         <i class="el-icon-check pr-10"></i>Save Changes</el-button
       >
-      <el-button type="primary" @click="deleteListingModal"
-        ><i class="el-icon-close pr-10"></i>Delete</el-button
+      <el-button type="danger" plain @click="deleteListingModal"
+        ><i class="el-icon-delete-solid pr-10"></i>Delete</el-button
       >
     </div>
   </div>
@@ -504,7 +504,7 @@ export default Vue.extend({
         confirmButtonText: "Yes,I want to delete it",
       })
         .then(() => {
-          this.deleteListingImage();
+          this.deleteListing();
         })
         .catch((err: any) => {
           console.log(err);
@@ -577,7 +577,8 @@ export default Vue.extend({
         (this as any as IMixinState).catchError(error);
       }
     },
-    async deleteListingImage() {
+
+    async deleteListing() {
       this.loading = true;
       try {
         const ListingResponse = await this.$listingApi.delete(this.listing_id);

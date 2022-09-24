@@ -61,6 +61,10 @@
           </div>
         </div>
         <div class="map_container">
+          <div class="mb-20">
+            <input id="address" type="textbox" :value="searched" />
+            <input type="button" value="Search" @click="codeAddress" />
+          </div>
           <div id="map" ref="map"></div>
         </div>
       </div>
@@ -241,7 +245,6 @@
             <el-slider v-model="step" disabled :min="1" :max="8"></el-slider>
           </div>
         </div>
-        <div id="map" ref="map"></div>
         <div class="property_content_container pb-20">
           <el-row class="pb-20">
             <el-col :sm="12" class="pb-20 d-flex_column pr-20">
@@ -533,6 +536,8 @@ import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
 import url from "../url";
 import regionsAndCities from "~/static/regions.json";
 // const apiKey = process.env.GOOGLE_API_KEY;
+var geocoder: any;
+var map: any;
 
 export default Vue.extend({
   // head: {
@@ -545,20 +550,7 @@ export default Vue.extend({
   //   ],
   // },
   async mounted() {
-    await this.$nextTick();
-    const coords = {
-      lat: this.propertyUpload.latitude,
-      lng: this.propertyUpload.longitude,
-    };
-    const map = new google.maps.Map(this.$refs.map, {
-      center: coords,
-      zoom: 8,
-    });
-    const marker = new google.maps.Marker({
-      position: coords,
-      map: map,
-    });
-    console.log(marker);
+    this.initMap();
   },
   name: "PropertyUpload",
   components: {
@@ -569,6 +561,8 @@ export default Vue.extend({
   data() {
     return {
       step: 1 as number,
+      searched: "",
+      mapQuery: "",
       map: null,
       // regions: {},
       category: "" as string,
@@ -713,7 +707,7 @@ export default Vue.extend({
         this.propertyUpload.property_amenities_id.length > 0
       ) {
         valid = true;
-      } else if (this.step == 4 && this.listing_photos.length > 0) {
+      } else if (this.step == 4 && this.listing_photos.length > 4) {
         valid = true;
       } else if (
         this.step == 5 &&
@@ -762,6 +756,39 @@ export default Vue.extend({
     // RegionsAndCities() {
     //   return this.regionsAndCities
     // },
+
+    initMap(): void {
+      geocoder = new google.maps.Geocoder();
+      var latlng = new google.maps.LatLng(
+        5.627703749893443,
+        -0.08697846429555343
+      );
+      var mapOptions = {
+        zoom: 8,
+        center: latlng,
+      };
+      map = new google.maps.Map(document.getElementById("map"), mapOptions);
+    },
+    codeAddress() {
+      var address = this.searched;
+      console.log(geocoder);
+      geocoder.geocode(
+        { address: address },
+        function (results: any, status: any) {
+          if (status == "OK") {
+            map.setCenter(results[0].geometry.location);
+            var marker = new google.maps.Marker({
+              map: map,
+              position: results[0].geometry.location,
+            });
+          } else {
+            alert(
+              "Geocode was not successful for the following reason: " + status
+            );
+          }
+        }
+      );
+    },
     url() {
       return url();
     },

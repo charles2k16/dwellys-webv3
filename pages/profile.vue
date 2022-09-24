@@ -57,7 +57,10 @@
           name="first"
           class="new_tab"
         >
-          <ProfileListings :user_listings="user_listings" />
+          <ProfileListings
+            :user_listings="user_listings"
+            :fetchListings="fetchListings"
+          />
         </el-tab-pane>
         <el-tab-pane label="Profile" name="second" class="settings_body">
           <el-form class="profile_info_container d-flex">
@@ -300,6 +303,7 @@ export default Vue.extend({
   async created() {
     this.fetchData();
     this.fetchFavorites();
+    this.fetchListings();
     const countries = await this.$countriesApi.index();
     this.countries = countries.data;
     if (this.lister.is_id_card_verified == 0) {
@@ -328,15 +332,18 @@ export default Vue.extend({
       this.userFavorites = userFavorite.data;
       console.log("user fav", this.userFavorites);
     },
-    async fetchData() {
+    async fetchListings() {
       const user = this.$auth.user;
-
       if (user.user_type == "lister") {
         const lister = await this.$userApi.show(user.id);
         console.log(lister, "user details");
         // this.loadlister(listers.data);
         this.user_listings = lister.data.listings;
       }
+    },
+    async fetchData() {
+      const user = this.$auth.user;
+
       console.log(user, "user");
       this.lister = {
         id: user.id,

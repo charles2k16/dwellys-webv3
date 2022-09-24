@@ -12,8 +12,8 @@ export default (ctx, inject) => {
   inject("propertyTypesApi", apiService("/propertytypes"));
   inject("listingPlansApi", apiService("/listingplans"));
   inject("listingApi", apiService("/listings"));
+  inject("listingImageApi", apiService("/listingimages"));
   inject("listingCategoriesApi", apiService("/listingcategories"));
-  inject("listingImagesApi", apiService("/listingimages"));
   inject("forgottenPassApi", apiService("/forgotpassword"));
   inject("selectFavoriteApi", apiService("/toggleuserfavoritelisting"));
   inject("userApi", apiService("/users"));
