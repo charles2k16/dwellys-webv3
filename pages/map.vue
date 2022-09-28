@@ -5,8 +5,15 @@
         <div class="map_container">
           <div id="map" ref="map"></div>
           <div class="mt-20">
-            <input id="address" type="textbox" :value="searched" />
-            <input type="button" value="Encode" @click="codeAddress" />
+            <input
+              id="pac-input"
+              class="controls"
+              ref="search"
+              @keyup="getDetails"
+              type="textbox"
+              :value="searched"
+            />
+            <!-- <input type="button" value="Encode" @click="initMap" /> -->
           </div>
         </div>
       </div>
@@ -23,11 +30,15 @@ var map;
 
 // const apiKey = process.env.GOOGLE_API_KEY;
 
+// window.initAutocomplete = this.initAutocomplete;
+
 export default Vue.extend({
   mounted() {
     // await this.$nextTick();
     // const coords = ;
-    this.newLocation();
+    // this.newLocation();
+    this.initMap();
+    // this.initAutocomplete();
   },
 
   name: "PropertyUpload",
@@ -44,14 +55,88 @@ export default Vue.extend({
       // regions: {},
       latitude: 5.627703749893443 as number,
       longitude: -0.08697846429555343 as number,
-      mylatitude: 6.627703749893443 as number,
-      mylongitude: -1.08697846429555343 as number,
-      newlatitude: 6.627703749893443 as number,
-      newlongitude: -1.08697846429555343 as number,
     };
   },
 
   methods: {
+    initAutocomplete() {
+      map = new google.maps.Map(this.$refs["map"] as HTMLElement, {
+        center: { lat: 5.627703749893443, lng: -0.08697846429555343 },
+        zoom: 13,
+        // mapTypeId: "roadmap",
+      });
+
+      console.log(map);
+
+      // Create the search box and link it to the UI element.
+      const input = this.$refs["search"] as HTMLInputElement;
+      const searchBox = new google.maps.places.SearchBox(input);
+
+      map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+      console.log(input);
+
+      // Bias the SearchBox results towards current map's viewport.
+      map.addListener("bounds_changed", () => {
+        searchBox.setBounds(map.getBounds() as google.maps.LatLngBounds);
+      });
+
+      let markers: google.maps.Marker[] = [];
+
+      // Listen for the event fired when the user selects a prediction and retrieve
+      // more details for that place.
+      searchBox.addListener("places_changed", () => {
+        const places = searchBox.getPlaces();
+
+        if (places.length == 0) {
+          return;
+        }
+
+        // Clear out the old markers.
+        markers.forEach((marker) => {
+          marker.setMap(null);
+        });
+        markers = [];
+
+        // For each place, get the icon, name and location.
+        const bounds = new google.maps.LatLngBounds();
+
+        places.forEach((place) => {
+          if (!place.geometry || !place.geometry.location) {
+            console.log("Returned place contains no geometry");
+            return;
+          }
+
+          const icon = {
+            url: place.icon as string,
+            size: new google.maps.Size(71, 71),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(17, 34),
+            scaledSize: new google.maps.Size(25, 25),
+          };
+
+          // Create a marker for each place.
+          markers.push(
+            new google.maps.Marker({
+              map,
+              icon,
+              title: place.name,
+              position: place.geometry.location,
+            })
+          );
+
+          if (place.geometry.viewport) {
+            // Only geocodes have viewport.
+            bounds.union(place.geometry.viewport);
+          } else {
+            bounds.extend(place.geometry.location);
+          }
+        });
+        map.fitBounds(bounds);
+      });
+    },
+    getDetails() {
+      console.log("this");
+    },
     initMap(): void {
       let map: google.maps.Map;
       let service: google.maps.places.PlacesService;
@@ -70,78 +155,38 @@ export default Vue.extend({
         zoom: 15,
       });
       console.log("map", map);
-
-      // const marker = new google.maps.Marker({
-      //   position: sydney,
-      //   map: map,
-      // });
-
-      const request = {
-        query: "melcome , Kumasi",
-        fields: ["name", "geometry"],
-      };
-
-      service = new google.maps.places.PlacesService(map);
-      console.log(service);
-
-      service.findPlaceFromQuery(
-        request,
-        (
-          results: google.maps.places.PlaceResult[] | null,
-          status: google.maps.places.PlacesServiceStatus
-        ) => {
-          if (status === google.maps.places.PlacesServiceStatus.OK && results) {
-            for (let i = 0; i < results.length; i++) {
-              console.log(results[i]);
-              this.createMarker(results[i]);
-            }
-
-            map.setCenter(results[0].geometry!.location!);
-          }
-        }
-      );
     },
-    newLocation() {
-      //   function initialize() {
-      geocoder = new google.maps.Geocoder();
-      var latlng = new google.maps.LatLng(
-        5.627703749893443,
-        -0.08697846429555343
-      );
-      var mapOptions = {
-        zoom: 8,
-        center: latlng,
-      };
-      map = new google.maps.Map(document.getElementById("map"), mapOptions);
-    },
-    codeAddress() {
-      var address = this.searched;
-      console.log(geocoder);
-      geocoder.geocode({ address: address }, function (results, status) {
-        if (status == "OK") {
-          map.setCenter(results[0].geometry.location);
-          var marker = new google.maps.Marker({
-            map: map,
-            position: results[0].geometry.location,
-          });
-        } else {
-          alert(
-            "Geocode was not successful for the following reason: " + status
-          );
-        }
-      });
-    },
-    getMap(callback) {
-      let vm = this;
-      function checkForMap() {
-        if (vm.map) callback(vm.map);
-        else setTimeout(checkForMap, 200);
-      }
-      checkForMap();
-    },
-    setMap() {
-      //   this.newLocation();
-    },
+
+    // newLocation() {
+    //   //   function initialize() {
+    //   geocoder = new google.maps.Geocoder();
+    //   var latlng = new google.maps.LatLng(
+    //     5.627703749893443,
+    //     -0.08697846429555343
+    //   );
+    //   var mapOptions = {
+    //     zoom: 8,
+    //     center: latlng,
+    //   };
+    //   map = new google.maps.Map(document.getElementById("map"), mapOptions);
+    // },
+    // codeAddress() {
+    //   var address = this.searched;
+    //   console.log(geocoder);
+    //   geocoder.geocode({ address: address }, function (results, status) {
+    //     if (status == "OK") {
+    //       map.setCenter(results[0].geometry.location);
+    //       var marker = new google.maps.Marker({
+    //         map: map,
+    //         position: results[0].geometry.location,
+    //       });
+    //     } else {
+    //       alert(
+    //         "Geocode was not successful for the following reason: " + status
+    //       );
+    //     }
+    //   });
+    // },
   },
 });
 </script>

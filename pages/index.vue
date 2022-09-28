@@ -99,7 +99,11 @@
           v-for="(tab, index) in tabOptions"
           :key="index"
         >
-          <div class="section pt-20" v-loading="pageLoad">
+          <div
+            class="section pt-20"
+            v-if="tab.label == 'All'"
+            v-loading="pageLoad"
+          >
             <PropertyList
               :type="tab.label"
               :listings="listings"
@@ -114,26 +118,26 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue from "vue";
 
 export default Vue.extend({
   auth: false,
-  name: 'IndexPage',
+  name: "IndexPage",
   data() {
     return {
-      search_value: '' as string,
+      search_value: "" as string,
       propertySearch: [
         {
-          label: 'Buy',
-          value: 'buy',
+          label: "Buy",
+          value: "buy",
         },
         {
-          label: 'Rent',
-          value: 'rent',
+          label: "Rent",
+          value: "rent",
         },
         {
-          label: 'Lease',
-          value: 'lease',
+          label: "Lease",
+          value: "lease",
         },
       ],
       listings: [] as Array<object>,
@@ -142,37 +146,56 @@ export default Vue.extend({
       queryList: [],
       isQuery: false as boolean,
       tabOptions: [
-        { label: 'All', title: 'Rent a home' },
-        { label: 'House', title: 'Rent a house' },
-        { label: 'Apartment', title: 'Rent an Apartment' },
-        { label: 'Town house', title: 'Rent a Town house' },
-        { label: ' Office', title: ' Rent an office' },
-        { label: 'Land', title: ' Buy a land' },
+        { label: "All", title: "Rent a home" },
+        { label: "House", title: "Rent a house" },
+        { label: "Apartment", title: "Rent an Apartment" },
+        { label: "Town house", title: "Rent a Town house" },
+        { label: " Office", title: " Rent an office" },
+        { label: "Land", title: " Buy a land" },
       ] as any,
     };
   },
   async created() {
-    if (this.$auth.loggedIn) {
-      this.fetchData();
-    }
-
     this.fetchData();
+    // if (!this.$auth.user.token && this.$auth.state.strategy) {
+    //   const user = this.$auth.user;
 
-    console.log(this.listings);
+    //   const socialsignup = {
+    //     first_name: user.first_name,
+    //     last_name: user.last_name,
+    //     email: user.email,
+    //     sign_up_mode: "facebook",
+    //     avatar: user.picture.data.url,
+    //     user_type: "visitor",
+    //     social_site_id: user.id,
+    //     dob: user.birthday,
+    //   };
+    //   const social_response = await this.$socialregisterApi.create(
+    //     socialsignup
+    //   );
+    //   console.log(social_response);
+    //   // this.$auth.setUserToken(token);
+    //   // this.$auth.setUser(user);
+    // }
+
     // this.userFavorites = userFavorite.data;
   },
   methods: {
     async fetchData() {
-      const listings = await this.$listingApi.query('?status=active');
+      const listings = await this.$listingApi.query("?status=active");
       console.log(listings);
       this.loadListing(listings.data);
+      // const filtered_properties = await this.$filterPropertiesApi.query(
+      //   "house"
+      // );
+      // console.log(filtered_properties);
     },
     loadListing(properties: any) {
       const data = properties.map((property: any) => {
         property.photos =
           property.listing_detail.feature_image_url != null
             ? property.listing_detail.feature_image_url
-            : 'no photo';
+            : "no photo";
         return property;
       });
       this.listings = data;
@@ -186,10 +209,10 @@ export default Vue.extend({
           this.queryList = query.data;
           this.isQuery = true;
         } catch (error: any) {
-          console.log('error', error);
+          console.log("error", error);
           if (error?.response?.data) {
             this.isQuery = true;
-            console.log('from server error', error.response.data.message);
+            console.log("from server error", error.response.data.message);
           }
         }
       }
@@ -200,7 +223,7 @@ export default Vue.extend({
     closeQuery() {
       this.isQuery = false;
       this.queryList = [];
-      this.search_value = '';
+      this.search_value = "";
     },
   },
 });
@@ -210,7 +233,7 @@ export default Vue.extend({
 .home {
   color: var(--text-white);
   .home_landing_page {
-    background-image: url('~/assets/img/home.png');
+    background-image: url("~/assets/img/home.png");
     background-repeat: no-repeat;
     background-size: 100% 400px;
     height: 400px;

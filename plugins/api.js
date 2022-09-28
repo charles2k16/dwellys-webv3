@@ -8,6 +8,7 @@ export default (ctx, inject) => {
 
   // You can reuse the repositoryWithAxios object:
   inject("registerApi", apiService("/signup"));
+  inject("socialregisterApi", apiService("/signupwithsocialmedia"));
   inject("countriesApi", apiService("/countries"));
   inject("propertyTypesApi", apiService("/propertytypes"));
   inject("listingPlansApi", apiService("/listingplans"));
@@ -23,4 +24,10 @@ export default (ctx, inject) => {
   inject("SelectdPlanApi", apiService("/listingselectedplans"));
   inject("userFavoriteApi", apiService("/myfavoritelisting"));
   inject("querySearchApi", apiService("/searchlisting?search_query="));
+  inject("propertySpecApi", apiService("/propertytypespecifications"));
+  inject("propertyAmenitiesApi", apiService("/propertytypeamenities"));
+  inject(
+    "filterPropertiesApi",
+    apiService("/filterlistings?status=active&property_type_name=")
+  );
 };

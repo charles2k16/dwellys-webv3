@@ -62,8 +62,16 @@
         </div>
         <div class="map_container">
           <div class="mb-20">
-            <input id="address" type="textbox" :value="searched" />
-            <input type="button" value="Search" @click="codeAddress" />
+            <!-- <input id="address" type="textbox" :value="searched" />
+            <input type="button" value="Search" @click="codeAddress" /> -->
+            <input
+              id="pac-input"
+              class="controls"
+              ref="search"
+              @keyup="getDetails"
+              type="textbox"
+              :value="searched"
+            />
           </div>
           <div id="map" ref="map"></div>
         </div>
@@ -296,6 +304,13 @@
                 </el-option>
               </el-select>
             </el-col>
+            <div class="map_container">
+              <div class="mb-20">
+                <input id="address" type="textbox" :value="searched" />
+                <input type="button" value="Search" @click="codeAddress" />
+              </div>
+              <div id="map" ref="map"></div>
+            </div>
           </el-row>
         </div>
       </div>
@@ -550,7 +565,7 @@ export default Vue.extend({
   //   ],
   // },
   async mounted() {
-    this.initMap();
+    this.initAutocomplete();
   },
   name: "PropertyUpload",
   components: {
@@ -707,7 +722,7 @@ export default Vue.extend({
         this.propertyUpload.property_amenities_id.length > 0
       ) {
         valid = true;
-      } else if (this.step == 4 && this.listing_photos.length > 4) {
+      } else if (this.step == 4 && this.listing_photos.length > 0) {
         valid = true;
       } else if (
         this.step == 5 &&
@@ -756,39 +771,117 @@ export default Vue.extend({
     // RegionsAndCities() {
     //   return this.regionsAndCities
     // },
+    initAutocomplete() {
+      map = new google.maps.Map(this.$refs["map"] as HTMLElement, {
+        center: { lat: 5.627703749893443, lng: -0.08697846429555343 },
+        zoom: 13,
+        // mapTypeId: "roadmap",
+      });
 
-    initMap(): void {
-      geocoder = new google.maps.Geocoder();
-      var latlng = new google.maps.LatLng(
-        5.627703749893443,
-        -0.08697846429555343
-      );
-      var mapOptions = {
-        zoom: 8,
-        center: latlng,
-      };
-      map = new google.maps.Map(document.getElementById("map"), mapOptions);
-    },
-    codeAddress() {
-      var address = this.searched;
-      console.log(geocoder);
-      geocoder.geocode(
-        { address: address },
-        function (results: any, status: any) {
-          if (status == "OK") {
-            map.setCenter(results[0].geometry.location);
-            var marker = new google.maps.Marker({
-              map: map,
-              position: results[0].geometry.location,
-            });
-          } else {
-            alert(
-              "Geocode was not successful for the following reason: " + status
-            );
-          }
+      console.log(map);
+
+      // Create the search box and link it to the UI element.
+      const input = this.$refs["search"] as HTMLInputElement;
+      const searchBox = new google.maps.places.SearchBox(input);
+
+      map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+      console.log(input);
+
+      // Bias the SearchBox results towards current map's viewport.
+      map.addListener("bounds_changed", () => {
+        searchBox.setBounds(map.getBounds() as google.maps.LatLngBounds);
+      });
+
+      let markers: google.maps.Marker[] = [];
+
+      // Listen for the event fired when the user selects a prediction and retrieve
+      // more details for that place.
+      searchBox.addListener("places_changed", () => {
+        const places = searchBox.getPlaces();
+
+        if (places.length == 0) {
+          return;
         }
-      );
+
+        // Clear out the old markers.
+        markers.forEach((marker) => {
+          marker.setMap(null);
+        });
+        markers = [];
+
+        // For each place, get the icon, name and location.
+        const bounds = new google.maps.LatLngBounds();
+
+        places.forEach((place) => {
+          if (!place.geometry || !place.geometry.location) {
+            console.log("Returned place contains no geometry");
+            return;
+          }
+
+          const icon = {
+            url: place.icon as string,
+            size: new google.maps.Size(71, 71),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(17, 34),
+            scaledSize: new google.maps.Size(25, 25),
+          };
+
+          // Create a marker for each place.
+          markers.push(
+            new google.maps.Marker({
+              map,
+              icon,
+              title: place.name,
+              position: place.geometry.location,
+            })
+          );
+
+          if (place.geometry.viewport) {
+            // Only geocodes have viewport.
+            bounds.union(place.geometry.viewport);
+          } else {
+            bounds.extend(place.geometry.location);
+          }
+        });
+        map.fitBounds(bounds);
+      });
     },
+    getDetails() {
+      console.log("this");
+    },
+    // initMap() {
+    //   console.log("refs", this.$refs["map"], document.getElementById("map"));
+    //   geocoder = new google.maps.Geocoder();
+    //   var latlng = new google.maps.LatLng(
+    //     5.627703749893443,
+    //     -0.08697846429555343
+    //   );
+    //   var mapOptions = {
+    //     zoom: 8,
+    //     center: latlng,
+    //   };
+    //   map = new google.maps.Map(this.$refs["map"] as HTMLElement, mapOptions);
+    // },
+    // codeAddress() {
+    //   var address = this.searched;
+    //   console.log(geocoder);
+    //   geocoder.geocode(
+    //     { address: address },
+    //     function (results: any, status: any) {
+    //       if (status == "OK") {
+    //         map.setCenter(results[0].geometry.location);
+    //         var marker = new google.maps.Marker({
+    //           map: map,
+    //           position: results[0].geometry.location,
+    //         });
+    //       } else {
+    //         alert(
+    //           "Geocode was not successful for the following reason: " + status
+    //         );
+    //       }
+    //     }
+    //   );
+    // },
     url() {
       return url();
     },
@@ -893,6 +986,9 @@ export default Vue.extend({
     toNext() {
       this.step++;
       console.log(this.propertyUpload);
+      // if (this.step == 5) {
+      //   this.initMap();
+      // }
     },
     getCategory(e: any) {
       console.log(e);

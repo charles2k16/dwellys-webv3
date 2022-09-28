@@ -46,6 +46,10 @@ declare module "vue/types/vue" {
     $discountApi: apiService;
     $SelectdPlanApi: apiService;
     $userFavoriteApi: apiService;
+    $propertySpecApi: apiService;
+    $propertyAmenitiesApi: apiService;
+    $filterPropertiesApi: apiService;
+    $socialregisterApi: apiService;
     $router: any;
     $auth: any;
     $alert: any;

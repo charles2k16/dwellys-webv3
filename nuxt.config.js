@@ -21,7 +21,7 @@ export default {
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
     script: [
       {
-        src: `https://maps.googleapis.com/maps/api/js?key=AIzaSyBCDlQDyEIH49_kfRvoUvx69hw2_RY7WQE&region=GH&libraries=places&v=weekly`,
+        src: `https://maps.googleapis.com/maps/api/js?key=AIzaSyCt8902N2wOQ4kGxifiMhmZ4eHw-8J2v1Q&region=GH&libraries=places&v=weekly`,
         hid: "map",
         defer: true,
       },
@@ -133,15 +133,15 @@ export default {
         responseType: "code",
         endpoints: {
           token: "http://localhost:8000/api/v3/loginwithsocialmedia", // somm backend url to resolve your auth with google and give you the token back
-          userInfo: false, // the endpoint to get the user info after you recived the token
+          userInfo: "http://localhost:8000/auth/user/", // the endpoint to get the user info after you recived the token
           redirect_uri: "http://localhost:3000/login",
         },
       },
       facebook: {
         endpoints: {
-          token: "http://localhost:8000/api/v3/loginwithsocialmedia",
+          token: "/loginwithsocialmedia",
           userInfo:
-            "https://graph.facebook.com/v6.0/me?fields=id,name,email,picture{url}",
+            "https://graph.facebook.com/v6.0/me?fields=id,name,email,picture{url},first_name,last_name,birthday",
         },
         clientId: "3270395229903696",
         scope: ["public_profile", "email"],

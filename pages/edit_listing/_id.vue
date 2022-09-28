@@ -238,7 +238,7 @@
           <el-input v-model="specification.number" class="w-50 px-10" />
           <i
             class="el-icon-delete-solid deleteImgIcon pt-10"
-            @click="removeSpec(index)"
+            @click="removeSpec(index, specification.specification.id)"
           ></i>
         </li>
       </ul>
@@ -292,7 +292,7 @@
           </p>
           <i
             class="el-icon-delete-solid deleteImgIcon pl-5 pt-10"
-            @click="removeAmenity(index, amenity)"
+            @click="removeAmenity(index, amenity.id)"
           ></i>
         </li>
       </ul>
@@ -427,7 +427,7 @@ export default Vue.extend({
       this.dialogVisible = false;
       this.photos = [];
     },
-    removeSpec(index: number) {
+    removeSpec(index: number, id: string) {
       console.log("specification id", index);
       // const h = this.$createElement
       this.$confirm("Are you sure you want to delete?", {
@@ -435,19 +435,21 @@ export default Vue.extend({
         confirmButtonText: "Yes,I want to Delete",
       })
         .then(() => {
-          this.listing.property_specifications.splice(index, 1);
+          // this.listing.property_specifications.splice(index, 1);
+          this.deleteSepcification(id);
         })
         .catch((err: any) => {
           console.log(err);
         });
     },
-    removeAmenity(index: number, amenity: any) {
+    removeAmenity(index: number, id: string) {
       this.$confirm("Are you sure you want to delete?", {
         cancelButtonText: "No, i want to keep",
         confirmButtonText: "Yes,I want to Delete",
       })
         .then(() => {
           this.listing.amenities.splice(index, 1);
+          this.deleteAmenity(id);
         })
         .catch((err: any) => {
           console.log(err);
@@ -559,13 +561,8 @@ export default Vue.extend({
       this.listing.other_specifications;
     },
     async deleteImage(planId: string) {
-      this.loading = true;
       try {
         const ImageResponse = await this.$listingImagesApi.delete(planId);
-
-        console.log(ImageResponse);
-
-        this.loading = false;
         this.fetchData();
         (this as any as IMixinState).$message({
           showClose: true,
@@ -577,14 +574,39 @@ export default Vue.extend({
         (this as any as IMixinState).catchError(error);
       }
     },
-
+    async deleteSepcification(id: string) {
+      try {
+        const SpecificationResponse = await this.$propertySpecApi.delete(id);
+        this.fetchData();
+        (this as any as IMixinState).$message({
+          showClose: true,
+          message: SpecificationResponse.message,
+          type: "success",
+        });
+      } catch (error) {
+        console.log(error, "error");
+        (this as any as IMixinState).catchError(error);
+      }
+    },
+    async deleteAmenity(id: string) {
+      try {
+        const amenityResponse = await this.$propertyAmenitiesApi.delete(id);
+        this.fetchData();
+        (this as any as IMixinState).$message({
+          showClose: true,
+          message: amenityResponse.message,
+          type: "success",
+        });
+      } catch (error) {
+        console.log(error, "error");
+        (this as any as IMixinState).catchError(error);
+      }
+    },
     async deleteListing() {
       this.loading = true;
       try {
         const ListingResponse = await this.$listingApi.delete(this.listing_id);
-
         console.log(ListingResponse);
-
         this.loading = false;
         this.fetchData();
         (this as any as IMixinState).$message({
@@ -598,7 +620,6 @@ export default Vue.extend({
         (this as any as IMixinState).catchError(error);
       }
     },
-
     async updateListing() {
       this.loading = true;
       const specifications = this.listing.property_specifications.map(
@@ -673,9 +694,6 @@ export default Vue.extend({
         const ImageResponse = await this.$listingImagesApi.update("feature", {
           listing_image_id: imageId,
         });
-
-        console.log(ImageResponse);
-
         this.loading = false;
         this.fetchData();
         (this as any as IMixinState).$message({
@@ -689,14 +707,12 @@ export default Vue.extend({
       }
     },
     async addImages() {
-      console.log(this.photos);
       try {
         const listingResponse = await this.$listingImagesApi.create({
           listing_id: this.listing_id,
           listing_photos: this.photos,
         });
         console.log(listingResponse);
-        // console.log(listingId, active)
         this.dialogVisible = false;
         this.loading = false;
         this.photos = [];
