@@ -60,20 +60,6 @@
             </div>
           </div>
         </div>
-        <div class="map_container">
-          <div class="mb-20">
-            <!-- <input id="address" type="textbox" :value="searched" />
-            <input type="button" value="Search" @click="codeAddress" /> -->
-            <input
-              id="pac-input"
-              class="controls"
-              ref="search"
-              type="textbox"
-              :value="searched"
-            />
-          </div>
-          <div id="map" ref="map"></div>
-        </div>
       </div>
       <div v-if="step === 2" v-loading="propLoad">
         <div class="center">
@@ -303,20 +289,7 @@
                 </el-option>
               </el-select>
             </el-col>
-            <div class="map_container">
-              <div class="mb-20">
-                <!-- <input id="address" type="textbox" :value="searched" />
-            <input type="button" value="Search" @click="codeAddress" /> -->
-                <input
-                  id="pac-input"
-                  class="controls"
-                  ref="search"
-                  type="textbox"
-                  :value="searched"
-                />
-              </div>
-              <div id="map" ref="map"></div>
-            </div>
+            <Map @latlng="getLatlng" />
           </el-row>
         </div>
       </div>
@@ -556,27 +529,14 @@ import { IMixinState } from "@/types/mixinsTypes";
 import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
 import url from "../url";
 import regionsAndCities from "~/static/regions.json";
+import Map from "../components/Properties/map.vue";
 // const apiKey = process.env.GOOGLE_API_KEY;
-var geocoder: any;
-var map: any;
 
 export default Vue.extend({
-  // head: {
-  //   script: [
-  //     {
-  //       src: `https://maps.googleapis.com/maps/api/js?key=${apiKey}`,
-  //       hid: "map",
-  //       defer: true,
-  //     },
-  //   ],
-  // },
-  mounted() {
-    this.initAutocomplete();
-  },
   name: "PropertyUpload",
   components: {
     ApplicationHandler,
-    // regionsAndCities,
+    Map,
   },
 
   data() {
@@ -646,8 +606,8 @@ export default Vue.extend({
         country_id: "39a40751-d7d2-4346-99e5-b0235b520ce5" as string,
         // "39a40751-d7d2-4346-99e5-b0235b520ce5"
         listing_category_id: "" as string,
-        latitude: 5.627703749893443 as number,
-        longitude: -0.08697846429555343 as number,
+        latitude: 0 as number,
+        longitude: 0 as number,
         specifications: [] as any,
         property_amenities_id: [] as Array<string>,
         description: "" as string,
@@ -696,9 +656,9 @@ export default Vue.extend({
       // this.propertyTypes.country
       console.log(this.countries);
 
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(this.showPosition);
-      }
+      // if (navigator.geolocation) {
+      //   navigator.geolocation.getCurrentPosition(this.showPosition);
+      // }
     } catch (error: any) {
       console.log(error);
       if (error?.response?.data) {
@@ -728,7 +688,7 @@ export default Vue.extend({
         this.propertyUpload.property_amenities_id.length > 0
       ) {
         valid = true;
-      } else if (this.step == 4 && this.listing_photos.length > 4) {
+      } else if (this.step == 4 && this.listing_photos.length > 0) {
         valid = true;
       } else if (
         this.step == 5 &&
@@ -777,83 +737,6 @@ export default Vue.extend({
     // RegionsAndCities() {
     //   return this.regionsAndCities
     // },
-
-    initAutocomplete() {
-      map = new google.maps.Map(this.$refs["map"] as HTMLElement, {
-        center: { lat: 5.627703749893443, lng: -0.08697846429555343 },
-        zoom: 13,
-        // mapTypeId: "roadmap",
-      });
-      const input = this.$refs["search"] as HTMLInputElement;
-      const searchBox = new google.maps.places.SearchBox(input);
-
-      map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
-      // Bias the SearchBox results towards current map's viewport.
-      map.addListener("bounds_changed", () => {
-        searchBox.setBounds(map.getBounds() as google.maps.LatLngBounds);
-      });
-
-      let markers: google.maps.Marker[] = [];
-
-      // Listen for the event fired when the user selects a prediction and retrieve
-      // more details for that place.
-      searchBox.addListener("places_changed", () => {
-        const places = searchBox.getPlaces();
-        console.log(places);
-        if (places.length == 0) {
-          return;
-        }
-
-        // Clear out the old markers.
-        markers.forEach((marker) => {
-          marker.setMap(null);
-        });
-        markers = [];
-
-        // For each place, get the icon, name and location.
-        const bounds = new google.maps.LatLngBounds();
-
-        places.forEach((place) => {
-          if (!place.geometry || !place.geometry.location) {
-            console.log("Returned place contains no geometry");
-            return;
-          }
-
-          const icon = {
-            url: place.icon as string,
-            size: new google.maps.Size(71, 71),
-            origin: new google.maps.Point(0, 0),
-            anchor: new google.maps.Point(17, 34),
-            scaledSize: new google.maps.Size(25, 25),
-          };
-
-          // Create a marker for each place.
-          markers.push(
-            new google.maps.Marker({
-              map,
-              icon,
-              title: place.name,
-              position: place.geometry.location,
-            })
-          );
-
-          console.log(
-            "maps",
-            place.geometry.location.lat(),
-            place.geometry.location.lng()
-          );
-
-          if (place.geometry.viewport) {
-            // Only geocodes have viewport.
-            bounds.union(place.geometry.viewport);
-          } else {
-            bounds.extend(place.geometry.location);
-          }
-        });
-        map.fitBounds(bounds);
-      });
-    },
     url() {
       return url();
     },
@@ -877,6 +760,11 @@ export default Vue.extend({
     },
     getSvg(pic: string): string {
       return require("../assets/svg/" + pic);
+    },
+    getLatlng(geoCode: any) {
+      console.log(geoCode);
+      (this.propertyUpload.latitude = geoCode.latitude),
+        (this.propertyUpload.longitude = geoCode.longitude);
     },
     getPrice(plan: any) {
       console.log(plan);
@@ -967,10 +855,10 @@ export default Vue.extend({
           : ""
       );
     },
-    showPosition(position: any) {
-      this.propertyUpload.latitude = position.coords.latitude;
-      this.propertyUpload.longitude = position.coords.longitude;
-    },
+    // showPosition(position: any) {
+    //   this.propertyUpload.latitude = position.coords.latitude;
+    //   this.propertyUpload.longitude = position.coords.longitude;
+    // },
     async sendPayment() {
       this.btnLoading = true;
       try {
@@ -1025,7 +913,7 @@ export default Vue.extend({
           listing_id: propertyResponse.data.id,
           listing_photos: this.listing_photos,
         });
-        console.log(propertyResponse);
+        console.log("image upload", imageListing);
 
         this.listing_id = propertyResponse.data.id;
 
@@ -1036,10 +924,23 @@ export default Vue.extend({
           message: propertyResponse.message,
           type: "success",
         });
-      } catch (error) {
+      } catch (error: any) {
         console.log(error, "error");
         this.btnLoading = false;
-        (this as any as IMixinState).catchError(error);
+        if (error?.response?.data) {
+          (this as any as IMixinState).$message({
+            showClose: true,
+            message: error.response.data.message,
+            type: "error",
+          });
+        } else {
+          (this as any as IMixinState).$message({
+            showClose: true,
+            message: "Check your interent connectivity",
+            type: "error",
+          });
+        }
+        // (this as any as IMixinState).catchError(error);
       }
     },
   },

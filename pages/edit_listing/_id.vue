@@ -198,18 +198,11 @@
           </div>
         </section>
       </div>
-      <div class="map_container">
-        <div class="mt-20">
-          <input
-            id="pac-input"
-            class="controls"
-            ref="search"
-            type="textbox"
-            :value="searched"
-          />
-          <!-- <button @click="getSearch">Search</button> -->
-        </div>
-        <div id="map" ref="map"></div>
+      <div class="pt-10 pb-10" v-if="listing.listing_detail">
+        <Map
+          :lat="listing.listing_detail.latitude"
+          :lng="listing.listing_detail.longitude"
+        />
       </div>
     </div>
     <section class="pt-30 listing_description">
@@ -322,20 +315,19 @@
 <script lang="ts">
 import Vue from "vue";
 import { IMixinState } from "@/types/mixinsTypes";
-var map: any;
-
+import map from "../../components/profile/map.vue";
+// var map: any;
 export default Vue.extend({
   name: "ListingDetails",
-
+  components: {
+    map,
+  },
   // props: {
   //   property: {
   //     type: Object,
   //     required: true,
   //   },
   // },
-  mounted() {
-    this.initAutocomplete();
-  },
   data() {
     return {
       url: "http://localhost:8000/",
@@ -366,83 +358,6 @@ export default Vue.extend({
     this.fetchData();
   },
   methods: {
-    initAutocomplete() {
-      map = new google.maps.Map(this.$refs["map"] as HTMLElement, {
-        center: { lat: 5.627703749893443, lng: -0.08697846429555343 },
-        zoom: 13,
-        // mapTypeId: "roadmap",
-      });
-      const input = this.$refs["search"] as HTMLInputElement;
-      const searchBox = new google.maps.places.SearchBox(input);
-
-      map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
-      // Bias the SearchBox results towards current map's viewport.
-      map.addListener("bounds_changed", () => {
-        searchBox.setBounds(map.getBounds() as google.maps.LatLngBounds);
-      });
-
-      let markers: google.maps.Marker[] = [];
-
-      // Listen for the event fired when the user selects a prediction and retrieve
-      // more details for that place.
-      searchBox.addListener("places_changed", () => {
-        const places = searchBox.getPlaces();
-        console.log(places);
-        if (places.length == 0) {
-          return;
-        }
-
-        // Clear out the old markers.
-        markers.forEach((marker) => {
-          marker.setMap(null);
-        });
-        markers = [];
-
-        // For each place, get the icon, name and location.
-        const bounds = new google.maps.LatLngBounds();
-
-        places.forEach((place) => {
-          if (!place.geometry || !place.geometry.location) {
-            console.log("Returned place contains no geometry");
-            return;
-          }
-
-          const icon = {
-            url: place.icon as string,
-            size: new google.maps.Size(71, 71),
-            origin: new google.maps.Point(0, 0),
-            anchor: new google.maps.Point(17, 34),
-            scaledSize: new google.maps.Size(25, 25),
-          };
-
-          // Create a marker for each place.
-          markers.push(
-            new google.maps.Marker({
-              map,
-              icon,
-              title: place.name,
-              position: place.geometry.location,
-            })
-          );
-
-          console.log(
-            "maps",
-            place.geometry.location.lat(),
-            place.geometry.location.lng()
-          );
-
-          if (place.geometry.viewport) {
-            // Only geocodes have viewport.
-            bounds.union(place.geometry.viewport);
-          } else {
-            bounds.extend(place.geometry.location);
-          }
-        });
-        map.fitBounds(bounds);
-      });
-    },
-
     async fetchData() {
       const listing = await this.$listingApi.show(this.$route.params.id);
       console.log("listing", listing);
