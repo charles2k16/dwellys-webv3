@@ -68,7 +68,6 @@
               id="pac-input"
               class="controls"
               ref="search"
-              @keyup="getDetails"
               type="textbox"
               :value="searched"
             />
@@ -306,8 +305,15 @@
             </el-col>
             <div class="map_container">
               <div class="mb-20">
-                <input id="address" type="textbox" :value="searched" />
-                <input type="button" value="Search" @click="codeAddress" />
+                <!-- <input id="address" type="textbox" :value="searched" />
+            <input type="button" value="Search" @click="codeAddress" /> -->
+                <input
+                  id="pac-input"
+                  class="controls"
+                  ref="search"
+                  type="textbox"
+                  :value="searched"
+                />
               </div>
               <div id="map" ref="map"></div>
             </div>
@@ -771,21 +777,17 @@ export default Vue.extend({
     // RegionsAndCities() {
     //   return this.regionsAndCities
     // },
+
     initAutocomplete() {
       map = new google.maps.Map(this.$refs["map"] as HTMLElement, {
         center: { lat: 5.627703749893443, lng: -0.08697846429555343 },
         zoom: 13,
         // mapTypeId: "roadmap",
       });
-
-      console.log(map);
-
-      // Create the search box and link it to the UI element.
       const input = this.$refs["search"] as HTMLInputElement;
       const searchBox = new google.maps.places.SearchBox(input);
 
       map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-      console.log(input);
 
       // Bias the SearchBox results towards current map's viewport.
       map.addListener("bounds_changed", () => {
@@ -798,7 +800,7 @@ export default Vue.extend({
       // more details for that place.
       searchBox.addListener("places_changed", () => {
         const places = searchBox.getPlaces();
-
+        console.log(places);
         if (places.length == 0) {
           return;
         }
@@ -836,6 +838,12 @@ export default Vue.extend({
             })
           );
 
+          console.log(
+            "maps",
+            place.geometry.location.lat(),
+            place.geometry.location.lng()
+          );
+
           if (place.geometry.viewport) {
             // Only geocodes have viewport.
             bounds.union(place.geometry.viewport);
@@ -846,42 +854,6 @@ export default Vue.extend({
         map.fitBounds(bounds);
       });
     },
-    getDetails() {
-      console.log("this");
-    },
-    // initMap() {
-    //   console.log("refs", this.$refs["map"], document.getElementById("map"));
-    //   geocoder = new google.maps.Geocoder();
-    //   var latlng = new google.maps.LatLng(
-    //     5.627703749893443,
-    //     -0.08697846429555343
-    //   );
-    //   var mapOptions = {
-    //     zoom: 8,
-    //     center: latlng,
-    //   };
-    //   map = new google.maps.Map(this.$refs["map"] as HTMLElement, mapOptions);
-    // },
-    // codeAddress() {
-    //   var address = this.searched;
-    //   console.log(geocoder);
-    //   geocoder.geocode(
-    //     { address: address },
-    //     function (results: any, status: any) {
-    //       if (status == "OK") {
-    //         map.setCenter(results[0].geometry.location);
-    //         var marker = new google.maps.Marker({
-    //           map: map,
-    //           position: results[0].geometry.location,
-    //         });
-    //       } else {
-    //         alert(
-    //           "Geocode was not successful for the following reason: " + status
-    //         );
-    //       }
-    //     }
-    //   );
-    // },
     url() {
       return url();
     },
@@ -986,9 +958,6 @@ export default Vue.extend({
     toNext() {
       this.step++;
       console.log(this.propertyUpload);
-      // if (this.step == 5) {
-      //   this.initMap();
-      // }
     },
     getCategory(e: any) {
       console.log(e);
@@ -1042,6 +1011,7 @@ export default Vue.extend({
         }
       }
     },
+
     async submitUpload() {
       this.btnLoading = true;
       try {

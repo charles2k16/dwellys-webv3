@@ -130,10 +130,10 @@ export default {
         clientId: process.env.GOOGLE_CLIENT_ID,
         scope: ["profile", "email"],
         codeChallengeMethod: "",
-        responseType: "code",
+        responseType: "token id_token",
         endpoints: {
           token: "http://localhost:8000/api/v3/loginwithsocialmedia", // somm backend url to resolve your auth with google and give you the token back
-          userInfo: "http://localhost:8000/auth/user/", // the endpoint to get the user info after you recived the token
+          userInfo: false, // the endpoint to get the user info after you recived the token
           redirect_uri: "http://localhost:3000/login",
         },
       },
