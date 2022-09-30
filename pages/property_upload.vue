@@ -570,7 +570,7 @@ export default Vue.extend({
   //     },
   //   ],
   // },
-  async mounted() {
+  mounted() {
     this.initAutocomplete();
   },
   name: "PropertyUpload",
@@ -728,7 +728,7 @@ export default Vue.extend({
         this.propertyUpload.property_amenities_id.length > 0
       ) {
         valid = true;
-      } else if (this.step == 4 && this.listing_photos.length > 0) {
+      } else if (this.step == 4 && this.listing_photos.length > 4) {
         valid = true;
       } else if (
         this.step == 5 &&

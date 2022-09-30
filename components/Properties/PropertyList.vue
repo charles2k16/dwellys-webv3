@@ -34,7 +34,7 @@
                   class="material-icons ml-5"
                   @click="favProperty(property)"
                   :style="
-                    favProperties.some(fav => fav.id == property.id)
+                    favProperties.some((fav) => fav.id == property.id)
                       ? { color: 'red' }
                       : { color: 'white' }
                   "
@@ -103,8 +103,8 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import { IMixinState } from '../../types/mixinsTypes';
+import Vue from "vue";
+import { IMixinState } from "../../types/mixinsTypes";
 
 export default Vue.extend({
   props: {
@@ -121,7 +121,7 @@ export default Vue.extend({
       type: String,
     },
   },
-  name: 'PropertyList',
+  name: "PropertyList",
   data() {
     return {
       favProperties: [] as any,
@@ -136,14 +136,16 @@ export default Vue.extend({
       if (this.$auth.loggedIn) {
         const userFavorite = await this.$userFavoriteApi.index();
         const favorites = userFavorite.data;
+
         for (let i = 0; i < favorites.length; i++) {
           this.favProperties.push(favorites[i].listing);
         }
+        console.log("favorites", this.favProperties);
       }
     },
     truncateString(str: string) {
       if (str.length > 30) {
-        return str.slice(0, 30) + '...';
+        return str.slice(0, 30) + "...";
       } else {
         return str;
       }
@@ -168,21 +170,21 @@ export default Vue.extend({
           this.fetchFavorites();
           (this as any as IMixinState).$message({
             showClose: true,
-            message: 'Added property to favourite!',
-            type: 'success',
+            message: "Added property to favourite!",
+            type: "success",
           });
         } catch (error: any) {
           (this as any as IMixinState).catchError(error);
           console.log(error?.response);
         }
       } else {
-        this.$confirm('Login to select favourite', {
-          confirmButtonText: 'Login',
-          cancelButtonText: 'Cancel',
-          type: 'success',
+        this.$confirm("Login to select favourite", {
+          confirmButtonText: "Login",
+          cancelButtonText: "Cancel",
+          type: "success",
         })
           .then(() => {
-            this.$router.push('/login');
+            this.$router.push("/login");
           })
           .catch(() => {
             // this.$router.push("/register");
@@ -192,7 +194,7 @@ export default Vue.extend({
     openPropertyDetails(property: any): void {
       console.log(property);
       this.$router.push({
-        name: 'property_details',
+        name: "property_details",
         // params: { property: property.id },
         query: {
           name: property.listing_detail.name,

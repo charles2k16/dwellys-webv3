@@ -157,26 +157,27 @@ export default Vue.extend({
   },
   async created() {
     this.fetchData();
-    // if (!this.$auth.user.token && this.$auth.state.strategy) {
-    //   const user = this.$auth.user;
+    console.log(this.$auth.state.strategy);
+    if (!this.$auth.user.token && this.$auth.state.strategy == "facebook") {
+      const user = this.$auth.user;
 
-    //   const socialsignup = {
-    //     first_name: user.first_name,
-    //     last_name: user.last_name,
-    //     email: user.email,
-    //     sign_up_mode: "facebook",
-    //     avatar: user.picture.data.url,
-    //     user_type: "visitor",
-    //     social_site_id: user.id,
-    //     dob: user.birthday,
-    //   };
-    //   const social_response = await this.$socialregisterApi.create(
-    //     socialsignup
-    //   );
-    //   console.log(social_response);
-    //   // this.$auth.setUserToken(token);
-    //   // this.$auth.setUser(user);
-    // }
+      const socialsignup = {
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        sign_up_mode: "facebook",
+        avatar: user.picture.data.url,
+        user_type: "visitor",
+        social_site_id: user.id,
+        dob: user.birthday,
+      };
+      const social_response = await this.$socialregisterApi.create(
+        socialsignup
+      );
+      console.log(social_response);
+      // this.$auth.setUserToken(token);
+      // this.$auth.setUser(user);
+    }
 
     // this.userFavorites = userFavorite.data;
   },

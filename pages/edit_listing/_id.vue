@@ -119,72 +119,28 @@
         >
       </span>
     </el-dialog>
-    <div class="d-flex justify_between">
+    <div class="d-flex justify_between pt-20">
       <div class="d-flex pt-20">
-        <!-- <section class="listing_bar"> -->
-        <!-- <p>Lister</p> -->
-        <!-- <p class="pt-10"> -->
-        <!-- <b>{{ listing && listing.lister.first_name }} </b> -->
-        <!-- </p> -->
-        <!-- </section> -->
         <section class="listing_bar">
-          <p>Listing type</p>
-          <!-- <p class="pt-10">
-            <b>{{ listing.property_type && listing.property_type.name }} </b>
-          </p> -->
+          <p>Listing Name</p>
           <el-input
-            v-if="listing.property_type"
-            v-model="listing.property_type.name"
+            v-if="listing.listing_detail"
+            v-model="listing.listing_detail.name"
           />
         </section>
         <section class="listing_bar pl-20">
           <p>Amount</p>
-          <!-- <p class="pt-10">
-            <b>{{ listing.listing_detail && listing.listing_detail.price }} </b>
-          </p> -->
           <el-input
             v-if="listing.listing_detail"
             v-model="listing.listing_detail.price"
-          />
+          >
+            <template slot="prepend">GH&#8373; </template></el-input
+          >
         </section>
       </div>
     </div>
     <el-divider></el-divider>
-    <div>
-      <div class="d-flex listing_location pt-30">
-        <section class="pr-20">
-          <p>Location</p>
-          <el-input
-            v-if="listing.listing_detail"
-            v-model="listing.listing_detail.region"
-          />
-        </section>
-        <section class="pl-20 date">
-          <p>Upload Date</p>
-          <div class="d-flex">
-            <p class="pt-10 w-100 pr-10">
-              <b>
-                {{
-                  listing && $moment(listing.created_at).format("MMM DD, YY")
-                }}
-              </b>
-            </p>
-            <el-input type="date" v-if="listing" v-model="listing.created_at" />
-          </div>
-        </section>
-      </div>
-    </div>
-    <section class="pt-30 listing_description">
-      <p>Description</p>
-      <el-input
-        type="textarea"
-        :rows="2"
-        v-if="listing.listing_detail"
-        v-model="listing.listing_detail.description"
-      />
-    </section>
-    <div v-if="listing.listing_detail" class="pt-30">
-      <p>Images</p>
+    <div v-if="listing.listing_detail" class="">
       <p>Select an image as front image</p>
       <div class="property_images pt-10 pb-10">
         <div
@@ -207,9 +163,11 @@
           </div>
         </div>
       </div>
-      <el-button type="success" @click="dialogVisible = true" class="p-10"
-        >Add Image(s)</el-button
-      >
+      <div class="d-flex justify_end">
+        <el-button type="success" @click="dialogVisible = true" class="p-10"
+          >Add Image(s)</el-button
+        >
+      </div>
       <!-- <el-upload class="upload-demo" :on-change="newImage" multiple>
         <el-button size="small" type="primary">Click to upload</el-button>
         <div slot="tip" class="el-upload__tip">
@@ -217,6 +175,53 @@
         </div>
       </el-upload> -->
     </div>
+    <div>
+      <div class="d-flex listing_location pt-30">
+        <section class="pr-20">
+          <p>Location</p>
+          <el-input
+            v-if="listing.listing_detail"
+            v-model="listing.listing_detail.city"
+          />
+        </section>
+        <section class="pl-20 date">
+          <p>Upload Date</p>
+          <div class="d-flex">
+            <p class="pt-10 w-100 pr-10">
+              <b>
+                {{
+                  listing && $moment(listing.created_at).format("MMM DD, YY")
+                }}
+              </b>
+            </p>
+            <!-- <el-input type="date" v-if="listing" v-model="listing.created_at" /> -->
+          </div>
+        </section>
+      </div>
+      <div class="map_container">
+        <div class="mt-20">
+          <input
+            id="pac-input"
+            class="controls"
+            ref="search"
+            type="textbox"
+            :value="searched"
+          />
+          <!-- <button @click="getSearch">Search</button> -->
+        </div>
+        <div id="map" ref="map"></div>
+      </div>
+    </div>
+    <section class="pt-30 listing_description">
+      <p>Description</p>
+      <el-input
+        type="textarea"
+        :rows="2"
+        v-if="listing.listing_detail"
+        v-model="listing.listing_detail.description"
+      />
+    </section>
+
     <div class="pt-30">
       <h3>Basic information</h3>
       <p class="pt-20">Specifications</p>
@@ -226,18 +231,17 @@
           :key="specification.id"
           class="py-10 d-flex"
         >
-          <!--   w-50 -->
-          <p class="pt-5">
-            {{
-              specification.name
-                ? specification.name
-                : specification.specification.name
-            }}
-            -
-          </p>
-          <el-input v-model="specification.number" class="w-50 px-10" />
+          <el-input v-model="specification.number" class="px-10">
+            <template slot="prepend"
+              >{{
+                specification.name
+                  ? specification.name
+                  : specification.specification.name
+              }}
+            </template></el-input
+          >
           <i
-            class="el-icon-delete-solid deleteImgIcon pt-10"
+            class="el-icon-close deleteImgIcon pt-10"
             @click="removeSpec(index, specification.specification.id)"
           ></i>
         </li>
@@ -258,17 +262,17 @@
           :key="specification.id"
           class="py-10 d-flex"
         >
-          <p class="pt-5">
-            {{
-              specification.name
-                ? specification.name
-                : specification.specification.name
-            }}
-            -
-          </p>
-          <el-input v-model="specification.number" class="w-50 px-10" />
+          <el-input v-model="specification.number" class="px-10">
+            <template slot="prepend"
+              >{{
+                specification.name
+                  ? specification.name
+                  : specification.specification.name
+              }}
+            </template></el-input
+          >
           <i
-            class="el-icon-delete-solid deleteImgIcon"
+            class="el-icon-close deleteImgIcon pt-10"
             @click="removeOtherSpec(index)"
           ></i>
         </li>
@@ -291,7 +295,7 @@
             {{ amenity.name ? amenity.name : amenity.amenity.name }}
           </p>
           <i
-            class="el-icon-delete-solid deleteImgIcon pl-5 pt-10"
+            class="el-icon-close deleteImgIcon pl-5 pt-10"
             @click="removeAmenity(index, amenity.id)"
           ></i>
         </li>
@@ -318,6 +322,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { IMixinState } from "@/types/mixinsTypes";
+var map: any;
 
 export default Vue.extend({
   name: "ListingDetails",
@@ -328,12 +333,16 @@ export default Vue.extend({
   //     required: true,
   //   },
   // },
+  mounted() {
+    this.initAutocomplete();
+  },
   data() {
     return {
       url: "http://localhost:8000/",
       imageErr: "" as string,
       activeName: "first" as string,
       image: "" as any,
+      searched: "" as string,
       listing_id: this.$route.params.id,
       newOtherSpec: {
         name: "",
@@ -357,6 +366,83 @@ export default Vue.extend({
     this.fetchData();
   },
   methods: {
+    initAutocomplete() {
+      map = new google.maps.Map(this.$refs["map"] as HTMLElement, {
+        center: { lat: 5.627703749893443, lng: -0.08697846429555343 },
+        zoom: 13,
+        // mapTypeId: "roadmap",
+      });
+      const input = this.$refs["search"] as HTMLInputElement;
+      const searchBox = new google.maps.places.SearchBox(input);
+
+      map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+      // Bias the SearchBox results towards current map's viewport.
+      map.addListener("bounds_changed", () => {
+        searchBox.setBounds(map.getBounds() as google.maps.LatLngBounds);
+      });
+
+      let markers: google.maps.Marker[] = [];
+
+      // Listen for the event fired when the user selects a prediction and retrieve
+      // more details for that place.
+      searchBox.addListener("places_changed", () => {
+        const places = searchBox.getPlaces();
+        console.log(places);
+        if (places.length == 0) {
+          return;
+        }
+
+        // Clear out the old markers.
+        markers.forEach((marker) => {
+          marker.setMap(null);
+        });
+        markers = [];
+
+        // For each place, get the icon, name and location.
+        const bounds = new google.maps.LatLngBounds();
+
+        places.forEach((place) => {
+          if (!place.geometry || !place.geometry.location) {
+            console.log("Returned place contains no geometry");
+            return;
+          }
+
+          const icon = {
+            url: place.icon as string,
+            size: new google.maps.Size(71, 71),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(17, 34),
+            scaledSize: new google.maps.Size(25, 25),
+          };
+
+          // Create a marker for each place.
+          markers.push(
+            new google.maps.Marker({
+              map,
+              icon,
+              title: place.name,
+              position: place.geometry.location,
+            })
+          );
+
+          console.log(
+            "maps",
+            place.geometry.location.lat(),
+            place.geometry.location.lng()
+          );
+
+          if (place.geometry.viewport) {
+            // Only geocodes have viewport.
+            bounds.union(place.geometry.viewport);
+          } else {
+            bounds.extend(place.geometry.location);
+          }
+        });
+        map.fitBounds(bounds);
+      });
+    },
+
     async fetchData() {
       const listing = await this.$listingApi.show(this.$route.params.id);
       console.log("listing", listing);
@@ -739,7 +825,7 @@ export default Vue.extend({
 $small_screen: 426px;
 $medium_screen: 769px;
 .listing_bar {
-  width: 150px;
+  max-width: 200px;
   padding-right: 10px;
 }
 .property_images {
@@ -758,7 +844,7 @@ $medium_screen: 769px;
 }
 .specs_container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 300px));
+  grid-template-columns: repeat(auto-fit, minmax(100px, 200px));
   li {
     list-style-type: none;
   }
@@ -766,8 +852,8 @@ $medium_screen: 769px;
 .amenites_list {
   padding-top: 20px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 300px));
-  width: 80%;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 200px));
+  width: 100%;
 
   // max-width: 500px;
   #amenity_inner {
@@ -790,7 +876,7 @@ $medium_screen: 769px;
 
 .deleteImgIcon {
   color: red;
-  font-size: 18px;
+  font-size: 20px;
 }
 .listing_img {
   border: 1px solid green;

@@ -310,3 +310,7 @@
   background-color: #ffecec;
   color: #cf0100;
 }
+
+.el-input--small .el-input__inner {
+  height: 40px;
+}
