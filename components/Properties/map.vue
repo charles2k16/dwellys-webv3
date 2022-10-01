@@ -28,11 +28,6 @@ export default Vue.extend({
     this.initAutocomplete();
   },
 
-  name: "map",
-  components: {
-    // regionsAndCities,
-  },
-
   data() {
     return {
       step: 1 as number,

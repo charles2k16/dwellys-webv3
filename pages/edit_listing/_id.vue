@@ -235,7 +235,7 @@
           >
           <i
             class="el-icon-close deleteImgIcon pt-10"
-            @click="removeSpec(index, specification.specification.id)"
+            @click="removeSpec(index, specification.id)"
           ></i>
         </li>
       </ul>
@@ -266,7 +266,7 @@
           >
           <i
             class="el-icon-close deleteImgIcon pt-10"
-            @click="removeOtherSpec(index)"
+            @click="removeOtherSpec(index, specification.id)"
           ></i>
         </li>
       </ul>
@@ -456,7 +456,7 @@ export default Vue.extend({
           console.log(err);
         });
     },
-    removeOtherSpec(index: number) {
+    removeOtherSpec(index: number, id: string) {
       // const h = this.$createElement
       this.$confirm("Are you sure you want to delete?", {
         cancelButtonText: "No, i want to keep",
@@ -464,6 +464,7 @@ export default Vue.extend({
       })
         .then(() => {
           this.listing.other_specifications.splice(index, 1);
+          this.deleteOtherSepcification(id);
         })
         .catch((err: any) => {
           console.log(err);
@@ -577,7 +578,23 @@ export default Vue.extend({
     },
     async deleteSepcification(id: string) {
       try {
-        const SpecificationResponse = await this.$propertySpecApi.delete(id);
+        const SpecificationResponse =
+          await this.$listingSpecificationApi.delete(id);
+        this.fetchData();
+        (this as any as IMixinState).$message({
+          showClose: true,
+          message: SpecificationResponse.message,
+          type: "success",
+        });
+      } catch (error) {
+        console.log(error, "error");
+        (this as any as IMixinState).catchError(error);
+      }
+    },
+    async deleteOtherSepcification(id: string) {
+      try {
+        const SpecificationResponse =
+          await this.$listingOtherSpecificationApi.delete(id);
         this.fetchData();
         (this as any as IMixinState).$message({
           showClose: true,
@@ -591,7 +608,7 @@ export default Vue.extend({
     },
     async deleteAmenity(id: string) {
       try {
-        const amenityResponse = await this.$propertyAmenitiesApi.delete(id);
+        const amenityResponse = await this.$listingAmenitiesApi.delete(id);
         this.fetchData();
         (this as any as IMixinState).$message({
           showClose: true,

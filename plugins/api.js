@@ -9,9 +9,16 @@ export default (ctx, inject) => {
   // You can reuse the repositoryWithAxios object:
   inject("registerApi", apiService("/signup"));
   inject("socialregisterApi", apiService("/signupwithsocialmedia"));
+  inject("socialloginApi", apiService("/loginwithsocialmedia"));
   inject("countriesApi", apiService("/countries"));
   inject("propertyTypesApi", apiService("/propertytypes"));
   inject("listingPlansApi", apiService("/listingplans"));
+  inject("listingSpecificationApi", apiService("/listingspecifications"));
+  inject("listingAmenitiesApi", apiService("/listingamenities"));
+  inject(
+    "listingOtherSpecificationApi",
+    apiService("/listingotherspecifications")
+  );
   inject("listingApi", apiService("/listings"));
   inject("listingImagesApi", apiService("/listingimages"));
   inject("listingCategoriesApi", apiService("/listingcategories"));

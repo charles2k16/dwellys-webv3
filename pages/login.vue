@@ -153,7 +153,9 @@ export default Vue.extend({
         });
     },
     facebookSignIn() {
-      this.$auth.loginWith("facebook");
+      this.$auth.loginWith("facebook").then((response) => {
+        console.log(response);
+      });
     },
     googleSignIn() {
       this.$auth.loginWith("google");
