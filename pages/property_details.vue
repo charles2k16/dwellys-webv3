@@ -39,7 +39,7 @@
 
           <p class="align_center">
             <span class="material-icons mr-5"> schedule </span>Last updated,
-            {{ $moment(propertyDetails.updated_at).format("MMMM Do YYYY") }}
+            {{ $moment(propertyDetails.updated_at).format('MMMM Do YYYY') }}
           </p>
         </div>
         <div class="details_plot">
@@ -78,7 +78,12 @@
         </el-col>
 
         <el-col :xs="8" :sm="8" :md="4" v-if="hasMorePhotos">
-          <div class="thumbnail">
+          <div
+            class="thumbnail"
+            v-for="(image, index) in propertyDetails.listing_detail
+              .listing_images"
+            :key="index"
+          >
             <img :src="apiUrl + '/' + image.photo" class="_image" />
           </div>
         </el-col>
@@ -158,9 +163,9 @@
                     </p>
                     <p style="font-size: 13px; color: #64748b">
                       {{
-                        propertyDetails.lister.user_type == "lister"
-                          ? "Independent agent"
-                          : "Admin"
+                        propertyDetails.lister.user_type == 'lister'
+                          ? 'Independent agent'
+                          : 'Admin'
                       }}
                     </p>
                   </div>
@@ -207,34 +212,34 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
-import url from "../url";
-import { IMixinState } from "../types/mixinsTypes";
+import Vue from 'vue';
+import ApplicationHandler from '@/handlers/ApplicationHandler.vue';
+import url from '../url';
+import { IMixinState } from '../types/mixinsTypes';
 
 export default Vue.extend({
   auth: false,
-  name: "PropertyDetails",
+  name: 'PropertyDetails',
   components: {
     ApplicationHandler,
   },
   data() {
     return {
-      activeName: "first" as string,
-      image: "" as any,
+      activeName: 'first' as string,
+      image: '' as any,
       propertyDetails: {} as any,
-      home: "" as string,
+      home: '' as string,
       favProperties: [] as Array<object>,
       sendForm: {
         amount: null,
         recipient_amt: null,
-        payment_method: "" as string,
+        payment_method: '' as string,
       },
-      user: "",
+      user: '',
     };
   },
   async created() {
-    console.log("routes", this.$route.query);
+    console.log('routes', this.$route.query);
     const listings = await this.$listingApi.show(this.$route.query.id);
     this.propertyDetails = listings.data;
     console.log(listings);
@@ -264,18 +269,18 @@ export default Vue.extend({
           console.log(favoriteResponse);
           (this as any as IMixinState).$message({
             showClose: true,
-            message: "Added property to favourite!",
-            type: "success",
+            message: 'Added property to favourite!',
+            type: 'success',
           });
         } catch (error: any) {}
       } else {
-        this.$confirm("Login to select favourite", {
-          confirmButtonText: "Login",
-          cancelButtonText: "Cancel",
-          type: "success",
+        this.$confirm('Login to select favourite', {
+          confirmButtonText: 'Login',
+          cancelButtonText: 'Cancel',
+          type: 'success',
         })
           .then(() => {
-            this.$router.push("/login");
+            this.$router.push('/login');
           })
           .catch(() => {
             //  console.log()
@@ -298,8 +303,8 @@ export default Vue.extend({
         );
       } else {
         (this as any as IMixinState).getNotification(
-          "Login to send agent a message!",
-          "warning"
+          'Login to send agent a message!',
+          'warning'
         );
       }
     },
@@ -383,7 +388,7 @@ $small_screen: 426px;
       margin-left: 15px;
 
       &::before {
-        content: "\2022";
+        content: '\2022';
         color: red;
         font-weight: bold;
         display: inline-block;
