@@ -91,7 +91,7 @@
           <div>
             <p class="pb-10"><b> Basic Information</b></p>
 
-            <div class="d-flex">
+            <div class="basic_specifications">
               <span
                 class="info_card"
                 v-for="(
@@ -132,11 +132,21 @@
           <div class="info_side_card">
             <el-card shadow="hover" class="p-10">
               <div style="height: 200px">
-                <p>Rent</p>
+                <p>
+                  {{
+                    propertyDetails.listing_detail &&
+                    propertyDetails.listing_detail.category.name
+                  }}
+                </p>
                 <p class="mt-5 amout" v-if="propertyDetails.listing_detail">
                   <b style="font-size: 24px; line-height: 28px"
-                    >${{ propertyDetails.listing_detail.price }}.00</b
-                  >/ month
+                    >GH₵{{ propertyDetails.listing_detail.price }}</b
+                  ><span
+                    v-if="
+                      propertyDetails.listing_detail.category.name == 'Rent'
+                    "
+                    >/month</span
+                  >
                 </p>
                 <div class="d-flex mt-20" v-if="propertyDetails.listing_detail">
                   <img
@@ -184,16 +194,22 @@
         <hr class="hr_rule" />
         <div class="amenities_content">
           <h4 class="mt-20">Amenities</h4>
-          <ul
-            class="amenites_list"
-            v-for="amenity in propertyDetails.amenities"
-            :key="amenity.amenity.name"
-          >
-            <li>{{ amenity.amenity.name }}</li>
+          <ul class="amenites_list">
+            <li
+              v-for="amenity in propertyDetails.amenities"
+              :key="amenity.amenity.name"
+            >
+              {{ amenity.amenity.name }}
+            </li>
           </ul>
         </div>
       </div>
-
+      <div class="pt-10 pb-10" v-if="propertyDetails.listing_detail">
+        <Map
+          :lat="propertyDetails.listing_detail.latitude"
+          :lng="propertyDetails.listing_detail.longitude"
+        />
+      </div>
       <div>
         <hr class="hr_rule" />
         <h4 class="mt-20">Similar properties</h4>
@@ -211,12 +227,14 @@ import Vue from "vue";
 import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
 import url from "../url";
 import { IMixinState } from "../types/mixinsTypes";
+import Map from "../components/profile/map.vue";
 
 export default Vue.extend({
   auth: false,
   name: "PropertyDetails",
   components: {
     ApplicationHandler,
+    Map,
   },
   data() {
     return {
@@ -348,20 +366,24 @@ $small_screen: 426px;
     object-fit: cover;
   }
 }
-.info_card {
-  background: #f8fafc;
-  padding: 5px 10px;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  margin: 0 10px;
-  display: flex;
+.basic_specifications {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(70px, 150px));
+  .info_card {
+    background: #f8fafc;
+    padding: 5px 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    margin: 10px;
+    display: flex;
 
-  p {
-    font-size: 13px;
-  }
-  .material-icons {
-    font-size: 22px;
-    color: grey;
+    p {
+      font-size: 13px;
+    }
+    .material-icons {
+      font-size: 22px;
+      color: grey;
+    }
   }
 }
 .amenities {
@@ -369,10 +391,9 @@ $small_screen: 426px;
 
   .amenites_list {
     padding-top: 20px;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(70px, 150px)) !important;
     width: 100%;
-
     max-width: 500px;
 
     li {

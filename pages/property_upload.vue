@@ -243,7 +243,7 @@
             <el-col :sm="12" class="pb-20 d-flex_column pr-20">
               <span>Country</span>
               <el-select
-                v-model="propertyUpload.country"
+                v-model="country"
                 placeholder="Select"
                 class="region pt-10"
               >
@@ -354,7 +354,8 @@
           <PlansPricing :pricingPlans="pricingPlans" @getPlan="getPrice" />
         </div>
       </div>
-      <div v-if="step === 8">
+      <!-- v-if="step === 8" -->
+      <div>
         <div class="payment_container">
           <div class="payment_section pr-30">
             <h3>Payment</h3>
@@ -542,9 +543,7 @@ export default Vue.extend({
   data() {
     return {
       step: 1 as number,
-      searched: "",
-      mapQuery: "",
-      map: null,
+      showPaymentModal: false,
       // regions: {},
       category: "" as string,
       pageLoad: false as boolean,
@@ -699,7 +698,8 @@ export default Vue.extend({
       } else if (
         this.step == 6 &&
         this.propertyUpload.price != 0 &&
-        this.propertyUpload.name != ""
+        this.propertyUpload.name != "" &&
+        this.propertyUpload.description != ""
       ) {
         valid = true;
       } else if (this.step == 7 && this.listing_plan_id != "") {
@@ -827,7 +827,7 @@ export default Vue.extend({
       );
 
       let specIndex = specifications.findIndex(
-        (spec: any) => spec.id == specId
+        (spec: any) => spec.property_type_specification_id == specId
       );
       console.log(specIndex);
       if (specIndex == -1) {
@@ -859,8 +859,20 @@ export default Vue.extend({
     //   this.propertyUpload.latitude = position.coords.latitude;
     //   this.propertyUpload.longitude = position.coords.longitude;
     // },
+    open() {
+      this.$alert(
+        "Make payment and proceed to verification",
+        "Verification of payment",
+        {
+          confirmButtonText: "Verify",
+        }
+      ).then(() => {
+        console.log("veiry");
+      });
+    },
     async sendPayment() {
       this.btnLoading = true;
+      this.open();
       try {
         const data = {
           listing_id: this.listing_id,
@@ -879,12 +891,14 @@ export default Vue.extend({
         const selectdPlanResponse = await this.$SelectdPlanApi.create(data);
         console.log(selectdPlanResponse);
         this.btnLoading = false;
+
         (this as any as IMixinState).$message({
           showClose: true,
           message: selectdPlanResponse.message,
           type: "error",
         });
-        this.$router.replace("/");
+        this.open();
+        // this.$router.replace("/");
       } catch (error: any) {
         console.log(error, "error");
         (this as any as IMixinState).catchError(error);

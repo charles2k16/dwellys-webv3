@@ -50,8 +50,11 @@
           <div class="card_body">
             <div class="d-flex justify_between">
               <p class="house_amount">
-                GH₵ {{ property.listing_detail.price }}/<span class="month"
-                  >mth</span
+                GH₵ {{ property.listing_detail.price
+                }}<span
+                  v-if="property.listing_detail.category.name == 'Rent'"
+                  class="month"
+                  >/mth</span
                 >
               </p>
               <p class="property_name">House</p>

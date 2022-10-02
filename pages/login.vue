@@ -153,9 +153,7 @@ export default Vue.extend({
         });
     },
     facebookSignIn() {
-      this.$auth.loginWith("facebook").then((response) => {
-        console.log(response);
-      });
+      this.$auth.loginWith("facebook");
     },
     googleSignIn() {
       this.$auth.loginWith("google");
@@ -178,8 +176,7 @@ $small_screen: 426px;
     display: flex;
     flex-direction: column;
     .facebook,
-    .google,
-    .apple {
+    .google {
       background: #f1f5f9;
       display: flex;
       cursor: pointer;

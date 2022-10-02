@@ -568,7 +568,7 @@ export default Vue.extend({
         this.fetchData();
         (this as any as IMixinState).$message({
           showClose: true,
-          message: ImageResponse.message,
+          message:"Image Deleted Successffully!",
           type: "success",
         });
       } catch (error) {
@@ -583,7 +583,7 @@ export default Vue.extend({
         this.fetchData();
         (this as any as IMixinState).$message({
           showClose: true,
-          message: SpecificationResponse.message,
+          message: "Specification Deleted Successffully!",
           type: "success",
         });
       } catch (error) {
@@ -598,7 +598,7 @@ export default Vue.extend({
         this.fetchData();
         (this as any as IMixinState).$message({
           showClose: true,
-          message: SpecificationResponse.message,
+          message: "Specification  Deleted Successffully!",
           type: "success",
         });
       } catch (error) {
@@ -612,7 +612,7 @@ export default Vue.extend({
         this.fetchData();
         (this as any as IMixinState).$message({
           showClose: true,
-          message: amenityResponse.message,
+          message: "Amenity Deleted Successffully!",
           type: "success",
         });
       } catch (error) {

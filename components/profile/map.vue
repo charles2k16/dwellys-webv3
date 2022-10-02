@@ -1,6 +1,5 @@
 <template>
   <div class="">
-    {{ lat }}-{{ lng }}
     <div id="map" ref="map"></div>
   </div>
 </template>
@@ -37,10 +36,10 @@ export default Vue.extend({
     initMap(): void {
       // The location of Uluru
       // { lat: -25.344, lng: 131.031 }
-      const uluru = { lat: parseInt(this.lat), lng: parseInt(this.lng) };
+      const uluru = { lat: parseFloat(this.lat), lng: parseFloat(this.lng) };
       // The map, centered at Uluru
       const map = new google.maps.Map(this.$refs["map"] as HTMLElement, {
-        zoom: 4,
+        zoom: 16,
         center: uluru,
       });
 

@@ -1,8 +1,20 @@
 <template>
   <div class="section registerForm_content">
-    <div class="pb-20">
-      <h3>Create an account</h3>
-      <p class="mt-10">Provide information about yourself for identity</p>
+    <div class="social_register_container">
+      <div class="pb-20">
+        <h3>Create an account</h3>
+        <p class="mt-10">Provide information about yourself for identity</p>
+      </div>
+      <div class="social_register">
+        <div class="facebook" @click="facebookSignIn">
+          <img src="~/assets/img/facebook.png" width="25px" />
+          <p class="pl-5">Register with Facebook</p>
+        </div>
+        <div class="google" type="info" @click="googleSignIn">
+          <img src="~/assets/img/google.png" />
+          <p>Register with Google</p>
+        </div>
+      </div>
     </div>
 
     <hr class="hr_rule" />
@@ -44,12 +56,12 @@
             <el-row :gutter="20">
               <el-col :xs="24" :sm="24" :md="24">
                 <el-form-item label="Date of Birth" prop="dob">
-                  <el-date-picker
+                  <!-- <el-date-picker
                     v-model="registerForm.dob"
                     type="date"
                     placeholder="Pick a day"
                   >
-                  </el-date-picker>
+                  </el-date-picker> -->
                 </el-form-item>
               </el-col>
             </el-row>
@@ -132,31 +144,31 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import VuePhoneNumberInput from 'vue-phone-number-input';
-import 'vue-phone-number-input/dist/vue-phone-number-input.css';
-import { IMixinState } from '@/types/mixinsTypes';
+import Vue from "vue";
+import VuePhoneNumberInput from "vue-phone-number-input";
+import "vue-phone-number-input/dist/vue-phone-number-input.css";
+import { IMixinState } from "@/types/mixinsTypes";
 
 export default Vue.extend({
   auth: false,
-  name: 'registerFormPage',
+  name: "registerFormPage",
   components: {
     VuePhoneNumberInput,
   },
   data() {
     var validatePass = (rule: any, value: string, callback: any) => {
-      if (value === '') {
-        callback(new Error('Please input the password'));
+      if (value === "") {
+        callback(new Error("Please input the password"));
       } else {
-        if ((this as any).registerForm.confirm_password !== '') {
-          (this as any).$refs.registerForm.validateField('confirm_password');
+        if ((this as any).registerForm.confirm_password !== "") {
+          (this as any).$refs.registerForm.validateField("confirm_password");
         }
         callback();
       }
     };
     var validatePass2 = (rule: any, value: string, callback: any) => {
-      if (value === '') {
-        callback(new Error('Please input the password again'));
+      if (value === "") {
+        callback(new Error("Please input the password again"));
       } else if (value !== (this as any).registerForm.password) {
         callback(new Error("Password don't match!"));
       } else {
@@ -164,56 +176,56 @@ export default Vue.extend({
       }
     };
     return {
-      phone: '',
+      phone: "",
       loading: false,
       countries: [],
       registerForm: {
-        first_name: '' as string,
-        last_name: '' as string,
-        dob: '' as string,
-        email: '' as string,
-        password: '' as string,
-        confirm_password: '',
-        phone_number: '' as string,
-        sign_up_mode: 'email' as string,
-        user_type: 'visitor' as string,
-        country_id: '' as string,
+        first_name: "" as string,
+        last_name: "" as string,
+        dob: "" as string,
+        email: "" as string,
+        password: "" as string,
+        confirm_password: "",
+        phone_number: "" as string,
+        sign_up_mode: "email" as string,
+        user_type: "visitor" as string,
+        country_id: "" as string,
       },
       validation: {
         email: [
           {
             required: true,
-            type: 'email',
-            message: 'Please enter valid email',
-            trigger: ['blur', 'change'],
+            type: "email",
+            message: "Please enter valid email",
+            trigger: ["blur", "change"],
           },
-          { min: 5, message: 'Length should be 5 or more', trigger: 'blur' },
+          { min: 5, message: "Length should be 5 or more", trigger: "blur" },
         ],
         first_name: [
           {
             required: true,
-            message: 'Please enter your first name',
-            trigger: ['blur', 'change'],
+            message: "Please enter your first name",
+            trigger: ["blur", "change"],
           },
         ],
         last_name: [
           {
             required: true,
-            message: 'Please enter your last name',
-            trigger: ['blur', 'change'],
+            message: "Please enter your last name",
+            trigger: ["blur", "change"],
           },
         ],
-        password: [{ validator: validatePass, trigger: 'blur' }],
-        confirm_password: [{ validator: validatePass2, trigger: 'blur' }],
+        password: [{ validator: validatePass, trigger: "blur" }],
+        confirm_password: [{ validator: validatePass2, trigger: "blur" }],
       },
     };
   },
   async created() {
     const countries = await this.$countriesApi.index();
     countries.data.filter((country: any) =>
-      country.short_name == 'GH'
+      country.short_name == "GH"
         ? (this.registerForm.country_id = country.id)
-        : ''
+        : ""
     );
     this.countries = countries.data;
     console.log(this.countries);
@@ -223,7 +235,7 @@ export default Vue.extend({
       this.countries.filter((country: any) =>
         country.short_name == e.countryCode
           ? (this.registerForm.country_id = country.id)
-          : ''
+          : ""
       );
       this.registerForm.phone_number = e.formattedNumber;
     },
@@ -237,8 +249,8 @@ export default Vue.extend({
         } else {
           this.loading = false;
           (this as any as IMixinState).getNotification(
-            'Make sure all required fields are filled',
-            'error'
+            "Make sure all required fields are filled",
+            "error"
           );
         }
       });
@@ -247,19 +259,25 @@ export default Vue.extend({
       try {
         const register = await this.$registerApi.create(this.registerForm);
         this.loading = false;
-        this.$confirm(register.message, 'Confirm Email Address', {
-          confirmButtonText: 'Continue',
-          type: 'success',
+        this.$confirm(register.message, "Confirm Email Address", {
+          confirmButtonText: "Continue",
+          type: "success",
         }).then(() => {
           // this.$router.push('/login');
           this.$router.push({
-            name: 'profile',
+            name: "profile",
           });
         });
       } catch (error) {
         this.loading = false;
         (this as any as IMixinState).catchError(error);
       }
+    },
+    facebookSignIn() {
+      this.$auth.loginWith("facebook");
+    },
+    googleSignIn() {
+      this.$auth.loginWith("google");
     },
   },
 });
@@ -271,6 +289,38 @@ $small_screen: 426px;
   padding-top: 40px;
   .register_header_line {
     display: none;
+  }
+  .social_register_container {
+    display: flex;
+    justify-content: space-between;
+    @media (max-width: 768px) {
+      flex-direction: column;
+    }
+    .social_register {
+      display: flex;
+      // flex-direction: column;
+      .facebook,
+      .google {
+        background: #f1f5f9;
+        display: flex;
+        cursor: pointer;
+        margin-bottom: 10px;
+        padding: 20px;
+        line-height: 10px;
+        margin-right: 5px;
+        color: #44556f;
+        border-radius: 8px;
+        @media (max-width: $small_screen) {
+          padding: 10px;
+          line-height: 0;
+          font-size: 14px;
+        }
+        p {
+          flex: 1;
+          text-align: center;
+        }
+      }
+    }
   }
   .user_registerForm_footer {
     padding: 80px 0 30px;

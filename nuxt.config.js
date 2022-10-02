@@ -139,6 +139,7 @@ export default {
       },
       facebook: {
         endpoints: {
+          // redirect_uri: "http://localhost:3000/login",
           token: "/loginwithsocialmedia",
           userInfo:
             "https://graph.facebook.com/v6.0/me?fields=id,name,email,picture{url},first_name,last_name,birthday",
