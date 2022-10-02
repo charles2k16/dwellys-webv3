@@ -868,6 +868,7 @@ export default Vue.extend({
         }
       ).then(() => {
         console.log("veiry");
+        this.$router.push("/payment-condition");
       });
     },
     async sendPayment() {
