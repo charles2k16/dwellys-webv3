@@ -78,7 +78,12 @@
         </el-col>
 
         <el-col :xs="8" :sm="8" :md="4" v-if="hasMorePhotos">
-          <div class="thumbnail">
+          <div
+            class="thumbnail"
+            v-for="(image, index) in propertyDetails.listing_detail
+              .listing_images"
+            :key="index"
+          >
             <img :src="apiUrl + '/' + image.photo" class="_image" />
           </div>
         </el-col>

@@ -6,7 +6,7 @@
         <p class="pb-10">&copy; Dwellys 2022, All rights reserved</p>
         <p class="trademark_text text-grey">
           Dwellys is a registered trademark and the trading name of Dwellys
-          Limited.(v-0.5.5)
+          Limited.(v-0.5.6)
         </p>
       </el-col>
       <el-col :md="8" :sm="24">
@@ -26,18 +26,18 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue';
 
 export default Vue.extend({
-  name: "Footer",
+  name: 'Footer',
   data() {
     return {
-      user: "login",
+      user: 'login',
     };
   },
   methods: {
     showLoginModal(): void {
-      console.log("show");
+      console.log('show');
       (this as any).$refs.loginAction.showLogin(this.user);
     },
   },
