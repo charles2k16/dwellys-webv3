@@ -104,11 +104,7 @@
             v-if="tab.label == 'All'"
             v-loading="pageLoad"
           >
-            <PropertyList
-              :type="tab.label"
-              :listings="listings"
-              :favorites="favorites"
-            />
+            <PropertyList :type="tab.label" :listings="listings" />
           </div>
           <div></div>
         </el-tab-pane>
@@ -142,7 +138,6 @@ export default Vue.extend({
       ],
       listings: [] as Array<object>,
       pageLoad: true as boolean,
-      favorites: [] as Array<object>,
       queryList: [],
       isQuery: false as boolean,
       tabOptions: [
@@ -179,8 +174,6 @@ export default Vue.extend({
       // this.$auth.setUser(user);
     }
     this.fetchData();
-
-    // this.userFavorites = userFavorite.data;
   },
   methods: {
     async fetchData() {

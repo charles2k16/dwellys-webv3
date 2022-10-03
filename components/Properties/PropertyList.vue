@@ -115,14 +115,6 @@ export default Vue.extend({
       required: true,
       type: Array,
     },
-    favorites: {
-      required: false,
-      type: Array,
-    },
-    type: {
-      required: true,
-      type: String,
-    },
   },
   name: "PropertyList",
   data() {

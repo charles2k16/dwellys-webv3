@@ -20,6 +20,11 @@ export default (ctx, inject) => {
     apiService("/listingotherspecifications")
   );
   inject("listingApi", apiService("/listings"));
+  inject(
+    "similarListingsApi",
+    apiService("/similarlistings?property_type_name=")
+  );
+
   inject("listingImagesApi", apiService("/listingimages"));
   inject("listingCategoriesApi", apiService("/listingcategories"));
   inject("forgottenPassApi", apiService("/forgotpassword"));

@@ -220,7 +220,7 @@
         <h4 class="mt-20">Similar properties</h4>
 
         <div class="pt-20">
-          <SimilarProperties />
+          <SimilarProperties :listings="similarListings" />
         </div>
       </div>
     </div>
@@ -235,6 +235,7 @@ import { IMixinState } from "../types/mixinsTypes";
 import Map from "../components/profile/map.vue";
 
 export default Vue.extend({
+  scrollToTop: true,
   auth: false,
   name: "PropertyDetails",
   components: {
@@ -254,13 +255,17 @@ export default Vue.extend({
         payment_method: "" as string,
       },
       user: "",
+      similarListings: [],
     };
   },
-  async created() {
-    console.log("routes", this.$route.query);
-    const listings = await this.$listingApi.show(this.$route.query.id);
-    this.propertyDetails = listings.data;
-    console.log(listings);
+
+  watch: {
+    $route() {
+      this.fetchData();
+    },
+  },
+  created() {
+    this.fetchData();
   },
   computed: {
     hasMorePhotos() {
@@ -268,6 +273,17 @@ export default Vue.extend({
     },
   },
   methods: {
+    async fetchData() {
+      console.log("routes", this.$route.query);
+      const listings = await this.$listingApi.show(this.$route.query.id);
+
+      this.propertyDetails = listings.data;
+      const similarProperties = await this.$similarListingsApi.query(
+        this.propertyDetails.property_type.name
+      );
+      this.similarListings = similarProperties.data;
+      console.log(similarProperties);
+    },
     url() {
       return url();
     },

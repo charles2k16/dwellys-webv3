@@ -43,6 +43,7 @@ declare module "vue/types/vue" {
     $listingAmenitiesApi: apiService;
     $listingOtherSpecificationApi: apiService;
     $selectFavoriteApi: apiService;
+    $similarListingsApi: apiService;
     $userApi: apiService;
     $passwordApi: apiService;
     $userUpdateApi: apiService;

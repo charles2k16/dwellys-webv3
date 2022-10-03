@@ -85,7 +85,7 @@
                   <el-input-number
                     :min="0"
                     size="small"
-                    @change="getSpec(spec.number, spec.id)"
+                    @change="getSpec(spec.number, spec.id, spec.name)"
                     v-model="spec.number"
                   >
                     {{ spec.number ? spec.number : 0 }}
@@ -355,7 +355,7 @@
         </div>
       </div>
       <!-- v-if="step === 8" -->
-      <div>
+      <div v-if="step === 8">
         <div class="payment_container">
           <div class="payment_section pr-30">
             <h3>Payment</h3>
@@ -820,7 +820,7 @@ export default Vue.extend({
 
       console.log(this.propertyUpload.property_amenities_id);
     },
-    getSpec(num: Number, specId: string) {
+    getSpec(num: Number, specId: string, name: string) {
       let specifications = Object.assign(
         [],
         this.propertyUpload.specifications
@@ -833,6 +833,7 @@ export default Vue.extend({
       if (specIndex == -1) {
         this.propertyUpload.specifications.push({
           number: num,
+          name: name,
           property_type_specification_id: specId,
         });
       } else {
@@ -868,8 +869,30 @@ export default Vue.extend({
         }
       ).then(() => {
         console.log("veiry");
-        this.$router.push("/payment-condition");
+
+        this.verifyPayment();
       });
+    },
+    async verifyPayment() {
+      try {
+        const data = {};
+        const selectdPlanResponse = await this.$SelectdPlanApi.create(data);
+        console.log(selectdPlanResponse);
+
+        this.$router.push("/payment-condition");
+      } catch (error: any) {
+        console.log(error, "error");
+        (this as any as IMixinState).catchError(error);
+        this.btnLoading = false;
+
+        if (error?.response?.data) {
+          (this as any as IMixinState).$message({
+            showClose: true,
+            message: error.response.data.message,
+            type: "error",
+          });
+        }
+      }
     },
     async sendPayment() {
       this.btnLoading = true;
