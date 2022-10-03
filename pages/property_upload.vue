@@ -870,30 +870,31 @@ export default Vue.extend({
       ).then(() => {
         console.log("veiry");
 
-        this.verifyPayment();
+        // this.verifyPayment();
+        this.$router.push("/payment-condition");
       });
     },
-    async verifyPayment() {
-      try {
-        const data = {};
-        const selectdPlanResponse = await this.$SelectdPlanApi.create(data);
-        console.log(selectdPlanResponse);
+    // async verifyPayment() {
+    //   try {
+    //     const data = {};
+    //     const selectdPlanResponse = await this.$SelectdPlanApi.create(data);
+    //     console.log(selectdPlanResponse);
 
-        this.$router.push("/payment-condition");
-      } catch (error: any) {
-        console.log(error, "error");
-        (this as any as IMixinState).catchError(error);
-        this.btnLoading = false;
+    //     this.$router.push("/payment-condition");
+    //   } catch (error: any) {
+    //     console.log(error, "error");
+    //     (this as any as IMixinState).catchError(error);
+    //     this.btnLoading = false;
 
-        if (error?.response?.data) {
-          (this as any as IMixinState).$message({
-            showClose: true,
-            message: error.response.data.message,
-            type: "error",
-          });
-        }
-      }
-    },
+    //     if (error?.response?.data) {
+    //       (this as any as IMixinState).$message({
+    //         showClose: true,
+    //         message: error.response.data.message,
+    //         type: "error",
+    //       });
+    //     }
+    //   }
+    // },
     async sendPayment() {
       this.btnLoading = true;
       this.open();
