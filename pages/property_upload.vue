@@ -273,10 +273,10 @@
               </el-select>
             </el-col>
           </el-row>
-          <el-row class="pb-20">
-            <el-col :sm="12" class="pb-20 d-flex_column">
-              <span class="pb-10">Location</span>
-              <el-select
+          <el-row>
+            <!-- <el-col :sm="12" class="pb-20 d-flex_column"> -->
+            <p class="pb-10"><span>Location</span></p>
+            <!-- <el-select
                 v-model="propertyUpload.location"
                 placeholder="Location"
                 class="region pt-10"
@@ -288,7 +288,7 @@
                 >
                 </el-option>
               </el-select>
-            </el-col>
+            </el-col> -->
             <Map @latlng="getLatlng" />
           </el-row>
         </div>
@@ -762,9 +762,9 @@ export default Vue.extend({
       return require("../assets/svg/" + pic);
     },
     getLatlng(geoCode: any) {
-      console.log(geoCode);
       (this.propertyUpload.latitude = geoCode.latitude),
         (this.propertyUpload.longitude = geoCode.longitude);
+      this.propertyUpload.location = geoCode.location;
     },
     getPrice(plan: any) {
       console.log(plan);

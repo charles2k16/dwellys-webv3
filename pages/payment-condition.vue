@@ -35,9 +35,9 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .payment_condition {
   width: 50%;
-  margin: 0 auto;
-  padding-top: 80px;
-  min-height: 500px;
+  margin: 100px auto;
+  padding-top: 50px;
+  height: 600px;
   text-align: center;
   .success {
     color: greenyellow;

@@ -104,10 +104,11 @@ export default Vue.extend({
             })
           );
 
-          console.log(place.geometry);
+          console.log(place);
           const geoCode = {
             latitude: place.geometry.location.lat(),
             longitude: place.geometry.location.lng(),
+            location: place.formatted_address,
           };
 
           this.$emit("latlng", geoCode);

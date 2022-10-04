@@ -43,6 +43,12 @@
           </p>
         </div>
         <div class="details_plot">
+          <p class="d-flex pr-20">
+            <span class="material-icons mr-5"> visibility </span>
+            <span style="paddingtop: 2px; paddingleft: 2px"
+              ><b>{{ propertyDetails.listing_total_views }}</b>
+            </span>
+          </p>
           <p class="align_center mr-20">
             <span class="material-icons mr-5"> share </span>Share
           </p>
@@ -58,7 +64,9 @@
             >
               favorite
             </span>
-            <span class="pl-5">Like</span>
+            <span class="pl-5">
+              <b>{{ propertyDetails.listing_total_likes }}</b>
+            </span>
           </p>
         </div>
       </div>
@@ -274,8 +282,8 @@ export default Vue.extend({
   },
   methods: {
     async fetchData() {
-      console.log("routes", this.$route.query);
       const listings = await this.$listingApi.show(this.$route.query.id);
+      console.log(listings.data);
 
       this.propertyDetails = listings.data;
       const similarProperties = await this.$similarListingsApi.query(

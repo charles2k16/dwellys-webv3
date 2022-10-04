@@ -106,7 +106,13 @@
           >
             <PropertyList :type="tab.label" :listings="listings" />
           </div>
-          <div></div>
+          <div
+            class="section pt-20"
+            v-if="tab.label == 'House'"
+            v-loading="pageLoad"
+          >
+            <PropertyList :type="tab.label" :listings="listings" />
+          </div>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -176,6 +182,9 @@ export default Vue.extend({
     this.fetchData();
   },
   methods: {
+    getLabel(label: string) {
+      console.log(label);
+    },
     async fetchData() {
       const listings = await this.$listingApi.query("?status=active");
       console.log(listings);
