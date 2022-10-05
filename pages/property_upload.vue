@@ -510,10 +510,8 @@
           <b> {{ this.minute }}:{{ this.countDown }}</b>
         </p>
         <span slot="footer" class="dialog-footer">
-          <el-button @click="payment_prompt = false">Cancel</el-button>
-          <el-button type="primary" @click="payment_prompt = false"
-            >Verify</el-button
-          >
+          <el-button @click="cancelVerification">Cancel</el-button>
+          <el-button type="primary" @click="toVerification">Verify</el-button>
         </span>
       </el-dialog>
       <hr class="hr_rule" />
@@ -563,11 +561,12 @@ export default Vue.extend({
   watch: {
     minute(min) {
       min == 0 &&
+        this.payment_prompt == true &&
         this.$router.push({
           name: "payment-condition",
           // params: { property: property.id },
           query: {
-            verification: false,
+            verification: "failed",
           },
         });
     },
@@ -575,9 +574,10 @@ export default Vue.extend({
   data() {
     return {
       step: 1 as number,
-      countDown: 0,
+      countDown: 0 as number,
       payment_prompt: false,
-      minute: 5,
+      minute: 5 as number,
+      timerOut: null as any,
       showPaymentModal: false,
       // regions: {},
       category: "" as string,
@@ -769,12 +769,27 @@ export default Vue.extend({
     },
   },
   methods: {
+    cancelVerification() {
+      this.payment_prompt = false;
+      clearTimeout(this.timerOut);
+      this.timerOut = null;
+      console.log("cancel");
+    },
+    toVerification() {
+      this.$router.push({
+        name: "payment-condition",
+        // params: { property: property.id },
+        query: {
+          verification: "success",
+        },
+      });
+    },
     countDownTimer() {
       if (this.countDown == -1) {
         this.minute--;
         this.countDown = 2;
       }
-      setTimeout(() => {
+      this.timerOut = setTimeout(() => {
         this.countDown -= 1;
         this.countDownTimer();
       }, 1000);
@@ -922,8 +937,7 @@ export default Vue.extend({
     // },
     async sendPayment() {
       this.btnLoading = true;
-      this.countDownTimer();
-      this.payment_prompt = true;
+
       try {
         const data = {
           listing_id: this.listing_id,
@@ -943,11 +957,14 @@ export default Vue.extend({
         console.log(selectdPlanResponse);
         this.btnLoading = false;
 
-        (this as any as IMixinState).$message({
-          showClose: true,
-          message: selectdPlanResponse.message,
-          type: "error",
-        });
+        // (this as any as IMixinState).$message({
+        //   showClose: true,
+        //   message: selectdPlanResponse.message,
+        //   type: "success",
+        // });
+        this.payment_prompt = true;
+        this.countDown = 0;
+        this.minute = 5;
         this.countDownTimer();
 
         // this.$router.replace("/");

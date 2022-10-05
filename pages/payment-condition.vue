@@ -1,6 +1,6 @@
 <template>
   <div class="payment_condition">
-    <div v-if="verification">
+    <div v-if="verification != 'failed'">
       <div><span class="material-icons success"> check_circle </span></div>
       <h3 class="py-20">Your have successfully made payment!</h3>
       <NuxtLink to="/"
