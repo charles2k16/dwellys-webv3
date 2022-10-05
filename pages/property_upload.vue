@@ -355,7 +355,7 @@
         </div>
       </div>
       <!-- v-if="step === 8" -->
-      <div v-if="step === 8">
+      <div>
         <div class="payment_container">
           <div class="payment_section pr-30">
             <h3>Payment</h3>
@@ -495,6 +495,27 @@
           >
         </div>
       </div>
+      <el-dialog
+        title="Verification of payment"
+        :visible.sync="payment_prompt"
+        width="30%"
+        center
+      >
+        <span
+          >You will receive a prompt on your phone to authorize payment. After
+          payment, click on verify to complete payment process within this time
+          frame</span
+        >
+        <p class="center pt-10">
+          <b> {{ this.minute }}:{{ this.countDown }}</b>
+        </p>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="payment_prompt = false">Cancel</el-button>
+          <el-button type="primary" @click="payment_prompt = false"
+            >Verify</el-button
+          >
+        </span>
+      </el-dialog>
       <hr class="hr_rule" />
       <div class="property_upload_btns pt-10" v-if="step != 8">
         <el-button type="info" @click="toPrev" :disabled="step === 1"
@@ -539,10 +560,24 @@ export default Vue.extend({
     ApplicationHandler,
     Map,
   },
-
+  watch: {
+    minute(min) {
+      min == 0 &&
+        this.$router.push({
+          name: "payment-condition",
+          // params: { property: property.id },
+          query: {
+            verification: false,
+          },
+        });
+    },
+  },
   data() {
     return {
       step: 1 as number,
+      countDown: 0,
+      payment_prompt: false,
+      minute: 5,
       showPaymentModal: false,
       // regions: {},
       category: "" as string,
@@ -734,9 +769,16 @@ export default Vue.extend({
     },
   },
   methods: {
-    // RegionsAndCities() {
-    //   return this.regionsAndCities
-    // },
+    countDownTimer() {
+      if (this.countDown == -1) {
+        this.minute--;
+        this.countDown = 2;
+      }
+      setTimeout(() => {
+        this.countDown -= 1;
+        this.countDownTimer();
+      }, 1000);
+    },
     url() {
       return url();
     },
@@ -856,24 +898,7 @@ export default Vue.extend({
           : ""
       );
     },
-    // showPosition(position: any) {
-    //   this.propertyUpload.latitude = position.coords.latitude;
-    //   this.propertyUpload.longitude = position.coords.longitude;
-    // },
-    open() {
-      this.$alert(
-        "Make payment and proceed to verification",
-        "Verification of payment",
-        {
-          confirmButtonText: "Verify",
-        }
-      ).then(() => {
-        console.log("veiry");
 
-        // this.verifyPayment();
-        this.$router.push("/payment-condition");
-      });
-    },
     // async verifyPayment() {
     //   try {
     //     const data = {};
@@ -897,7 +922,8 @@ export default Vue.extend({
     // },
     async sendPayment() {
       this.btnLoading = true;
-      this.open();
+      this.countDownTimer();
+      this.payment_prompt = true;
       try {
         const data = {
           listing_id: this.listing_id,
@@ -922,7 +948,8 @@ export default Vue.extend({
           message: selectdPlanResponse.message,
           type: "error",
         });
-        this.open();
+        this.countDownTimer();
+
         // this.$router.replace("/");
       } catch (error: any) {
         console.log(error, "error");

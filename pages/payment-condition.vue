@@ -1,6 +1,6 @@
 <template>
   <div class="payment_condition">
-    <div v-if="success">
+    <div v-if="verification">
       <div><span class="material-icons success"> check_circle </span></div>
       <h3 class="py-20">Your have successfully made payment!</h3>
       <NuxtLink to="/"
@@ -25,10 +25,13 @@ export default Vue.extend({
   data() {
     return {
       home: "" as string,
-      success: true as boolean,
+      verification: null as any,
     };
   },
   methods: {},
+  created() {
+    this.verification = this.$route.query.verification;
+  },
 });
 </script>
 
