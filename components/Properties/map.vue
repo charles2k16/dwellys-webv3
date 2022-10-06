@@ -5,7 +5,7 @@
       <input
         id="pac-input"
         class="controls"
-        placeholder="Search..."
+        placeholder="Search location"
         ref="search"
         type="textbox"
         :value="searched"
@@ -133,6 +133,10 @@ export default Vue.extend({
   width: 100%;
 }
 .controls {
+  position: absolute !important;
+  left: 10px !important;
+  top: 45px !important;
+  width: 95%;
   margin-top: 10px;
   padding: 10px;
   border: 1px solid black;
