@@ -108,10 +108,10 @@
           </div>
           <div
             class="section pt-20"
-            v-if="tab.label == 'House'"
+            v-else-if="tab.label == 'House'"
             v-loading="pageLoad"
           >
-            <PropertyList :type="tab.label" :listings="listings" />
+            <PropertyList :type="tab.label" :listings="house_listings" />
           </div>
         </el-tab-pane>
       </el-tabs>
@@ -127,6 +127,7 @@ export default Vue.extend({
   name: "IndexPage",
   data() {
     return {
+      house_listings: [],
       search_value: "" as string,
       propertySearch: [
         {
@@ -158,6 +159,8 @@ export default Vue.extend({
   },
   async created() {
     console.log(this.$auth.state.strategy);
+
+    this.fetchData();
     if (!this.$auth.user.id && this.$auth.state.strategy == "facebook") {
       const facebook_user = this.$auth.user;
 
@@ -179,7 +182,6 @@ export default Vue.extend({
       // this.$auth.setUserToken(token);
       // this.$auth.setUser(user);
     }
-    this.fetchData();
   },
   methods: {
     getLabel(label: string) {
@@ -187,7 +189,13 @@ export default Vue.extend({
     },
     async fetchData() {
       const listings = await this.$listingApi.query("?status=active");
-      console.log(listings);
+      console.log(listings.data);
+      this.house_listings = listings.data.filter((listing: any) =>
+        listing.property_type
+          ? listing.property_type.name == "House & Apartment"
+          : ""
+      );
+      console.log(this.house_listings);
       this.loadListing(listings.data);
       // const filtered_properties = await this.$filterPropertiesApi.query(
       //   "house"

@@ -298,7 +298,15 @@ $small_screen: 426px;
     }
     .social_register {
       display: flex;
-      // flex-direction: column;
+      @media (max-width: 425px) {
+        flex-direction: column;
+      }
+      // .facebook {
+      //   background-color: #395697;
+      // }
+      // .google {
+      //   background: #f1f5f9;
+      // }
       .facebook,
       .google {
         background: #f1f5f9;
