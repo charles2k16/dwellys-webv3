@@ -312,6 +312,7 @@
                 </el-option>
               </el-select>
             </el-col>
+            <el-button @click="getLocation">Get Location</el-button>
             <Map @latlng="getLatlng" />
           </el-row>
         </div>
@@ -452,27 +453,8 @@ export default Vue.extend({
         },
       ],
       listing_photos: [] as any,
-      discount_code: "",
       listing_plan_id: "",
       listing_id: "",
-      discount: {
-        no_of_days: 0,
-        percentage_value: 0,
-      },
-      selectedPlan: {
-        listing_id: "",
-        listing_planid: "",
-        discount_code: "",
-        payment_option: "",
-        card_payment: {
-          cvv: "",
-          name_on_card: "",
-          card_number: "",
-          card_expiry_month: "",
-          card_expiry_year: "",
-        },
-        mobile_money_number: "",
-      },
       propertyUpload: {
         name: "" as string,
         property_type_id: "" as string,
@@ -638,6 +620,7 @@ export default Vue.extend({
         };
       }
     },
+    getLocation() {},
     showPosition(position: any) {
       this.propertyUpload.latitude = position.coords.latitude;
       this.propertyUpload.longitude = position.coords.longitude;
@@ -646,8 +629,6 @@ export default Vue.extend({
       let newSection = { name: "", number: 0 };
       this.propertyUpload.other_specifications.push(newSection);
     },
-    handlePreview() {},
-    handleRemove() {},
     async getProperty(newProperty: any) {
       this.propertyUpload.property_type_id = newProperty.id;
       // this.propertyUpload.name = newProperty.name;
