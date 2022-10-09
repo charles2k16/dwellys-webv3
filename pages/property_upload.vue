@@ -274,19 +274,25 @@
               </el-select>
             </el-col>
           </el-row>
-          <p>
+          <p class="pb-10">
             <span></span>Enter <b>Longitude</b> and <b>Latitude</b> of property
             <b>or</b> be in location of property to get the geolocation.
           </p>
           <el-row class="pb-20">
             <el-col :sm="12" class="pb-20 d-flex_column pr-20">
               <span>Longitude</span>
-              <el-input v-model="country" placeholder="Enter Longitude">
+              <el-input
+                v-model="propertyUpload.longitude"
+                placeholder="Enter Longitude"
+              >
               </el-input>
             </el-col>
             <el-col :sm="12" class="pb-20 d-flex_column pr-20">
               <span>Latitude</span>
-              <el-input v-model="country" placeholder="Enter Latitude">
+              <el-input
+                v-model="propertyUpload.latitude"
+                placeholder="Enter Latitude"
+              >
               </el-input>
             </el-col>
           </el-row>
@@ -488,6 +494,9 @@ export default Vue.extend({
   },
 
   async created() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(this.showPosition);
+    }
     try {
       const categories = await this.$listingCategoriesApi.index();
       this.categories = categories.data;
@@ -624,7 +633,7 @@ export default Vue.extend({
         };
       }
     },
-    showPosition(position) {
+    showPosition(position: any) {
       this.propertyUpload.latitude = position.coords.latitude;
       this.propertyUpload.longitude = position.coords.longitude;
     },
