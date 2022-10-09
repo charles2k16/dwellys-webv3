@@ -228,7 +228,8 @@
           <p v-if="imageErr" style="color: red">{{ imageErr }}</p>
         </div>
       </div>
-      <div v-if="step === 5">
+      <!-- v-if="step === 5" -->
+      <div>
         <div class="center">
           <div class="property_upload_head">
             <h3>Select property location</h3>
@@ -271,6 +272,22 @@
                 >
                 </el-option>
               </el-select>
+            </el-col>
+          </el-row>
+          <p>
+            <span></span>Enter <b>Longitude</b> and <b>Latitude</b> of property
+            <b>or</b> be in location of property to get the geolocation.
+          </p>
+          <el-row class="pb-20">
+            <el-col :sm="12" class="pb-20 d-flex_column pr-20">
+              <span>Longitude</span>
+              <el-input v-model="country" placeholder="Enter Longitude">
+              </el-input>
+            </el-col>
+            <el-col :sm="12" class="pb-20 d-flex_column pr-20">
+              <span>Latitude</span>
+              <el-input v-model="country" placeholder="Enter Latitude">
+              </el-input>
             </el-col>
           </el-row>
           <el-row>
@@ -606,6 +623,10 @@ export default Vue.extend({
           this.listing_photos.push(img);
         };
       }
+    },
+    showPosition(position) {
+      this.propertyUpload.latitude = position.coords.latitude;
+      this.propertyUpload.longitude = position.coords.longitude;
     },
     addSpecSection() {
       let newSection = { name: "", number: 0 };

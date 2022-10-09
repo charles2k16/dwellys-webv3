@@ -304,7 +304,7 @@ export default Vue.extend({
 
         (this as any as IMixinState).$message({
           showClose: true,
-          message: discountCodeResponse.message,
+          message: "Discount code verified, proceed to payment",
           type: "success",
         });
 
