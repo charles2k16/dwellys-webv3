@@ -274,10 +274,10 @@
               </el-select>
             </el-col>
           </el-row>
-          <p class="pb-10">
+          <!-- <p class="pb-10">
             <span></span>Enter <b>Longitude</b> and <b>Latitude</b> of property
             <b>or</b> be in location of property to get the geolocation.
-          </p>
+          </p> -->
           <el-row class="pb-20">
             <el-col :sm="12" class="pb-20 d-flex_column pr-20">
               <span>Longitude</span>
@@ -297,9 +297,9 @@
             </el-col>
           </el-row>
           <el-row>
-            <!-- <el-col :sm="12" class="pb-20 d-flex_column"> -->
-            <!-- <p class="pb-10"><span>Enter location in the search below</span></p> -->
-            <!-- <el-select
+            <el-col :sm="12" class="pb-20 d-flex_column">
+              <span>Location</span>
+              <el-select
                 v-model="propertyUpload.location"
                 placeholder="Location"
                 class="region pt-10"
@@ -308,10 +308,10 @@
                   v-for="region in regions[propertyUpload.region]"
                   :key="region"
                   :value="region"
-                >d
+                  >d
                 </el-option>
               </el-select>
-            </el-col> -->
+            </el-col>
             <Map @latlng="getLatlng" />
           </el-row>
         </div>
