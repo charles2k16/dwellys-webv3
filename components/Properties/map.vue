@@ -2,14 +2,14 @@
   <div class="">
     <div id="map" ref="map"></div>
     <div class="mt-20">
-      <input
+      <!-- <input
         id="pac-input"
         class="controls"
         placeholder="Search location"
         ref="search"
         type="textbox"
         :value="searched"
-      />
+      /> -->
     </div>
   </div>
 </template>

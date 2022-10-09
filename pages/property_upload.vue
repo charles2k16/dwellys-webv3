@@ -298,7 +298,7 @@
           </el-row>
           <el-row>
             <!-- <el-col :sm="12" class="pb-20 d-flex_column"> -->
-            <p class="pb-10"><span>Enter location in the search below</span></p>
+            <!-- <p class="pb-10"><span>Enter location in the search below</span></p> -->
             <!-- <el-select
                 v-model="propertyUpload.location"
                 placeholder="Location"
@@ -496,6 +496,11 @@ export default Vue.extend({
   async created() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(this.showPosition);
+    } else {
+      (this as any as IMixinState).getNotification(
+        "Geolocation is not supported by this browser.",
+        "error"
+      );
     }
     try {
       const categories = await this.$listingCategoriesApi.index();
