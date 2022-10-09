@@ -121,6 +121,7 @@
 
 <script lang="ts">
 import Vue from "vue";
+import { IMixinState } from "@/types/mixinsTypes";
 
 export default Vue.extend({
   auth: false,
@@ -157,45 +158,68 @@ export default Vue.extend({
       ] as any,
     };
   },
-  async created() {
-    console.log(this.$auth.state.strategy);
-
+  created() {
     this.fetchData();
-    if (!this.$auth.user.id && this.$auth.state.strategy == "facebook") {
-      const facebook_user = this.$auth.user;
 
-      const socialsignup = {
-        first_name: facebook_user.first_name,
-        last_name: facebook_user.last_name,
-        email: facebook_user.email,
-        sign_up_mode: "facebook",
-        avatar: facebook_user.picture.data.url,
-        user_type: "visitor",
-        social_site_id: facebook_user.id,
-        dob: this.$moment(facebook_user.birthday, "YYYY-MM-DD"),
-      };
-      const social_response = await this.$socialloginApi.create(socialsignup);
-      const { token, user } = social_response.data;
-      this.$auth.setUserToken(token);
-      this.$auth.setUser(user);
-      console.log(social_response);
-      // this.$auth.setUserToken(token);
-      // this.$auth.setUser(user);
-    }
+    // !this.$auth.strategy.token.get()
+    !this.$auth.user.id && this.$auth.state.strategy == "facebook"
+      ? this.facebookAuth()
+      : "";
   },
   methods: {
+    async facebookAuth() {
+      try {
+        const facebook_user = this.$auth.user;
+        const socialsignup = {
+          email: facebook_user.email,
+          sign_up_mode: "facebook",
+          user_type: "visitor",
+          social_site_id: facebook_user.id,
+        };
+        const social_response = await this.$socialloginApi.create(socialsignup);
+        const { token, user } = social_response.data;
+        this.$auth.setUserToken(token);
+        this.$auth.setUser(user);
+        console.log("social_response", social_response);
+        // this.$auth.setUserToken(token);
+        // this.$auth.setUser(user);
+        (this as any as IMixinState).$message({
+          showClose: true,
+          message: "Logged in successfully",
+          type: "success",
+        });
+      } catch (error: any) {
+        if (error?.response) {
+          console.log(error.response);
+          // const socialsignup = {
+          //   first_name: facebook_user.first_name,
+          //   last_name: facebook_user.last_name,
+          //   email: facebook_user.email,
+          //   sign_up_mode: "facebook",
+          //   avatar: facebook_user.picture.data.url,
+          //   user_type: "visitor",
+          //   social_site_id: facebook_user.id,
+          //   dob: this.$moment(facebook_user.birthday, "YYYY-MM-DD"),
+          // };
+          (this as any as IMixinState).getNotification(
+            error.response.data.message,
+            "warning"
+          );
+          this.$router.push("/register");
+        } else {
+          (this as any as IMixinState).$message({
+            showClose: true,
+            message: "Check your network connectivity",
+            type: "error",
+          });
+        }
+      }
+    },
     getLabel(label: string) {
       console.log(label);
     },
     async fetchData() {
       const listings = await this.$listingApi.query("?status=active");
-      console.log(listings.data);
-      this.house_listings = listings.data.filter((listing: any) =>
-        listing.property_type
-          ? listing.property_type.name == "House & Apartment"
-          : ""
-      );
-      console.log(this.house_listings);
       this.loadListing(listings.data);
       // const filtered_properties = await this.$filterPropertiesApi.query(
       //   "house"

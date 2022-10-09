@@ -117,7 +117,12 @@
                 <span>Discount code</span>
                 <!-- <span>**Required</span> -->
               </section>
-              <el-input v-model="discount_code" />
+              <div class="d-flex">
+                <el-input v-model="discount_code" />
+                <el-button @click="checkDiscountCode" :loading="codeLoading">
+                  Verify <i class="el-icon-arrow-right"></i>
+                </el-button>
+              </div>
             </div>
             <div class="property_rental pt-20">
               <section class="d-flex justify_between">
@@ -200,6 +205,7 @@ export default Vue.extend({
       showPaymentModal: false,
       propertySelected: false as boolean,
       media: "Pay with Momo" as string,
+      codeLoading: false,
       paymentMedia: [
         { method: "Pay with Momo", icon: "el-icon-mobile-phone" },
         { method: "Pay with card", icon: "el-icon-bank-card" },
@@ -278,12 +284,44 @@ export default Vue.extend({
     countDownTimer() {
       if (this.countDown == -1) {
         this.minute--;
-        this.countDown = 2;
+        this.countDown = 5;
       }
       this.timerOut = setTimeout(() => {
         this.countDown -= 1;
         this.countDownTimer();
       }, 1000);
+    },
+    async checkDiscountCode() {
+      console.log("discount");
+      //
+      this.codeLoading = true;
+      try {
+        const discountCodeResponse = await this.$verifydiscountApi.query(
+          this.discount_code
+        );
+        console.log(discountCodeResponse);
+        this.codeLoading = false;
+
+        (this as any as IMixinState).$message({
+          showClose: true,
+          message: discountCodeResponse.message,
+          type: "success",
+        });
+
+        // this.$router.replace("/");
+      } catch (error: any) {
+        console.log(error, "error");
+        (this as any as IMixinState).catchError(error);
+        this.codeLoading = false;
+
+        if (error?.response?.data) {
+          (this as any as IMixinState).$message({
+            showClose: true,
+            message: error.response.data.message,
+            type: "error",
+          });
+        }
+      }
     },
     changePaymentMedia(method: string) {
       this.selectedPlan.card_payment.cvv = "";

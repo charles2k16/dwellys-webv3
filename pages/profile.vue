@@ -437,7 +437,13 @@ export default Vue.extend({
           "Update successfull!",
           "success"
         );
-      } catch (error) {
+      } catch (error: any) {
+        if (error?.response?.data) {
+          (this as any as IMixinState).getNotification(
+            error.response.data.message,
+            "error"
+          );
+        }
         this.loading = false;
         (this as any as IMixinState).catchError(error);
       }

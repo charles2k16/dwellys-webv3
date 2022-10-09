@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading="loading">
     <div class="section pt-20">
       <ApplicationHandler ref="propertyAction" />
 
@@ -9,21 +9,12 @@
             <span class="material-icons">arrow_back</span>
           </NuxtLink>
         </div>
-        <p>
+        <p v-if="propertyDetails.listing_detail">
           <b
-            >{{
-              propertyDetails.listing_detail &&
-              propertyDetails.listing_detail.name
-            }}
+            >{{ propertyDetails.listing_detail.name }}
             -
-            {{
-              propertyDetails.listing_detail &&
-              propertyDetails.listing_detail.location
-            }},
-            {{
-              propertyDetails.listing_detail &&
-              propertyDetails.listing_detail.region
-            }}
+            {{ propertyDetails.listing_detail.location }},
+            {{ propertyDetails.listing_detail.region }}
           </b>
         </p>
       </div>
@@ -253,6 +244,8 @@ export default Vue.extend({
   data() {
     return {
       activeName: "first" as string,
+
+      loading: true as boolean,
       image: "" as any,
       propertyDetails: {} as any,
       home: "" as string,
@@ -269,7 +262,9 @@ export default Vue.extend({
 
   watch: {
     $route() {
+      this.loading = true;
       this.fetchData();
+      this.loading = false;
     },
   },
   created() {
@@ -282,15 +277,24 @@ export default Vue.extend({
   },
   methods: {
     async fetchData() {
-      const listings = await this.$listingApi.show(this.$route.query.id);
-      console.log(listings.data);
+      try {
+        const listings = await this.$listingApi.show(this.$route.query.id);
+        console.log(listings.data);
 
-      this.propertyDetails = listings.data;
-      const similarProperties = await this.$similarListingsApi.query(
-        this.propertyDetails.property_type.name
-      );
-      this.similarListings = similarProperties.data;
-      console.log(similarProperties);
+        this.propertyDetails = listings.data;
+        const similarProperties = await this.$similarListingsApi.query(
+          this.propertyDetails.property_type.name
+        );
+        this.loading = false;
+        this.similarListings = similarProperties.data;
+        console.log(similarProperties);
+      } catch (error) {
+        (this as any as IMixinState).getNotification(
+          "Check your network connectivity",
+          "warning"
+        );
+        this.loading = false;
+      }
     },
     url() {
       return url();
@@ -340,9 +344,10 @@ export default Vue.extend({
     //   },
     showOwner(): void {
       if (this.$auth.loggedIn) {
-        (this as any).$refs.propertyAction.showMessageModal(
-          this.propertyDetails.lister
-        );
+        (this as any).$refs.propertyAction.showMessageModal({
+          user: this.propertyDetails.lister,
+          url: this.$route.fullPath,
+        });
       } else {
         (this as any as IMixinState).getNotification(
           "Login to send agent a message!",

@@ -50,6 +50,7 @@ declare module "vue/types/vue" {
     $querySearchApi: apiService;
     $discountApi: apiService;
     $SelectdPlanApi: apiService;
+    $verifydiscountApi: apiService;
     $userFavoriteApi: apiService;
     $propertySpecApi: apiService;
     $propertyAmenitiesApi: apiService;

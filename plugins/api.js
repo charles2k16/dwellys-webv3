@@ -33,6 +33,7 @@ export default (ctx, inject) => {
   inject("userUpdateApi", apiService("/auth/account"));
   inject("passwordApi", apiService("/updatepassword"));
   inject("discountApi", apiService("/discounts"));
+  inject("verifydiscountApi", apiService("/verifydiscount?discount_code="));
   inject("SelectdPlanApi", apiService("/listingselectedplans"));
   inject("userFavoriteApi", apiService("/myfavoritelisting"));
   inject("querySearchApi", apiService("/searchlisting?search_query="));

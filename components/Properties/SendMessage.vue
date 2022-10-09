@@ -2,11 +2,11 @@
   <el-row>
     <hr class="hr_rule" />
     <div class="d-flex pb-20 pt-10">
-      <img class="agent_avatar" :src="apiUrl + '/' + user.avatar" />
+      <img class="agent_avatar" :src="apiUrl + '/' + user.user.avatar" />
       <div class="ml-20">
-        <p>{{ user.first_name }} {{ user.last_name }}</p>
+        <p>{{ user.user.first_name }} {{ user.user.last_name }}</p>
         <p style="font-size: 12px; color: #64748b">
-          {{ user.user_type == "lister" ? "Independent agent" : "Admin" }}
+          {{ user.user.user_type == "lister" ? "Independent agent" : "Admin" }}
         </p>
       </div>
     </div>
@@ -20,7 +20,9 @@
     </el-form>
     <div class="d-flex justify_end pt-20">
       <el-button type="info" @click="cancelMessage">Cancel</el-button>
-      <a :href="`https://wa.me/${contact}?text=${message}`" target="_blank"
+      <a
+        :href="`https://wa.me/${contact}?text=${message}?url${user.url}`"
+        target="_blank"
         ><el-button type="primary" @click="sendMessage"
           >Send message</el-button
         ></a

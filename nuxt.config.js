@@ -124,23 +124,26 @@ export default {
         endpoints: {
           login: { url: "/login", method: "post" },
           user: false,
+          logout: { url: "/logout", method: "post" },
         },
       },
       google: {
         clientId: process.env.GOOGLE_CLIENT_ID,
-        scope: ["profile", "email"],
+        // scope: ["profile", "email"],
         codeChallengeMethod: "",
-        responseType: "token id_token",
+        responseType: "code",
         endpoints: {
           token: "http://localhost:8000/api/v3/loginwithsocialmedia", // somm backend url to resolve your auth with google and give you the token back
           userInfo: false, // the endpoint to get the user info after you recived the token
           redirect_uri: "http://localhost:3000/login",
+          logout: { url: "/logout", method: "post" },
         },
       },
       facebook: {
         endpoints: {
           // redirect_uri: "http://localhost:3000/login",
           token: "/loginwithsocialmedia",
+          logout: { url: "/logout", method: "post" },
           userInfo:
             "https://graph.facebook.com/v6.0/me?fields=id,name,email,picture{url},first_name,last_name,birthday",
         },
