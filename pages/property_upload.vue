@@ -313,7 +313,10 @@
               </el-select>
             </el-col>
             <el-button @click="getLocation">Get Location</el-button>
-            <Map @latlng="getLatlng" />
+            <Map
+              :lat="propertyUpload.latitude"
+              :lng="propertyUpload.longitude"
+            />
           </el-row>
         </div>
       </div>
@@ -413,7 +416,7 @@ import { IMixinState } from "@/types/mixinsTypes";
 import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
 import url from "../url";
 import regionsAndCities from "~/static/regions.json";
-import Map from "../components/Properties/map.vue";
+import Map from "../components/profile/map.vue";
 // const apiKey = process.env.GOOGLE_API_KEY;
 
 export default Vue.extend({
@@ -595,11 +598,11 @@ export default Vue.extend({
     getSvg(pic: string): string {
       return require("../assets/svg/" + pic);
     },
-    getLatlng(geoCode: any) {
-      (this.propertyUpload.latitude = geoCode.latitude),
-        (this.propertyUpload.longitude = geoCode.longitude);
-      this.propertyUpload.location = geoCode.location;
-    },
+    // getLatlng(geoCode: any) {
+    //   (this.propertyUpload.latitude = geoCode.latitude),
+    //     (this.propertyUpload.longitude = geoCode.longitude);
+    //   this.propertyUpload.location = geoCode.location;
+    // },
     getPrice(plan: any) {
       console.log(plan);
       this.listing_plan_id = plan.id;
@@ -620,7 +623,16 @@ export default Vue.extend({
         };
       }
     },
-    getLocation() {},
+    getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(this.showPosition);
+      } else {
+        (this as any as IMixinState).getNotification(
+          "Geolocation is not supported by this browser.",
+          "error"
+        );
+      }
+    },
     showPosition(position: any) {
       this.propertyUpload.latitude = position.coords.latitude;
       this.propertyUpload.longitude = position.coords.longitude;

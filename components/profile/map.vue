@@ -1,5 +1,6 @@
 <template>
   <div class="">
+    {{ lat }}-{{ lng }}
     <div id="map" ref="map"></div>
   </div>
 </template>
@@ -10,6 +11,9 @@ import Vue from "vue";
 var map: any;
 
 export default Vue.extend({
+  // watch() {
+
+  // },
   props: {
     lat: {
       type: String,
