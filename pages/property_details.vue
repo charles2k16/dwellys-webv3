@@ -276,21 +276,19 @@ export default Vue.extend({
   },
   methods: {
     scrollToTop() {
-      window.scrollTo(0, 0);
+      window.scrollTo(10, 10);
+      // window.scrollTo(0, 0);
     },
     async fetchData() {
       this.loading = true;
       try {
         const listings = await this.$listingApi.show(this.$route.query.id);
-        console.log(listings.data);
 
         this.propertyDetails = listings.data;
         const similarProperties = await this.$similarListingsApi.query(
           this.propertyDetails.property_type.name
         );
-        this.loading = false;
-        this.similarListings = similarProperties.data;
-        console.log(similarProperties);
+        this.loadListing(similarProperties.data);
       } catch (error) {
         (this as any as IMixinState).getNotification(
           "Check your network connectivity",
@@ -298,6 +296,17 @@ export default Vue.extend({
         );
         this.loading = false;
       }
+    },
+    loadListing(properties: any) {
+      const data = properties.map((property: any) => {
+        property.photos =
+          property.listing_detail.feature_image_url != null
+            ? property.listing_detail.feature_image_url
+            : "no photo";
+        return property;
+      });
+      this.similarListings = data;
+      this.loading = false;
     },
     url() {
       return url();
