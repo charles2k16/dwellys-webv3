@@ -229,7 +229,7 @@
         </div>
       </div>
       <!-- v-if="step === 5" -->
-      <div v-if="step === 5">
+      <div>
         <div class="center">
           <div class="property_upload_head">
             <h3>Select property location</h3>
@@ -313,10 +313,7 @@
               </el-select>
             </el-col>
             <el-button @click="getLocation">Get Location</el-button>
-            <Map
-              :lat="propertyUpload.latitude"
-              :lng="propertyUpload.longitude"
-            />
+            <Map @latlng="getLatlng" />
           </el-row>
         </div>
       </div>
@@ -416,7 +413,7 @@ import { IMixinState } from "@/types/mixinsTypes";
 import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
 import url from "../url";
 import regionsAndCities from "~/static/regions.json";
-import Map from "../components/profile/map.vue";
+import Map from "../components/properties/map.vue";
 // const apiKey = process.env.GOOGLE_API_KEY;
 
 export default Vue.extend({
@@ -598,11 +595,10 @@ export default Vue.extend({
     getSvg(pic: string): string {
       return require("../assets/svg/" + pic);
     },
-    // getLatlng(geoCode: any) {
-    //   (this.propertyUpload.latitude = geoCode.latitude),
-    //     (this.propertyUpload.longitude = geoCode.longitude);
-    //   this.propertyUpload.location = geoCode.location;
-    // },
+    getLatlng(geoCode: any) {
+      (this.propertyUpload.latitude = geoCode.latitude),
+        (this.propertyUpload.longitude = geoCode.longitude);
+    },
     getPrice(plan: any) {
       console.log(plan);
       this.listing_plan_id = plan.id;

@@ -39,6 +39,7 @@
 import Vue from "vue";
 var geocoder;
 var map: any;
+var marker: any;
 
 // const apiKey = process.env.GOOGLE_API_KEY;
 
@@ -114,7 +115,6 @@ export default Vue.extend({
       });
       console.log("map", map);
     },
-
     newLocation() {
       //   function initialize() {
       geocoder = new google.maps.Geocoder();
@@ -122,12 +122,42 @@ export default Vue.extend({
         5.627703749893443,
         -0.08697846429555343
       );
+
       var mapOptions = {
         zoom: 8,
         center: latlng,
       };
       map = new google.maps.Map(document.getElementById("map"), mapOptions);
+      let infoWindow = new google.maps.InfoWindow({
+        content: "Click the map to get Lat/Lng!",
+        position: latlng,
+      });
+
+      infoWindow.open(map);
+
+      // Configure the click listener.
+      // let marker = [];
+      map.addListener("click", (mapsMouseEvent) => {
+        // Close the current InfoWindow.
+        infoWindow.close();
+
+        // marker = new google.maps.Marker({
+        //   position: mapsMouseEvent.latLng,
+        //   map: map,
+        // });
+        marker = [];
+        // Create a new InfoWindow.
+        infoWindow = new google.maps.InfoWindow({
+          position: mapsMouseEvent.latLng,
+        });
+        infoWindow.setContent(
+          JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
+        );
+
+        infoWindow.open(map);
+      });
     },
+
     codeAddress() {
       var address = document.getElementById("address").value;
       geocoder.geocode({ address: address }, function (results, status) {
