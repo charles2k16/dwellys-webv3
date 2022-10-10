@@ -1,6 +1,6 @@
 <template>
   <div v-loading="loading">
-    <div class="section pt-20">
+    <div ref="property_details" class="section pt-20">
       <ApplicationHandler ref="propertyAction" />
 
       <div class="align_center mb-10">
@@ -262,9 +262,8 @@ export default Vue.extend({
 
   watch: {
     $route() {
-      this.loading = true;
+      this.scrollToTop();
       this.fetchData();
-      this.loading = false;
     },
   },
   created() {
@@ -276,7 +275,11 @@ export default Vue.extend({
     },
   },
   methods: {
+    scrollToTop() {
+      window.scrollTo(0, 0);
+    },
     async fetchData() {
+      this.loading = true;
       try {
         const listings = await this.$listingApi.show(this.$route.query.id);
         console.log(listings.data);
