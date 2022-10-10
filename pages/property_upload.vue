@@ -229,7 +229,7 @@
         </div>
       </div>
       <!-- v-if="step === 5" -->
-      <div>
+      <div v-if="step === 5">
         <div class="center">
           <div class="property_upload_head">
             <h3>Select property location</h3>
