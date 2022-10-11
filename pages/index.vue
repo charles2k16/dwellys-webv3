@@ -162,7 +162,7 @@ export default Vue.extend({
     this.fetchData();
 
     // !this.$auth.strategy.token.get()
-    !this.$auth.user.id && this.$auth.state.strategy == "facebook"
+    !this.$auth.user.user_type && this.$auth.state.strategy == "facebook"
       ? this.facebookAuth()
       : "";
   },
