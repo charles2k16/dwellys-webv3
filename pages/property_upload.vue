@@ -229,7 +229,7 @@
         </div>
       </div>
       <!-- v-if="step === 5" -->
-      <div>
+      <div v-if="step === 5">
         <div class="center">
           <div class="property_upload_head">
             <h3>Select property location</h3>
@@ -274,11 +274,7 @@
               </el-select>
             </el-col>
           </el-row>
-          <!-- <p class="pb-10">
-            <span></span>Enter <b>Longitude</b> and <b>Latitude</b> of property
-            <b>or</b> be in location of property to get the geolocation.
-          </p> -->
-          <el-row class="pb-20">
+          <!-- <el-row class="pb-20">
             <el-col :sm="12" class="pb-20 d-flex_column pr-20">
               <span>Longitude</span>
               <el-input
@@ -295,7 +291,7 @@
               >
               </el-input>
             </el-col>
-          </el-row>
+          </el-row> -->
           <el-row>
             <el-col :sm="12" class="pb-20 d-flex_column">
               <span>Location</span>
@@ -308,11 +304,10 @@
                   v-for="region in regions[propertyUpload.region]"
                   :key="region"
                   :value="region"
-                  >d
+                >
                 </el-option>
               </el-select>
             </el-col>
-            <el-button @click="getLocation">Get Location</el-button>
             <Map @latlng="getLatlng" />
           </el-row>
         </div>
@@ -413,7 +408,7 @@ import { IMixinState } from "@/types/mixinsTypes";
 import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
 import url from "../url";
 import regionsAndCities from "~/static/regions.json";
-import Map from "../components/properties/map.vue";
+import Map from "../components/Properties/map.vue";
 // const apiKey = process.env.GOOGLE_API_KEY;
 
 export default Vue.extend({
@@ -556,7 +551,9 @@ export default Vue.extend({
       } else if (
         this.step == 5 &&
         this.propertyUpload.location != "" &&
-        this.propertyUpload.region != ""
+        this.propertyUpload.region != "" &&
+        this.propertyUpload.latitude &&
+        this.propertyUpload.longitude
       ) {
         valid = true;
       } else if (

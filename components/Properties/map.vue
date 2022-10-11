@@ -130,10 +130,7 @@ export default Vue.extend({
         zoom: 14,
         center: latlng,
       };
-      const map = new google.maps.Map(
-        document.getElementById("map"),
-        mapOptions
-      );
+      const map = new google.maps.Map(this.$refs["map"], mapOptions);
       let infoWindow = new google.maps.InfoWindow({
         content: "Click the map to get Lat/Lng!",
         position: latlng,
