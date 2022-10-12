@@ -38,7 +38,7 @@
           <NuxtLink to="/messages">Messages</NuxtLink>
         </span> -->
 
-        <el-dropdown trigger="hover">
+        <el-dropdown trigger="click">
           <span class="el-dropdown-link">
             <span class="login-avatar">
               <span v-if="$auth.loggedIn" class="d-flex">
@@ -54,7 +54,7 @@
                 <img src="~/assets/img/user_icon.png" alt="icon" v-else />
               </span>
 
-              <span v-else class="align_center" @click="showLoginModal">
+              <span v-else class="align_center">
                 <span class="mr-10">Login</span>
                 <img src="~/assets/img/user_icon.png" alt="icon" />
               </span>
@@ -116,7 +116,7 @@
               <img src="~/assets/img/user_icon.png" alt="icon" v-else />
             </span>
 
-            <span v-else class="align_center" @click="showLoginModal">
+            <span v-else class="align_center">
               <span class="mr-10">Login</span>
               <img src="~/assets/img/user_icon.png" alt="icon" />
             </span>
@@ -175,13 +175,13 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import 'element-ui/lib/theme-chalk/display.css';
-import ApplicationHandler from '@/handlers/ApplicationHandler.vue';
-import url from '../../url';
+import Vue from "vue";
+import "element-ui/lib/theme-chalk/display.css";
+import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
+import url from "../../url";
 
 export default Vue.extend({
-  name: 'NavHeader',
+  name: "NavHeader",
   components: {
     ApplicationHandler,
   },
@@ -189,14 +189,14 @@ export default Vue.extend({
     return {
       userData: {} as any,
       userReady: false,
-      user_type: '' as any,
+      user_type: "" as any,
       src:
-        process.env.NODE_ENV === 'development'
-          ? 'http://localhost:8000/'
-          : 'https://newapi.dwellys.com/',
-      user: 'login' as string,
+        process.env.NODE_ENV === "development"
+          ? "http://localhost:8000/"
+          : "https://newapi.dwellys.com/",
+      user: "login" as string,
       drawer: false as boolean,
-      direction: 'rtl',
+      direction: "rtl",
     };
   },
 

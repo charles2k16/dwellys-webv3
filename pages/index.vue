@@ -189,30 +189,23 @@ export default Vue.extend({
           type: "success",
         });
       } catch (error: any) {
-        if (error?.response) {
-          console.log(error.response);
-          // const socialsignup = {
-          //   first_name: facebook_user.first_name,
-          //   last_name: facebook_user.last_name,
-          //   email: facebook_user.email,
-          //   sign_up_mode: "facebook",
-          //   avatar: facebook_user.picture.data.url,
-          //   user_type: "visitor",
-          //   social_site_id: facebook_user.id,
-          //   dob: this.$moment(facebook_user.birthday, "YYYY-MM-DD"),
-          // };
-          (this as any as IMixinState).getNotification(
-            error.response.data.message,
-            "warning"
-          );
-          this.$router.push("/register");
-        } else {
-          (this as any as IMixinState).$message({
-            showClose: true,
-            message: "Check your network connectivity",
-            type: "error",
-          });
-        }
+        // if (error?.response) {
+        //   console.log(error.response);
+        //   const socialsignup = {
+        //     first_name: facebook_user.first_name,
+        //     last_name: facebook_user.last_name,
+        //     email: facebook_user.email,
+        //     sign_up_mode: "facebook",
+        //     avatar: facebook_user.picture.data.url,
+        //     user_type: "visitor",
+        //     social_site_id: facebook_user.id,
+        //     dob: this.$moment(facebook_user.birthday, "YYYY-MM-DD"),
+        //   };
+        //   (this as any as IMixinState).getNotification(
+        //     error.response.data.message,
+        //     "warning"
+        //   );
+        // }
       }
     },
     getLabel(label: string) {

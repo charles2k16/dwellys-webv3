@@ -735,12 +735,6 @@ export default Vue.extend({
             message: error.response.data.message,
             type: "error",
           });
-        } else {
-          (this as any as IMixinState).$message({
-            showClose: true,
-            message: "Check your interent connectivity",
-            type: "error",
-          });
         }
         // (this as any as IMixinState).catchError(error);
       }

@@ -290,10 +290,6 @@ export default Vue.extend({
         );
         this.loadListing(similarProperties.data);
       } catch (error) {
-        (this as any as IMixinState).getNotification(
-          "Check your network connectivity",
-          "warning"
-        );
         this.loading = false;
       }
     },
