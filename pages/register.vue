@@ -56,12 +56,12 @@
             <el-row :gutter="20">
               <el-col :xs="24" :sm="24" :md="24">
                 <el-form-item label="Date of Birth" prop="dob">
-                  <!-- <el-date-picker
+                  <el-date-picker
                     v-model="registerForm.dob"
                     type="date"
                     placeholder="Pick a day"
                   >
-                  </el-date-picker> -->
+                  </el-date-picker>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -256,8 +256,21 @@ export default Vue.extend({
       });
     },
     async signUp(): Promise<void> {
+      const data = {
+        first_name: this.registerForm.first_name,
+        last_name: this.registerForm.last_name,
+        dob: this.$moment(this.registerForm.dob).format("YYYY-MM-DD h:mm:ss"),
+        email: this.registerForm.email,
+        password: this.registerForm.password,
+        confirm_password: this.registerForm.confirm_password,
+        phone_number: this.registerForm.phone_number,
+        sign_up_mode: this.registerForm.sign_up_mode,
+        user_type: this.registerForm.user_type,
+        country_id: this.registerForm.country_id,
+      };
+      console.log(data);
       try {
-        const register = await this.$registerApi.create(this.registerForm);
+        const register = await this.$registerApi.create(data);
         this.loading = false;
         this.$confirm(register.message, "Confirm Email Address", {
           confirmButtonText: "Continue",
