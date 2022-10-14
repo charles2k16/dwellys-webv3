@@ -14,7 +14,7 @@
           <div
             class="property_image"
             :style="background_style(property.photos)"
-            @click="openPropertyDetails(property)"
+            @click.self="openPropertyDetails(property)"
           >
             <div class="d-flex justify_between property_labels p-10">
               <p style="background: white">
@@ -47,7 +47,7 @@
           <!-- <nuxt-link
             :to="{ name: 'property_details', params: { property: property } }"
           > -->
-          <div class="card_body">
+          <div class="card_body" @click="openPropertyDetails(property)">
             <div class="d-flex justify_between">
               <p class="house_amount">
                 GH₵ {{ property.listing_detail.price
@@ -67,7 +67,7 @@
               </p>
             </div>
           </div>
-          <div class="card_footer">
+          <div class="card_footer" @click="openPropertyDetails(property)">
             <div
               class="pl-5 pt-5"
               v-for="specification in property.property_specifications"
@@ -79,21 +79,6 @@
               </div>
               <p>{{ specification.specification.name }}</p>
             </div>
-            <!-- <div class="house_bathroom">
-              <div class="d-flex align_center">
-                <img src="~/assets/svg/bath.png" class="property_img pr-10" />
-                <b>4</b>
-              </div>
-              <p>Bathrooms</p>
-            </div>
-            <div>
-              <div class="d-flex align_center">
-                <img src="~/assets/svg/tv.png" class="property_img pr-10" /><b
-                  >1</b
-                >
-              </div>
-              <p>Living area</p>
-            </div> -->
           </div>
           <!-- </nuxt-link> -->
         </el-card>
@@ -119,29 +104,37 @@ export default Vue.extend({
       required: true,
       type: String,
     },
+    fetchFavorites: {
+      required: false,
+      type: Function,
+    },
+    favProperties: {
+      required: false,
+      type: Array,
+    },
   },
   name: "PropertyList",
   data() {
     return {
-      favProperties: [] as any,
+      // favProperties: [] as any,
     };
   },
   async created() {
-    this.fetchFavorites();
+    // this.fetchFavorites();
   },
 
   methods: {
-    async fetchFavorites() {
-      if (this.$auth.loggedIn) {
-        const userFavorite = await this.$userFavoriteApi.index();
-        const favorites = userFavorite.data;
+    // async fetchFavorites() {
+    //   if (this.$auth.loggedIn) {
+    //     const userFavorite = await this.$userFavoriteApi.index();
+    //     const favorites = userFavorite.data;
 
-        for (let i = 0; i < favorites.length; i++) {
-          this.favProperties.push(favorites[i].listing);
-        }
-        console.log("favorites", this.favProperties);
-      }
-    },
+    //     for (let i = 0; i < favorites.length; i++) {
+    //       this.favProperties.push(favorites[i].listing);
+    //     }
+    //     console.log("favorites", this.favProperties);
+    //   }
+    // },
     truncateString(str: string) {
       if (str.length > 30) {
         return str.slice(0, 30) + "...";
@@ -166,6 +159,7 @@ export default Vue.extend({
           const favoriteResponse = await this.$selectFavoriteApi.create({
             listing_id: fav.id,
           });
+          console.log(favoriteResponse, fav);
           this.fetchFavorites();
           (this as any as IMixinState).$message({
             showClose: true,

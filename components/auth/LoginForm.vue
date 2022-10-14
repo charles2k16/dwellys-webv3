@@ -72,28 +72,28 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import { IMixinState } from '@/types/mixinsTypes';
+import Vue from "vue";
+import { IMixinState } from "@/types/mixinsTypes";
 
 export default Vue.extend({
-  name: 'LoginForm',
+  name: "LoginForm",
   data() {
     return {
       btnLoading: false as boolean,
-      errorInfo: '' as string,
+      errorInfo: "" as string,
       loginForm: {
-        email: '' as string,
-        password: '' as string,
+        email: "" as string,
+        password: "" as string,
       },
       validation: {
         email: [
           {
             required: true,
-            type: 'email',
-            message: 'Please enter valid email',
-            trigger: ['blur', 'change'],
+            type: "email",
+            message: "Please enter valid email",
+            trigger: ["blur", "change"],
           },
-          { min: 5, message: 'Length should be 5 or more', trigger: 'blur' },
+          { min: 5, message: "Length should be 5 or more", trigger: "blur" },
         ],
       },
     };
@@ -107,28 +107,29 @@ export default Vue.extend({
         } else {
           this.btnLoading = false;
           (this as any as IMixinState).getNotification(
-            'Make sure all required fields are filled',
-            'error'
+            "Make sure all required fields are filled",
+            "error"
           );
         }
       });
     },
     login(response: any) {
       const { user, token } = response.data.data;
-      console.log(user, token, 'response');
+      console.log(user, token, "response");
 
       this.$auth.setUserToken(token);
       this.$auth.setUser(user);
-      this.$emit('closeLoginModal');
+      window.location.reload();
+      this.$emit("closeLoginModal");
       (this as any as IMixinState).$message({
         showClose: true,
         message: response.data.message,
-        type: 'success',
+        type: "success",
       });
     },
     checkUserVerification() {
       this.$auth
-        .loginWith('local', {
+        .loginWith("local", {
           data: {
             email: this.loginForm.email,
             password: this.loginForm.password,
@@ -139,17 +140,17 @@ export default Vue.extend({
           const message = response.data.message;
           if (
             message ==
-            'An email has been set to you in order to complete your registration'
+            "An email has been set to you in order to complete your registration"
           ) {
             this.errorInfo =
-              'An email has been set to you in order to complete your registration';
+              "An email has been set to you in order to complete your registration";
             (this as any as IMixinState).getNotification(
-              'Verify your email address to continue',
-              'warning'
+              "Verify your email address to continue",
+              "warning"
             );
           } else {
             this.login(response);
-            this.errorInfo = '';
+            this.errorInfo = "";
           }
         })
         .catch((error: any) => {
@@ -159,14 +160,14 @@ export default Vue.extend({
             // this.errorInfo = "Invalid Credentials";
             (this as any as IMixinState).getNotification(
               error?.response?.data.message,
-              'error'
+              "error"
             );
           }
         });
     },
     facebookSignIn() {
       this.$auth
-        .loginWith('facebook')
+        .loginWith("facebook")
         .then((response: any) => {
           // const { user, token } = response.data.data;
           console.log(response);
@@ -186,7 +187,7 @@ export default Vue.extend({
     },
     googleSignIn() {
       this.$auth
-        .loginWith('google')
+        .loginWith("google")
         .then((response: any) => {
           // const { user, token } = response.data.data;
           console.log(response);

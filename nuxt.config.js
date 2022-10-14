@@ -143,7 +143,10 @@ export default {
         endpoints: {
           // redirect_uri: "http://localhost:3000/login",
           token: "/loginwithsocialmedia",
-          logout: { url: "/logout", method: "post" },
+          // logout: {
+          //   url: "http://localhost:8000/api/v3/logout",
+          //   method: "post",
+          // },
           userInfo:
             "https://graph.facebook.com/v6.0/me?fields=id,name,email,picture{url},first_name,last_name,birthday",
         },

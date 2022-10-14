@@ -104,14 +104,32 @@
             v-if="tab.label == 'All'"
             v-loading="pageLoad"
           >
-            <PropertyList :type="tab.label" :listings="listings" />
+            <PropertyList
+              :type="tab.label"
+              :listings="listings"
+              :fetchFavorites="fetchFavorites"
+              :favProperties="favProperties"
+            />
+            <div v-if="total > 30" class="d-flex justify_center">
+              <p class="p-10 show_more_btn" @click="getMoreProperties">
+                Show more<i
+                  class="el-icon-bottom pl-10"
+                  style="fontsize: 20px"
+                ></i>
+              </p>
+            </div>
           </div>
           <div
             class="section pt-20"
             v-else-if="tab.label == 'House'"
             v-loading="pageLoad"
           >
-            <PropertyList :type="tab.label" :listings="house_listings" />
+            <PropertyList
+              :type="tab.label"
+              :listings="house_listings"
+              :fetchFavorites="fetchFavorites"
+              :favProperties="favProperties"
+            />
           </div>
         </el-tab-pane>
       </el-tabs>
@@ -130,6 +148,7 @@ export default Vue.extend({
     return {
       house_listings: [],
       search_value: "" as string,
+      total: 0 as number,
       propertySearch: [
         {
           label: "Buy",
@@ -145,9 +164,11 @@ export default Vue.extend({
         },
       ],
       listings: [] as Array<object>,
+      page: 0 as number,
       pageLoad: true as boolean,
       queryList: [],
       isQuery: false as boolean,
+      favProperties: [] as any,
       tabOptions: [
         { label: "All", title: "Rent a home" },
         { label: "House", title: "Rent a house" },
@@ -165,54 +186,98 @@ export default Vue.extend({
     !this.$auth.user.user_type && this.$auth.state.strategy == "facebook"
       ? this.facebookAuth()
       : "";
+    this.$auth.loggedIn && this.fetchFavorites();
   },
   methods: {
     async facebookAuth() {
+      const facebook_user = this.$auth.user;
       try {
-        const facebook_user = this.$auth.user;
         const socialsignup = {
           email: facebook_user.email,
           sign_up_mode: "facebook",
           user_type: "visitor",
           social_site_id: facebook_user.id,
         };
+        console.log(facebook_user);
         const social_response = await this.$socialloginApi.create(socialsignup);
+
         const { token, user } = social_response.data;
         this.$auth.setUserToken(token);
         this.$auth.setUser(user);
         console.log("social_response", social_response);
-        // this.$auth.setUserToken(token);
-        // this.$auth.setUser(user);
+        this.fetchFavorites();
+        // window.location.reload();
         (this as any as IMixinState).$message({
           showClose: true,
-          message: "Logged in successfully",
+          message: "Logged-in successfully",
           type: "success",
         });
       } catch (error: any) {
-        // if (error?.response) {
-        //   console.log(error.response);
-        //   const socialsignup = {
-        //     first_name: facebook_user.first_name,
-        //     last_name: facebook_user.last_name,
-        //     email: facebook_user.email,
-        //     sign_up_mode: "facebook",
-        //     avatar: facebook_user.picture.data.url,
-        //     user_type: "visitor",
-        //     social_site_id: facebook_user.id,
-        //     dob: this.$moment(facebook_user.birthday, "YYYY-MM-DD"),
-        //   };
-        //   (this as any as IMixinState).getNotification(
-        //     error.response.data.message,
-        //     "warning"
-        //   );
-        // }
+        console.log("error");
+        if (
+          error.response.data.errors.email ==
+          "The email has already been taken."
+        ) {
+          console.log(error.response);
+          const socialsignup = {
+            first_name: facebook_user.first_name,
+            last_name: facebook_user.last_name,
+            email: facebook_user.email,
+            sign_up_mode: "facebook",
+            avatar: facebook_user.picture.data.url,
+            user_type: "visitor",
+            social_site_id: facebook_user.id,
+            dob: this.$moment(facebook_user.birthday).format(
+              "YYYY-MM-DD h:mm:ss"
+            ),
+          };
+          const social_response = await this.$socialregisterApi.create(
+            socialsignup
+          );
+          console.log("facebook signup", social_response);
+          this.$confirm(social_response.message, "Confirm Email Address", {
+            confirmButtonText: "Continue",
+            type: "success",
+          }).then(() => {
+            // this.$router.push('/login');
+            this.$router.push({
+              name: "profile",
+            });
+          });
+        } else {
+          (this as any as IMixinState).getNotification(
+            error.response.data.errors,
+            "error"
+          );
+        }
+      }
+    },
+    async fetchFavorites() {
+      if (this.$auth.loggedIn) {
+        const userFavorite = await this.$userFavoriteApi.index();
+        const favorites = userFavorite.data;
+
+        for (let i = 0; i < favorites.length; i++) {
+          this.favProperties.push(favorites[i].listing);
+        }
+        console.log("favorites", this.favProperties);
       }
     },
     getLabel(label: string) {
       console.log(label);
     },
+    async getMoreProperties() {
+      const listings = await this.$listingApi.query(
+        `?status=active?${this.page + 1}`
+      );
+      this.page = listings.pagination.current_page;
+      this.loadListing(listings.data);
+    },
     async fetchData() {
       const listings = await this.$listingApi.query("?status=active");
+      console.log(listings);
+      this.total = listings.pagination.total;
+      this.page = listings.pagination.current_page;
       this.loadListing(listings.data);
       // const filtered_properties = await this.$filterPropertiesApi.query(
       //   "house"
@@ -259,6 +324,11 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+.show_more_btn {
+  background: var(--color-primary);
+  color: white;
+  border-radius: 10px;
+}
 .home {
   color: var(--text-white);
   .home_landing_page {
