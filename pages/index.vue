@@ -193,24 +193,29 @@ export default Vue.extend({
       const facebook_user = this.$auth.user;
       try {
         const socialsignup = {
+          first_name: facebook_user.first_name,
+          last_name: facebook_user.last_name,
           email: facebook_user.email,
           sign_up_mode: "facebook",
+          avatar: facebook_user.picture.data.url,
           user_type: "visitor",
           social_site_id: facebook_user.id,
+          dob: this.$moment(facebook_user.birthday).format(
+            "YYYY-MM-DD h:mm:ss"
+          ),
         };
-        console.log(facebook_user);
-        const social_response = await this.$socialloginApi.create(socialsignup);
-
-        const { token, user } = social_response.data;
-        this.$auth.setUserToken(token);
-        this.$auth.setUser(user);
-        console.log("social_response", social_response);
-        this.fetchFavorites();
-        // window.location.reload();
-        (this as any as IMixinState).$message({
-          showClose: true,
-          message: "Logged-in successfully",
+        const social_response = await this.$socialregisterApi.create(
+          socialsignup
+        );
+        console.log("facebook signup", social_response);
+        this.$confirm(social_response.message, "Confirm Email Address", {
+          confirmButtonText: "Continue",
           type: "success",
+        }).then(() => {
+          // this.$router.push('/login');
+          this.$router.push({
+            name: "profile",
+          });
         });
       } catch (error: any) {
         console.log("error");
@@ -220,29 +225,26 @@ export default Vue.extend({
         ) {
           console.log(error.response);
           const socialsignup = {
-            first_name: facebook_user.first_name,
-            last_name: facebook_user.last_name,
             email: facebook_user.email,
             sign_up_mode: "facebook",
-            avatar: facebook_user.picture.data.url,
             user_type: "visitor",
             social_site_id: facebook_user.id,
-            dob: this.$moment(facebook_user.birthday).format(
-              "YYYY-MM-DD h:mm:ss"
-            ),
           };
-          const social_response = await this.$socialregisterApi.create(
+          console.log(facebook_user);
+          const social_response = await this.$socialloginApi.create(
             socialsignup
           );
-          console.log("facebook signup", social_response);
-          this.$confirm(social_response.message, "Confirm Email Address", {
-            confirmButtonText: "Continue",
+
+          const { token, user } = social_response.data;
+          this.$auth.setUserToken(token);
+          this.$auth.setUser(user);
+          console.log("social_response", social_response);
+          this.fetchFavorites();
+          // window.location.reload();
+          (this as any as IMixinState).$message({
+            showClose: true,
+            message: "Logged-in successfully",
             type: "success",
-          }).then(() => {
-            // this.$router.push('/login');
-            this.$router.push({
-              name: "profile",
-            });
           });
         } else {
           (this as any as IMixinState).getNotification(
