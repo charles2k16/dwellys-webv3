@@ -77,7 +77,9 @@
                 <NuxtLink to="/property_upload">Property Upload</NuxtLink>
               </span>
             </el-dropdown-item>
-            <el-dropdown-item v-if="!$auth.loggedIn">
+            <el-dropdown-item
+              v-if="!$auth.loggedIn || $auth.user.user_type == 'visitor'"
+            >
               <span class="py-10">
                 <NuxtLink to="/property_account"
                   >Sell your property now</NuxtLink
@@ -122,20 +124,33 @@
             </span>
           </span>
           <br />
-
-          <div v-if="!$auth.loggedIn">
-            <span @click="showLoginModal" class="py-10 mb-10">Login</span>
+          <!-- you should find a way to make this whole div the if statement -->
+          <div>
+            <span
+              v-if="!$auth.loggedIn"
+              @click="showLoginModal"
+              class="py-10 mb-10"
+              >Login</span
+            >
             <br />
 
-            <hr class="hr_rule mt-10" />
+            <hr v-if="!$auth.loggedIn" class="hr_rule mt-10" />
 
-            <span @click="drawer = false" class="mt-10 d-block">
+            <span
+              v-if="!$auth.loggedIn"
+              @click="drawer = false"
+              class="mt-10 d-block"
+            >
               <NuxtLink to="/register">Register</NuxtLink>
             </span>
 
-            <hr class="hr_rule mt-10" />
+            <hr v-if="!$auth.loggedIn" class="hr_rule mt-10" />
 
-            <span @click="drawer = false" class="mt-10 d-block">
+            <span
+              @click="drawer = false"
+              v-if="!$auth.loggedIn || $auth.user.user_type == 'visitor'"
+              class="mt-10 d-block"
+            >
               <NuxtLink to="/property_account">Sell your property now</NuxtLink>
             </span>
           </div>
