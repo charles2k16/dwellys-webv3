@@ -8,6 +8,7 @@
         v-for="(property, index) in listings"
         :key="index"
         class="pb-20"
+        style="height: 400px"
       >
         <el-card
           v-if="property.listing"
@@ -16,6 +17,7 @@
         >
           <div
             class="property_image"
+            :style="background_style(property.photos)"
             @click.self="openPropertyDetails(property)"
           >
             <!-- :style="background_style(property.listing.photos)" -->
@@ -23,12 +25,6 @@
               <p style="background: white">
                 {{ property.listing.listing_detail.category.name }}
               </p>
-              <span class="d-flex">
-                <span class="pt-2"
-                  >{{ property.listing.listing_total_views }}
-                </span>
-                <span class="material-icons ml-5"> visibility </span>
-              </span>
               <span class="fav">
                 <span style="color: #000" class="pt-2"
                   >{{ property.listing.listing_total_likes }}
@@ -46,7 +42,7 @@
           <!-- <nuxt-link
             :to="{ name: 'property_details', params: { property: property } }"
           > -->
-          <div class="card_body">
+          <div class="card_body" @click="openPropertyDetails(property)">
             <!-- amount -->
             <p class="house_amount">
               ${{ property.listing.listing_detail.price }}/mth
@@ -56,7 +52,7 @@
               {{ property.listing.listing_detail.city }}
             </p>
           </div>
-          <div class="card_footer">
+          <div class="card_footer" @click="openPropertyDetails(property)">
             <div
               class="pl-5"
               v-for="specification in property.listing.property_specifications"

@@ -36,7 +36,7 @@
     <el-dialog
       title="Add Property Specification(s)"
       :visible.sync="specVisible"
-      width="45%"
+      width="30%"
     >
       <div v-for="spec in propertySpecs" :key="spec.id">
         <div class="property_main_content">
@@ -63,7 +63,7 @@
     <el-dialog
       title="Add Other Specification(s)"
       :visible.sync="otherSpecVisible"
-      width="45%"
+      width="30%"
     >
       <!-- <div v-for="spec in propertySpecs" :key="spec.id"> -->
       <div class="property_main_content">
@@ -119,23 +119,15 @@
         >
       </span>
     </el-dialog>
-    <div class="d-flex justify_between pt-20">
-      <div class="d-flex pt-20">
-        <section class="listing_bar">
+    <div class="pt-20">
+      <div class="pt-20">
+        <section class="listing_bar mb-20">
           <p>Listing Name</p>
           <el-input
+            class="listing_name"
             v-if="listing.listing_detail"
             v-model="listing.listing_detail.name"
           />
-        </section>
-        <section class="listing_bar pl-20">
-          <p>Amount</p>
-          <el-input
-            v-if="listing.listing_detail"
-            v-model="listing.listing_detail.price"
-          >
-            <template slot="prepend">GH&#8373; </template></el-input
-          >
         </section>
       </div>
     </div>
@@ -155,7 +147,6 @@
             :style="img.id == imageId && 'border: 1px solid green'"
           />
           <div class="d-flex justify_end pr-20 pt-5">
-            <!-- <i class="el-icon-edit-outline"></i> -->
             <i
               class="el-icon-delete-solid deleteImgIcon"
               @click="open(img.id)"
@@ -164,16 +155,10 @@
         </div>
       </div>
       <div class="d-flex justify_end">
-        <el-button type="success" @click="dialogVisible = true" class="p-10"
+        <el-button type="info" @click="dialogVisible = true" class="p-10"
           >Add Image(s)</el-button
         >
       </div>
-      <!-- <el-upload class="upload-demo" :on-change="newImage" multiple>
-        <el-button size="small" type="primary">Click to upload</el-button>
-        <div slot="tip" class="el-upload__tip">
-          jpg/png files with a size less than 500kb
-        </div>
-      </el-upload> -->
     </div>
     <div>
       <div class="d-flex listing_location pt-30">
@@ -217,6 +202,15 @@
 
     <div class="pt-30">
       <h3>Basic information</h3>
+      <section class="amount_bar mb-20 mt-20">
+        <p>Amount</p>
+        <el-input
+          v-if="listing.listing_detail"
+          v-model="listing.listing_detail.price"
+        >
+          <template slot="prepend">GH&#8373; </template></el-input
+        >
+      </section>
       <p class="pt-20">Specifications</p>
       <ul class="specs_container">
         <li
@@ -241,7 +235,7 @@
       </ul>
       <el-button
         v-if="propertySpecs > 0"
-        type="success"
+        type="info"
         @click="specVisible = true"
         class="p-10"
         >Add Specification(s)</el-button
@@ -270,7 +264,7 @@
           ></i>
         </li>
       </ul>
-      <el-button type="success" @click="otherSpecVisible = true" class="p-10"
+      <el-button type="info" @click="otherSpecVisible = true" class="p-10 m-10"
         >Add Other Specification(s)</el-button
       >
     </div>
@@ -295,7 +289,7 @@
       </ul>
       <el-button
         v-if="amenities.length > 0"
-        type="success"
+        type="info"
         @click="amenityVisible = true"
         class="p-10"
         >Add Amenitie(s)</el-button
@@ -318,6 +312,7 @@ import { IMixinState } from "@/types/mixinsTypes";
 import map from "../../components/profile/map.vue";
 // var map: any;
 export default Vue.extend({
+  auth: false,
   name: "ListingDetails",
   components: {
     map,
@@ -360,7 +355,6 @@ export default Vue.extend({
   methods: {
     async fetchData() {
       const listing = await this.$listingApi.show(this.$route.params.id);
-      console.log("listing", listing);
       this.listing = listing.data;
 
       const property = await this.$propertyTypesApi.show(
@@ -369,7 +363,6 @@ export default Vue.extend({
 
       const propertySpecs = property.data.specifications;
       const propertyAmenities = property.data.amenities;
-      // console.log(propertyAmenities);
 
       for (let i = 0; i < propertySpecs.length; i++) {
         if (
@@ -408,8 +401,6 @@ export default Vue.extend({
         });
     },
     newImage(file: any) {
-      console.log(file);
-
       if (file.size >= 5000000) {
         this.imageErr = "Image must not exceed 5 Mb.";
       } else {
@@ -429,7 +420,6 @@ export default Vue.extend({
       this.photos = [];
     },
     removeSpec(index: number, id: string) {
-      console.log("specification id", index);
       // const h = this.$createElement
       this.$confirm("Are you sure you want to delete?", {
         cancelButtonText: "No, i want to keep",
@@ -471,7 +461,6 @@ export default Vue.extend({
         });
     },
     open(planId: string) {
-      console.log(planId, "profile");
       // const h = this.$createElement
       this.$confirm("Are you sure you want to delete?", {
         cancelButtonText: "No, i want to keep",
@@ -491,15 +480,10 @@ export default Vue.extend({
         (amenity: any) => amenity.id == property.id
       );
 
-      // console.log(findIndex)
-      // let amenityIndex = this.listing.amenities.indexOf(property);
-
       this.listing.amenities.includes(property)
         ? this.listing.amenities.splice(findIndex, 1)
         : this.listing.amenities.push(property);
       // }
-
-      console.log(this.listing.amenities);
     },
     deleteListingModal() {
       // const h = this.$createElement
@@ -522,10 +506,8 @@ export default Vue.extend({
           propertyAmenities[i].amenity &&
           propertyAmenities[i].amenity.id == property.id
         ) {
-          console.log(propertyAmenities[i].name);
           find = true;
         } else if (propertyAmenities[i].id == property.id) {
-          console.log(propertyAmenities[i].name);
           find = true;
         }
       }
@@ -533,7 +515,6 @@ export default Vue.extend({
       return find;
     },
     addSpecs() {
-      console.log(this.propertySpecs);
       for (let i = 0; i < this.propertySpecs.length; i++) {
         if (this.propertySpecs[i].number > 0) {
           this.listing.property_specifications.push(this.propertySpecs[i]);
@@ -542,7 +523,6 @@ export default Vue.extend({
       this.specVisible = false;
     },
     addAmenities() {
-      console.log(this.listing.amenities);
       this.amenityVisible = false;
 
       // for (let i = 0; i < this.propertySpecs.length; i++) {
@@ -568,11 +548,10 @@ export default Vue.extend({
         this.fetchData();
         (this as any as IMixinState).$message({
           showClose: true,
-          message:"Image Deleted Successffully!",
+          message: "Image Deleted Successffully!",
           type: "success",
         });
       } catch (error) {
-        console.log(error, "error");
         (this as any as IMixinState).catchError(error);
       }
     },
@@ -587,7 +566,6 @@ export default Vue.extend({
           type: "success",
         });
       } catch (error) {
-        console.log(error, "error");
         (this as any as IMixinState).catchError(error);
       }
     },
@@ -602,7 +580,6 @@ export default Vue.extend({
           type: "success",
         });
       } catch (error) {
-        console.log(error, "error");
         (this as any as IMixinState).catchError(error);
       }
     },
@@ -616,7 +593,6 @@ export default Vue.extend({
           type: "success",
         });
       } catch (error) {
-        console.log(error, "error");
         (this as any as IMixinState).catchError(error);
       }
     },
@@ -624,7 +600,7 @@ export default Vue.extend({
       this.loading = true;
       try {
         const ListingResponse = await this.$listingApi.delete(this.listing_id);
-        console.log(ListingResponse);
+
         this.loading = false;
         this.fetchData();
         (this as any as IMixinState).$message({
@@ -634,7 +610,6 @@ export default Vue.extend({
         });
         this.$router.replace("/profile");
       } catch (error) {
-        console.log(error, "error");
         (this as any as IMixinState).catchError(error);
       }
     },
@@ -671,7 +646,6 @@ export default Vue.extend({
           icon: amenity.icon,
         };
       });
-      console.log(amenities);
 
       try {
         const listingResponse = await this.$listingApi.update(this.listing_id, {
@@ -691,8 +665,6 @@ export default Vue.extend({
           price: this.listing.listing_detail.price,
         });
 
-        console.log(listingResponse);
-
         this.loading = false;
         this.fetchData();
         (this as any as IMixinState).$message({
@@ -702,7 +674,6 @@ export default Vue.extend({
         });
         // this.$router.replace("/profile");
       } catch (error) {
-        console.log(error, "error");
         (this as any as IMixinState).catchError(error);
         this.loading = false;
       }
@@ -720,7 +691,6 @@ export default Vue.extend({
           type: "success",
         });
       } catch (error) {
-        console.log(error, "error");
         (this as any as IMixinState).catchError(error);
       }
     },
@@ -730,7 +700,6 @@ export default Vue.extend({
           listing_id: this.listing_id,
           listing_photos: this.photos,
         });
-        console.log(listingResponse);
         this.dialogVisible = false;
         this.loading = false;
         this.photos = [];
@@ -741,7 +710,6 @@ export default Vue.extend({
           type: "success",
         });
       } catch (error: any) {
-        console.log(error, "error");
         (this as any as IMixinState).$message({
           showClose: true,
           message: error.message,
@@ -757,6 +725,13 @@ export default Vue.extend({
 $small_screen: 426px;
 $medium_screen: 769px;
 .listing_bar {
+  max-width: 500px;
+  padding-right: 10px;
+  .listing_name {
+    max-width: 500px;
+  }
+}
+.amount_bar {
   max-width: 200px;
   padding-right: 10px;
 }

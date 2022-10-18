@@ -3,11 +3,11 @@
     <div ref="property_details" class="section pt-20">
       <ApplicationHandler ref="propertyAction" />
 
-      <div class="align_center mb-10">
+      <div class="align_center mb-10 pt-10">
         <div class="arrow_back">
-          <NuxtLink to="/">
+          <div @click="$router.back()">
             <span class="material-icons">arrow_back</span>
-          </NuxtLink>
+          </div>
         </div>
         <p v-if="propertyDetails.listing_detail">
           <b
@@ -76,7 +76,13 @@
           </el-carousel>
         </el-col>
 
-        <el-col :xs="8" :sm="8" :md="4" v-if="hasMorePhotos">
+        <el-col
+          :xs="8"
+          :sm="8"
+          :md="4"
+          v-if="hasMorePhotos"
+          class="has_more_photos hidden-sm-and-down"
+        >
           <div
             class="thumbnail"
             v-for="(image, index) in propertyDetails.listing_detail
@@ -208,7 +214,7 @@
           </ul>
         </div>
       </div>
-      <div class="pt-10 pb-10" v-if="propertyDetails.listing_detail">
+      <div class="mt-20 mb-20" v-if="propertyDetails.listing_detail">
         <Map
           :lat="propertyDetails.listing_detail.latitude"
           :lng="propertyDetails.listing_detail.longitude"
@@ -216,7 +222,7 @@
       </div>
       <div>
         <hr class="hr_rule" />
-        <h4 class="mt-20">Similar properties</h4>
+        <h4 class="mt-60">Similar properties</h4>
 
         <div class="pt-20">
           <SimilarProperties :listings="similarListings" />
@@ -320,7 +326,6 @@ export default Vue.extend({
           const favoriteResponse = await this.$selectFavoriteApi.create({
             listing_id: fav.id,
           });
-          console.log(favoriteResponse);
           (this as any as IMixinState).$message({
             showClose: true,
             message: "Added property to favourite!",
@@ -336,13 +341,8 @@ export default Vue.extend({
           .then(() => {
             this.$router.push("/login");
           })
-          .catch(() => {
-            //  console.log()
-          });
+          .catch(() => {});
       }
-    },
-    handleClick(tab: string, event: object) {
-      console.log(tab, event);
     },
     prevImage(image: any) {
       this.image = image;
@@ -376,11 +376,14 @@ $small_screen: 426px;
   padding-top: 5px;
   border: 1px solid #cbd5e1;
   border-radius: 10px;
-  color: rgba(203, 213, 225, 1);
   display: flex;
   justify-content: center;
   align-items: center;
   margin-right: 20px;
+}
+.has_more_photos {
+  height: 500px;
+  overflow-y: scroll;
 }
 .details_plot {
   display: flex;

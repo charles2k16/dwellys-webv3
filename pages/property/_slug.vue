@@ -3,11 +3,11 @@
     <div class="section pt-20">
       <ApplicationHandler ref="propertyAction" />
 
-      <div class="align_center mb-10">
+      <div class="align_center mb-10 pt-10">
         <div class="arrow_back">
-          <NuxtLink to="/">
+          <div @click="$router.back()">
             <span class="material-icons">arrow_back</span>
-          </NuxtLink>
+          </div>
         </div>
         <p>
           <b
@@ -39,7 +39,7 @@
 
           <p class="align_center">
             <span class="material-icons mr-5"> schedule </span>Last updated,
-            {{ $moment(propertyDetails.updated_at).format('MMMM Do YYYY') }}
+            {{ $moment(propertyDetails.updated_at).format("MMMM Do YYYY") }}
           </p>
         </div>
         <div class="details_plot">
@@ -65,7 +65,12 @@
     </div>
     <div class="mob-margin section">
       <el-row :gutter="20" v-if="propertyDetails.listing_detail">
-        <el-col :xs="24" :sm="24" :md="hasMorePhotos ? 20 : 24">
+        <el-col
+          :xs="24"
+          :sm="24"
+          :md="hasMorePhotos ? 20 : 24"
+          class="has_more_photos hidden-sm-and-down"
+        >
           <el-carousel :interval="5000" arrow="always">
             <el-carousel-item
               v-for="(image, index) in propertyDetails.listing_detail
@@ -158,9 +163,9 @@
                     </p>
                     <p style="font-size: 13px; color: #64748b">
                       {{
-                        propertyDetails.lister.user_type == 'lister'
-                          ? 'Independent agent'
-                          : 'Admin'
+                        propertyDetails.lister.user_type == "lister"
+                          ? "Independent agent"
+                          : "Admin"
                       }}
                     </p>
                   </div>
@@ -207,36 +212,35 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import ApplicationHandler from '@/handlers/ApplicationHandler.vue';
-import url from '../../url';
-import { IMixinState } from '../../types/mixinsTypes';
+import Vue from "vue";
+import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
+import url from "../../url";
+import { IMixinState } from "../../types/mixinsTypes";
 
 export default Vue.extend({
   auth: false,
-  name: 'SingleProperty',
+  name: "SingleProperty",
   components: {
     ApplicationHandler,
   },
   data() {
     return {
-      activeName: 'first' as string,
-      image: '' as any,
+      activeName: "first" as string,
+      image: "" as any,
       propertyDetails: {} as any,
-      home: '' as string,
+      home: "" as string,
       favProperties: [] as Array<object>,
       sendForm: {
         amount: null,
         recipient_amt: null,
-        payment_method: '' as string,
+        payment_method: "" as string,
       },
-      user: '',
+      user: "",
     };
   },
   async created() {
     const listings = await this.$listingApi.show(this.$route.query.id);
     this.propertyDetails = listings.data;
-    console.log(listings);
   },
   computed: {
     hasMorePhotos() {
@@ -260,29 +264,23 @@ export default Vue.extend({
           const favoriteResponse = await this.$selectFavoriteApi.create({
             listing_id: fav.id,
           });
-          console.log(favoriteResponse);
           (this as any as IMixinState).$message({
             showClose: true,
-            message: 'Added property to favourite!',
-            type: 'success',
+            message: "Added property to favourite!",
+            type: "success",
           });
         } catch (error: any) {}
       } else {
-        this.$confirm('Login to select favourite', {
-          confirmButtonText: 'Login',
-          cancelButtonText: 'Cancel',
-          type: 'success',
+        this.$confirm("Login to select favourite", {
+          confirmButtonText: "Login",
+          cancelButtonText: "Cancel",
+          type: "success",
         })
           .then(() => {
-            this.$router.push('/login');
+            this.$router.push("/login");
           })
-          .catch(() => {
-            //  console.log()
-          });
+          .catch(() => {});
       }
-    },
-    handleClick(tab: string, event: object) {
-      console.log(tab, event);
     },
     prevImage(image: any) {
       this.image = image;
@@ -297,8 +295,8 @@ export default Vue.extend({
         );
       } else {
         (this as any as IMixinState).getNotification(
-          'Login to send agent a message!',
-          'warning'
+          "Login to send agent a message!",
+          "warning"
         );
       }
     },
@@ -320,6 +318,10 @@ $small_screen: 426px;
   justify-content: center;
   align-items: center;
   margin-right: 20px;
+}
+.has_more_photos {
+  height: 500px;
+  overflow-y: scroll;
 }
 .details_plot {
   display: flex;
@@ -382,7 +384,7 @@ $small_screen: 426px;
       margin-left: 15px;
 
       &::before {
-        content: '\2022';
+        content: "\2022";
         color: red;
         font-weight: bold;
         display: inline-block;

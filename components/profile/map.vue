@@ -1,6 +1,5 @@
 <template>
   <div class="">
-    {{ lat }}-{{ lng }}
     <div id="map" ref="map"></div>
   </div>
 </template>

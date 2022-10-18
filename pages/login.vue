@@ -106,7 +106,6 @@ export default Vue.extend({
     },
     login(response: any) {
       const { user, token } = response.data.data;
-      console.log(user, token, "response");
 
       this.$auth.setUserToken(token);
       this.$auth.setUser(user);

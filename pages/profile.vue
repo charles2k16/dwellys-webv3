@@ -50,7 +50,7 @@
           >
         </p>
       </div>
-      <el-tabs v-model="activeName" @tab-click="handleClick" class="nav_scroll">
+      <el-tabs v-model="activeName" class="nav_scroll">
         <el-tab-pane
           v-if="lister.user_type == 'lister'"
           label="My Listings"
@@ -384,12 +384,7 @@ export default Vue.extend({
           : ""
       );
     },
-    handleClick(tab: string, event: object) {
-      console.log(tab, event);
-    },
     getAvatar(file: any) {
-      console.log(file);
-
       let reader = new FileReader();
       reader.readAsDataURL(file.raw);
       reader.onloadend = () => {
@@ -397,8 +392,6 @@ export default Vue.extend({
       };
     },
     getID(file: any) {
-      console.log(file);
-
       let reader = new FileReader();
       reader.readAsDataURL(file.raw);
       reader.onloadend = () => {
@@ -423,13 +416,11 @@ export default Vue.extend({
         country_id: this.lister.country_id,
         user_type: this.lister.user_type,
       };
-      console.log(data);
       try {
         const profileResponse = await this.$userUpdateApi.update(
           "update",
           data
         );
-        console.log("profile response", profileResponse);
         this.$auth.setUser(profileResponse.data.user);
 
         this.loading = false;
@@ -454,8 +445,6 @@ export default Vue.extend({
       try {
         const ImageResponse = await this.$listingImagesApi.delete(planId);
 
-        console.log(ImageResponse);
-
         this.loading = false;
         this.fetchData();
         (this as any as IMixinState).$message({
@@ -464,7 +453,6 @@ export default Vue.extend({
           type: "success",
         });
       } catch (error) {
-        console.log(error, "error");
         (this as any as IMixinState).catchError(error);
       }
     },
@@ -490,7 +478,6 @@ export default Vue.extend({
           new_password: this.passwords.new_password,
           confirm_password: this.passwords.confirm_password,
         });
-        console.log(response);
 
         (this as any as IMixinState).$confirm(
           "Password Changed Successfully!",

@@ -34,6 +34,7 @@
                   class="material-icons ml-5"
                   @click="favProperty(property)"
                   :style="
+                    favProperties &&
                     favProperties.some((fav) => fav.id == property.id)
                       ? { color: 'red' }
                       : { color: 'white' }
@@ -101,7 +102,7 @@ export default Vue.extend({
       type: Array,
     },
     type: {
-      required: true,
+      required: false,
       type: String,
     },
     fetchFavorites: {

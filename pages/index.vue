@@ -85,9 +85,9 @@
         <div v-if="queryList.length > 0">
           <PropertyList :listings="queryList" />
         </div>
-        <div v-else class="d-flex justify_center">
+        <div v-else class="no_results_found">
           <h3>No Result Found.</h3>
-          <br /><br />
+          <br />
           <el-button type="primary" size="mini" @click="closeQuery"
             >Go back Home</el-button
           >
@@ -183,7 +183,9 @@ export default Vue.extend({
     this.fetchData();
 
     // !this.$auth.strategy.token.get()
-    !this.$auth.user.user_type && this.$auth.state.strategy == "facebook"
+    this.$auth.user &&
+    !this.$auth.user.user_type &&
+    this.$auth.state.strategy == "facebook"
       ? this.facebookAuth()
       : "";
     this.$auth.loggedIn && this.fetchFavorites();
@@ -218,19 +220,16 @@ export default Vue.extend({
           });
         });
       } catch (error: any) {
-        console.log("error");
         if (
           error.response.data.errors.email ==
           "The email has already been taken."
         ) {
-          console.log(error.response);
           const socialsignup = {
             email: facebook_user.email,
             sign_up_mode: "facebook",
             user_type: "visitor",
             social_site_id: facebook_user.id,
           };
-          console.log(facebook_user);
           const social_response = await this.$socialloginApi.create(
             socialsignup
           );
@@ -238,7 +237,6 @@ export default Vue.extend({
           const { token, user } = social_response.data;
           this.$auth.setUserToken(token);
           this.$auth.setUser(user);
-          console.log("social_response", social_response);
           this.fetchFavorites();
           // window.location.reload();
           (this as any as IMixinState).$message({
@@ -262,11 +260,7 @@ export default Vue.extend({
         for (let i = 0; i < favorites.length; i++) {
           this.favProperties.push(favorites[i].listing);
         }
-        console.log("favorites", this.favProperties);
       }
-    },
-    getLabel(label: string) {
-      console.log(label);
     },
     async getMoreProperties() {
       const listings = await this.$listingApi.query(
@@ -277,14 +271,9 @@ export default Vue.extend({
     },
     async fetchData() {
       const listings = await this.$listingApi.query("?status=active");
-      console.log(listings);
       this.total = listings.pagination.total;
       this.page = listings.pagination.current_page;
       this.loadListing(listings.data);
-      // const filtered_properties = await this.$filterPropertiesApi.query(
-      //   "house"
-      // );
-      // console.log(filtered_properties);
     },
     loadListing(properties: any) {
       const data = properties.map((property: any) => {
@@ -301,17 +290,25 @@ export default Vue.extend({
       if (this.search_value) {
         try {
           const query = await this.$querySearchApi.query(this.search_value);
-          console.log(query);
-          this.queryList = query.data;
+          this.queryListing(query.data);
           this.isQuery = true;
         } catch (error: any) {
-          console.log("error", error);
           if (error?.response?.data) {
             this.isQuery = true;
-            console.log("from server error", error.response.data.message);
           }
         }
       }
+    },
+    queryListing(properties: any) {
+      const data = properties.map((property: any) => {
+        property.photos =
+          property.listing_detail.feature_image_url != null
+            ? property.listing_detail.feature_image_url
+            : "no photo";
+        return property;
+      });
+      this.queryList = data;
+      this.pageLoad = false;
     },
     handleClick(tab: string) {
       console.log(tab);
@@ -375,9 +372,17 @@ export default Vue.extend({
   }
   .to_properties {
     display: flex;
+    cursor: pointer;
     justify-content: center;
     align-items: center;
     color: black;
+  }
+  .no_results_found {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 }
 </style>

@@ -9,6 +9,7 @@
           v-for="(listing, index) in user_listings"
           :key="index"
           class="pb-20"
+          style="height: 400px"
         >
           <el-card shadow="hover" class="property_container">
             <div
@@ -31,7 +32,6 @@
                         >Edit</NuxtLink
                       ></el-dropdown-item
                     >
-                    <el-dropdown-item>Publish</el-dropdown-item>
                     <el-dropdown-item style="color: red"
                       ><span @click="deleteListingModal(listing.id)">
                         Delete</span

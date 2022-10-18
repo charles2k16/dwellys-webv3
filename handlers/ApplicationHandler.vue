@@ -26,7 +26,7 @@
     </el-dialog>
     <el-dialog
       :visible.sync="messageModal"
-      width="40%"
+      width="30%"
       :destroy-on-close="true"
       custom-class="mobile-modal"
     >

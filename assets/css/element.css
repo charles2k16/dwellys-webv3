@@ -314,3 +314,13 @@
 .el-input--small .el-input__inner {
   height: 40px;
 }
+.el-button--info {
+  color: #64748b;
+  background: #f1f5f9;
+  border: none;
+  border-radius: 8px;
+}
+.el-button--info:hover {
+  background: hsla(0, 100%, 41%, 0.6);
+  color: white;
+}
