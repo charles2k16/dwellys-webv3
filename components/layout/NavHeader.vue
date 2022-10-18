@@ -224,8 +224,6 @@ export default Vue.extend({
     logout() {
       this.$auth.logout();
       this.userReady = false;
-
-      window.location.reload();
     },
   },
 });

@@ -124,7 +124,7 @@ export default {
         endpoints: {
           login: { url: "/login", method: "post" },
           user: false,
-          logout: { url: "/logout", method: "post" },
+          logout: { url: "/logout", method: "get" },
         },
       },
       google: {
@@ -136,7 +136,7 @@ export default {
           token: "http://localhost:8000/api/v3/loginwithsocialmedia", // somm backend url to resolve your auth with google and give you the token back
           userInfo: false, // the endpoint to get the user info after you recived the token
           redirect_uri: "http://localhost:3000/login",
-          logout: { url: "/logout", method: "post" },
+          logout: { url: "/logout", method: "get" },
         },
       },
       facebook: {
