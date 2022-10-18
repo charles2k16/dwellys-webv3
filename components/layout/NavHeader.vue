@@ -42,7 +42,7 @@
           <span class="el-dropdown-link">
             <span class="login-avatar">
               <span v-if="$auth.loggedIn" class="d-flex">
-                <span class="pt-10 pr-5">
+                <span class="pr-5">
                   {{ $auth.user.first_name }}
                 </span>
                 <img
@@ -279,7 +279,7 @@ a {
   justify-content: center;
   border: 1px solid #e2e8f0;
   background: #f8fafc;
-  padding: 5px 10px;
+  padding: 5px 20px;
   border-radius: 20px;
 
   .user_avatar {
