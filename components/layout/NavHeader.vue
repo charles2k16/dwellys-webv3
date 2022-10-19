@@ -8,7 +8,10 @@
           <img src="~/assets/img/logo.png" />
         </NuxtLink>
       </div>
-      <div class="header_content hidden-sm-and-down" v-if="!$auth.loggedIn">
+      <div
+        class="header_content hidden-sm-and-down"
+        v-if="!$auth.loggedIn || $auth.user.user_type == 'visitor'"
+      >
         <span class="pl-10">
           <NuxtLink to="/property_account">Sell your property now</NuxtLink>
         </span>
