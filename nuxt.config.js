@@ -79,7 +79,7 @@ export default {
     // baseURL: 'https://newapi.dwellys.com/api',
     baseURL:
       process.env.NODE_ENV === "development"
-        ? "https://newapi.dwellys.com/api/v3"
+        ? "http://127.0.0.1:8000/api/v3"
         : "https://newapi.dwellys.com/api",
     headers: {
       "Access-Control-Allow-Origin": "*",
