@@ -93,7 +93,7 @@
           >
         </div>
       </div>
-      <el-tabs v-else type="border-card">
+      <el-tabs v-else type="border-card" @tab-click="changeLabel">
         <el-tab-pane
           :label="tab.label"
           v-for="(tab, index) in tabOptions"
@@ -119,11 +119,7 @@
               </p>
             </div>
           </div>
-          <div
-            class="section pt-20"
-            v-else-if="tab.label == 'House'"
-            v-loading="pageLoad"
-          >
+          <div class="section pt-20" v-else v-loading="pageLoad">
             <PropertyList
               :type="tab.label"
               :listings="house_listings"
@@ -181,8 +177,6 @@ export default Vue.extend({
   },
   created() {
     this.fetchData();
-
-    // !this.$auth.strategy.token.get()
     this.$auth.user &&
     !this.$auth.user.user_type &&
     this.$auth.state.strategy == "facebook"
@@ -286,11 +280,43 @@ export default Vue.extend({
       this.listings = data;
       this.pageLoad = false;
     },
+    async changeLabel(tab: any) {
+      this.pageLoad = true;
+      console.log(tab.label);
+      try {
+        const property_type_response = await this.$similarListingsApi.query(
+          tab.label
+        );
+        console.log(property_type_response);
+
+        this.loadOtherProperties(property_type_response.data);
+      } catch (error: any) {
+        console.log("error", error);
+        if (error?.response?.data) {
+          console.log("from server error", error.response.data.message);
+          this.house_listings = [];
+        }
+        this.pageLoad = false;
+      }
+    },
+    loadOtherProperties(properties: any) {
+      const data = properties.map((property: any) => {
+        property.photos =
+          property.listing_detail.feature_image_url != null
+            ? property.listing_detail.feature_image_url
+            : "no photo";
+        return property;
+      });
+      this.house_listings = data;
+      this.pageLoad = false;
+    },
     async getQuery() {
+      this.pageLoad = true;
       if (this.search_value) {
         try {
           const query = await this.$querySearchApi.query(this.search_value);
-          this.queryListing(query.data);
+          console.log(query);
+          this.loadQuery(query.data);
           this.isQuery = true;
         } catch (error: any) {
           if (error?.response?.data) {
@@ -299,7 +325,7 @@ export default Vue.extend({
         }
       }
     },
-    queryListing(properties: any) {
+    loadQuery(properties: any) {
       const data = properties.map((property: any) => {
         property.photos =
           property.listing_detail.feature_image_url != null
@@ -309,9 +335,6 @@ export default Vue.extend({
       });
       this.queryList = data;
       this.pageLoad = false;
-    },
-    handleClick(tab: string) {
-      console.log(tab);
     },
     closeQuery() {
       this.isQuery = false;

@@ -42,7 +42,7 @@
           <span class="el-dropdown-link">
             <span class="login-avatar">
               <span v-if="$auth.loggedIn" class="d-flex">
-                <span class="pr-5">
+                <span class="pt-5 pr-5">
                   {{ $auth.user.first_name }}
                 </span>
                 <img
