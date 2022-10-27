@@ -43,6 +43,7 @@
             <span class="material-icons">arrow_back</span>
           </p>
           <el-input
+            @keyup.native.enter="getQuery"
             v-model="search_value"
             class="search_input"
             placeholder="Search for property"
@@ -134,29 +135,29 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { IMixinState } from "@/types/mixinsTypes";
+import Vue from 'vue';
+import { IMixinState } from '@/types/mixinsTypes';
 
 export default Vue.extend({
   auth: false,
-  name: "IndexPage",
+  name: 'IndexPage',
   data() {
     return {
       house_listings: [],
-      search_value: "" as string,
+      search_value: '' as string,
       total: 0 as number,
       propertySearch: [
         {
-          label: "Buy",
-          value: "buy",
+          label: 'Buy',
+          value: 'buy',
         },
         {
-          label: "Rent",
-          value: "rent",
+          label: 'Rent',
+          value: 'rent',
         },
         {
-          label: "Lease",
-          value: "lease",
+          label: 'Lease',
+          value: 'lease',
         },
       ],
       listings: [] as Array<object>,
@@ -166,12 +167,12 @@ export default Vue.extend({
       isQuery: false as boolean,
       favProperties: [] as any,
       tabOptions: [
-        { label: "All", title: "Rent a home" },
-        { label: "House", title: "Rent a house" },
-        { label: "Apartment", title: "Rent an Apartment" },
-        { label: "Town house", title: "Rent a Town house" },
-        { label: " Office", title: " Rent an office" },
-        { label: "Land", title: " Buy a land" },
+        { label: 'All', title: 'Rent a home' },
+        { label: 'House', title: 'Rent a house' },
+        { label: 'Apartment', title: 'Rent an Apartment' },
+        { label: 'Town house', title: 'Rent a Town house' },
+        { label: ' Office', title: ' Rent an office' },
+        { label: 'Land', title: ' Buy a land' },
       ] as any,
     };
   },
@@ -179,9 +180,9 @@ export default Vue.extend({
     this.fetchData();
     this.$auth.user &&
     !this.$auth.user.user_type &&
-    this.$auth.state.strategy == "facebook"
+    this.$auth.state.strategy == 'facebook'
       ? this.facebookAuth()
-      : "";
+      : '';
     this.$auth.loggedIn && this.fetchFavorites();
   },
   methods: {
@@ -192,36 +193,36 @@ export default Vue.extend({
           first_name: facebook_user.first_name,
           last_name: facebook_user.last_name,
           email: facebook_user.email,
-          sign_up_mode: "facebook",
+          sign_up_mode: 'facebook',
           avatar: facebook_user.picture.data.url,
-          user_type: "visitor",
+          user_type: 'visitor',
           social_site_id: facebook_user.id,
           dob: this.$moment(facebook_user.birthday).format(
-            "YYYY-MM-DD h:mm:ss"
+            'YYYY-MM-DD h:mm:ss'
           ),
         };
         const social_response = await this.$socialregisterApi.create(
           socialsignup
         );
-        console.log("facebook signup", social_response);
-        this.$confirm(social_response.message, "Confirm Email Address", {
-          confirmButtonText: "Continue",
-          type: "success",
+        console.log('facebook signup', social_response);
+        this.$confirm(social_response.message, 'Confirm Email Address', {
+          confirmButtonText: 'Continue',
+          type: 'success',
         }).then(() => {
           // this.$router.push('/login');
           this.$router.push({
-            name: "profile",
+            name: 'profile',
           });
         });
       } catch (error: any) {
         if (
           error.response.data.errors.email ==
-          "The email has already been taken."
+          'The email has already been taken.'
         ) {
           const socialsignup = {
             email: facebook_user.email,
-            sign_up_mode: "facebook",
-            user_type: "visitor",
+            sign_up_mode: 'facebook',
+            user_type: 'visitor',
             social_site_id: facebook_user.id,
           };
           const social_response = await this.$socialloginApi.create(
@@ -235,13 +236,13 @@ export default Vue.extend({
           // window.location.reload();
           (this as any as IMixinState).$message({
             showClose: true,
-            message: "Logged-in successfully",
-            type: "success",
+            message: 'Logged-in successfully',
+            type: 'success',
           });
         } else {
           (this as any as IMixinState).getNotification(
             error.response.data.errors,
-            "error"
+            'error'
           );
         }
       }
@@ -264,7 +265,7 @@ export default Vue.extend({
       this.loadListing(listings.data);
     },
     async fetchData() {
-      const listings = await this.$listingApi.query("?status=active");
+      const listings = await this.$listingApi.query('?status=active');
       this.total = listings.pagination.total;
       this.page = listings.pagination.current_page;
       this.loadListing(listings.data);
@@ -274,7 +275,7 @@ export default Vue.extend({
         property.photos =
           property.listing_detail.feature_image_url != null
             ? property.listing_detail.feature_image_url
-            : "no photo";
+            : 'no photo';
         return property;
       });
       this.listings = data;
@@ -291,9 +292,9 @@ export default Vue.extend({
 
         this.loadOtherProperties(property_type_response.data);
       } catch (error: any) {
-        console.log("error", error);
+        console.log('error', error);
         if (error?.response?.data) {
-          console.log("from server error", error.response.data.message);
+          console.log('from server error', error.response.data.message);
           this.house_listings = [];
         }
         this.pageLoad = false;
@@ -304,7 +305,7 @@ export default Vue.extend({
         property.photos =
           property.listing_detail.feature_image_url != null
             ? property.listing_detail.feature_image_url
-            : "no photo";
+            : 'no photo';
         return property;
       });
       this.house_listings = data;
@@ -315,12 +316,15 @@ export default Vue.extend({
       if (this.search_value) {
         try {
           const query = await this.$querySearchApi.query(this.search_value);
-          console.log(query);
+          console.log('query', query);
+          //  console.log();
           this.loadQuery(query.data);
           this.isQuery = true;
         } catch (error: any) {
           if (error?.response?.data) {
+            console.log(error?.response);
             this.isQuery = true;
+            this.pageLoad = false;
           }
         }
       }
@@ -330,16 +334,17 @@ export default Vue.extend({
         property.photos =
           property.listing_detail.feature_image_url != null
             ? property.listing_detail.feature_image_url
-            : "no photo";
+            : 'no photo';
         return property;
       });
+
       this.queryList = data;
       this.pageLoad = false;
     },
     closeQuery() {
       this.isQuery = false;
       this.queryList = [];
-      this.search_value = "";
+      this.search_value = '';
     },
   },
 });
@@ -354,7 +359,7 @@ export default Vue.extend({
 .home {
   color: var(--text-white);
   .home_landing_page {
-    background-image: url("~/assets/img/home.png");
+    background-image: url('~/assets/img/home.png');
     background-repeat: no-repeat;
     background-size: 100% 400px;
     height: 400px;

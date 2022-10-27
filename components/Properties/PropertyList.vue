@@ -75,7 +75,41 @@
               :key="specification.id"
             >
               <div class="d-flex align_center">
-                <img src="~/assets/svg/bed.png" class="property_img pr-10" />
+                <img
+                  v-if="
+                    specification.specification.name == 'Bed room' ||
+                    specification.specification.name == 'Bedroom'
+                  "
+                  src="~/assets/svg/bed.png"
+                  class="property_img pr-10"
+                />
+                <img
+                  v-else-if="
+                    specification.specification.name == 'Bath room' ||
+                    specification.specification.name == 'Bathroom'
+                  "
+                  src="~/assets/svg/bath.png"
+                  class="property_img pr-10"
+                />
+                <img
+                  v-else-if="specification.specification.name == 'Garage'"
+                  src="~/assets/svg/garage.png"
+                  class="property_img pr-10"
+                />
+                <img
+                  v-else-if="specification.specification.name == 'Chair'"
+                  src="~/assets/svg/chair.png"
+                  class="property_img pr-10"
+                />
+                <img
+                  v-else-if="
+                    specification.specification.name == 'Dining room' ||
+                    specification.specification.name == 'Diningroom'
+                  "
+                  src="~/assets/svg/kitchen.png"
+                  class="property_img pr-10"
+                />
+
                 <b>{{ specification.number }} </b>
               </div>
               <p>{{ specification.specification.name }}</p>
@@ -92,8 +126,8 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { IMixinState } from "../../types/mixinsTypes";
+import Vue from 'vue';
+import { IMixinState } from '../../types/mixinsTypes';
 
 export default Vue.extend({
   props: {
@@ -114,7 +148,7 @@ export default Vue.extend({
       type: Array,
     },
   },
-  name: "PropertyList",
+  name: 'PropertyList',
   data() {
     return {
       // favProperties: [] as any,
@@ -138,7 +172,7 @@ export default Vue.extend({
     // },
     truncateString(str: string) {
       if (str.length > 30) {
-        return str.slice(0, 30) + "...";
+        return str.slice(0, 30) + '...';
       } else {
         return str;
       }
@@ -164,21 +198,21 @@ export default Vue.extend({
           this.fetchFavorites();
           (this as any as IMixinState).$message({
             showClose: true,
-            message: "Added property to favourite!",
-            type: "success",
+            message: 'Added property to favourite!',
+            type: 'success',
           });
         } catch (error: any) {
           (this as any as IMixinState).catchError(error);
           console.log(error?.response);
         }
       } else {
-        this.$confirm("Login to select favourite", {
-          confirmButtonText: "Login",
-          cancelButtonText: "Cancel",
-          type: "success",
+        this.$confirm('Login to select favourite', {
+          confirmButtonText: 'Login',
+          cancelButtonText: 'Cancel',
+          type: 'success',
         })
           .then(() => {
-            this.$router.push("/login");
+            this.$router.push('/login');
           })
           .catch(() => {
             // this.$router.push("/register");
@@ -188,7 +222,7 @@ export default Vue.extend({
     openPropertyDetails(property: any): void {
       console.log(property);
       this.$router.push({
-        name: "property_details",
+        name: 'property_details',
         // params: { property: property.id },
         query: {
           name: property.listing_detail.name,

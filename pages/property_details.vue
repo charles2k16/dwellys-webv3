@@ -2,7 +2,17 @@
   <div v-loading="loading">
     <div ref="property_details" class="section pt-20">
       <ApplicationHandler ref="propertyAction" />
-
+      <el-dialog :visible.sync="dialogVisible" width="50%">
+        <div>
+          <img :src="apiUrl + '/' + modalImage" class="carousel_image" />
+        </div>
+        <!-- <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">Cancel</el-button>
+          <el-button type="primary" @click="dialogVisible = false"
+            >Confirm</el-button
+          >
+        </span> -->
+      </el-dialog>
       <div class="align_center mb-10 pt-10">
         <div class="arrow_back">
           <div @click="$router.back()">
@@ -30,7 +40,7 @@
 
           <p class="align_center">
             <span class="material-icons mr-5"> schedule </span>Last updated,
-            {{ $moment(propertyDetails.updated_at).format("MMMM Do YYYY") }}
+            {{ $moment(propertyDetails.updated_at).format('MMMM Do YYYY') }}
           </p>
         </div>
         <div class="details_plot">
@@ -89,7 +99,11 @@
               .listing_images"
             :key="index"
           >
-            <img :src="apiUrl + '/' + image.photo" class="_image" />
+            <img
+              :src="apiUrl + '/' + image.photo"
+              class="_image"
+              @click="showImage(image.photo)"
+            />
           </div>
         </el-col>
       </el-row>
@@ -178,9 +192,9 @@
                     </p>
                     <p style="font-size: 13px; color: #64748b">
                       {{
-                        propertyDetails.lister.user_type == "lister"
-                          ? "Independent agent"
-                          : "Admin"
+                        propertyDetails.lister.user_type == 'lister'
+                          ? 'Independent agent'
+                          : 'Admin'
                       }}
                     </p>
                   </div>
@@ -233,35 +247,36 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
-import url from "../url";
-import { IMixinState } from "../types/mixinsTypes";
-import Map from "../components/profile/map.vue";
+import Vue from 'vue';
+import ApplicationHandler from '@/handlers/ApplicationHandler.vue';
+import url from '../url';
+import { IMixinState } from '../types/mixinsTypes';
+import Map from '../components/profile/map.vue';
 
 export default Vue.extend({
   scrollToTop: true,
   auth: false,
-  name: "PropertyDetails",
+  name: 'PropertyDetails',
   components: {
     ApplicationHandler,
     Map,
   },
   data() {
     return {
-      activeName: "first" as string,
-
+      activeName: 'first' as string,
+      dialogVisible: false as boolean,
       loading: true as boolean,
-      image: "" as any,
+      image: '' as any,
+      modalImage: '' as any,
       propertyDetails: {} as any,
-      home: "" as string,
+      home: '' as string,
       favProperties: [] as Array<object>,
       sendForm: {
         amount: null,
         recipient_amt: null,
-        payment_method: "" as string,
+        payment_method: '' as string,
       },
-      user: "",
+      user: '',
       similarListings: [],
     };
   },
@@ -281,6 +296,10 @@ export default Vue.extend({
     },
   },
   methods: {
+    showImage(image: string) {
+      this.modalImage = image;
+      this.dialogVisible = true;
+    },
     scrollToTop() {
       window.scrollTo(10, 10);
       // window.scrollTo(0, 0);
@@ -304,7 +323,7 @@ export default Vue.extend({
         property.photos =
           property.listing_detail.feature_image_url != null
             ? property.listing_detail.feature_image_url
-            : "no photo";
+            : 'no photo';
         return property;
       });
       this.similarListings = data;
@@ -328,18 +347,18 @@ export default Vue.extend({
           });
           (this as any as IMixinState).$message({
             showClose: true,
-            message: "Added property to favourite!",
-            type: "success",
+            message: 'Added property to favourite!',
+            type: 'success',
           });
         } catch (error: any) {}
       } else {
-        this.$confirm("Login to select favourite", {
-          confirmButtonText: "Login",
-          cancelButtonText: "Cancel",
-          type: "success",
+        this.$confirm('Login to select favourite', {
+          confirmButtonText: 'Login',
+          cancelButtonText: 'Cancel',
+          type: 'success',
         })
           .then(() => {
-            this.$router.push("/login");
+            this.$router.push('/login');
           })
           .catch(() => {});
       }
@@ -358,8 +377,8 @@ export default Vue.extend({
         });
       } else {
         (this as any as IMixinState).getNotification(
-          "Login to send agent a message!",
-          "warning"
+          'Login to send agent a message!',
+          'warning'
         );
       }
     },
@@ -378,6 +397,7 @@ $small_screen: 426px;
   border-radius: 10px;
   display: flex;
   justify-content: center;
+  cursor: pointer;
   align-items: center;
   margin-right: 20px;
 }
@@ -449,7 +469,7 @@ $small_screen: 426px;
       margin-left: 15px;
 
       &::before {
-        content: "\2022";
+        content: '\2022';
         color: red;
         font-weight: bold;
         display: inline-block;
