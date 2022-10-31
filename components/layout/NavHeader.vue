@@ -5,7 +5,7 @@
     <div class="header_wrapper">
       <div style="display: flex; align-items: center">
         <NuxtLink to="/">
-          <img src="~/assets/img/logo.png" />
+          <img src="~/assets/img/logo.jpg" class="nav_logo" />
         </NuxtLink>
       </div>
       <div
@@ -193,13 +193,13 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import "element-ui/lib/theme-chalk/display.css";
-import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
-import url from "../../url";
+import Vue from 'vue';
+import 'element-ui/lib/theme-chalk/display.css';
+import ApplicationHandler from '@/handlers/ApplicationHandler.vue';
+import url from '../../url';
 
 export default Vue.extend({
-  name: "NavHeader",
+  name: 'NavHeader',
   components: {
     ApplicationHandler,
   },
@@ -207,14 +207,14 @@ export default Vue.extend({
     return {
       userData: {} as any,
       userReady: false,
-      user_type: "" as any,
+      user_type: '' as any,
       src:
-        process.env.NODE_ENV === "development"
-          ? "http://localhost:8000/"
-          : "https://newapi.dwellys.com/",
-      user: "login" as string,
+        process.env.NODE_ENV === 'development'
+          ? 'http://localhost:8000/'
+          : 'https://newapi.dwellys.com/',
+      user: 'login' as string,
       drawer: false as boolean,
-      direction: "rtl",
+      direction: 'rtl',
     };
   },
 
@@ -262,6 +262,9 @@ a {
   @media (max-width: $laptop_screen) {
     padding-right: 10px;
     padding-left: 10px;
+  }
+  .nav_logo {
+    width: 150px;
   }
 }
 .header_content {
