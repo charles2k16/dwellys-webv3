@@ -4,7 +4,7 @@
       <el-col
         :xs="24"
         :sm="12"
-        :md="6"
+        :md="8"
         v-for="property in listings"
         :key="property.id"
         style="height: 400px"
@@ -35,7 +35,7 @@
                   @click="favProperty(property)"
                   :style="
                     favProperties &&
-                    favProperties.some((fav) => fav.id == property.id)
+                    favProperties.some(fav => fav.id == property.id)
                       ? { color: 'red' }
                       : { color: 'white' }
                   "
