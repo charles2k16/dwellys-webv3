@@ -3,8 +3,7 @@
     <el-row :gutter="20" v-if="listings.length > 0">
       <el-col
         :xs="24"
-        :sm="12"
-        :md="6"
+        :sm="8"
         v-for="property in listings"
         :key="property.id"
         style="height: 400px"

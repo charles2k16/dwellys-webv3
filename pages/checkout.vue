@@ -171,12 +171,13 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { IMixinState } from "@/types/mixinsTypes";
-import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
+import Vue from 'vue';
+import { IMixinState } from '@/types/mixinsTypes';
+import ApplicationHandler from '@/handlers/ApplicationHandler.vue';
 
 export default Vue.extend({
-  name: "PropertyUpload",
+  auth: false,
+  name: 'checkoutPage',
   components: {
     ApplicationHandler,
   },
@@ -185,10 +186,10 @@ export default Vue.extend({
       min == 0 &&
         this.payment_prompt == true &&
         this.$router.push({
-          name: "payment-condition",
+          name: 'payment-condition',
           // params: { property: property.id },
           query: {
-            verification: "failed",
+            verification: 'failed',
             listing_id: this.listing_id,
             plan_id: this.listing_plan_id,
             category: this.category,
@@ -204,16 +205,16 @@ export default Vue.extend({
       timerOut: null as any,
       showPaymentModal: false,
       propertySelected: false as boolean,
-      media: "Pay with Momo" as string,
+      media: 'Pay with Momo' as string,
       codeLoading: false,
       paymentMedia: [
-        { method: "Pay with Momo", icon: "el-icon-mobile-phone" },
-        { method: "Pay with card", icon: "el-icon-bank-card" },
+        { method: 'Pay with Momo', icon: 'el-icon-mobile-phone' },
+        { method: 'Pay with card', icon: 'el-icon-bank-card' },
       ],
-      mobile_money: ["MTN Mobile money", "Vodafone Cash", "Zeepay"],
-      mobile: "",
+      mobile_money: ['MTN Mobile money', 'Vodafone Cash', 'Zeepay'],
+      mobile: '',
       btnLoading: false as boolean,
-      discount_code: "" as string,
+      discount_code: '' as string,
       listing_plan_id: null as any,
       category: null as any,
       listing_id: null as any,
@@ -222,18 +223,18 @@ export default Vue.extend({
         percentage_value: 0,
       },
       selectedPlan: {
-        listing_id: "",
-        listing_planid: "",
-        discount_code: "",
-        payment_option: "",
+        listing_id: '',
+        listing_planid: '',
+        discount_code: '',
+        payment_option: '',
         card_payment: {
-          cvv: "",
-          name_on_card: "",
-          card_number: "",
-          card_expiry_month: "",
-          card_expiry_year: "",
+          cvv: '',
+          name_on_card: '',
+          card_number: '',
+          card_expiry_month: '',
+          card_expiry_year: '',
         },
-        mobile_money_number: "",
+        mobile_money_number: '',
       },
     };
   },
@@ -249,16 +250,16 @@ export default Vue.extend({
     submitVal() {
       let valid = false;
       if (
-        this.media == "Pay with Momo" &&
-        this.selectedPlan.mobile_money_number != ""
+        this.media == 'Pay with Momo' &&
+        this.selectedPlan.mobile_money_number != ''
       ) {
         valid = true;
       } else if (
-        this.media == "Pay with card" &&
-        this.selectedPlan.card_payment.cvv != "" &&
-        this.selectedPlan.card_payment.name_on_card != "" &&
-        this.selectedPlan.card_payment.card_expiry_month != "" &&
-        this.selectedPlan.card_payment.card_expiry_year != ""
+        this.media == 'Pay with card' &&
+        this.selectedPlan.card_payment.cvv != '' &&
+        this.selectedPlan.card_payment.name_on_card != '' &&
+        this.selectedPlan.card_payment.card_expiry_month != '' &&
+        this.selectedPlan.card_payment.card_expiry_year != ''
       ) {
         valid = true;
       }
@@ -270,14 +271,14 @@ export default Vue.extend({
       this.payment_prompt = false;
       clearTimeout(this.timerOut);
       this.timerOut = null;
-      console.log("cancel");
+      console.log('cancel');
     },
     toVerification() {
       this.$router.push({
-        name: "payment-condition",
+        name: 'payment-condition',
         // params: { property: property.id },
         query: {
-          verification: "success",
+          verification: 'success',
         },
       });
     },
@@ -292,7 +293,7 @@ export default Vue.extend({
       }, 1000);
     },
     async checkDiscountCode() {
-      console.log("discount");
+      console.log('discount');
       //
       this.codeLoading = true;
       try {
@@ -304,13 +305,13 @@ export default Vue.extend({
 
         (this as any as IMixinState).$message({
           showClose: true,
-          message: "Discount code verified, proceed to payment",
-          type: "success",
+          message: 'Discount code verified, proceed to payment',
+          type: 'success',
         });
 
         // this.$router.replace("/");
       } catch (error: any) {
-        console.log(error, "error");
+        console.log(error, 'error');
         (this as any as IMixinState).catchError(error);
         this.codeLoading = false;
 
@@ -318,18 +319,18 @@ export default Vue.extend({
           (this as any as IMixinState).$message({
             showClose: true,
             message: error.response.data.message,
-            type: "error",
+            type: 'error',
           });
         }
       }
     },
     changePaymentMedia(method: string) {
-      this.selectedPlan.card_payment.cvv = "";
-      this.selectedPlan.card_payment.name_on_card = "";
-      this.selectedPlan.card_payment.card_number = "";
-      this.selectedPlan.card_payment.card_expiry_month = "";
-      this.selectedPlan.card_payment.card_expiry_year = "";
-      this.selectedPlan.mobile_money_number = "";
+      this.selectedPlan.card_payment.cvv = '';
+      this.selectedPlan.card_payment.name_on_card = '';
+      this.selectedPlan.card_payment.card_number = '';
+      this.selectedPlan.card_payment.card_expiry_month = '';
+      this.selectedPlan.card_payment.card_expiry_year = '';
+      this.selectedPlan.mobile_money_number = '';
       this.media = method;
     },
 
@@ -342,7 +343,7 @@ export default Vue.extend({
           listing_plan_id: this.listing_plan_id,
           discount_code: this.discount_code,
           payment_option:
-            this.media == "Pay with Momo" ? "mobile_money" : "card_payment",
+            this.media == 'Pay with Momo' ? 'mobile_money' : 'card_payment',
           card_pament: {
             cvv: this.selectedPlan.card_payment.cvv,
             name_on_card: this.selectedPlan.card_payment.name_on_card,
@@ -367,7 +368,7 @@ export default Vue.extend({
 
         // this.$router.replace("/");
       } catch (error: any) {
-        console.log(error, "error");
+        console.log(error, 'error');
         (this as any as IMixinState).catchError(error);
         this.btnLoading = false;
 
@@ -375,7 +376,7 @@ export default Vue.extend({
           (this as any as IMixinState).$message({
             showClose: true,
             message: error.response.data.message,
-            type: "error",
+            type: 'error',
           });
         }
       }
