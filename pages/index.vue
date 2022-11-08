@@ -311,27 +311,27 @@ export default Vue.extend({
       this.pageLoad = false;
     },
     getQuery() {
-      this.$router.push({
-        name: 'search',
-        // params: { property: property.id },
-        query: {
-          name: this.search_value,
-        },
-      });
       // this.pageLoad = true;
-      // if (this.search_value) {
-      //   try {
-      //     const query = await this.$querySearchApi.query(this.search_value);
-      //     console.log(query);
-      //     this.loadQuery(query.data);
-      //     this.isQuery = true;
-      //   } catch (error: any) {
-      //     if (error?.response?.data) {
-      //       this.isQuery = true;
-      //       this.pageLoad = false;
-      //     }
-      //   }
-      // }
+      if (this.search_value) {
+        this.$router.push({
+          name: 'search',
+          // params: { property: property.id },
+          query: {
+            name: this.search_value,
+          },
+        });
+        //   try {
+        //     const query = await this.$querySearchApi.query(this.search_value);
+        //     console.log(query);
+        //     this.loadQuery(query.data);
+        //     this.isQuery = true;
+        //   } catch (error: any) {
+        //     if (error?.response?.data) {
+        //       this.isQuery = true;
+        //       this.pageLoad = false;
+        //     }
+        //   }
+      }
     },
     loadQuery(properties: any) {
       const data = properties.map((property: any) => {

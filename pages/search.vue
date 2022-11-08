@@ -2,6 +2,91 @@
   <div v-loading="loading" class="section search_details_container">
     <div class="search_property_details">
       <div ref="property_details" class="">
+        <el-drawer
+          :visible.sync="filter_drawer"
+          direction="rtl"
+          :before-close="handleClose"
+        >
+          <div class="all_filters">
+            <div class="filter_prop_type">
+              <el-radio-group
+                v-model="search_property.type"
+                style="margin-bottom: 30px"
+              >
+                <el-radio-button label="top">Sale</el-radio-button>
+                <el-radio-button label="right">Rent</el-radio-button>
+                <el-radio-button label="bottom">Lease</el-radio-button>
+              </el-radio-group>
+            </div>
+            <div>
+              <label for="">Price</label>
+              <div class="pt-10">
+                <div class="d-flex">
+                  <el-input
+                    placeholder="min"
+                    type="number"
+                    v-model="search_property.min_price"
+                  >
+                    <template slot="prepend">GH&#8373; </template></el-input
+                  ><span class="px-10 pt-10">-</span>
+                  <el-input
+                    placeholder="max"
+                    type="number"
+                    v-model="search_property.max_price"
+                  >
+                    <template slot="prepend">GH&#8373; </template>
+                  </el-input>
+                </div>
+              </div>
+            </div>
+            <div class="pt-20">
+              <label for="">Property Type</label>
+              <div class="pt-10">
+                <div class="all_filter_type">
+                  <div
+                    v-for="(type, index) in property_types"
+                    :key="index"
+                    @click="getPropertyType(type)"
+                    :style="
+                      search_property.type == type.value &&
+                      'background:#de0b0b80'
+                    "
+                  >
+                    <span> <i :class="type.icon"></i> </span>
+                    <span>{{ type.value }} </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="pt-20">
+              <div class="d-flex_column pb-10">
+                <label for="bed" class="pb-5">Bed(s)</label>
+                <el-input-number
+                  id="bed"
+                  v-model="search_property.bed"
+                  @change="handleChange"
+                  class="w-100"
+                  :min="1"
+                  :max="10"
+                ></el-input-number>
+              </div>
+              <div class="d-flex_column">
+                <label for="baths" class="pb-5">Bathroom(s)</label>
+                <el-input-number
+                  id="baths"
+                  v-model="search_property.bathrooms"
+                  @change="handleChange"
+                  class="w-100"
+                  :min="1"
+                  :max="10"
+                ></el-input-number>
+              </div>
+            </div>
+            <div class="all_filters_btn">
+              <el-button type="primary">Search</el-button>
+            </div>
+          </div>
+        </el-drawer>
         <ApplicationHandler ref="propertyAction" />
         <el-dialog :visible.sync="dialogVisible" width="50%">
           <div>
@@ -241,89 +326,145 @@
     </div>
 
     <div class="search_property_similar">
-      <div>
-        <!-- search options -->
-      </div>
-
       <div class="pt-20">
-        <div class="search_options">
-          <el-select
-            v-model="search_property.category"
-            placeholder="Category"
-            class="search_option"
-          >
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+        <div>
+          <div class="content_search">
+            <el-input type="search" placeholder="search..."></el-input>
+          </div>
+          <div class="search_options">
+            <el-select
+              v-model="search_property.category"
+              placeholder="Category"
+              class="search_option"
             >
-            </el-option>
-          </el-select>
+              <el-option
+                v-for="item in categories"
+                :key="item.value"
+                :label="item.value"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
 
-          <el-dropdown
-            v-model="search_property.price"
-            placeholder="Price"
-            class="search_price mr-5"
-          >
-            <span class="el-dropdown-link drop_link d-flex justify_between">
-              Price<i class="el-icon-arrow-down el-icon--right"></i>
-            </span>
-            <el-dropdown-menu slot="dropdown" style="width: 340px">
-              <el-dropdown-item>
-                <div class="block">
-                  <el-slider v-model="value" range show-stops :max="10000000">
-                  </el-slider>
-                </div>
-                <div class="d-flex">
-                  <el-input
-                    placeholder="Enter min"
-                    type="number"
-                    v-model="value[0]"
-                  >
-                    <template slot="prepend">GH&#8373; </template></el-input
-                  ><span class="px-10 pt-10">-</span>
-                  <el-input
-                    placeholder="Enter max"
-                    type="number"
-                    v-model="value[1]"
-                  >
-                    <template slot="prepend">GH&#8373; </template>
-                  </el-input>
-                </div>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-          <el-select
-            v-model="search_property.bath"
-            placeholder="Bed/Baths"
-            class="search_option"
-          >
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+            <el-dropdown
+              v-model="search_property.price"
+              trigger="click"
+              :hide-on-click="hidePrice"
+              placeholder="Price"
+              class="search_price mr-5"
             >
-            </el-option>
-          </el-select>
-          <el-select
-            v-model="search_property.specifications"
-            multiple
-            collapse-tags
-            class="search_option"
-            placeholder="Select"
-          >
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              <span class="el-dropdown-link drop_link d-flex justify_between">
+                Price<i class="el-icon-arrow-down el-icon--right"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown" style="width: 380px">
+                <el-dropdown-item>
+                  <!-- <div class="block">
+                  <el-slider v-model="value" range :max="10000000"> </el-slider>
+                </div> -->
+                  <div class="d-flex">
+                    <el-input
+                      placeholder="min"
+                      type="number"
+                      v-model="search_property.min_price"
+                    >
+                      <template slot="prepend">GH&#8373; </template></el-input
+                    ><span class="px-10 pt-10">-</span>
+                    <el-input
+                      placeholder="max"
+                      type="number"
+                      v-model="search_property.max_price"
+                    >
+                      <template slot="prepend">GH&#8373; </template>
+                    </el-input>
+                  </div>
+                  <div class="d-flex justify_end pt-10">
+                    <el-button @click="hidePrice = true" type="primary"
+                      >Done</el-button
+                    >
+                  </div>
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+
+            <el-dropdown
+              v-model="search_property.beds"
+              trigger="click"
+              :hide-on-click="hideSelect"
+              class="search_price mr-5"
+              placeholder="Bed/Baths"
             >
-            </el-option>
-          </el-select>
+              <span class="el-dropdown-link drop_link d-flex justify_between">
+                Bed/Baths<i class="el-icon-arrow-down el-icon--right"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown" style="width: 200px">
+                <el-dropdown-item>
+                  <!-- <div class="block">
+                  <el-slider v-model="value" range :max="10000000"> </el-slider>
+                </div> -->
+                  <div class="">
+                    <div class="d-flex_column pb-10">
+                      <label for="bed" class="pb-5">Bed(s)</label>
+                      <el-input-number
+                        id="bed"
+                        v-model="search_property.bed"
+                        @change="handleChange"
+                        class="w-100"
+                        :min="1"
+                        :max="10"
+                      ></el-input-number>
+                    </div>
+                    <div class="d-flex_column">
+                      <label for="baths" class="pb-5">Bathroom(s)</label>
+                      <el-input-number
+                        id="baths"
+                        v-model="search_property.bathrooms"
+                        @change="handleChange"
+                        class="w-100"
+                        :min="1"
+                        :max="10"
+                      ></el-input-number>
+                    </div>
+                  </div>
+                  <div class="d-flex justify_end pt-10">
+                    <el-button @click="hideSelect = true" type="primary"
+                      >Done</el-button
+                    >
+                  </div>
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+            <el-select
+              v-model="search_property.specifications"
+              class="search_option"
+              placeholder="Select Type"
+            >
+              <!-- multiple -->
+              <!-- collapse-tags -->
+              <el-option
+                v-for="item in property_types"
+                :key="item.value"
+                :label="item.value"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+            <div
+              class="search_price el-dropdown"
+              style="color: rgba(96, 98, 102, 0.5); cursor: pointer"
+              @click="filter_drawer = true"
+            >
+              <span> <i class="el-icon-s-operation"></i> </span>
+              <span>All Filters</span>
+            </div>
+            <div class="pl-10 pb-10">
+              <el-button type="primary">Search</el-button>
+            </div>
+          </div>
         </div>
-        <SimilarProperties :listings="similarListings" />
+        <SearchProperties
+          :listings="similarListings"
+          @property="showProperty"
+        />
       </div>
     </div>
   </div>
@@ -332,7 +473,6 @@
 <script lang="ts">
 import Vue from 'vue';
 import ApplicationHandler from '@/handlers/ApplicationHandler.vue';
-import url from '../url';
 import { IMixinState } from '../types/mixinsTypes';
 import Map from '../components/profile/map.vue';
 
@@ -348,38 +488,31 @@ export default Vue.extend({
     return {
       activeName: 'first' as string,
       dialogVisible: false as boolean,
+      filter_drawer: false as boolean,
       loading: true as boolean,
+      hidePrice: false as boolean,
+      hideSelect: false as boolean,
       image: '' as any,
-      value: [0, 8],
+      // value: [null, null],
       modalImage: '' as any,
       search_property: {
         price: 0,
         type: '',
         specifications: [],
         category: '',
+        min_price: null,
+        max_price: null,
       },
-      options: [
-        {
-          value: 'Option1',
-          label: 'Option1',
-        },
-        {
-          value: 'Option2',
-          label: 'Option2',
-        },
-        {
-          value: 'Option3',
-          label: 'Option3',
-        },
-        {
-          value: 'Option4',
-          label: 'Option4',
-        },
-        {
-          value: 'Option5',
-          label: 'Option5',
-        },
+
+      categories: [{ value: 'Rent' }, { value: 'Lease' }, { value: 'Sale' }],
+      property_types: [
+        { value: 'House', icon: 'el-icon-s-home' },
+        { value: 'Apartment', icon: 'el-icon-discount' },
+        { value: 'Office', icon: 'el-icon-office-building' },
+        { value: 'Land', icon: 'el-icon-place' },
+        { value: 'Town house', icon: 'el-icon-school' },
       ],
+
       propertyDetails: {} as any,
       home: '' as string,
       favProperties: [] as Array<object>,
@@ -417,6 +550,9 @@ export default Vue.extend({
       window.scrollTo(10, 10);
       // window.scrollTo(0, 0);
     },
+    handleClose() {
+      this.filter_drawer = false;
+    },
     async fetchData() {
       // this.loading = true;
       // console.log(this.$route.query.name);
@@ -437,9 +573,7 @@ export default Vue.extend({
       // }
 
       try {
-        const listings = await this.$listingApi.show(
-          '456668a3-ec6c-404f-9bda-dec040558d31'
-        );
+        const listings = await this.$listingApi.show(this.$route.query.id);
 
         this.propertyDetails = listings.data;
         const similarProperties = await this.$similarListingsApi.query(
@@ -461,8 +595,10 @@ export default Vue.extend({
       this.similarListings = data;
       this.loading = false;
     },
-    url() {
-      return url();
+    handleChange() {},
+    showProperty() {},
+    getPropertyType(type: any) {
+      this.search_property.type = type.value;
     },
     async favProperty(fav: any) {
       if (this.$auth.loggedIn) {
@@ -537,11 +673,16 @@ $small_screen: 426px;
     margin-left: 5px;
   }
 }
-
+.content_search {
+  width: 90%;
+  // margin: 0 auto;
+  padding-left: 10px;
+  padding-bottom: 10px;
+}
 .search_options {
   display: flex;
   flex-wrap: wrap;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   padding-left: 10px;
   .search_option {
     margin-bottom: 5px;
@@ -555,6 +696,38 @@ $small_screen: 426px;
     }
   }
 }
+.all_filters {
+  width: 80%;
+  margin: 0 auto;
+  .filter_prop_type {
+    display: flex;
+    justify-content: center;
+  }
+  .all_filter_type {
+    display: flex;
+    flex-wrap: wrap;
+    div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px;
+      width: 130px;
+      border: 1px solid rgba(96, 98, 102, 0.5);
+      border-radius: 10px;
+      margin: 5px;
+      i {
+        font-size: 20px;
+      }
+    }
+  }
+  .all_filters_btn {
+    margin-top: 40px;
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+  }
+}
+
 .arrow_back {
   width: 40px;
   padding-top: 5px;
