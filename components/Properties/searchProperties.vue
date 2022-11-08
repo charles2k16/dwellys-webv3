@@ -3,7 +3,7 @@
     <el-row :gutter="20" v-if="listings.length > 0">
       <el-col
         :xs="24"
-        :sm="8"
+        :sm="12"
         v-for="property in listings"
         :key="property.id"
         style="height: 400px"
@@ -13,7 +13,7 @@
           <div
             class="property_image"
             :style="background_style(property.photos)"
-            @click.self="openPropertyDetails(property)"
+            @click="openPropertyDetails(property)"
           >
             <div class="d-flex justify_between property_labels p-10">
               <p style="background: white">
@@ -33,8 +33,7 @@
                   class="material-icons ml-5"
                   @click="favProperty(property)"
                   :style="
-                    favProperties &&
-                    favProperties.some(fav => fav.id == property.id)
+                    favProperties.some((fav) => fav.id == property.id)
                       ? { color: 'red' }
                       : { color: 'white' }
                   "
@@ -47,7 +46,7 @@
           <!-- <nuxt-link
             :to="{ name: 'property_details', params: { property: property } }"
           > -->
-          <div class="card_body" @click="openPropertyDetails(property)">
+          <div class="card_body">
             <div class="d-flex justify_between">
               <p class="house_amount">
                 GH₵ {{ property.listing_detail.price
@@ -67,52 +66,33 @@
               </p>
             </div>
           </div>
-          <div class="card_footer" @click="openPropertyDetails(property)">
+          <div class="card_footer">
             <div
               class="pl-5 pt-5"
               v-for="specification in property.property_specifications"
               :key="specification.id"
             >
               <div class="d-flex align_center">
-                <img
-                  v-if="
-                    specification.specification.name == 'Bed room' ||
-                    specification.specification.name == 'Bedroom'
-                  "
-                  src="~/assets/svg/bed.png"
-                  class="property_img pr-10"
-                />
-                <img
-                  v-else-if="
-                    specification.specification.name == 'Bath room' ||
-                    specification.specification.name == 'Bathroom'
-                  "
-                  src="~/assets/svg/bath.png"
-                  class="property_img pr-10"
-                />
-                <img
-                  v-else-if="specification.specification.name == 'Garage'"
-                  src="~/assets/svg/garage.png"
-                  class="property_img pr-10"
-                />
-                <img
-                  v-else-if="specification.specification.name == 'Chair'"
-                  src="~/assets/svg/chair.png"
-                  class="property_img pr-10"
-                />
-                <img
-                  v-else-if="
-                    specification.specification.name == 'Dining room' ||
-                    specification.specification.name == 'Diningroom'
-                  "
-                  src="~/assets/svg/kitchen.png"
-                  class="property_img pr-10"
-                />
-
+                <img src="~/assets/svg/bed.png" class="property_img pr-10" />
                 <b>{{ specification.number }} </b>
               </div>
               <p>{{ specification.specification.name }}</p>
             </div>
+            <!-- <div class="house_bathroom">
+              <div class="d-flex align_center">
+                <img src="~/assets/svg/bath.png" class="property_img pr-10" />
+                <b>4</b>
+              </div>
+              <p>Bathrooms</p>
+            </div>
+            <div>
+              <div class="d-flex align_center">
+                <img src="~/assets/svg/tv.png" class="property_img pr-10" /><b
+                  >1</b
+                >
+              </div>
+              <p>Living area</p>
+            </div> -->
           </div>
           <!-- </nuxt-link> -->
         </el-card>
@@ -134,41 +114,29 @@ export default Vue.extend({
       required: true,
       type: Array,
     },
-    type: {
-      required: false,
-      type: String,
-    },
-    fetchFavorites: {
-      required: false,
-      type: Function,
-    },
-    favProperties: {
-      required: false,
-      type: Array,
-    },
   },
-  name: 'PropertyList',
+  name: 'SearchProperties',
   data() {
     return {
-      // favProperties: [] as any,
+      favProperties: [] as any,
     };
   },
   async created() {
-    // this.fetchFavorites();
+    this.fetchFavorites();
   },
 
   methods: {
-    // async fetchFavorites() {
-    //   if (this.$auth.loggedIn) {
-    //     const userFavorite = await this.$userFavoriteApi.index();
-    //     const favorites = userFavorite.data;
+    async fetchFavorites() {
+      if (this.$auth.loggedIn) {
+        const userFavorite = await this.$userFavoriteApi.index();
+        const favorites = userFavorite.data;
 
-    //     for (let i = 0; i < favorites.length; i++) {
-    //       this.favProperties.push(favorites[i].listing);
-    //     }
-    //     console.log("favorites", this.favProperties);
-    //   }
-    // },
+        for (let i = 0; i < favorites.length; i++) {
+          this.favProperties.push(favorites[i].listing);
+        }
+        console.log('favorites', this.favProperties);
+      }
+    },
     truncateString(str: string) {
       if (str.length > 30) {
         return str.slice(0, 30) + '...';
@@ -193,7 +161,6 @@ export default Vue.extend({
           const favoriteResponse = await this.$selectFavoriteApi.create({
             listing_id: fav.id,
           });
-          console.log(favoriteResponse, fav);
           this.fetchFavorites();
           (this as any as IMixinState).$message({
             showClose: true,
@@ -219,15 +186,15 @@ export default Vue.extend({
       }
     },
     openPropertyDetails(property: any): void {
-      console.log(property);
       this.$router.push({
-        name: 'property_details',
-        // params: { property: property.id },
+        name: 'search',
         query: {
           name: property.listing_detail.name,
           id: property.id,
         },
       });
+      //   this.$emit('property', property);
+      console.log(property);
     },
   },
 });

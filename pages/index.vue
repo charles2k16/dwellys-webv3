@@ -283,7 +283,6 @@ export default Vue.extend({
     },
     async changeLabel(tab: any) {
       this.pageLoad = true;
-      console.log(tab.label);
       try {
         const property_type_response = await this.$similarListingsApi.query(
           tab.label
@@ -311,22 +310,27 @@ export default Vue.extend({
       this.house_listings = data;
       this.pageLoad = false;
     },
-    async getQuery() {
-      this.pageLoad = true;
+    getQuery() {
+      // this.pageLoad = true;
       if (this.search_value) {
-        try {
-          const query = await this.$querySearchApi.query(this.search_value);
-          console.log('query', query);
-          //  console.log();
-          this.loadQuery(query.data);
-          this.isQuery = true;
-        } catch (error: any) {
-          if (error?.response?.data) {
-            console.log(error?.response);
-            this.isQuery = true;
-            this.pageLoad = false;
-          }
-        }
+        this.$router.push({
+          name: 'search',
+          // params: { property: property.id },
+          query: {
+            name: this.search_value,
+          },
+        });
+        //   try {
+        //     const query = await this.$querySearchApi.query(this.search_value);
+        //     console.log(query);
+        //     this.loadQuery(query.data);
+        //     this.isQuery = true;
+        //   } catch (error: any) {
+        //     if (error?.response?.data) {
+        //       this.isQuery = true;
+        //       this.pageLoad = false;
+        //     }
+        //   }
       }
     },
     loadQuery(properties: any) {

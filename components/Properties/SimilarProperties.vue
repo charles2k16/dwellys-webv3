@@ -4,7 +4,6 @@
       <el-col
         :xs="24"
         :sm="12"
-        :md="6"
         v-for="property in listings"
         :key="property.id"
         style="height: 400px"
@@ -106,8 +105,8 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { IMixinState } from "../../types/mixinsTypes";
+import Vue from 'vue';
+import { IMixinState } from '../../types/mixinsTypes';
 
 export default Vue.extend({
   props: {
@@ -116,7 +115,7 @@ export default Vue.extend({
       type: Array,
     },
   },
-  name: "SimilarProperties",
+  name: 'SimilarProperties',
   data() {
     return {
       favProperties: [] as any,
@@ -135,12 +134,12 @@ export default Vue.extend({
         for (let i = 0; i < favorites.length; i++) {
           this.favProperties.push(favorites[i].listing);
         }
-        console.log("favorites", this.favProperties);
+        console.log('favorites', this.favProperties);
       }
     },
     truncateString(str: string) {
       if (str.length > 30) {
-        return str.slice(0, 30) + "...";
+        return str.slice(0, 30) + '...';
       } else {
         return str;
       }
@@ -165,21 +164,21 @@ export default Vue.extend({
           this.fetchFavorites();
           (this as any as IMixinState).$message({
             showClose: true,
-            message: "Added property to favourite!",
-            type: "success",
+            message: 'Added property to favourite!',
+            type: 'success',
           });
         } catch (error: any) {
           (this as any as IMixinState).catchError(error);
           console.log(error?.response);
         }
       } else {
-        this.$confirm("Login to select favourite", {
-          confirmButtonText: "Login",
-          cancelButtonText: "Cancel",
-          type: "success",
+        this.$confirm('Login to select favourite', {
+          confirmButtonText: 'Login',
+          cancelButtonText: 'Cancel',
+          type: 'success',
         })
           .then(() => {
-            this.$router.push("/login");
+            this.$router.push('/login');
           })
           .catch(() => {
             // this.$router.push("/register");
@@ -188,7 +187,7 @@ export default Vue.extend({
     },
     openPropertyDetails(property: any): void {
       this.$router.push({
-        name: "property_details",
+        name: 'property_details',
         query: {
           name: property.listing_detail.name,
           id: property.id,
