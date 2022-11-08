@@ -310,6 +310,18 @@
   background-color: #ffecec;
   color: #cf0100;
 }
+.search_price.el-dropdown {
+  border: 1px solid #e2e8f0;
+  height: 43px;
+  border-radius: 8px;
+  background: #f8fafc;
+  box-sizing: border-box;
+  color: #606266;
+  display: inline-block;
+  line-height: 40px;
+  outline: 0;
+  padding: 0 15px;
+}
 
 .el-input--small .el-input__inner {
   height: 40px;

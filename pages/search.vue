@@ -1,7 +1,7 @@
 <template>
   <div v-loading="loading" class="section search_details_container">
     <div class="search_property_details">
-      <div ref="property_details" class="section pt-20">
+      <div ref="property_details" class="">
         <ApplicationHandler ref="propertyAction" />
         <el-dialog :visible.sync="dialogVisible" width="50%">
           <div>
@@ -241,9 +241,88 @@
     </div>
 
     <div class="search_property_similar">
-      <h4 class="mt-60">Similar properties</h4>
+      <div>
+        <!-- search options -->
+      </div>
 
       <div class="pt-20">
+        <div class="search_options">
+          <el-select
+            v-model="search_property.category"
+            placeholder="Category"
+            class="search_option"
+          >
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+
+          <el-dropdown
+            v-model="search_property.price"
+            placeholder="Price"
+            class="search_price mr-5"
+          >
+            <span class="el-dropdown-link drop_link d-flex justify_between">
+              Price<i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown" style="width: 340px">
+              <el-dropdown-item>
+                <div class="block">
+                  <el-slider v-model="value" range show-stops :max="10000000">
+                  </el-slider>
+                </div>
+                <div class="d-flex">
+                  <el-input
+                    placeholder="Enter min"
+                    type="number"
+                    v-model="value[0]"
+                  >
+                    <template slot="prepend">GH&#8373; </template></el-input
+                  ><span class="px-10 pt-10">-</span>
+                  <el-input
+                    placeholder="Enter max"
+                    type="number"
+                    v-model="value[1]"
+                  >
+                    <template slot="prepend">GH&#8373; </template>
+                  </el-input>
+                </div>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <el-select
+            v-model="search_property.bath"
+            placeholder="Bed/Baths"
+            class="search_option"
+          >
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+          <el-select
+            v-model="search_property.specifications"
+            multiple
+            collapse-tags
+            class="search_option"
+            placeholder="Select"
+          >
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </div>
         <SimilarProperties :listings="similarListings" />
       </div>
     </div>
@@ -271,7 +350,36 @@ export default Vue.extend({
       dialogVisible: false as boolean,
       loading: true as boolean,
       image: '' as any,
+      value: [0, 8],
       modalImage: '' as any,
+      search_property: {
+        price: 0,
+        type: '',
+        specifications: [],
+        category: '',
+      },
+      options: [
+        {
+          value: 'Option1',
+          label: 'Option1',
+        },
+        {
+          value: 'Option2',
+          label: 'Option2',
+        },
+        {
+          value: 'Option3',
+          label: 'Option3',
+        },
+        {
+          value: 'Option4',
+          label: 'Option4',
+        },
+        {
+          value: 'Option5',
+          label: 'Option5',
+        },
+      ],
       propertyDetails: {} as any,
       home: '' as string,
       favProperties: [] as Array<object>,
@@ -293,6 +401,7 @@ export default Vue.extend({
   },
   created() {
     this.fetchData();
+    console.log(screen.width);
   },
   computed: {
     hasMorePhotos() {
@@ -329,7 +438,7 @@ export default Vue.extend({
 
       try {
         const listings = await this.$listingApi.show(
-          '95550db8-cc50-460c-a079-5eb6dbc3921a'
+          '456668a3-ec6c-404f-9bda-dec040558d31'
         );
 
         this.propertyDetails = listings.data;
@@ -426,6 +535,24 @@ $small_screen: 426px;
   }
   .search_property_similar {
     margin-left: 5px;
+  }
+}
+
+.search_options {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  padding-left: 10px;
+  .search_option {
+    margin-bottom: 5px;
+    width: 25%;
+    padding-right: 5px;
+  }
+  .search_price {
+    .drop_link {
+      padding-top: 10px;
+      color: rgba(96, 98, 102, 0.5);
+    }
   }
 }
 .arrow_back {
