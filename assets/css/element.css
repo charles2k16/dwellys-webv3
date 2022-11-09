@@ -336,3 +336,21 @@
   background: hsla(0, 100%, 41%, 0.6);
   color: white;
 }
+.el-drawer__open .el-drawer.rtl {
+  width: 30% !important;
+}
+@media (max-width: 1024px) {
+  .el-drawer__open .el-drawer.rtl {
+    width: 40% !important;
+  }
+}
+@media (max-width: 768px) {
+  .el-drawer__open .el-drawer.rtl {
+    width: 50% !important;
+  }
+}
+@media (max-width: 425px) {
+  .el-drawer__open .el-drawer.rtl {
+    width: 100% !important;
+  }
+}

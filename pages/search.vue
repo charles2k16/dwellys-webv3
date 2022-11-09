@@ -1,92 +1,93 @@
 <template>
   <div v-loading="loading" class="section search_details_container">
-    <div class="search_property_details">
-      <div ref="property_details" class="">
-        <el-drawer
-          :visible.sync="filter_drawer"
-          direction="rtl"
-          :before-close="handleClose"
-        >
-          <div class="all_filters">
-            <div class="filter_prop_type">
-              <el-radio-group
-                v-model="search_property.type"
-                style="margin-bottom: 30px"
+    <el-drawer
+      :visible.sync="filter_drawer"
+      direction="rtl"
+      :before-close="handleClose"
+      class="filter_drawer"
+    >
+      <div class="all_filters">
+        <div class="filter_prop_type">
+          <el-radio-group
+            v-model="search_property.type"
+            style="margin-bottom: 30px"
+          >
+            <el-radio-button label="top">Sale</el-radio-button>
+            <el-radio-button label="right">Rent</el-radio-button>
+            <el-radio-button label="bottom">Lease</el-radio-button>
+          </el-radio-group>
+        </div>
+        <div>
+          <label for="">Price</label>
+          <div class="pt-10">
+            <div class="drawer_price">
+              <el-input
+                placeholder="min"
+                type="number"
+                v-model="search_property.min_price"
               >
-                <el-radio-button label="top">Sale</el-radio-button>
-                <el-radio-button label="right">Rent</el-radio-button>
-                <el-radio-button label="bottom">Lease</el-radio-button>
-              </el-radio-group>
-            </div>
-            <div>
-              <label for="">Price</label>
-              <div class="pt-10">
-                <div class="d-flex">
-                  <el-input
-                    placeholder="min"
-                    type="number"
-                    v-model="search_property.min_price"
-                  >
-                    <template slot="prepend">GH&#8373; </template></el-input
-                  ><span class="px-10 pt-10">-</span>
-                  <el-input
-                    placeholder="max"
-                    type="number"
-                    v-model="search_property.max_price"
-                  >
-                    <template slot="prepend">GH&#8373; </template>
-                  </el-input>
-                </div>
-              </div>
-            </div>
-            <div class="pt-20">
-              <label for="">Property Type</label>
-              <div class="pt-10">
-                <div class="all_filter_type">
-                  <div
-                    v-for="(type, index) in property_types"
-                    :key="index"
-                    @click="getPropertyType(type)"
-                    :style="
-                      search_property.type == type.value &&
-                      'background:#de0b0b80'
-                    "
-                  >
-                    <span> <i :class="type.icon"></i> </span>
-                    <span>{{ type.value }} </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="pt-20">
-              <div class="d-flex_column pb-10">
-                <label for="bed" class="pb-5">Bed(s)</label>
-                <el-input-number
-                  id="bed"
-                  v-model="search_property.bed"
-                  @change="handleChange"
-                  class="w-100"
-                  :min="1"
-                  :max="10"
-                ></el-input-number>
-              </div>
-              <div class="d-flex_column">
-                <label for="baths" class="pb-5">Bathroom(s)</label>
-                <el-input-number
-                  id="baths"
-                  v-model="search_property.bathrooms"
-                  @change="handleChange"
-                  class="w-100"
-                  :min="1"
-                  :max="10"
-                ></el-input-number>
-              </div>
-            </div>
-            <div class="all_filters_btn">
-              <el-button type="primary">Search</el-button>
+                <template slot="prepend">GH&#8373; </template></el-input
+              ><span class="px-10 pt-10 price_divider">-</span>
+              <el-input
+                placeholder="max"
+                type="number"
+                class="max_price"
+                v-model="search_property.max_price"
+              >
+                <template slot="prepend">GH&#8373; </template>
+              </el-input>
             </div>
           </div>
-        </el-drawer>
+        </div>
+        <div class="pt-20">
+          <label for="">Property Type</label>
+          <div class="pt-10">
+            <div class="all_filter_type">
+              <div
+                v-for="(type, index) in property_types"
+                :key="index"
+                @click="getPropertyType(type)"
+                :style="
+                  search_property.type == type.value && 'background:#de0b0b80'
+                "
+              >
+                <span> <i :class="type.icon"></i> </span>
+                <span>{{ type.value }} </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="pt-20">
+          <div class="d-flex_column pb-10">
+            <label for="bed" class="pb-5">Bed(s)</label>
+            <el-input-number
+              id="bed"
+              v-model="search_property.bed"
+              @change="handleChange"
+              class="w-100"
+              :min="1"
+              :max="10"
+            ></el-input-number>
+          </div>
+          <div class="d-flex_column">
+            <label for="baths" class="pb-5">Bathroom(s)</label>
+            <el-input-number
+              id="baths"
+              v-model="search_property.bathrooms"
+              @change="handleChange"
+              class="w-100"
+              :min="1"
+              :max="10"
+            ></el-input-number>
+          </div>
+        </div>
+        <div class="all_filters_btn">
+          <el-button type="primary">Search</el-button>
+        </div>
+      </div>
+    </el-drawer>
+    <div class="search_property_details">
+      <div ref="property_details" class="">
         <ApplicationHandler ref="propertyAction" />
         <el-dialog :visible.sync="dialogVisible" width="50%">
           <div>
@@ -356,12 +357,16 @@
               <span class="el-dropdown-link drop_link d-flex justify_between">
                 Price<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
-              <el-dropdown-menu slot="dropdown" style="width: 380px">
+              <el-dropdown-menu
+                slot="dropdown"
+                style="max-width: 300px"
+                class="price_dropdown"
+              >
                 <el-dropdown-item>
                   <!-- <div class="block">
                   <el-slider v-model="value" range :max="10000000"> </el-slider>
                 </div> -->
-                  <div class="d-flex">
+                  <div class="price_drop_options">
                     <el-input
                       placeholder="min"
                       type="number"
@@ -668,9 +673,30 @@ $small_screen: 426px;
   }
   .search_property_details {
     margin-right: 5px;
+    @media (max-width: $small_screen) {
+      display: none;
+    }
   }
   .search_property_similar {
     margin-left: 5px;
+    .price_dropdown {
+      // // width: 300px !important;
+      // background: green;
+      // @media (max-width: $small_screen) {
+      //   max-width: 200px;
+      // }
+      .price_drop_options {
+        display: flex;
+
+        @media (max-width: $small_screen) {
+          display: flex;
+          flex-direction: column;
+        }
+      }
+    }
+    @media (max-width: $small_screen) {
+      width: 100%;
+    }
   }
 }
 .content_search {
@@ -699,10 +725,28 @@ $small_screen: 426px;
 .all_filters {
   width: 80%;
   margin: 0 auto;
+  .drawer_price {
+    display: flex;
+    .price_divider {
+      @media (max-width: $small_screen) {
+        display: none;
+      }
+    }
+    @media (max-width: $small_screen) {
+      display: flex;
+      flex-direction: column;
+    }
+    .max_price {
+      @media (max-width: $small_screen) {
+        margin-top: 10px;
+      }
+    }
+  }
   .filter_prop_type {
     display: flex;
     justify-content: center;
   }
+
   .all_filter_type {
     display: flex;
     flex-wrap: wrap;
@@ -725,6 +769,11 @@ $small_screen: 426px;
     display: flex;
     justify-content: flex-end;
     width: 100%;
+  }
+  @media (max-width: $small_screen) {
+    width: 100%;
+    padding-right: 10px;
+    padding-left: 10px;
   }
 }
 
