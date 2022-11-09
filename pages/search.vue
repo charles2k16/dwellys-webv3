@@ -696,6 +696,7 @@ $small_screen: 426px;
     }
     @media (max-width: $small_screen) {
       width: 100%;
+      // margin-top: 40px;
     }
   }
 }
