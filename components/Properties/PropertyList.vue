@@ -34,7 +34,7 @@
                   @click="favProperty(property)"
                   :style="
                     favProperties &&
-                    favProperties.some((fav) => fav.id == property.id)
+                    favProperties.some(fav => fav.id == property.id)
                       ? { color: 'red' }
                       : { color: 'white' }
                   "
