@@ -86,7 +86,10 @@
         </div>
       </div>
     </el-drawer>
-    <div class="search_property_details">
+    <div
+      class="search_property_details"
+      :style="similarListings.length < 1 && 'display:none'"
+    >
       <div ref="property_details" class="">
         <ApplicationHandler ref="propertyAction" />
         <el-dialog :visible.sync="dialogVisible" width="50%">
@@ -326,7 +329,10 @@
       </el-row>
     </div>
 
-    <div class="search_property_similar">
+    <div
+      class="search_property_similar"
+      :style="similarListings.length < 1 && 'width:100%'"
+    >
       <div class="pt-20">
         <div>
           <div class="content_search">
@@ -534,6 +540,7 @@ export default Vue.extend({
   watch: {
     $route() {
       this.scrollToTop();
+
       this.fetchData();
     },
   },
@@ -559,7 +566,7 @@ export default Vue.extend({
       this.filter_drawer = false;
     },
     async fetchData() {
-      // this.loading = true;
+      this.loading = true;
       // console.log(this.$route.query.name);
       // try {
       //   const query = await this.$querySearchApi.query(this.$route.query.name);
