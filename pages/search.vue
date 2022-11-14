@@ -658,9 +658,7 @@ export default Vue.extend({
       console.log('query', joined);
 
       try {
-        const similarProperties = await this.$searchProperties.query(
-          type + category
-        );
+        const similarProperties = await this.$searchProperties.query(joined);
         this.loadListing(similarProperties.data);
       } catch (error) {
         this.loading = false;
