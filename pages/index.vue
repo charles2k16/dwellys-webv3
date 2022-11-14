@@ -320,17 +320,6 @@ export default Vue.extend({
             name: this.search_value,
           },
         });
-        //   try {
-        //     const query = await this.$querySearchApi.query(this.search_value);
-        //     console.log(query);
-        //     this.loadQuery(query.data);
-        //     this.isQuery = true;
-        //   } catch (error: any) {
-        //     if (error?.response?.data) {
-        //       this.isQuery = true;
-        //       this.pageLoad = false;
-        //     }
-        //   }
       }
     },
     loadQuery(properties: any) {

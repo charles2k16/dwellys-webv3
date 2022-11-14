@@ -5,27 +5,33 @@
   --font-primary: SFtext_reg;
   --font-primary-md: SFtext_md;
   --font-primary-light: SFtext_light;
-  --font-header-reg: SFPro_reg;
+  --circular_light: Inter_bold;
+  --font-header-reg: SFtext_md;
   --disable-button: #de0b0b80;
 }
 
 @font-face {
-  font-family: "SFtext_reg";
-  src: url("../fonts/SFUIText-Regular.woff");
+  font-family: 'SFtext_reg';
+  src: url('../fonts/Inter-Regular.ttf');
 }
 @font-face {
-  font-family: "SFPro_reg";
-  src: url("../fonts/FontsFree-Net-SFProDisplay-Light.ttf");
-}
-
-@font-face {
-  font-family: "SFtext_light";
-  src: url("../fonts/SFUIText-Light.woff");
+  font-family: 'SFPro_reg';
+  src: url('../fonts/Inter-SemiBold.ttf');
 }
 
 @font-face {
-  font-family: "SFtext_md";
-  src: url("../fonts/SFUIText-Medium.woff");
+  font-family: 'Inter_bold';
+  src: url('../fonts/Inter-Bold.ttf');
+}
+
+@font-face {
+  font-family: 'SFtext_light';
+  src: url('../fonts/Inter-Light.ttf');
+}
+
+@font-face {
+  font-family: 'SFtext_md';
+  src: url('../fonts/Inter-Medium.ttf');
 }
 
 html,
@@ -81,7 +87,7 @@ p {
   /* color: #64748B; */
 }
 span {
-  font-family: Circular_light, sans-serif;
+  font-family: circular_light, sans-serif;
   font-weight: 100;
 }
 .text-black {

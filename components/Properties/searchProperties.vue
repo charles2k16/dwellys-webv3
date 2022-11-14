@@ -122,7 +122,7 @@ export default Vue.extend({
       favProperties: [] as any,
     };
   },
-  async created() {
+  created() {
     this.fetchFavorites();
   },
 

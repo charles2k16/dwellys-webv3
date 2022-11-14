@@ -9,12 +9,17 @@
       <div class="all_filters">
         <div class="filter_prop_type">
           <el-radio-group
-            v-model="search_property.type"
+            v-model="search_property.category"
             style="margin-bottom: 30px"
           >
-            <el-radio-button label="top">Sale</el-radio-button>
-            <el-radio-button label="right">Rent</el-radio-button>
-            <el-radio-button label="bottom">Lease</el-radio-button>
+            <el-radio-button
+              v-for="item in categories"
+              :key="item.id"
+              :value="item.id"
+              :label="item.name"
+            >
+              {{ item.name }}
+            </el-radio-button>
           </el-radio-group>
         </div>
         <div>
@@ -48,11 +53,12 @@
                 :key="index"
                 @click="getPropertyType(type)"
                 :style="
-                  search_property.type == type.value && 'background:#de0b0b80'
+                  search_property.type == type.id && 'background:#de0b0b80'
                 "
+                class="center"
               >
-                <span> <i :class="type.icon"></i> </span>
-                <span>{{ type.value }} </span>
+                <!-- <img :src="apiUrl + '/' + type.photo" alt="" /> -->
+                <span>{{ type.name }} </span>
               </div>
             </div>
           </div>
@@ -60,29 +66,28 @@
         <div class="pt-20">
           <div class="d-flex_column pb-10">
             <label for="bed" class="pb-5">Bed(s)</label>
-            <el-input-number
+            <el-input
               id="bed"
-              v-model="search_property.bed"
-              @change="handleChange"
               class="w-100"
-              :min="1"
-              :max="10"
-            ></el-input-number>
+              placeholder="max"
+              v-model="search_property.bed"
+              type="number"
+            >
+            </el-input>
           </div>
           <div class="d-flex_column">
             <label for="baths" class="pb-5">Bathroom(s)</label>
-            <el-input-number
+            <el-input
               id="baths"
-              v-model="search_property.bathrooms"
-              @change="handleChange"
               class="w-100"
-              :min="1"
-              :max="10"
-            ></el-input-number>
+              placeholder="max"
+              v-model="search_property.bathroom"
+              type="number"
+            ></el-input>
           </div>
         </div>
         <div class="all_filters_btn">
-          <el-button type="primary">Search</el-button>
+          <el-button type="primary" @click="queryProperty">Search</el-button>
         </div>
       </div>
     </el-drawer>
@@ -336,7 +341,11 @@
       <div class="pt-20">
         <div>
           <div class="content_search">
-            <el-input type="search" placeholder="search..."></el-input>
+            <el-input
+              type="search"
+              v-model="search_property.search_query"
+              placeholder="search..."
+            ></el-input>
           </div>
           <div class="search_options">
             <el-select
@@ -346,9 +355,9 @@
             >
               <el-option
                 v-for="item in categories"
-                :key="item.value"
-                :label="item.value"
-                :value="item.value"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
               >
               </el-option>
             </el-select>
@@ -415,25 +424,24 @@
                   <div class="">
                     <div class="d-flex_column pb-10">
                       <label for="bed" class="pb-5">Bed(s)</label>
-                      <el-input-number
+                      <el-input
                         id="bed"
-                        v-model="search_property.bed"
-                        @change="handleChange"
                         class="w-100"
-                        :min="1"
-                        :max="10"
-                      ></el-input-number>
+                        placeholder="max"
+                        v-model="search_property.bed"
+                        type="number"
+                      >
+                      </el-input>
                     </div>
                     <div class="d-flex_column">
                       <label for="baths" class="pb-5">Bathroom(s)</label>
-                      <el-input-number
+                      <el-input
                         id="baths"
-                        v-model="search_property.bathrooms"
-                        @change="handleChange"
                         class="w-100"
-                        :min="1"
-                        :max="10"
-                      ></el-input-number>
+                        placeholder="max"
+                        v-model="search_property.bathroom"
+                        type="number"
+                      ></el-input>
                     </div>
                   </div>
                   <div class="d-flex justify_end pt-10">
@@ -445,7 +453,7 @@
               </el-dropdown-menu>
             </el-dropdown>
             <el-select
-              v-model="search_property.specifications"
+              v-model="search_property.type"
               class="search_option"
               placeholder="Select Type"
             >
@@ -453,9 +461,9 @@
               <!-- collapse-tags -->
               <el-option
                 v-for="item in property_types"
-                :key="item.value"
-                :label="item.value"
-                :value="item.value"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
               >
               </el-option>
             </el-select>
@@ -468,7 +476,9 @@
               <span>All Filters</span>
             </div>
             <div class="pl-10 pb-10">
-              <el-button type="primary">Search</el-button>
+              <el-button type="primary" @click="queryProperty"
+                >Search</el-button
+              >
             </div>
           </div>
         </div>
@@ -507,23 +517,17 @@ export default Vue.extend({
       // value: [null, null],
       modalImage: '' as any,
       search_property: {
-        price: 0,
-        type: '',
-        specifications: [],
-        category: '',
-        min_price: null,
-        max_price: null,
+        search_query: '' as string,
+        type: '' as string,
+        category: '' as string,
+        min_price: 0 as number,
+        max_price: 0 as number,
+        bed: 0 as number,
+        bathroom: 0 as number,
       },
 
-      categories: [{ value: 'Rent' }, { value: 'Lease' }, { value: 'Sale' }],
-      property_types: [
-        { value: 'House', icon: 'el-icon-s-home' },
-        { value: 'Apartment', icon: 'el-icon-discount' },
-        { value: 'Office', icon: 'el-icon-office-building' },
-        { value: 'Land', icon: 'el-icon-place' },
-        { value: 'Town house', icon: 'el-icon-school' },
-      ],
-
+      categories: [],
+      property_types: [],
       propertyDetails: {} as any,
       home: '' as string,
       favProperties: [] as Array<object>,
@@ -567,24 +571,15 @@ export default Vue.extend({
     },
     async fetchData() {
       this.loading = true;
-      // console.log(this.$route.query.name);
-      // try {
-      //   const query = await this.$querySearchApi.query(this.$route.query.name);
-      //   console.log('query', query, 'search');
-      //   //  console.log();
-      //   this.loading = false;
-      //   // this.loadQuery(query.data);
-      //   // this.isQuery = true;
-      // } catch (error: any) {
-      //   if (error?.response?.data) {
-      //     console.error(error?.response);
-      //     // this.isQuery = true;
-      //     // this.pageLoad = false;
-      //   }
-      //   this.loading = false;
-      // }
 
       try {
+        const categories = await this.$listingCategoriesApi.index();
+        this.categories = categories.data;
+
+        const propertyTypes = await this.$propertyTypesApi.index();
+        console.log('types', propertyTypes);
+        this.property_types = propertyTypes.data;
+
         const listings = await this.$listingApi.show(this.$route.query.id);
 
         this.propertyDetails = listings.data;
@@ -596,6 +591,7 @@ export default Vue.extend({
         this.loading = false;
       }
     },
+
     loadListing(properties: any) {
       const data = properties.map((property: any) => {
         property.photos =
@@ -609,8 +605,9 @@ export default Vue.extend({
     },
     handleChange() {},
     showProperty() {},
+
     getPropertyType(type: any) {
-      this.search_property.type = type.value;
+      this.search_property.type = type.id;
     },
     async favProperty(fav: any) {
       if (this.$auth.loggedIn) {
@@ -643,12 +640,38 @@ export default Vue.extend({
           .catch(() => {});
       }
     },
+    async queryProperty() {
+      let searched = this.search_property;
+      // this.loading = true;
+      // let query =
+      //   searched.search_query && `search_query=${searched.search_query}&`;
+      let type = searched.type && `property_type_id=${searched.type}`;
+      let max_price = searched.max_price && `max_price=${searched.max_price}`;
+      let min_price = searched.min_price && `min_price=${searched.min_price}`;
+      let category = searched.category && `category_id=${searched.category}`;
+      // let bed = searched.bed && `bed=${searched.bed}&`;
+      // let bathroom = searched.bathroom && `bathroom=${searched.bathroom}&`;
+      let filteredSearch = [type, max_price, min_price, category];
+
+      let joined = filteredSearch.join('&');
+
+      console.log('query', joined);
+
+      try {
+        const similarProperties = await this.$searchProperties.query(
+          type + category
+        );
+        this.loadListing(similarProperties.data);
+      } catch (error) {
+        this.loading = false;
+      }
+    },
     prevImage(image: any) {
       this.image = image;
     },
-    //  lastUpdate (date:any) {
-    //     return moment(date).format("MMMM Do YYYY");
-    //   },
+    // queryProperty() {
+    //   console.log(this.search_property);
+    // },
     showOwner(): void {
       if (this.$auth.loggedIn) {
         (this as any).$refs.propertyAction.showMessageModal({

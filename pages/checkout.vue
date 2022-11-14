@@ -296,9 +296,10 @@ export default Vue.extend({
       console.log('discount');
       //
       this.codeLoading = true;
+      const verifyQuery = `${this.discount_code}&listing_plan_id=${this.listing_plan_id}&listing_id=${this.listing_id}`;
       try {
         const discountCodeResponse = await this.$verifydiscountApi.query(
-          this.discount_code
+          verifyQuery
         );
         console.log(discountCodeResponse);
         this.codeLoading = false;
@@ -333,7 +334,6 @@ export default Vue.extend({
       this.selectedPlan.mobile_money_number = '';
       this.media = method;
     },
-
     async sendPayment() {
       this.btnLoading = true;
 

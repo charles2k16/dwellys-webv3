@@ -402,17 +402,17 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import "vue-phone-number-input/dist/vue-phone-number-input.css";
-import { IMixinState } from "@/types/mixinsTypes";
-import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
-import url from "../url";
-import regionsAndCities from "~/static/regions.json";
-import Map from "../components/Properties/map.vue";
+import Vue from 'vue';
+import 'vue-phone-number-input/dist/vue-phone-number-input.css';
+import { IMixinState } from '@/types/mixinsTypes';
+import ApplicationHandler from '@/handlers/ApplicationHandler.vue';
+import url from '../url';
+import regionsAndCities from '~/static/regions.json';
+import Map from '../components/Properties/map.vue';
 // const apiKey = process.env.GOOGLE_API_KEY;
 
 export default Vue.extend({
-  name: "PropertyUpload",
+  name: 'PropertyUpload',
   components: {
     ApplicationHandler,
     Map,
@@ -421,15 +421,15 @@ export default Vue.extend({
     return {
       step: 1 as number,
       // regions: {},
-      category: "" as string,
+      category: '' as string,
       pageLoad: false as boolean,
-      country: "Ghana" as string,
+      country: 'Ghana' as string,
       propLoad: false as boolean,
       propertySelected: false as boolean,
-      media: "Pay with Momo" as string,
-      imageErr: "" as string,
-      specErr: "" as string,
-      selectedProperty: "",
+      media: 'Pay with Momo' as string,
+      imageErr: '' as string,
+      specErr: '' as string,
+      selectedProperty: '',
       btnLoading: false as boolean,
       propertyTypes: [],
       propertySpecs: {
@@ -441,31 +441,31 @@ export default Vue.extend({
       pricingPlans: [],
       countries: [
         {
-          code: "+233",
-          full_name: "GHANA",
-          id: "39a40751-d7d2-4346-99e5-b0235b520ce5",
-          short_name: "GH",
+          code: '+233',
+          full_name: 'GHANA',
+          id: '39a40751-d7d2-4346-99e5-b0235b520ce5',
+          short_name: 'GH',
         },
       ],
       listing_photos: [] as any,
-      listing_plan_id: "",
-      listing_id: "",
+      listing_plan_id: '',
+      listing_id: '',
       propertyUpload: {
-        name: "" as string,
-        property_type_id: "" as string,
-        country_id: "39a40751-d7d2-4346-99e5-b0235b520ce5" as string,
+        name: '' as string,
+        property_type_id: '' as string,
+        country_id: '39a40751-d7d2-4346-99e5-b0235b520ce5' as string,
         // "39a40751-d7d2-4346-99e5-b0235b520ce5"
-        listing_category_id: "" as string,
+        listing_category_id: '' as string,
         latitude: 0 as number,
         longitude: 0 as number,
         specifications: [] as any,
         property_amenities_id: [] as Array<string>,
-        description: "" as string,
+        description: '' as string,
         price: 0 as number,
-        location: "",
-        city: "accra" as string,
-        region: "Greater Accra",
-        other_specifications: [{ name: "", number: 0 }],
+        location: '',
+        city: 'accra' as string,
+        region: 'Greater Accra',
+        other_specifications: [{ name: '', number: 0 }],
       },
     };
   },
@@ -475,8 +475,8 @@ export default Vue.extend({
       navigator.geolocation.getCurrentPosition(this.showPosition);
     } else {
       (this as any as IMixinState).getNotification(
-        "Geolocation is not supported by this browser.",
-        "error"
+        'Geolocation is not supported by this browser.',
+        'error'
       );
     }
     try {
@@ -487,7 +487,7 @@ export default Vue.extend({
       this.regions = authors;
 
       const getOne = Object.keys(authors);
-      const values = authors["Ahafo"];
+      const values = authors['Ahafo'];
       // console.log(getOne);
 
       console.log(values);
@@ -506,9 +506,9 @@ export default Vue.extend({
 
       const countries = await this.$countriesApi.index();
       countries.data.filter((country: any) =>
-        country.short_name == "GH"
+        country.short_name == 'GH'
           ? (this.propertyUpload.country_id = country.id)
-          : ""
+          : ''
       );
       // this.countries = countries.data;
       // this.propertyTypes.country
@@ -521,8 +521,8 @@ export default Vue.extend({
       console.log(error);
       if (error?.response?.data) {
         (this as any as IMixinState).getNotification(
-          "Please, login as an agent!",
-          "warning"
+          'Please, login as an agent!',
+          'warning'
         );
       }
     }
@@ -532,8 +532,8 @@ export default Vue.extend({
       let valid = false;
       if (
         this.step == 1 &&
-        this.propertyUpload.property_type_id != "" &&
-        this.propertyUpload.listing_category_id != ""
+        this.propertyUpload.property_type_id != '' &&
+        this.propertyUpload.listing_category_id != ''
       ) {
         valid = true;
       } else if (
@@ -550,8 +550,8 @@ export default Vue.extend({
         valid = true;
       } else if (
         this.step == 5 &&
-        this.propertyUpload.location != "" &&
-        this.propertyUpload.region != "" &&
+        this.propertyUpload.location != '' &&
+        this.propertyUpload.region != '' &&
         this.propertyUpload.latitude &&
         this.propertyUpload.longitude
       ) {
@@ -559,11 +559,11 @@ export default Vue.extend({
       } else if (
         this.step == 6 &&
         this.propertyUpload.price != 0 &&
-        this.propertyUpload.name != "" &&
-        this.propertyUpload.description != ""
+        this.propertyUpload.name != '' &&
+        this.propertyUpload.description != ''
       ) {
         valid = true;
-      } else if (this.step == 7 && this.listing_plan_id != "") {
+      } else if (this.step == 7 && this.listing_plan_id != '') {
         valid = true;
       }
       return valid;
@@ -590,7 +590,7 @@ export default Vue.extend({
       return this.url() + pic;
     },
     getSvg(pic: string): string {
-      return require("../assets/svg/" + pic);
+      return require('../assets/svg/' + pic);
     },
     getLatlng(geoCode: any) {
       (this.propertyUpload.latitude = geoCode.latitude),
@@ -605,13 +605,13 @@ export default Vue.extend({
       console.log(event.target.files[0]);
       const file = event.target.files[0];
       if (file.size >= 5000000) {
-        this.imageErr = "Each image must not exceed 5 Mb.";
+        this.imageErr = 'Each image must not exceed 5 Mb.';
       } else {
-        this.imageErr = "";
+        this.imageErr = '';
         let reader = new FileReader();
         reader.readAsDataURL(event.target.files[0]);
         reader.onloadend = () => {
-          let img = { tag: "front", is_featured: false, photo: reader.result };
+          let img = { tag: 'front', is_featured: false, photo: reader.result };
           this.listing_photos.push(img);
         };
       }
@@ -621,8 +621,8 @@ export default Vue.extend({
         navigator.geolocation.getCurrentPosition(this.showPosition);
       } else {
         (this as any as IMixinState).getNotification(
-          "Geolocation is not supported by this browser.",
-          "error"
+          'Geolocation is not supported by this browser.',
+          'error'
         );
       }
     },
@@ -631,7 +631,7 @@ export default Vue.extend({
       this.propertyUpload.longitude = position.coords.longitude;
     },
     addSpecSection() {
-      let newSection = { name: "", number: 0 };
+      let newSection = { name: '', number: 0 };
       this.propertyUpload.other_specifications.push(newSection);
     },
     async getProperty(newProperty: any) {
@@ -695,7 +695,7 @@ export default Vue.extend({
       this.categories.filter((category: any) =>
         category.name == e
           ? (this.propertyUpload.listing_category_id = category.id)
-          : ""
+          : ''
       );
     },
 
@@ -707,14 +707,14 @@ export default Vue.extend({
         const propertyResponse = await this.$listingApi.create(
           this.propertyUpload
         );
-        console.log("property upload", propertyResponse);
-        const imageListing = await this.$listingImagesApi.create({
-          listing_id: propertyResponse.data.id,
-          listing_photos: this.listing_photos,
-        });
+        console.log('property upload', propertyResponse);
+        // const imageListing = await this.$listingImagesApi.create({
+        //   listing_id: propertyResponse.data.id,
+        //   listing_photos: this.listing_photos,
+        // });
         this.btnLoading = false;
         this.$router.replace({
-          name: "checkout",
+          name: 'checkout',
           query: {
             listing_id: propertyResponse.data.id,
             plan_id: this.listing_plan_id,
@@ -727,13 +727,13 @@ export default Vue.extend({
         //   type: "success",
         // });
       } catch (error: any) {
-        console.log(error, "error");
+        console.log(error, 'error');
         this.btnLoading = false;
         if (error?.response?.data) {
           (this as any as IMixinState).$message({
             showClose: true,
             message: error.response.data.message,
-            type: "error",
+            type: 'error',
           });
         }
         // (this as any as IMixinState).catchError(error);

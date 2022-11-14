@@ -337,7 +337,7 @@
   color: white;
 }
 .el-drawer__open .el-drawer.rtl {
-  width: 30% !important;
+  width: 35% !important;
 }
 @media (max-width: 1024px) {
   .el-drawer__open .el-drawer.rtl {
