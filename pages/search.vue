@@ -520,8 +520,8 @@ export default Vue.extend({
         search_query: '' as string,
         type: '' as string,
         category: '' as string,
-        min_price: 0 as number,
-        max_price: 0 as number,
+        min_price: null,
+        max_price: null,
         bed: 0 as number,
         bathroom: 0 as number,
       },
@@ -658,7 +658,8 @@ export default Vue.extend({
       console.log('query', joined);
 
       try {
-        const similarProperties = await this.$searchProperties.query(joined);
+        const similarProperties = await this.$searchProperties.query(category);
+        console.log(similarProperties);
         this.loadListing(similarProperties.data);
       } catch (error) {
         this.loading = false;

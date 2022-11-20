@@ -72,7 +72,7 @@
         </div>
       </div>
     </div>
-    <div class="mob-margin section">
+    <div class="mob-margin section" style="height: 700px">
       <el-row :gutter="20" v-if="propertyDetails.listing_detail">
         <el-col :xs="24" :sm="24" :md="hasMorePhotos ? 20 : 24">
           <el-carousel :interval="5000" arrow="always">
@@ -402,7 +402,7 @@ $small_screen: 426px;
   margin-right: 20px;
 }
 .has_more_photos {
-  height: 500px;
+  height: 700px;
   overflow-y: scroll;
 }
 .details_plot {
