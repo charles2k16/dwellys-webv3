@@ -6,7 +6,7 @@
       <div class="header_wrapper">
         <div style="display: flex; align-items: center">
           <NuxtLink to="/">
-            <img src="~/assets/img/logo.jpg" class="nav_logo" />
+            <img src="/logo.png" class="nav_logo" />
           </NuxtLink>
         </div>
         <div
@@ -273,7 +273,7 @@ a {
     padding-left: 10px;
   }
   .nav_logo {
-    width: 150px;
+    width: 130px;
   }
 }
 .header_content {
