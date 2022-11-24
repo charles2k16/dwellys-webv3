@@ -1,5 +1,8 @@
 <template>
   <div class="header">
+    <div class="top_banner">
+      <span>This site is in public beta</span>
+    </div>
     <div class="section">
       <ApplicationHandler ref="modalHandler" />
       <!-- {{ $auth }} -->
@@ -257,13 +260,20 @@ a {
   color: #334155;
 }
 .header {
-  padding: 10px 0 0;
-  height: 60px;
+  padding: 0px 0 0;
+  height: 95px;
   position: sticky;
   top: 0;
   background: #fff;
   // width: 100%;
   z-index: 10;
+
+  .top_banner {
+    color: #fff;
+    text-align: center;
+    background-color: var(--color-primary);
+    padding: 10px 0;
+  }
 }
 .header_wrapper {
   display: flex;
