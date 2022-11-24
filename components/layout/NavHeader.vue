@@ -1,54 +1,134 @@
 <template>
-  <div class="header">
-    <div class="section">
-      <ApplicationHandler ref="modalHandler" />
-      <!-- {{ $auth }} -->
-      <div class="header_wrapper">
-        <div style="display: flex; align-items: center">
-          <NuxtLink to="/">
-            <img src="~/assets/img/logo.jpg" class="nav_logo" />
-          </NuxtLink>
-        </div>
-        <div
-          class="header_content hidden-sm-and-down"
-          v-if="!$auth.loggedIn || $auth.user.user_type == 'visitor'"
-        >
-          <span class="pl-10">
-            <NuxtLink to="/property_account">List your property now</NuxtLink>
-          </span>
-        </div>
-        <div class="drawer hidden-md-and-up">
-          <svg
-            @click="drawer = true"
-            xmlns="http://www.w3.org/2000/svg"
-            class="icon icon-tabler icon-tabler-align-right"
-            width="44"
-            height="44"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+  <div>
+    <div class="d-flex justify_center" style="color: white">
+      <p
+        class="p-10 mt-10"
+        style="
+          background: #dc3535;
+          border-radius: 10px;
+          width: 30%;
+          text-align: center;
+        "
+      >
+        <i class="el-icon-warning"></i> This site is in Beta.
+      </p>
+    </div>
+    <div class="header">
+      <div class="section">
+        <ApplicationHandler ref="modalHandler" />
+        <!-- {{ $auth }} -->
+        <div class="header_wrapper">
+          <div style="display: flex; align-items: center">
+            <NuxtLink to="/">
+              <img src="~/assets/img/logo.jpg" class="nav_logo" />
+            </NuxtLink>
+          </div>
+          <div
+            class="header_content hidden-sm-and-down"
+            v-if="!$auth.loggedIn || $auth.user.user_type == 'visitor'"
           >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <line x1="4" y1="6" x2="20" y2="6" />
-            <line x1="10" y1="12" x2="20" y2="12" />
-            <line x1="6" y1="18" x2="20" y2="18" />
-          </svg>
-        </div>
-        <div class="header_content hidden-sm-and-down">
-          <!-- <span v-if="$auth.loggedIn" class="pr-20">
+            <span class="pl-10">
+              <NuxtLink to="/property_account">List your property now</NuxtLink>
+            </span>
+          </div>
+          <div class="drawer hidden-md-and-up">
+            <svg
+              @click="drawer = true"
+              xmlns="http://www.w3.org/2000/svg"
+              class="icon icon-tabler icon-tabler-align-right"
+              width="44"
+              height="44"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <line x1="4" y1="6" x2="20" y2="6" />
+              <line x1="10" y1="12" x2="20" y2="12" />
+              <line x1="6" y1="18" x2="20" y2="18" />
+            </svg>
+          </div>
+          <div class="header_content hidden-sm-and-down">
+            <!-- <span v-if="$auth.loggedIn" class="pr-20">
           <NuxtLink to="/messages">Messages</NuxtLink>
         </span> -->
 
-          <el-dropdown trigger="click">
-            <span class="el-dropdown-link">
+            <el-dropdown trigger="click">
+              <span class="el-dropdown-link">
+                <span class="login-avatar">
+                  <span v-if="$auth.loggedIn" class="d-flex">
+                    <span class="pt-5 pr-5">
+                      {{ $auth.user.first_name }}
+                    </span>
+                    <img
+                      v-if="$auth.user.avatar"
+                      :src="src + $auth.user.avatar"
+                      alt="avatar"
+                      class="user_avatar"
+                    />
+                    <img src="~/assets/img/user_icon.png" alt="icon" v-else />
+                  </span>
+
+                  <span v-else class="align_center">
+                    <span class="mr-10">Login</span>
+                    <img src="~/assets/img/user_icon.png" alt="icon" />
+                  </span>
+                </span>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item v-if="!$auth.loggedIn">
+                  <p class="py-10" @click="showLoginModal">Login</p>
+                </el-dropdown-item>
+                <el-dropdown-item v-if="!$auth.loggedIn">
+                  <p class="py-10" @click="$router.push('/register')">
+                    Register
+                  </p>
+                </el-dropdown-item>
+                <el-dropdown-item v-if="$auth.loggedIn">
+                  <span class="py-10">
+                    <NuxtLink to="/profile">Profile</NuxtLink>
+                  </span>
+                </el-dropdown-item>
+                <el-dropdown-item v-if="$auth.loggedIn">
+                  <span class="py-10" v-if="$auth.user.user_type == 'lister'">
+                    <NuxtLink to="/property_upload">Property Upload</NuxtLink>
+                  </span>
+                </el-dropdown-item>
+                <el-dropdown-item
+                  v-if="!$auth.loggedIn || $auth.user.user_type == 'visitor'"
+                >
+                  <span class="py-10">
+                    <NuxtLink to="/property_account"
+                      >List your property now</NuxtLink
+                    >
+                  </span>
+                </el-dropdown-item>
+                <el-dropdown-item v-if="$auth.loggedIn" style="color: red">
+                  <p class="py-10" @click="logout">Logout</p></el-dropdown-item
+                >
+              </el-dropdown-menu>
+            </el-dropdown>
+          </div>
+        </div>
+        <!-- <hr class="hr_rule register_header_line mt-20" /> -->
+
+        <el-drawer
+          size="60%"
+          :visible.sync="drawer"
+          :direction="direction"
+          :before-close="handleClose"
+        >
+          <div class="drawer_content px-20">
+            <div class="d-flex_column">
               <span class="login-avatar">
                 <span v-if="$auth.loggedIn" class="d-flex">
-                  <span class="pt-5 pr-5">
+                  <span class="pt-10 pr-5">
                     {{ $auth.user.first_name }}
                   </span>
+
                   <img
                     v-if="$auth.user.avatar"
                     :src="src + $auth.user.avatar"
@@ -63,135 +143,72 @@
                   <img src="~/assets/img/user_icon.png" alt="icon" />
                 </span>
               </span>
-            </span>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item v-if="!$auth.loggedIn">
-                <p class="py-10" @click="showLoginModal">Login</p>
-              </el-dropdown-item>
-              <el-dropdown-item v-if="!$auth.loggedIn">
-                <p class="py-10" @click="$router.push('/register')">Register</p>
-              </el-dropdown-item>
-              <el-dropdown-item v-if="$auth.loggedIn">
-                <span class="py-10">
-                  <NuxtLink to="/profile">Profile</NuxtLink>
+              <br />
+              <!-- you should find a way to make this whole div the if statement -->
+              <div>
+                <span
+                  v-if="!$auth.loggedIn"
+                  @click="showLoginModal"
+                  class="py-10 mb-10"
+                  >Login</span
+                >
+                <br />
+
+                <hr v-if="!$auth.loggedIn" class="hr_rule mt-10" />
+
+                <span
+                  v-if="!$auth.loggedIn"
+                  @click="drawer = false"
+                  class="mt-10 d-block"
+                >
+                  <NuxtLink to="/register">Register</NuxtLink>
                 </span>
-              </el-dropdown-item>
-              <el-dropdown-item v-if="$auth.loggedIn">
-                <span class="py-10" v-if="$auth.user.user_type == 'lister'">
-                  <NuxtLink to="/property_upload">Property Upload</NuxtLink>
-                </span>
-              </el-dropdown-item>
-              <el-dropdown-item
-                v-if="!$auth.loggedIn || $auth.user.user_type == 'visitor'"
-              >
-                <span class="py-10">
+
+                <hr v-if="!$auth.loggedIn" class="hr_rule mt-10" />
+
+                <span
+                  @click="drawer = false"
+                  v-if="!$auth.loggedIn || $auth.user.user_type == 'visitor'"
+                  class="mt-10 d-block"
+                >
                   <NuxtLink to="/property_account"
-                    >Sell your property now</NuxtLink
+                    >List your property now</NuxtLink
                   >
                 </span>
-              </el-dropdown-item>
-              <el-dropdown-item v-if="$auth.loggedIn" style="color: red">
-                <p class="py-10" @click="logout">Logout</p></el-dropdown-item
-              >
-            </el-dropdown-menu>
-          </el-dropdown>
-        </div>
-      </div>
-      <!-- <hr class="hr_rule register_header_line mt-20" /> -->
+              </div>
 
-      <el-drawer
-        size="60%"
-        :visible.sync="drawer"
-        :direction="direction"
-        :before-close="handleClose"
-      >
-        <div class="drawer_content px-20">
-          <div class="d-flex_column">
-            <span class="login-avatar">
-              <span v-if="$auth.loggedIn" class="d-flex">
-                <span class="pt-10 pr-5">
-                  {{ $auth.user.first_name }}
+              <div v-if="$auth.loggedIn">
+                <span @click="drawer = false" class="pb-10 pt-20 d-block">
+                  <NuxtLink to="/profile">Profile</NuxtLink>
                 </span>
 
-                <img
-                  v-if="$auth.user.avatar"
-                  :src="src + $auth.user.avatar"
-                  alt="avatar"
-                  class="user_avatar"
-                />
-                <img src="~/assets/img/user_icon.png" alt="icon" v-else />
-              </span>
+                <hr class="hr_rule mt-10" />
 
-              <span v-else class="align_center">
-                <span class="mr-10">Login</span>
-                <img src="~/assets/img/user_icon.png" alt="icon" />
-              </span>
-            </span>
-            <br />
-            <!-- you should find a way to make this whole div the if statement -->
-            <div>
-              <span
-                v-if="!$auth.loggedIn"
-                @click="showLoginModal"
-                class="py-10 mb-10"
-                >Login</span
-              >
-              <br />
+                <span class="mt-10 d-block">
+                  <span v-if="$auth.user.user_type == 'lister'">
+                    <NuxtLink to="/property_upload">Property Upload</NuxtLink>
+                  </span>
+                </span>
 
-              <hr v-if="!$auth.loggedIn" class="hr_rule mt-10" />
+                <hr class="hr_rule mt-10" />
 
-              <span
-                v-if="!$auth.loggedIn"
-                @click="drawer = false"
-                class="mt-10 d-block"
-              >
-                <NuxtLink to="/register">Register</NuxtLink>
-              </span>
-
-              <hr v-if="!$auth.loggedIn" class="hr_rule mt-10" />
-
-              <span
-                @click="drawer = false"
-                v-if="!$auth.loggedIn || $auth.user.user_type == 'visitor'"
-                class="mt-10 d-block"
-              >
-                <NuxtLink to="/property_account"
-                  >List your property now</NuxtLink
+                <span
+                  v-if="$auth.loggedIn"
+                  @click="$auth.logout()"
+                  class="pb-20"
+                  style="color: red"
                 >
-              </span>
-            </div>
-
-            <div v-if="$auth.loggedIn">
-              <span @click="drawer = false" class="pb-10 pt-20 d-block">
-                <NuxtLink to="/profile">Profile</NuxtLink>
-              </span>
-
-              <hr class="hr_rule mt-10" />
-
-              <span class="mt-10 d-block">
-                <span v-if="$auth.user.user_type == 'lister'">
-                  <NuxtLink to="/property_upload">Property Upload</NuxtLink>
+                  Logout
                 </span>
-              </span>
+              </div>
 
-              <hr class="hr_rule mt-10" />
-
-              <span
-                v-if="$auth.loggedIn"
-                @click="$auth.logout()"
-                class="pb-20"
-                style="color: red"
-              >
-                Logout
-              </span>
-            </div>
-
-            <!-- <span v-if="$auth.loggedIn" @click="drawer = false" class="pb-10">
+              <!-- <span v-if="$auth.loggedIn" @click="drawer = false" class="pb-10">
                 <NuxtLink to="/messages">Messages</NuxtLink>
               </span> -->
+            </div>
           </div>
-        </div>
-      </el-drawer>
+        </el-drawer>
+      </div>
     </div>
   </div>
 </template>
