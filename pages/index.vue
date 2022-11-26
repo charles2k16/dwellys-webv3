@@ -266,9 +266,16 @@ export default Vue.extend({
     },
     async fetchData() {
       const listings = await this.$listingApi.query('?status=active');
-      this.total = listings.pagination.total;
-      this.page = listings.pagination.current_page;
-      this.loadListing(listings.data);
+      if (listings.data) {
+        this.loadListing(listings.data);
+      }
+
+      this.pageLoad = false;
+
+      if (listings.pagination) {
+        this.total = listings.pagination.total;
+        this.page = listings.pagination.current_page;
+      }
     },
     loadListing(properties: any) {
       const data = properties.map((property: any) => {
@@ -279,7 +286,6 @@ export default Vue.extend({
         return property;
       });
       this.listings = data;
-      this.pageLoad = false;
     },
     async changeLabel(tab: any) {
       this.pageLoad = true;
