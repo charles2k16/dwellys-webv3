@@ -5,6 +5,7 @@
       :visible.sync="showLoginModal"
       width="60%"
       :destroy-on-close="true"
+      :append-to-body="true"
       custom-class="login_modal"
     >
       <template slot="title">
@@ -38,13 +39,13 @@
   </div>
 </template>
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue';
 
 export default Vue.extend({
-  name: "ApplicationHandler",
+  name: 'ApplicationHandler',
   data() {
     return {
-      loginEmail: "" as string,
+      loginEmail: '' as string,
       showLoginModal: false as boolean,
       photoModal: false as boolean,
       messageModal: false as boolean,
@@ -71,7 +72,7 @@ export default Vue.extend({
       this.messageModal = false;
     },
     userAvatar(file: Object) {
-      this.$emit("avatar", file);
+      this.$emit('avatar', file);
       this.photoModal = false;
     },
   },
