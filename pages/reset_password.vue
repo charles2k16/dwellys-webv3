@@ -42,26 +42,26 @@
 </template>
 
 <script lang="ts">
-import { IMixinState } from "@/types/mixinsTypes";
-import Vue from "vue";
+import { IMixinState } from '@/types/mixinsTypes';
+import Vue from 'vue';
 export default Vue.extend({
-  name: "ForgottenPage",
-
+  name: 'ForgottenPage',
+  auth: false,
   data() {
     return {
       name: {
-        email: "" as string,
+        email: '' as string,
       },
       loading: false,
       validation: {
         email: [
           {
             required: true,
-            type: "email",
-            message: "Please enter valid email",
-            trigger: ["blur", "change"],
+            type: 'email',
+            message: 'Please enter valid email',
+            trigger: ['blur', 'change'],
           },
-          { min: 5, message: "Length should be 5 or more", trigger: "blur" },
+          { min: 5, message: 'Length should be 5 or more', trigger: 'blur' },
         ],
       },
     };
@@ -72,7 +72,7 @@ export default Vue.extend({
       // (this as any).$refs.name.validate((valid: boolean) => {
       //   if (valid) {
       this.signUp();
-      console.log(this.name, "name");
+      console.log(this.name, 'name');
       // this.$router.replace("/login");
       // }
       // else {
@@ -91,27 +91,27 @@ export default Vue.extend({
         this.loading = false;
         this.$confirm(
           register.message,
-          "Check your email for further instructions",
+          'Check your email for further instructions',
           {
-            confirmButtonText: "Continue",
-            type: "success",
+            confirmButtonText: 'Continue',
+            type: 'success',
           }
         ).then(() => {
-          this.$router.push("/login");
+          this.$router.push('/login');
         });
       } catch (error: any) {
         this.loading = false;
         if (error?.response?.data) {
           this.$confirm(
             error?.response?.data?.message,
-            "Your email is incorrect!",
+            'Your email is incorrect!',
             {
-              confirmButtonText: "Continue",
-              type: "success",
+              confirmButtonText: 'Continue',
+              type: 'success',
             }
           );
         }
-        this.name.email = "";
+        this.name.email = '';
         (this as any as IMixinState).catchError(error);
       }
     },

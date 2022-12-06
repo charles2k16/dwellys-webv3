@@ -26,6 +26,7 @@
         >
         </el-input>
       </el-form-item>
+      <NuxtLink to="/reset_password"><p>Forgotten password ?</p></NuxtLink>
       <div class="mt-20">
         <el-button
           type="primary"
@@ -55,29 +56,29 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { IMixinState } from "@/types/mixinsTypes";
+import Vue from 'vue';
+import { IMixinState } from '@/types/mixinsTypes';
 
 export default Vue.extend({
-  name: "LoginPage",
+  name: 'LoginPage',
 
   data() {
     return {
       showVerifyInfo: false,
       btnLoading: false as boolean,
       loginForm: {
-        email: "" as string,
-        password: "" as string,
+        email: '' as string,
+        password: '' as string,
       },
       validation: {
         email: [
           {
             required: true,
-            type: "email",
-            message: "Please enter valid email",
-            trigger: ["blur", "change"],
+            type: 'email',
+            message: 'Please enter valid email',
+            trigger: ['blur', 'change'],
           },
-          { min: 5, message: "Length should be 5 or more", trigger: "blur" },
+          { min: 5, message: 'Length should be 5 or more', trigger: 'blur' },
         ],
       },
     };
@@ -98,8 +99,8 @@ export default Vue.extend({
         } else {
           this.btnLoading = false;
           (this as any as IMixinState).getNotification(
-            "Make sure all required fields are filled",
-            "error"
+            'Make sure all required fields are filled',
+            'error'
           );
         }
       });
@@ -113,12 +114,12 @@ export default Vue.extend({
       (this as any as IMixinState).$message({
         showClose: true,
         message: response.data.message,
-        type: "success",
+        type: 'success',
       });
     },
     checkUserVerification() {
       this.$auth
-        .loginWith("local", {
+        .loginWith('local', {
           data: {
             email: this.loginForm.email,
             password: this.loginForm.password,
@@ -129,12 +130,12 @@ export default Vue.extend({
           const message = response.data.message;
           if (
             message ==
-            "An email has been set to you in order to complete your registration"
+            'An email has been set to you in order to complete your registration'
           ) {
             this.showVerifyInfo = true;
             (this as any as IMixinState).getNotification(
-              "Verify your email address to continue",
-              "warning"
+              'Verify your email address to continue',
+              'warning'
             );
           } else {
             this.login(response);
@@ -146,16 +147,16 @@ export default Vue.extend({
           if (error?.response?.data) {
             (this as any as IMixinState).getNotification(
               error?.response?.data.message,
-              "error"
+              'error'
             );
           }
         });
     },
     facebookSignIn() {
-      this.$auth.loginWith("facebook");
+      this.$auth.loginWith('facebook');
     },
     googleSignIn() {
-      this.$auth.loginWith("google");
+      this.$auth.loginWith('google');
     },
   },
 });
