@@ -8,7 +8,7 @@
         </p>
         <p class="trademark_text text-grey">
           Dwellys is a registered trademark and the trading name of Dwellys
-          Limited.(v-0.6.8)
+          Limited.(v-0.6.9)
         </p>
       </el-col>
       <el-col :md="8" :sm="24">
