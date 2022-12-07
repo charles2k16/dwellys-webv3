@@ -81,7 +81,7 @@
         </el-row> -->
       </div>
     </div>
-    <div class="section">
+    <div>
       <div v-if="isQuery" class="pt-20" v-loading="pageLoad">
         <div v-if="queryList.length > 0">
           <PropertyList :listings="queryList" />
@@ -204,7 +204,7 @@ export default Vue.extend({
         const social_response = await this.$socialregisterApi.create(
           socialsignup
         );
-        console.log('facebook signup', social_response);
+        // console.log('facebook signup', social_response);
         this.$confirm(social_response.message, 'Confirm Email Address', {
           confirmButtonText: 'Continue',
           type: 'success',
@@ -293,13 +293,10 @@ export default Vue.extend({
         const property_type_response = await this.$similarListingsApi.query(
           tab.label
         );
-        console.log(property_type_response);
 
         this.loadOtherProperties(property_type_response.data);
       } catch (error: any) {
-        console.log('error', error);
         if (error?.response?.data) {
-          console.log('from server error', error.response.data.message);
           this.house_listings = [];
         }
         this.pageLoad = false;
@@ -374,6 +371,7 @@ export default Vue.extend({
         max-width: 490px;
         font-weight: 200;
         line-height: 34px;
+        font-family: var(--font-primary-light);
         z-index: 10;
         span {
           font-weight: 700;

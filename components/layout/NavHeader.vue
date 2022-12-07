@@ -304,7 +304,7 @@ a {
   justify-content: center;
   border: 1px solid #e2e8f0;
   background: #f8fafc;
-  padding: 5px 20px;
+  padding: 2px 4px 2px 16px;
   border-radius: 20px;
 
   .user_avatar {

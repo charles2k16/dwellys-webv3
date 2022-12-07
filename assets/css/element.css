@@ -339,6 +339,19 @@
 .el-drawer__open .el-drawer.rtl {
   width: 35% !important;
 }
+
+.search_input .el-input__inner {
+  background: #fff;
+}
+
+.el-tabs--border-card > .el-tabs__header > .el-tabs__nav-wrap {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1200px;
+  width: 100%;
+  height: auto;
+}
+
 @media (max-width: 1024px) {
   .el-drawer__open .el-drawer.rtl {
     width: 40% !important;

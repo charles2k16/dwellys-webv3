@@ -2,20 +2,20 @@
   --text-base: #334155;
   --color-primary: #cf0100;
   --text-white: #ffffff;
-  --font-primary: SFtext_reg;
-  --font-primary-md: SFtext_md;
-  --font-primary-light: SFtext_light;
+  --font-primary: Inter_regular;
+  --font-primary-md: Inter_medium;
+  --font-primary-light: Inter_light;
   --circular_light: Inter_bold;
-  --font-header-reg: SFtext_md;
+  --font-header-reg: Inter_medium;
   --disable-button: #de0b0b80;
 }
 
 @font-face {
-  font-family: 'SFtext_reg';
+  font-family: 'Inter_regular';
   src: url('../fonts/Inter-Regular.ttf');
 }
 @font-face {
-  font-family: 'SFPro_reg';
+  font-family: 'Inter_semibold';
   src: url('../fonts/Inter-SemiBold.ttf');
 }
 
@@ -25,12 +25,12 @@
 }
 
 @font-face {
-  font-family: 'SFtext_light';
+  font-family: 'Inter_light';
   src: url('../fonts/Inter-Light.ttf');
 }
 
 @font-face {
-  font-family: 'SFtext_md';
+  font-family: 'Inter_medium';
   src: url('../fonts/Inter-Medium.ttf');
 }
 
@@ -81,13 +81,13 @@ hr.hr_rule {
   border: 0.5px solid #e2e8f0;
 }
 p {
-  font-size: 1rem;
+  font-size: 12px;
   font-family: var(--font-primary-light), sans-serif;
-  line-height: 24px;
+  line-height: 18px;
   /* color: #64748B; */
 }
 span {
-  font-family: circular_light, sans-serif;
+  font-family: --circular_light, sans-serif;
   font-weight: 100;
 }
 .text-black {

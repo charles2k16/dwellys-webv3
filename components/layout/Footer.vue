@@ -3,7 +3,9 @@
     <hr class="hr_rule" />
     <el-row class="mt-10">
       <el-col :md="8" :sm="24">
-        <p class="pb-10">&copy; Dwellys 2022, All rights reserved</p>
+        <p class="pb-10 right_reserved">
+          &copy; Dwellys 2022, All rights reserved
+        </p>
         <p class="trademark_text text-grey">
           Dwellys is a registered trademark and the trading name of Dwellys
           Limited.(v-0.6.8)
@@ -49,7 +51,9 @@ export default Vue.extend({
   background: #fff;
   bottom: 0;
   z-index: 50;
-
+  .right_reserved {
+    font-weight: 600;
+  }
   .media_holder {
     display: flex;
     justify-content: flex-end;
