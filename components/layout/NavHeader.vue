@@ -75,23 +75,23 @@
                 <p class="py-10" @click="$router.push('/register')">Register</p>
               </el-dropdown-item>
               <el-dropdown-item v-if="$auth.loggedIn">
-                <span class="py-10">
-                  <NuxtLink to="/profile">Profile</NuxtLink>
-                </span>
+                <p class="py-10" @click="$router.push('/profile')">Profile</p>
               </el-dropdown-item>
               <el-dropdown-item v-if="$auth.loggedIn">
-                <span class="py-10" v-if="$auth.user.user_type == 'lister'">
-                  <NuxtLink to="/property_upload">Property Upload</NuxtLink>
-                </span>
+                <p
+                  class="py-10"
+                  @click="$router.push('/property_upload')"
+                  v-if="$auth.user.user_type == 'lister'"
+                >
+                  Property Upload
+                </p>
               </el-dropdown-item>
               <el-dropdown-item
                 v-if="!$auth.loggedIn || $auth.user.user_type == 'visitor'"
               >
-                <span class="py-10">
-                  <NuxtLink to="/property_account"
-                    >List your property now</NuxtLink
-                  >
-                </span>
+                <p class="py-10" @click="$router.push('/property_account')">
+                  List your property now
+                </p>
               </el-dropdown-item>
               <el-dropdown-item v-if="$auth.loggedIn" style="color: red">
                 <p class="py-10" @click="logout">Logout</p></el-dropdown-item
