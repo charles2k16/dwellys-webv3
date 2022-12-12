@@ -15,10 +15,9 @@
               avatar ===
                 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
             "
-            :src="apiUrl + '/' + lister.avatar"
+            :src="lister.avatar"
             alt="avatar"
-            class="profile_img"
-          />
+            class="profile_img" />
 
           <img v-else :src="avatar" alt="avatar" class="profile_img" />
           <div class="pl-20 pt-20">
@@ -38,8 +37,7 @@
               :multiple="false"
               :auto-upload="false"
               :on-change="getAvatar"
-              :show-file-list="false"
-            >
+              :show-file-list="false">
               <el-button type="info" size="mini">Update Photo</el-button>
             </el-upload>
           </div>
@@ -55,12 +53,10 @@
           v-if="lister.user_type == 'lister'"
           label="My Listings"
           name="first"
-          class="new_tab"
-        >
+          class="new_tab">
           <ProfileListings
             :user_listings="user_listings"
-            :fetchListings="fetchListings"
-          />
+            :fetchListings="fetchListings" />
         </el-tab-pane>
         <el-tab-pane label="Profile" name="second" class="settings_body">
           <el-form class="profile_info_container d-flex">
@@ -77,10 +73,7 @@
                       <!-- <p v-if="!editInfo" class="profile_info">
                         {{ lister.first_name }}
                       </p> -->
-                      <el-input
-                        v-model="lister.first_name"
-                        placeholder="First name"
-                      >
+                      <el-input v-model="lister.first_name" placeholder="First name">
                       </el-input>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="12" class="last_name">
@@ -88,10 +81,7 @@
                       <!-- <p v-if="!editInfo" class="profile_info">
                         {{ lister.last_name }}
                       </p> -->
-                      <el-input
-                        v-model="lister.last_name"
-                        placeholder="Last Name"
-                      >
+                      <el-input v-model="lister.last_name" placeholder="Last Name">
                       </el-input>
                     </el-col>
                   </el-row>
@@ -116,11 +106,7 @@
                 <div class="details_div">
                   <p>Email address</p>
                   <!-- <p class="profile_info">{{ lister.email }}</p> -->
-                  <el-input
-                    v-model="lister.email"
-                    type="email"
-                    placeholder="Enter email"
-                  >
+                  <el-input v-model="lister.email" type="email" placeholder="Enter email">
                   </el-input>
                   <div class="pt-20 pb-10">
                     <p class="info_label pb-5">Phone number</p>
@@ -132,8 +118,7 @@
                     v-model="phone"
                     :border-radius="7"
                     default-country-code="GH"
-                    @update="onPhoneUpdate"
-                  />
+                    @update="onPhoneUpdate" />
                 </div>
               </div>
               <hr class="hr_rule" />
@@ -166,42 +151,35 @@
                     v-model="current_password"
                     type="password"
                     placeholder="Enter your current password"
-                    suffix-icon="el-icon-view"
-                  >
+                    suffix-icon="el-icon-view">
                   </el-input>
                 </div>
                 <hr class="hr_rule" />
                 <div class="pt-30">
                   <p class="pb-10" style="font-size: 14px">
-                    Password must contain at least 1 letter, 1 number and a
-                    symbol with minimum length of 12 characters
+                    Password must contain at least 1 letter, 1 number and a symbol with
+                    minimum length of 12 characters
                   </p>
                   <el-form
                     class="pb-30"
                     ref="passwords"
                     :rules="validation"
-                    :model="passwords"
-                  >
+                    :model="passwords">
                     <el-form-item label="New Password" prop="password">
                       <el-input
                         v-model="passwords.new_password"
                         type="password"
                         placeholder="Enter your new password"
                         suffix-icon="el-icon-view"
-                        class="pb-10"
-                      >
+                        class="pb-10">
                       </el-input>
                     </el-form-item>
-                    <el-form-item
-                      label="Confirm Password"
-                      prop="confirm_password"
-                    >
+                    <el-form-item label="Confirm Password" prop="confirm_password">
                       <el-input
                         v-model="passwords.confirm_password"
                         type="password"
                         placeholder="Re-enter your new password"
-                        suffix-icon="el-icon-view"
-                      >
+                        suffix-icon="el-icon-view">
                       </el-input>
                     </el-form-item>
                   </el-form>
@@ -225,33 +203,33 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue';
 // import { products } from '@/assets/data/index.js'
-import VuePhoneNumberInput from "vue-phone-number-input";
-import "vue-phone-number-input/dist/vue-phone-number-input.css";
-import { IMixinState } from "@/types/mixinsTypes";
-import url from "../url";
-import moment from "@nuxtjs/moment";
+import VuePhoneNumberInput from 'vue-phone-number-input';
+import 'vue-phone-number-input/dist/vue-phone-number-input.css';
+import { IMixinState } from '@/types/mixinsTypes';
+import url from '../url';
+import moment from '@nuxtjs/moment';
 
 export default Vue.extend({
-  name: "settings",
+  name: 'settings',
   components: {
     VuePhoneNumberInput,
   },
   data() {
     var validatePass = (rule: any, value: string, callback: any) => {
-      if (value === "") {
-        callback(new Error("Please input the password"));
+      if (value === '') {
+        callback(new Error('Please input the password'));
       } else {
-        if ((this as any).passwords.confirm_password !== "") {
-          (this as any).$refs.passwords.validateField("confirm_password");
+        if ((this as any).passwords.confirm_password !== '') {
+          (this as any).$refs.passwords.validateField('confirm_password');
         }
         callback();
       }
     };
     var validatePass2 = (rule: any, value: string, callback: any) => {
-      if (value === "") {
-        callback(new Error("Please input the password again"));
+      if (value === '') {
+        callback(new Error('Please input the password again'));
       } else if (value !== (this as any).passwords.new_password) {
         callback(new Error("Password don't match!"));
       } else {
@@ -259,44 +237,40 @@ export default Vue.extend({
       }
     };
     return {
-      activeName: "second" as string,
-      dummy_avatar: "../assets/img/avatar.png" as string,
-      home: "" as string,
-      phone: "",
-      not_approved_message: "",
+      activeName: 'second' as string,
+      dummy_avatar: '../assets/img/avatar.png' as string,
+      home: '' as string,
+      phone: '',
+      not_approved_message: '',
       passwords: {
-        new_password: "" as string,
-        confirm_password: "" as string,
+        new_password: '' as string,
+        confirm_password: '' as string,
       },
-      current_password: "" as string,
+      current_password: '' as string,
       loading: false as boolean,
-      identification: "" as any,
+      identification: '' as any,
       step: 1,
       avatar:
-        "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" as any,
+        'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png' as any,
       editInfo: false as any,
       user_listings: [],
       lister: {
-        id: "" as string,
-        first_name: "" as string,
-        last_name: "" as string,
-        dob: "" as string,
-        phone_number: "",
-        user_type: "",
-        email: "",
-        avatar: "",
-        country_id: "39a40751-d7d2-4346-99e5-b0235b520ce5" as string,
+        id: '' as string,
+        first_name: '' as string,
+        last_name: '' as string,
+        dob: '' as string,
+        phone_number: '',
+        user_type: '',
+        email: '',
+        avatar: '',
+        country_id: '39a40751-d7d2-4346-99e5-b0235b520ce5' as string,
       } as any,
-      options: ["SSNIT", "Passport", "Voter"],
+      options: ['SSNIT', 'Passport', 'Voter'],
       countries: [],
       userFavorites: [],
       validation: {
-        password: [
-          { validator: validatePass, trigger: "blur", required: true },
-        ],
-        confirm_password: [
-          { validator: validatePass2, trigger: "blur", required: true },
-        ],
+        password: [{ validator: validatePass, trigger: 'blur', required: true }],
+        confirm_password: [{ validator: validatePass2, trigger: 'blur', required: true }],
       },
     };
   },
@@ -312,9 +286,9 @@ export default Vue.extend({
       (this as any as IMixinState).$confirm(
         `Hi ${this.lister.first_name}, Your account is being approved. We will send you an email once it's approved, Thank you.`,
         {
-          confirmButtonText: "OK",
-          cancelButtonText: "Cancel",
-          type: "warning",
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
+          type: 'warning',
         }
       );
     }
@@ -324,19 +298,19 @@ export default Vue.extend({
       return url();
     },
     birthDate(date: any) {
-      this.$moment(date.format("MMM DD, YY"));
+      this.$moment(date.format('MMM DD, YY'));
     },
     async fetchFavorites() {
       const userFavorite = await this.$userFavoriteApi.index();
 
       this.userFavorites = userFavorite.data;
-      console.log("user fav", this.userFavorites);
+      console.log('user fav', this.userFavorites);
     },
     async fetchListings() {
       const user = this.$auth.user;
-      if (user.user_type == "lister") {
+      if (user.user_type == 'lister') {
         const lister = await this.$userApi.show(user.id);
-        console.log(lister, "user details");
+        console.log(lister, 'user details');
         // this.loadlister(listers.data);
         this.user_listings = lister.data.listings;
       }
@@ -344,7 +318,7 @@ export default Vue.extend({
     async fetchData() {
       const user = this.$auth.user;
 
-      console.log(user, "user");
+      console.log(user, 'user');
       this.lister = {
         id: user.id,
         first_name: user.first_name,
@@ -366,8 +340,8 @@ export default Vue.extend({
         console.log(favoriteResponse);
         (this as any as IMixinState).$message({
           showClose: true,
-          message: "Added property to favourite!",
-          type: "success",
+          message: 'Added property to favourite!',
+          type: 'success',
         });
         this.fetchFavorites();
       } catch (error: any) {
@@ -379,9 +353,7 @@ export default Vue.extend({
       console.log(e);
       this.lister.phone_number = e.formattedNumber;
       this.countries.filter((country: any) =>
-        country.short_name == e.countryCode
-          ? (this.lister.country_id = country.id)
-          : ""
+        country.short_name == e.countryCode ? (this.lister.country_id = country.id) : ''
       );
     },
     getAvatar(file: any) {
@@ -405,7 +377,7 @@ export default Vue.extend({
       const data = {
         avatar:
           this.avatar !=
-          "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+          'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
             ? this.avatar
             : null,
         dob: this.lister.dob,
@@ -417,22 +389,16 @@ export default Vue.extend({
         user_type: this.lister.user_type,
       };
       try {
-        const profileResponse = await this.$userUpdateApi.update(
-          "update",
-          data
-        );
+        const profileResponse = await this.$userUpdateApi.update('update', data);
         this.$auth.setUser(profileResponse.data.user);
 
         this.loading = false;
-        (this as any as IMixinState).getNotification(
-          "Update successfull!",
-          "success"
-        );
+        (this as any as IMixinState).getNotification('Update successfull!', 'success');
       } catch (error: any) {
         if (error?.response?.data) {
           (this as any as IMixinState).getNotification(
             error.response.data.message,
-            "error"
+            'error'
           );
         }
         this.loading = false;
@@ -450,7 +416,7 @@ export default Vue.extend({
         (this as any as IMixinState).$message({
           showClose: true,
           message: ImageResponse.message,
-          type: "success",
+          type: 'success',
         });
       } catch (error) {
         (this as any as IMixinState).catchError(error);
@@ -464,8 +430,8 @@ export default Vue.extend({
         } else {
           this.loading = false;
           (this as any as IMixinState).getNotification(
-            "Make sure all required fields are filled",
-            "error"
+            'Make sure all required fields are filled',
+            'error'
           );
           return false;
         }
@@ -479,14 +445,11 @@ export default Vue.extend({
           confirm_password: this.passwords.confirm_password,
         });
 
-        (this as any as IMixinState).$confirm(
-          "Password Changed Successfully!",
-          {
-            confirmButtonText: "OK",
-            cancelButtonText: "Cancel",
-            type: "success",
-          }
-        );
+        (this as any as IMixinState).$confirm('Password Changed Successfully!', {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
+          type: 'success',
+        });
         this.loading = false;
       } catch (error) {
         this.loading = false;
