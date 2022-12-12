@@ -81,7 +81,7 @@ hr.hr_rule {
   border: 0.5px solid #e2e8f0;
 }
 p {
-  font-size: 12px;
+  font-size: 15px;
   font-family: var(--font-primary-light), sans-serif;
   line-height: 18px;
   /* color: #64748B; */
