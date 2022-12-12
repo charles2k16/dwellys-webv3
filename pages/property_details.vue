@@ -4,7 +4,7 @@
       <ApplicationHandler ref="propertyAction" />
       <el-dialog :visible.sync="dialogVisible" width="50%">
         <div>
-          <img :src="apiUrl + '/' + modalImage" class="carousel_image" />
+          <img :src="modalImage" class="carousel_image" />
         </div>
         <!-- <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">Cancel</el-button>
@@ -32,10 +32,7 @@
         <div class="details_plot">
           <p class="align_center mr-20">
             <span class="material-icons mr-5"> room </span
-            >{{
-              propertyDetails.listing_detail &&
-              propertyDetails.listing_detail.city
-            }}
+            >{{ propertyDetails.listing_detail && propertyDetails.listing_detail.city }}
           </p>
 
           <p class="align_center">
@@ -61,8 +58,7 @@
                 favProperties.includes(propertyDetails)
                   ? { color: 'red' }
                   : { color: 'grey' }
-              "
-            >
+              ">
               favorite
             </span>
             <span class="pl-5">
@@ -77,11 +73,9 @@
         <el-col :xs="24" :sm="24" :md="hasMorePhotos ? 20 : 24">
           <el-carousel :interval="5000" arrow="always">
             <el-carousel-item
-              v-for="(image, index) in propertyDetails.listing_detail
-                .listing_images"
-              :key="index"
-            >
-              <img :src="apiUrl + '/' + image.photo" class="carousel_image" />
+              v-for="(image, index) in propertyDetails.listing_detail.listing_images"
+              :key="index">
+              <img :src="image.photo" class="carousel_image" />
             </el-carousel-item>
           </el-carousel>
         </el-col>
@@ -91,19 +85,12 @@
           :sm="8"
           :md="4"
           v-if="hasMorePhotos"
-          class="has_more_photos hidden-sm-and-down"
-        >
+          class="has_more_photos hidden-sm-and-down">
           <div
             class="thumbnail"
-            v-for="(image, index) in propertyDetails.listing_detail
-              .listing_images"
-            :key="index"
-          >
-            <img
-              :src="apiUrl + '/' + image.photo"
-              class="_image"
-              @click="showImage(image.photo)"
-            />
+            v-for="(image, index) in propertyDetails.listing_detail.listing_images"
+            :key="index">
+            <img :src="image.photo" class="_image" @click="showImage(image.photo)" />
           </div>
         </el-col>
       </el-row>
@@ -118,11 +105,8 @@
             <div class="basic_specifications">
               <span
                 class="info_card"
-                v-for="(
-                  specification, index
-                ) in propertyDetails.property_specifications"
-                :key="index"
-              >
+                v-for="(specification, index) in propertyDetails.property_specifications"
+                :key="index">
                 <p>
                   {{ specification.number }}
                   {{ specification.specification.name }}
@@ -132,8 +116,7 @@
               <span
                 class="info_card"
                 v-for="specification in propertyDetails.other_specifications"
-                :key="specification.id"
-              >
+                :key="specification.id">
                 <p class="d-flex">
                   {{ specification.number }}
                   {{ specification.name }}
@@ -165,18 +148,12 @@
                 <p class="mt-5 amout" v-if="propertyDetails.listing_detail">
                   <b style="font-size: 24px; line-height: 28px"
                     >GH₵{{ propertyDetails.listing_detail.price }}</b
-                  ><span
-                    v-if="
-                      propertyDetails.listing_detail.category.name == 'Rent'
-                    "
+                  ><span v-if="propertyDetails.listing_detail.category.name == 'Rent'"
                     >/month</span
                   >
                 </p>
                 <div class="d-flex mt-20" v-if="propertyDetails.listing_detail">
-                  <img
-                    :src="apiUrl + '/' + propertyDetails.lister.avatar"
-                    class="agent_avatar"
-                  />
+                  <img :src="propertyDetails.lister.avatar" class="agent_avatar" />
                   <div class="ml-20">
                     <p>
                       <b
@@ -203,9 +180,7 @@
               <div>
                 <el-button type="primary" style="width: 100%" @click="showOwner"
                   ><p class="d-flex justify_between">
-                    Send a message<span class="material-icons">
-                      arrow_forward
-                    </span>
+                    Send a message<span class="material-icons"> arrow_forward </span>
                   </p></el-button
                 >
               </div>
@@ -219,10 +194,7 @@
         <div class="amenities_content">
           <h4 class="mt-20">Amenities</h4>
           <ul class="amenites_list">
-            <li
-              v-for="amenity in propertyDetails.amenities"
-              :key="amenity.amenity.name"
-            >
+            <li v-for="amenity in propertyDetails.amenities" :key="amenity.amenity.name">
               {{ amenity.amenity.name }}
             </li>
           </ul>
@@ -231,8 +203,7 @@
       <div class="mt-20 mb-20" v-if="propertyDetails.listing_detail">
         <Map
           :lat="propertyDetails.listing_detail.latitude"
-          :lng="propertyDetails.listing_detail.longitude"
-        />
+          :lng="propertyDetails.listing_detail.longitude" />
       </div>
       <div>
         <hr class="hr_rule" />

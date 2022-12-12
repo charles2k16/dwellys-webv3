@@ -11,19 +11,12 @@
         </div>
         <p>
           <b
-            >{{
-              propertyDetails.listing_detail &&
-              propertyDetails.listing_detail.name
-            }}
+            >{{ propertyDetails.listing_detail && propertyDetails.listing_detail.name }}
             -
             {{
-              propertyDetails.listing_detail &&
-              propertyDetails.listing_detail.location
+              propertyDetails.listing_detail && propertyDetails.listing_detail.location
             }},
-            {{
-              propertyDetails.listing_detail &&
-              propertyDetails.listing_detail.region
-            }}
+            {{ propertyDetails.listing_detail && propertyDetails.listing_detail.region }}
           </b>
         </p>
       </div>
@@ -31,15 +24,12 @@
         <div class="details_plot">
           <p class="align_center mr-20">
             <span class="material-icons mr-5"> room </span
-            >{{
-              propertyDetails.listing_detail &&
-              propertyDetails.listing_detail.city
-            }}
+            >{{ propertyDetails.listing_detail && propertyDetails.listing_detail.city }}
           </p>
 
           <p class="align_center">
             <span class="material-icons mr-5"> schedule </span>Last updated,
-            {{ $moment(propertyDetails.updated_at).format("MMMM Do YYYY") }}
+            {{ $moment(propertyDetails.updated_at).format('MMMM Do YYYY') }}
           </p>
         </div>
         <div class="details_plot">
@@ -54,8 +44,7 @@
                 favProperties.includes(propertyDetails)
                   ? { color: 'red' }
                   : { color: 'grey' }
-              "
-            >
+              ">
               favorite
             </span>
             <span class="pl-5">Like</span>
@@ -69,22 +58,19 @@
           :xs="24"
           :sm="24"
           :md="hasMorePhotos ? 20 : 24"
-          class="has_more_photos hidden-sm-and-down"
-        >
+          class="has_more_photos hidden-sm-and-down">
           <el-carousel :interval="5000" arrow="always">
             <el-carousel-item
-              v-for="(image, index) in propertyDetails.listing_detail
-                .listing_images"
-              :key="index"
-            >
-              <img :src="apiUrl + '/' + image.photo" class="carousel_image" />
+              v-for="(image, index) in propertyDetails.listing_detail.listing_images"
+              :key="index">
+              <img :src="image.photo" class="carousel_image" />
             </el-carousel-item>
           </el-carousel>
         </el-col>
 
         <el-col :xs="8" :sm="8" :md="4" v-if="hasMorePhotos">
           <div class="thumbnail">
-            <img :src="apiUrl + '/' + image.photo" class="_image" />
+            <img :src="image.photo" class="_image" />
           </div>
         </el-col>
       </el-row>
@@ -99,11 +85,8 @@
             <div class="d-flex">
               <span
                 class="info_card"
-                v-for="(
-                  specification, index
-                ) in propertyDetails.property_specifications"
-                :key="index"
-              >
+                v-for="(specification, index) in propertyDetails.property_specifications"
+                :key="index">
                 <p>
                   {{ specification.number }}
                   {{ specification.specification.name }}
@@ -113,8 +96,7 @@
               <span
                 class="info_card"
                 v-for="specification in propertyDetails.other_specifications"
-                :key="specification.id"
-              >
+                :key="specification.id">
                 <p class="d-flex">
                   {{ specification.number }}
                   {{ specification.name }}
@@ -144,10 +126,7 @@
                   >/ month
                 </p>
                 <div class="d-flex mt-20" v-if="propertyDetails.listing_detail">
-                  <img
-                    :src="apiUrl + '/' + propertyDetails.lister.avatar"
-                    class="agent_avatar"
-                  />
+                  <img :src="propertyDetails.lister.avatar" class="agent_avatar" />
                   <div class="ml-20">
                     <p>
                       <b
@@ -163,9 +142,9 @@
                     </p>
                     <p style="font-size: 13px; color: #64748b">
                       {{
-                        propertyDetails.lister.user_type == "lister"
-                          ? "Independent agent"
-                          : "Admin"
+                        propertyDetails.lister.user_type == 'lister'
+                          ? 'Independent agent'
+                          : 'Admin'
                       }}
                     </p>
                   </div>
@@ -174,9 +153,7 @@
               <div>
                 <el-button type="primary" style="width: 100%" @click="showOwner"
                   ><p class="d-flex justify_between">
-                    Send a message<span class="material-icons">
-                      arrow_forward
-                    </span>
+                    Send a message<span class="material-icons"> arrow_forward </span>
                   </p></el-button
                 >
               </div>
@@ -192,8 +169,7 @@
           <ul
             class="amenites_list"
             v-for="amenity in propertyDetails.amenities"
-            :key="amenity.amenity.name"
-          >
+            :key="amenity.amenity.name">
             <li>{{ amenity.amenity.name }}</li>
           </ul>
         </div>
@@ -212,30 +188,30 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import ApplicationHandler from "@/handlers/ApplicationHandler.vue";
-import url from "../../url";
-import { IMixinState } from "../../types/mixinsTypes";
+import Vue from 'vue';
+import ApplicationHandler from '@/handlers/ApplicationHandler.vue';
+import url from '../../url';
+import { IMixinState } from '../../types/mixinsTypes';
 
 export default Vue.extend({
   auth: false,
-  name: "SingleProperty",
+  name: 'SingleProperty',
   components: {
     ApplicationHandler,
   },
   data() {
     return {
-      activeName: "first" as string,
-      image: "" as any,
+      activeName: 'first' as string,
+      image: '' as any,
       propertyDetails: {} as any,
-      home: "" as string,
+      home: '' as string,
       favProperties: [] as Array<object>,
       sendForm: {
         amount: null,
         recipient_amt: null,
-        payment_method: "" as string,
+        payment_method: '' as string,
       },
-      user: "",
+      user: '',
     };
   },
   async created() {
@@ -266,18 +242,18 @@ export default Vue.extend({
           });
           (this as any as IMixinState).$message({
             showClose: true,
-            message: "Added property to favourite!",
-            type: "success",
+            message: 'Added property to favourite!',
+            type: 'success',
           });
         } catch (error: any) {}
       } else {
-        this.$confirm("Login to select favourite", {
-          confirmButtonText: "Login",
-          cancelButtonText: "Cancel",
-          type: "success",
+        this.$confirm('Login to select favourite', {
+          confirmButtonText: 'Login',
+          cancelButtonText: 'Cancel',
+          type: 'success',
         })
           .then(() => {
-            this.$router.push("/login");
+            this.$router.push('/login');
           })
           .catch(() => {});
       }
@@ -290,13 +266,11 @@ export default Vue.extend({
     //   },
     showOwner(): void {
       if (this.$auth.loggedIn) {
-        (this as any).$refs.propertyAction.showMessageModal(
-          this.propertyDetails.lister
-        );
+        (this as any).$refs.propertyAction.showMessageModal(this.propertyDetails.lister);
       } else {
         (this as any as IMixinState).getNotification(
-          "Login to send agent a message!",
-          "warning"
+          'Login to send agent a message!',
+          'warning'
         );
       }
     },
@@ -384,7 +358,7 @@ $small_screen: 426px;
       margin-left: 15px;
 
       &::before {
-        content: "\2022";
+        content: '\2022';
         color: red;
         font-weight: bold;
         display: inline-block;

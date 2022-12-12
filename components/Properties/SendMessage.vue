@@ -2,11 +2,11 @@
   <el-row>
     <hr class="hr_rule" />
     <div class="d-flex pb-20 pt-10">
-      <img class="agent_avatar" :src="apiUrl + '/' + user.user.avatar" />
+      <img class="agent_avatar" :src="user.user.avatar" />
       <div class="ml-20">
         <p>{{ user.user.first_name }} {{ user.user.last_name }}</p>
         <p style="font-size: 12px; color: #64748b">
-          {{ user.user.user_type == "lister" ? "Independent agent" : "Admin" }}
+          {{ user.user.user_type == 'lister' ? 'Independent agent' : 'Admin' }}
         </p>
       </div>
     </div>
@@ -15,28 +15,23 @@
       <el-input
         v-model="message"
         placeholder="Write a message to send"
-        type="textarea"
-      ></el-input>
+        type="textarea"></el-input>
     </el-form>
     <div class="d-flex justify_end pt-20">
       <el-button type="info" @click="cancelMessage">Cancel</el-button>
-      <a
-        :href="`https://wa.me/${contact}?text=${message}?url${user.url}`"
-        target="_blank"
-        ><el-button type="primary" @click="sendMessage"
-          >Send message</el-button
-        ></a
+      <a :href="`https://wa.me/${contact}?text=${message}?url${user.url}`" target="_blank"
+        ><el-button type="primary" @click="sendMessage">Send message</el-button></a
       >
     </div>
   </el-row>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { IMixinState } from "@/types/mixinsTypes";
+import Vue from 'vue';
+import { IMixinState } from '@/types/mixinsTypes';
 
 export default Vue.extend({
-  name: "SendMessage",
+  name: 'SendMessage',
   props: {
     user: {
       required: true,
@@ -45,18 +40,18 @@ export default Vue.extend({
   },
   data() {
     return {
-      message: "" as string,
-      contact: "" as string,
+      message: '' as string,
+      contact: '' as string,
     };
   },
   created() {
     const user = this.$auth.user;
     this.contact = user.phone_number;
-    console.log("auth", user);
+    console.log('auth', user);
   },
   methods: {
     cancelMessage() {
-      this.$emit("closeMessageModal");
+      this.$emit('closeMessageModal');
     },
     sendMessage() {
       if (this.$auth.loggedIn) {
@@ -65,11 +60,11 @@ export default Vue.extend({
         //   "Message Sent Successfully!",
         //   "success"
         // );
-        this.$emit("closeMessageModal");
+        this.$emit('closeMessageModal');
       } else {
         (this as any as IMixinState).getNotification(
-          "Login to send agent a message!",
-          "warning"
+          'Login to send agent a message!',
+          'warning'
         );
       }
     },
