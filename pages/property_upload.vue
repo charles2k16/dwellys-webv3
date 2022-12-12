@@ -5,9 +5,7 @@
         <div class="center">
           <div class="property_upload_head">
             <h3>What kind of property do you want to upload?</h3>
-            <small
-              >Lorem ipsum dolor sit amet, consectetur adipiscing elit.</small
-            >
+            <small>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</small>
           </div>
           <div class="block slider">
             <el-slider v-model="step" disabled :min="1" :max="7"></el-slider>
@@ -21,14 +19,12 @@
               v-model="category"
               placeholder="Select"
               class="category pt-10"
-              @change="getCategory($event)"
-            >
+              @change="getCategory($event)">
               <el-option
                 v-for="category in categories"
                 :key="category.id"
                 :value="category.name"
-                class="py-10"
-              >
+                class="py-10">
               </el-option>
             </el-select>
             <!-- </el-col>  -->
@@ -42,8 +38,7 @@
                   selectedProperty == property.name && {
                     backgroundColor: '#F1F5F9',
                   }
-                "
-              >
+                ">
                 <div class="d-flex_column">
                   <p>
                     <b> {{ property.name }} </b>
@@ -52,10 +47,7 @@
                     {{ property.description }}
                   </p>
                 </div>
-                <img
-                  :src="url() + '/' + property.photo"
-                  class="property_upload_photo"
-                />
+                <img :src="property.photo" class="property_upload_photo" />
               </div>
             </div>
           </div>
@@ -86,8 +78,7 @@
                     :min="0"
                     size="small"
                     @change="getSpec(spec.number, spec.id, spec.name)"
-                    v-model="spec.number"
-                  >
+                    v-model="spec.number">
                     {{ spec.number ? spec.number : 0 }}
                     <!-- v-model="propertyUpload.specifications.number" -->
                   </el-input-number>
@@ -96,16 +87,12 @@
             </div>
             <div
               v-for="(spec, index) in propertyUpload.other_specifications"
-              :key="spec.id"
-            >
+              :key="spec.id">
               <div class="other_specs">
                 <div>
                   <div class="inner_specs">
                     <div class="d-flex_column">
-                      <el-input
-                        v-model="spec.name"
-                        placeholder="Please specify if other"
-                      >
+                      <el-input v-model="spec.name" placeholder="Please specify if other">
                       </el-input>
                     </div>
                     <div class="d-flex">
@@ -113,8 +100,7 @@
                         :min="0"
                         :disabled="!spec.name"
                         size="small"
-                        v-model="spec.number"
-                      >
+                        v-model="spec.number">
                         {{ spec.number }}
                       </el-input-number>
                     </div>
@@ -134,24 +120,16 @@
                     v-if="index != 0"
                     class="d-flex justify_end p-20"
                     style="color: red"
-                    @click="removeSpec(index)"
-                  >
-                    <i
-                      class="el-icon-delete-solid"
-                      style="font-weight: 600"
-                    ></i>
+                    @click="removeSpec(index)">
+                    <i class="el-icon-delete-solid" style="font-weight: 600"></i>
                   </p>
                 </div>
-                <p>
-                  For other living areas, please specify, eg, Patio, lounge,
-                  pool
-                </p>
+                <p>For other living areas, please specify, eg, Patio, lounge, pool</p>
               </div>
             </div>
             <div class="d-flex justify_end">
               <el-button @click="addSpecSection"
-                ><i class="el-icon-plus mr-10"></i>Add another
-                section</el-button
+                ><i class="el-icon-plus mr-10"></i>Add another section</el-button
               >
             </div>
           </div>
@@ -177,8 +155,7 @@
                   propertyUpload.property_amenities_id.includes(property.id)
                     ? { background: '#E2E8F0' }
                     : { background: '#fff' }
-                "
-              >
+                ">
                 <div class="">
                   <!-- <img :src="getSvg(property.img)" class="pt-10" /> -->
                   <p class="mt-30">{{ property.name }}</p>
@@ -205,12 +182,8 @@
               @change="toggleUpload"
               style="display: none"
               id="img"
-              accept="image/x-png,image/jpeg"
-            />
-            <label
-              for="img"
-              class="property_image_main d-flex_column justify_center"
-            >
+              accept="image/x-png,image/jpeg" />
+            <label for="img" class="property_image_main d-flex_column justify_center">
               <i class="el-icon-upload"></i><br />
               Drop file here or <em>click to upload</em></label
             >
@@ -221,8 +194,7 @@
               <img :src="image.photo" width="70px" class="mx-10 my-10" />
               <i
                 class="el-icon-delete-solid deleteImgIcon"
-                @click="removeUpload(index)"
-              ></i>
+                @click="removeUpload(index)"></i>
             </div>
           </div>
           <p v-if="imageErr" style="color: red">{{ imageErr }}</p>
@@ -243,17 +215,12 @@
           <el-row class="pb-20">
             <el-col :sm="12" class="pb-20 d-flex_column pr-20">
               <span>Country</span>
-              <el-select
-                v-model="country"
-                placeholder="Select"
-                class="region pt-10"
-              >
+              <el-select v-model="country" placeholder="Select" class="region pt-10">
                 <el-option
                   v-for="(country, index) in countries"
                   :key="index"
                   :value="country.id"
-                  :label="country.full_name"
-                >
+                  :label="country.full_name">
                 </el-option>
               </el-select>
               <!-- <el-input v-model="country" placeholder="Country"> </el-input> -->
@@ -263,13 +230,11 @@
               <el-select
                 v-model="propertyUpload.region"
                 placeholder="Select"
-                class="region pt-10"
-              >
+                class="region pt-10">
                 <el-option
                   v-for="region in Object.keys(regions)"
                   :key="region"
-                  :value="region"
-                >
+                  :value="region">
                 </el-option>
               </el-select>
             </el-col>
@@ -298,13 +263,11 @@
               <el-select
                 v-model="propertyUpload.location"
                 placeholder="Location"
-                class="region pt-10"
-              >
+                class="region pt-10">
                 <el-option
                   v-for="region in regions[propertyUpload.region]"
                   :key="region"
-                  :value="region"
-                >
+                  :value="region">
                 </el-option>
               </el-select>
             </el-col>
@@ -329,21 +292,14 @@
               <el-input
                 v-model="propertyUpload.name"
                 type="text"
-                placeholder="E.g Two bed room apartment"
-              >
+                placeholder="E.g Two bed room apartment">
               </el-input>
             </el-col>
             <el-col :sm="12" class="pb-20 pl-5 w-100 d-flex_column">
               <span class="pb-10">Property Price</span>
-              <el-input
-                v-model="propertyUpload.price"
-                type="number"
-                placeholder="200"
-              >
+              <el-input v-model="propertyUpload.price" type="number" placeholder="200">
                 <template slot="prepend">GH&#8373; </template>
-                <template slot="append" v-if="category == 'Rent'"
-                  >per month</template
-                >
+                <template slot="append" v-if="category == 'Rent'">per month</template>
               </el-input>
             </el-col>
           </el-row>
@@ -353,8 +309,7 @@
               type="textarea"
               :rows="2"
               placeholder="Please property description"
-              v-model="propertyUpload.description"
-            >
+              v-model="propertyUpload.description">
             </el-input>
           </div>
         </div>
@@ -375,9 +330,7 @@
       </div>
       <hr class="hr_rule" />
       <div class="property_upload_btns pt-10">
-        <el-button type="info" @click="toPrev" :disabled="step === 1"
-          >Back</el-button
-        >
+        <el-button type="info" @click="toPrev" :disabled="step === 1">Back</el-button>
         <el-button
           type="primary"
           class="btn_sm submit_register_button"
@@ -392,8 +345,7 @@
           class="btn_sm submit_register_button"
           @click="toNext"
           :disabled="!isValid"
-          v-else
-        >
+          v-else>
           Next</el-button
         >
       </div>
@@ -498,17 +450,13 @@ export default Vue.extend({
 
       const listingPlans = await this.$listingPlansApi.index();
 
-      const plans = listingPlans.data.filter(
-        (plan: any) => plan.is_active == 1
-      );
+      const plans = listingPlans.data.filter((plan: any) => plan.is_active == 1);
       console.log(plans);
       this.pricingPlans = plans;
 
       const countries = await this.$countriesApi.index();
       countries.data.filter((country: any) =>
-        country.short_name == 'GH'
-          ? (this.propertyUpload.country_id = country.id)
-          : ''
+        country.short_name == 'GH' ? (this.propertyUpload.country_id = country.id) : ''
       );
       // this.countries = countries.data;
       // this.propertyTypes.country
@@ -536,15 +484,9 @@ export default Vue.extend({
         this.propertyUpload.listing_category_id != ''
       ) {
         valid = true;
-      } else if (
-        this.step == 2 &&
-        this.propertyUpload.specifications.length > 0
-      ) {
+      } else if (this.step == 2 && this.propertyUpload.specifications.length > 0) {
         valid = true;
-      } else if (
-        this.step == 3 &&
-        this.propertyUpload.property_amenities_id.length > 0
-      ) {
+      } else if (this.step == 3 && this.propertyUpload.property_amenities_id.length > 0) {
         valid = true;
       } else if (this.step == 4 && this.listing_photos.length > 0) {
         valid = true;
@@ -585,9 +527,6 @@ export default Vue.extend({
     },
     removeSpec(index: number) {
       this.propertyUpload.other_specifications.splice(index, 1);
-    },
-    getImage(pic: any): string {
-      return this.url() + pic;
     },
     getSvg(pic: string): string {
       return require('../assets/svg/' + pic);
@@ -647,14 +586,9 @@ export default Vue.extend({
       console.log(property);
     },
     getAmenities(property: any): void {
-      let singlePlan = Object.assign(
-        [],
-        this.propertyUpload.property_amenities_id
-      );
+      let singlePlan = Object.assign([], this.propertyUpload.property_amenities_id);
       if (this.propertyUpload.property_amenities_id) {
-        let amenityIndex = this.propertyUpload.property_amenities_id.indexOf(
-          property.id
-        );
+        let amenityIndex = this.propertyUpload.property_amenities_id.indexOf(property.id);
         singlePlan.includes(property.id)
           ? this.propertyUpload.property_amenities_id.splice(amenityIndex, 1)
           : this.propertyUpload.property_amenities_id.push(property.id);
@@ -663,10 +597,7 @@ export default Vue.extend({
       console.log(this.propertyUpload.property_amenities_id);
     },
     getSpec(num: Number, specId: string, name: string) {
-      let specifications = Object.assign(
-        [],
-        this.propertyUpload.specifications
-      );
+      let specifications = Object.assign([], this.propertyUpload.specifications);
 
       let specIndex = specifications.findIndex(
         (spec: any) => spec.property_type_specification_id == specId
@@ -693,9 +624,7 @@ export default Vue.extend({
     getCategory(e: any) {
       console.log(e);
       this.categories.filter((category: any) =>
-        category.name == e
-          ? (this.propertyUpload.listing_category_id = category.id)
-          : ''
+        category.name == e ? (this.propertyUpload.listing_category_id = category.id) : ''
       );
     },
 
@@ -704,9 +633,7 @@ export default Vue.extend({
       try {
         // console.log(this.propertyUpload);
 
-        const propertyResponse = await this.$listingApi.create(
-          this.propertyUpload
-        );
+        const propertyResponse = await this.$listingApi.create(this.propertyUpload);
         console.log('property upload', propertyResponse);
         // const imageListing = await this.$listingImagesApi.create({
         //   listing_id: propertyResponse.data.id,

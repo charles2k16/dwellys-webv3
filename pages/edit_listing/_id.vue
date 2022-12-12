@@ -283,7 +283,6 @@ export default Vue.extend({
   // },
   data() {
     return {
-      url: 'http://localhost:8000/',
       imageErr: '' as string,
       activeName: 'first' as string,
       image: '' as any,
