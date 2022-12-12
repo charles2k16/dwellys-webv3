@@ -52,7 +52,7 @@
                   </span>
                   <img
                     v-if="$auth.user.avatar"
-                    :src="src + $auth.user.avatar"
+                    :src="$auth.user.avatar"
                     alt="avatar"
                     class="user_avatar" />
                   <img src="~/assets/img/user_icon.png" alt="icon" v-else />
@@ -115,7 +115,7 @@
 
                 <img
                   v-if="$auth.user.avatar"
-                  :src="src + $auth.user.avatar"
+                  :src="$auth.user.avatar"
                   alt="avatar"
                   class="user_avatar" />
                 <img src="~/assets/img/user_icon.png" alt="icon" v-else />
