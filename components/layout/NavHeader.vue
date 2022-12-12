@@ -107,6 +107,7 @@
         :visible.sync="drawer"
         :direction="direction"
         :before-close="handleClose"
+        :append-to-body="true"
       >
         <div class="drawer_content px-20">
           <div class="d-flex_column">
