@@ -37,7 +37,6 @@ export default Vue.extend({
   },
   methods: {
     showLoginModal(): void {
-      console.log('show');
       (this as any).$refs.loginAction.showLogin(this.user);
     },
   },

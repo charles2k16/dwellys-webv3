@@ -229,7 +229,6 @@ export default Vue.extend({
     },
     handleClose(done: string) {
       this.drawer = false;
-      console.log(done);
     },
     logout() {
       this.$auth.logout();
