@@ -71,8 +71,10 @@
               <el-dropdown-item v-if="!$auth.loggedIn">
                 <p class="py-10" @click="$router.push('/register')">Register</p>
               </el-dropdown-item>
-              <el-dropdown-item v-if="$auth.loggedIn" @click="$router.push('/profile')">
-                <p class="py-10">Profile</p>
+              <el-dropdown-item v-if="$auth.loggedIn">
+                <span @click="$router.push('/profile')">
+                  <p class="py-10">Profile</p>
+                </span>
               </el-dropdown-item>
               <el-dropdown-item v-if="$auth.loggedIn">
                 <p
@@ -201,7 +203,7 @@ export default Vue.extend({
       src:
         process.env.NODE_ENV === 'development'
           ? 'http://localhost:8000/'
-          : 'https://newapi.dwellys.com/',
+          : 'http://dwellys-files-production.s3.us-east-2.amazonaws.com/',
       user: 'login' as string,
       drawer: false as boolean,
       direction: 'rtl',
