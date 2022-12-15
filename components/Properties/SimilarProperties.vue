@@ -78,21 +78,6 @@
               </div>
               <p>{{ specification.specification.name }}</p>
             </div>
-            <!-- <div class="house_bathroom">
-              <div class="d-flex align_center">
-                <img src="~/assets/svg/bath.png" class="property_img pr-10" />
-                <b>4</b>
-              </div>
-              <p>Bathrooms</p>
-            </div>
-            <div>
-              <div class="d-flex align_center">
-                <img src="~/assets/svg/tv.png" class="property_img pr-10" /><b
-                  >1</b
-                >
-              </div>
-              <p>Living area</p>
-            </div> -->
           </div>
           <!-- </nuxt-link> -->
         </el-card>

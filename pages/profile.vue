@@ -17,7 +17,8 @@
             "
             :src="lister.avatar"
             alt="avatar"
-            class="profile_img" />
+            class="profile_img"
+          />
 
           <img v-else :src="avatar" alt="avatar" class="profile_img" />
           <div class="pl-20 pt-20">
@@ -37,7 +38,8 @@
               :multiple="false"
               :auto-upload="false"
               :on-change="getAvatar"
-              :show-file-list="false">
+              :show-file-list="false"
+            >
               <el-button type="info" size="mini">Update Photo</el-button>
             </el-upload>
           </div>
@@ -53,10 +55,12 @@
           v-if="lister.user_type == 'lister'"
           label="My Listings"
           name="first"
-          class="new_tab">
+          class="new_tab"
+        >
           <ProfileListings
             :user_listings="user_listings"
-            :fetchListings="fetchListings" />
+            :fetchListings="fetchListings"
+          />
         </el-tab-pane>
         <el-tab-pane label="Profile" name="second" class="settings_body">
           <el-form class="profile_info_container d-flex">
@@ -73,7 +77,10 @@
                       <!-- <p v-if="!editInfo" class="profile_info">
                         {{ lister.first_name }}
                       </p> -->
-                      <el-input v-model="lister.first_name" placeholder="First name">
+                      <el-input
+                        v-model="lister.first_name"
+                        placeholder="First name"
+                      >
                       </el-input>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="12" class="last_name">
@@ -81,7 +88,10 @@
                       <!-- <p v-if="!editInfo" class="profile_info">
                         {{ lister.last_name }}
                       </p> -->
-                      <el-input v-model="lister.last_name" placeholder="Last Name">
+                      <el-input
+                        v-model="lister.last_name"
+                        placeholder="Last Name"
+                      >
                       </el-input>
                     </el-col>
                   </el-row>
@@ -106,7 +116,11 @@
                 <div class="details_div">
                   <p>Email address</p>
                   <!-- <p class="profile_info">{{ lister.email }}</p> -->
-                  <el-input v-model="lister.email" type="email" placeholder="Enter email">
+                  <el-input
+                    v-model="lister.email"
+                    type="email"
+                    placeholder="Enter email"
+                  >
                   </el-input>
                   <div class="pt-20 pb-10">
                     <p class="info_label pb-5">Phone number</p>
@@ -118,7 +132,8 @@
                     v-model="phone"
                     :border-radius="7"
                     default-country-code="GH"
-                    @update="onPhoneUpdate" />
+                    @update="onPhoneUpdate"
+                  />
                 </div>
               </div>
               <hr class="hr_rule" />
@@ -151,35 +166,42 @@
                     v-model="current_password"
                     type="password"
                     placeholder="Enter your current password"
-                    suffix-icon="el-icon-view">
+                    suffix-icon="el-icon-view"
+                  >
                   </el-input>
                 </div>
                 <hr class="hr_rule" />
                 <div class="pt-30">
                   <p class="pb-10" style="font-size: 14px">
-                    Password must contain at least 1 letter, 1 number and a symbol with
-                    minimum length of 12 characters
+                    Password must contain at least 1 letter, 1 number and a
+                    symbol with minimum length of 12 characters
                   </p>
                   <el-form
                     class="pb-30"
                     ref="passwords"
                     :rules="validation"
-                    :model="passwords">
+                    :model="passwords"
+                  >
                     <el-form-item label="New Password" prop="password">
                       <el-input
                         v-model="passwords.new_password"
                         type="password"
                         placeholder="Enter your new password"
                         suffix-icon="el-icon-view"
-                        class="pb-10">
+                        class="pb-10"
+                      >
                       </el-input>
                     </el-form-item>
-                    <el-form-item label="Confirm Password" prop="confirm_password">
+                    <el-form-item
+                      label="Confirm Password"
+                      prop="confirm_password"
+                    >
                       <el-input
                         v-model="passwords.confirm_password"
                         type="password"
                         placeholder="Re-enter your new password"
-                        suffix-icon="el-icon-view">
+                        suffix-icon="el-icon-view"
+                      >
                       </el-input>
                     </el-form-item>
                   </el-form>
@@ -208,7 +230,6 @@ import Vue from 'vue';
 import VuePhoneNumberInput from 'vue-phone-number-input';
 import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 import { IMixinState } from '@/types/mixinsTypes';
-import url from '../url';
 import moment from '@nuxtjs/moment';
 
 export default Vue.extend({
@@ -269,8 +290,12 @@ export default Vue.extend({
       countries: [],
       userFavorites: [],
       validation: {
-        password: [{ validator: validatePass, trigger: 'blur', required: true }],
-        confirm_password: [{ validator: validatePass2, trigger: 'blur', required: true }],
+        password: [
+          { validator: validatePass, trigger: 'blur', required: true },
+        ],
+        confirm_password: [
+          { validator: validatePass2, trigger: 'blur', required: true },
+        ],
       },
     };
   },
@@ -294,9 +319,6 @@ export default Vue.extend({
     }
   },
   methods: {
-    url() {
-      return url();
-    },
     birthDate(date: any) {
       this.$moment(date.format('MMM DD, YY'));
     },
@@ -353,7 +375,9 @@ export default Vue.extend({
       console.log(e);
       this.lister.phone_number = e.formattedNumber;
       this.countries.filter((country: any) =>
-        country.short_name == e.countryCode ? (this.lister.country_id = country.id) : ''
+        country.short_name == e.countryCode
+          ? (this.lister.country_id = country.id)
+          : ''
       );
     },
     getAvatar(file: any) {
@@ -389,11 +413,17 @@ export default Vue.extend({
         user_type: this.lister.user_type,
       };
       try {
-        const profileResponse = await this.$userUpdateApi.update('update', data);
+        const profileResponse = await this.$userUpdateApi.update(
+          'update',
+          data
+        );
         this.$auth.setUser(profileResponse.data.user);
 
         this.loading = false;
-        (this as any as IMixinState).getNotification('Update successfull!', 'success');
+        (this as any as IMixinState).getNotification(
+          'Update successfull!',
+          'success'
+        );
       } catch (error: any) {
         if (error?.response?.data) {
           (this as any as IMixinState).getNotification(
@@ -445,11 +475,14 @@ export default Vue.extend({
           confirm_password: this.passwords.confirm_password,
         });
 
-        (this as any as IMixinState).$confirm('Password Changed Successfully!', {
-          confirmButtonText: 'OK',
-          cancelButtonText: 'Cancel',
-          type: 'success',
-        });
+        (this as any as IMixinState).$confirm(
+          'Password Changed Successfully!',
+          {
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel',
+            type: 'success',
+          }
+        );
         this.loading = false;
       } catch (error) {
         this.loading = false;

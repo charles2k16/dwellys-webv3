@@ -90,11 +90,11 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { IMixinState } from "@/types/mixinsTypes";
+import Vue from 'vue';
+import { IMixinState } from '@/types/mixinsTypes';
 
 export default Vue.extend({
-  name: "ProfileListings",
+  name: 'ProfileListings',
   props: {
     user_listings: {
       required: true,
@@ -107,23 +107,17 @@ export default Vue.extend({
   },
   data() {
     return {
-      email: "" as string,
+      email: '' as string,
       pageLoad: false,
-      houses: [
-        // { img: "Frame2.png", name: "property" },
-        // { img: "Frame3.png", name: "property" },
-        // { img: "Frame4.png", name: "property" },
-        // { img: "Frame5.png", name: "property" },
-      ],
     };
   },
 
   methods: {
     deleteListingModal(listing_id: string) {
       // const h = this.$createElement
-      this.$confirm("Are you sure you want to delete listing?", {
-        cancelButtonText: "No, i want to keep",
-        confirmButtonText: "Yes,I want to delete it",
+      this.$confirm('Are you sure you want to delete listing?', {
+        cancelButtonText: 'No, i want to keep',
+        confirmButtonText: 'Yes,I want to delete it',
       })
         .then(() => {
           this.deleteListing(listing_id);
@@ -142,10 +136,10 @@ export default Vue.extend({
         (this as any as IMixinState).$message({
           showClose: true,
           message: ListingResponse.message,
-          type: "success",
+          type: 'success',
         });
       } catch (error) {
-        console.log(error, "error");
+        console.log(error, 'error');
         (this as any as IMixinState).catchError(error);
       }
     },

@@ -11,12 +11,19 @@
         </div>
         <p>
           <b
-            >{{ propertyDetails.listing_detail && propertyDetails.listing_detail.name }}
+            >{{
+              propertyDetails.listing_detail &&
+              propertyDetails.listing_detail.name
+            }}
             -
             {{
-              propertyDetails.listing_detail && propertyDetails.listing_detail.location
+              propertyDetails.listing_detail &&
+              propertyDetails.listing_detail.location
             }},
-            {{ propertyDetails.listing_detail && propertyDetails.listing_detail.region }}
+            {{
+              propertyDetails.listing_detail &&
+              propertyDetails.listing_detail.region
+            }}
           </b>
         </p>
       </div>
@@ -24,7 +31,10 @@
         <div class="details_plot">
           <p class="align_center mr-20">
             <span class="material-icons mr-5"> room </span
-            >{{ propertyDetails.listing_detail && propertyDetails.listing_detail.city }}
+            >{{
+              propertyDetails.listing_detail &&
+              propertyDetails.listing_detail.city
+            }}
           </p>
 
           <p class="align_center">
@@ -44,7 +54,8 @@
                 favProperties.includes(propertyDetails)
                   ? { color: 'red' }
                   : { color: 'grey' }
-              ">
+              "
+            >
               favorite
             </span>
             <span class="pl-5">Like</span>
@@ -58,11 +69,14 @@
           :xs="24"
           :sm="24"
           :md="hasMorePhotos ? 20 : 24"
-          class="has_more_photos hidden-sm-and-down">
+          class="has_more_photos hidden-sm-and-down"
+        >
           <el-carousel :interval="5000" arrow="always">
             <el-carousel-item
-              v-for="(image, index) in propertyDetails.listing_detail.listing_images"
-              :key="index">
+              v-for="(image, index) in propertyDetails.listing_detail
+                .listing_images"
+              :key="index"
+            >
               <img :src="image.photo" class="carousel_image" />
             </el-carousel-item>
           </el-carousel>
@@ -85,8 +99,11 @@
             <div class="d-flex">
               <span
                 class="info_card"
-                v-for="(specification, index) in propertyDetails.property_specifications"
-                :key="index">
+                v-for="(
+                  specification, index
+                ) in propertyDetails.property_specifications"
+                :key="index"
+              >
                 <p>
                   {{ specification.number }}
                   {{ specification.specification.name }}
@@ -96,7 +113,8 @@
               <span
                 class="info_card"
                 v-for="specification in propertyDetails.other_specifications"
-                :key="specification.id">
+                :key="specification.id"
+              >
                 <p class="d-flex">
                   {{ specification.number }}
                   {{ specification.name }}
@@ -126,7 +144,10 @@
                   >/ month
                 </p>
                 <div class="d-flex mt-20" v-if="propertyDetails.listing_detail">
-                  <img :src="propertyDetails.lister.avatar" class="agent_avatar" />
+                  <img
+                    :src="propertyDetails.lister.avatar"
+                    class="agent_avatar"
+                  />
                   <div class="ml-20">
                     <p>
                       <b
@@ -153,7 +174,9 @@
               <div>
                 <el-button type="primary" style="width: 100%" @click="showOwner"
                   ><p class="d-flex justify_between">
-                    Send a message<span class="material-icons"> arrow_forward </span>
+                    Send a message<span class="material-icons">
+                      arrow_forward
+                    </span>
                   </p></el-button
                 >
               </div>
@@ -169,7 +192,8 @@
           <ul
             class="amenites_list"
             v-for="amenity in propertyDetails.amenities"
-            :key="amenity.amenity.name">
+            :key="amenity.amenity.name"
+          >
             <li>{{ amenity.amenity.name }}</li>
           </ul>
         </div>
@@ -190,7 +214,6 @@
 <script lang="ts">
 import Vue from 'vue';
 import ApplicationHandler from '@/handlers/ApplicationHandler.vue';
-import url from '../../url';
 import { IMixinState } from '../../types/mixinsTypes';
 
 export default Vue.extend({
@@ -224,9 +247,6 @@ export default Vue.extend({
     },
   },
   methods: {
-    url() {
-      return url();
-    },
     async favProperty(fav: any) {
       if (this.$auth.loggedIn) {
         let singleProperty = Object.assign([], this.favProperties);
@@ -266,7 +286,9 @@ export default Vue.extend({
     //   },
     showOwner(): void {
       if (this.$auth.loggedIn) {
-        (this as any).$refs.propertyAction.showMessageModal(this.propertyDetails.lister);
+        (this as any).$refs.propertyAction.showMessageModal(
+          this.propertyDetails.lister
+        );
       } else {
         (this as any as IMixinState).getNotification(
           'Login to send agent a message!',

@@ -206,7 +206,6 @@
 import Vue from 'vue';
 import 'element-ui/lib/theme-chalk/display.css';
 import ApplicationHandler from '@/handlers/ApplicationHandler.vue';
-import url from '../../url';
 
 export default Vue.extend({
   name: 'NavHeader',
@@ -238,9 +237,6 @@ export default Vue.extend({
     }
   },
   methods: {
-    url() {
-      return url();
-    },
     showLoginModal(): void {
       this.drawer = false;
       (this as any).$refs.modalHandler.showLogin(this.user);

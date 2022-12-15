@@ -8,19 +8,22 @@
         ref="loginForm"
         :model="loginForm"
         label-position="top"
-        :rules="validation">
+        :rules="validation"
+      >
         <el-form-item label="Email address" prop="email">
           <el-input
             v-model="loginForm.email"
             placeholder="Enter email"
-            prefix-icon="el-icon-message" />
+            prefix-icon="el-icon-message"
+          />
         </el-form-item>
         <el-form-item label="Password">
           <el-input
             v-model="loginForm.password"
             type="password"
             placeholder="Enter your password"
-            suffix-icon="el-icon-view">
+            suffix-icon="el-icon-view"
+          >
           </el-input>
         </el-form-item>
 
@@ -29,7 +32,11 @@
         </p>
 
         <div class="mt-20">
-          <el-button type="primary" class="btn_lg" @click="signIn" :loading="btnLoading"
+          <el-button
+            type="primary"
+            class="btn_lg"
+            @click="signIn"
+            :loading="btnLoading"
             >Continue</el-button
           >
         </div>
@@ -60,8 +67,9 @@
           <span class="bold">properties</span> for sale and rent
         </p>
         <p class="text-white">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut metus risus aenean
-          mattis. Odio accumsan viverra ipsum tristique lectus pellentesque erat.
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut metus
+          risus aenean mattis. Odio accumsan viverra ipsum tristique lectus
+          pellentesque erat.
         </p>
       </div>
     </div>
@@ -169,15 +177,7 @@ export default Vue.extend({
       this.$auth
         .loginWith('facebook')
         .then((response: any) => {
-          // const { user, token } = response.data.data;
           console.log(response);
-          // this.$auth.setUserToken(token);
-          // this.$auth.setUser(user);
-          // this.$emit("closeLoginModal");
-          // this.$message({
-          //   message: response.data.message,
-          //   type: "success",
-          // });
         })
         .catch((error: any) => {
           console.log(error);

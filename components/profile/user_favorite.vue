@@ -64,21 +64,6 @@
               </div>
               <p>{{ specification.specification.name }}</p>
             </div>
-            <!-- <div class="house_bathroom">
-              <div class="d-flex align_center">
-                <img src="~/assets/svg/bath.png" class="property_img pr-10" />
-                <b>4</b>
-              </div>
-              <p>Bathrooms</p>
-            </div>
-            <div>
-              <div class="d-flex align_center">
-                <img src="~/assets/svg/tv.png" class="property_img pr-10" /><b
-                  >1</b
-                >
-              </div>
-              <p>Living area</p>
-            </div> -->
           </div>
           <!-- </nuxt-link> -->
         </el-card>
@@ -91,9 +76,9 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue';
 
-import { IMixinState } from "../../types/mixinsTypes";
+import { IMixinState } from '../../types/mixinsTypes';
 
 export default Vue.extend({
   props: {
@@ -102,7 +87,7 @@ export default Vue.extend({
       type: Array,
     },
   },
-  name: "UserFavorite",
+  name: 'UserFavorite',
   data() {
     return {
       favProperties: [] as Array<object>,
@@ -110,12 +95,12 @@ export default Vue.extend({
   },
   methods: {
     favProperty(fav: any) {
-      this.$emit("favorite", fav.id);
+      this.$emit('favorite', fav.id);
     },
     openPropertyDetails(property: any): void {
       console.log(property);
       this.$router.push({
-        name: "property_details",
+        name: 'property_details',
         // params: { property: property.id },
         query: {
           name: property.listing.listing_detail.name,
