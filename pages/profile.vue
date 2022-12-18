@@ -49,6 +49,17 @@
             >Not Verified</el-tag
           >
         </p>
+
+        <div>
+          <el-button
+            v-if="lister.user_type == 'visitor'"
+            type="primary"
+            class=""
+            @click="$router.push('/become_a_lister')"
+          >
+            Become a lister
+          </el-button>
+        </div>
       </div>
       <el-tabs v-model="activeName" class="nav_scroll">
         <el-tab-pane
@@ -258,6 +269,7 @@ export default Vue.extend({
       }
     };
     return {
+      drawer: false as boolean,
       activeName: 'second' as string,
       dummy_avatar: '../assets/img/avatar.png' as string,
       home: '' as string,

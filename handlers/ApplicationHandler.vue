@@ -43,6 +43,7 @@ import Vue from 'vue';
 
 export default Vue.extend({
   name: 'ApplicationHandler',
+
   data() {
     return {
       loginEmail: '' as string,
@@ -65,7 +66,6 @@ export default Vue.extend({
     showMessageModal(user: any): void {
       this.user = user;
       console.log(user);
-
       this.messageModal = true;
     },
     closemessageModal(): void {

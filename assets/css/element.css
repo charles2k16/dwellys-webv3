@@ -269,6 +269,10 @@
   }
 }
 
+.el-select {
+  width: 100%;
+}
+
 .el-select > .el-input {
   width: 100%;
   max-width: 350px;
@@ -350,6 +354,11 @@
   max-width: 1200px;
   width: 100%;
   height: auto;
+}
+
+.id_type > .el-input {
+  width: 100%;
+  max-width: 800px !important;
 }
 
 @media (max-width: 1024px) {

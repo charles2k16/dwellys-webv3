@@ -424,6 +424,7 @@ export default Vue.extend({
       propertySelected: false as boolean,
       media: 'Pay with Momo' as string,
       imageErr: '' as string,
+      percentage_fraction: 0 as number,
       specErr: '' as string,
       selectedProperty: '',
       btnLoading: false as boolean,
@@ -588,6 +589,7 @@ export default Vue.extend({
     },
     getPrice(plan: any) {
       console.log(plan);
+      this.percentage_fraction = plan.percentage_fraction_on_value;
       this.listing_plan_id = plan.id;
       // this.propertyUpload.plan = plan.price;
     },
@@ -703,14 +705,18 @@ export default Vue.extend({
         //   listing_photos: this.listing_photos,
         // });
         this.btnLoading = false;
-        this.$router.replace({
-          name: 'checkout',
-          query: {
-            listing_id: propertyResponse.data.id,
-            plan_id: this.listing_plan_id,
-            category: this.category,
-          },
-        });
+        if (this.percentage_fraction != 100) {
+          this.$router.replace({
+            name: 'checkout',
+            query: {
+              listing_id: propertyResponse.data.id,
+              plan_id: this.listing_plan_id,
+              category: this.category,
+            },
+          });
+        }
+        this.$router.replace('/');
+
         // (this as any as IMixinState).$message({
         //   showClose: true,
         //   message: propertyResponse.message,
