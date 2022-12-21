@@ -29,7 +29,7 @@
         </p>
       </div>
       <div class="d-flex justify_between flex-wrap pb-10 text-grey">
-        <div class="details_plot">
+        <div class="details_plot details_area">
           <p class="align_center mr-20">
             <span class="material-icons mr-5"> room </span
             >{{
@@ -228,6 +228,32 @@
         </div>
       </div>
       <div class="mt-20 mb-20" v-if="propertyDetails.listing_detail">
+        <section class="share_cordinates">
+          <el-dropdown trigger="click" class="mb-20">
+            <span class="el-dropdown-link">
+              <el-button type="primary">
+                Share<i class="el-icon-arrow-down el-icon--right"></i
+              ></el-button>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item
+                ><a
+                  :href="`https://www.google.com/maps/search/?api=1&query=${propertyDetails.listing_detail.latitude},${propertyDetails.listing_detail.longitude}`"
+                  target="_blank"
+                  >Google Map</a
+                ></el-dropdown-item
+              >
+              <el-dropdown-item>Bolt</el-dropdown-item>
+              <el-dropdown-item
+                ><a
+                  :href="`m.uber.com/ul?client_id=1039031868707-iakjs1b8u7i12s3jb5l11on7uc8flkpr.apps.googleusercontent.com&dropoff[latitude]=${propertyDetails.listing_detail.latitude}&dropoff[longitude]=-${propertyDetails.listing_detail.longitude}`"
+                  target="_blank"
+                  >Uber</a
+                ></el-dropdown-item
+              >
+            </el-dropdown-menu>
+          </el-dropdown>
+        </section>
         <Map
           :lat="propertyDetails.listing_detail.latitude"
           :lng="propertyDetails.listing_detail.longitude"
@@ -385,6 +411,14 @@ export default Vue.extend({
 $medium_screen: 768px;
 $small_screen: 426px;
 
+.share_cordinates {
+  display: none;
+  @media (max-width: $small_screen) {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
 .arrow_back {
   width: 40px;
   padding-top: 5px;
@@ -403,11 +437,21 @@ $small_screen: 426px;
 .details_plot {
   display: flex;
   justify-content: space-between;
+  @media (max-width: $small_screen) {
+    width: 100%;
+    padding: 0 20px;
+  }
   p {
     font-size: 13px;
   }
   .material-icons {
     font-size: 18px;
+  }
+}
+
+.details_area {
+  @media (max-width: $small_screen) {
+    display: none;
   }
 }
 .carousel_image {

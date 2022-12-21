@@ -2,9 +2,13 @@
   <div class="home">
     <div class="home_landing_page">
       <div class="landing_content section">
-        <h1>
+        <!-- <h1>
           Discover the world’s hub for <br />
           <span>houses</span> and <span>properties</span> for sale and rent
+        </h1> -->
+        <h1 class="flash">
+          Put your <span>property</span> on the worlds Stage
+          <!-- houses and <span>properties</span> for sale and rent -->
         </h1>
         <div class="discover_line"></div>
         <!-- <el-tabs type="card" @tab-click="handleClick" class="home_search_tabs">

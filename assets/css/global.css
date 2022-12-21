@@ -64,7 +64,7 @@ small {
 h1 {
   font-family: var(--font-header-reg), sans-serif;
 
-  font-size: 30px;
+  font-size: 36px;
 }
 h2 {
   font-size: 1.5rem;
@@ -409,4 +409,37 @@ span {
 }
 .country-selector[data-v-46e105de] {
   width: 109px !important;
+}
+@-webkit-keyframes flash {
+  from,
+  50%,
+  to {
+    opacity: 1;
+  }
+
+  25%,
+  75% {
+    opacity: 0;
+  }
+}
+
+@keyframes flash {
+  from,
+  50%,
+  to {
+    opacity: 1;
+  }
+
+  25%,
+  75% {
+    opacity: 0;
+  }
+}
+
+.flash {
+  -webkit-animation-name: flash;
+  animation-name: flash;
+  animation-duration: 4s;
+  animation-delay: 8s;
+  animation-iteration-count: infinite;
 }
