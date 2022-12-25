@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <div class="top_banner">
-      <span>This site is in public beta</span>
+      <span>This site is new and undergoing public tests</span>
     </div>
     <div class="section">
       <ApplicationHandler ref="modalHandler" />
@@ -16,8 +16,8 @@
           class="header_content hidden-sm-and-down"
           v-if="!$auth.loggedIn || $auth.user.user_type == 'visitor'"
         >
-          <span class="pl-10">
-            <NuxtLink to="/property_account">List your property now</NuxtLink>
+          <span class="pl-10 flash">
+            <NuxtLink to="/become_a_lister">List your property now</NuxtLink>
           </span>
         </div>
         <div class="drawer hidden-md-and-up">
@@ -91,7 +91,7 @@
               <el-dropdown-item
                 v-if="!$auth.loggedIn || $auth.user.user_type == 'visitor'"
               >
-                <p class="py-10" @click="$router.push('/property_account')">
+                <p class="py-10" @click="$router.push('/become_a_lister')">
                   List your property now
                 </p>
               </el-dropdown-item>
@@ -161,7 +161,7 @@
                 v-if="!$auth.loggedIn || $auth.user.user_type == 'visitor'"
                 class="mt-10 d-block"
               >
-                <NuxtLink to="/property_account"
+                <NuxtLink to="/become_a_lister"
                   >List your property now</NuxtLink
                 >
               </span>

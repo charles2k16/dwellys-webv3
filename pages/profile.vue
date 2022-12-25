@@ -57,7 +57,7 @@
             class=""
             @click="$router.push('/become_a_lister')"
           >
-            Become a lister
+            List your property now
           </el-button>
         </div>
       </div>

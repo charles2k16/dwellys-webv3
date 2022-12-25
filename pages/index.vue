@@ -6,7 +6,7 @@
           Discover the world’s hub for <br />
           <span>houses</span> and <span>properties</span> for sale and rent
         </h1> -->
-        <h1 class="flash">
+        <h1>
           Put your <span>property</span> on the worlds Stage
           <!-- houses and <span>properties</span> for sale and rent -->
         </h1>
