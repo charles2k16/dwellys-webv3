@@ -60,37 +60,22 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
     '@nuxtjs/auth-next',
     // "@nuxtjs/auth",
     'nuxt-material-design-icons-iconfont',
     '@nuxtjs/moment',
-
-    // "nuxt-material-design-icons",
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    // http://localhost:8000/api/v1
-    // baseURL: 'https://newapi.dwellys.com/api',
-    baseURL:  `${process.env.API_URL}`,
-    // ' http://localhost:8000/api/v3',
-   
+    baseURL: `${process.env.API_URL}`,
+
     headers: {
       'Access-Control-Allow-Origin': '*',
     },
-    // "http://127.0.0.1:8000/api/v3"
-    //  process.env.NODE_ENV !== "production"
-    // ? : "https://newapi.dwellys.com/api/v3"
   },
-  //
-  // server: {
-  //   port: 8000,
-  // },
 
   router: {
     middleware: ['auth'],
