@@ -34,7 +34,7 @@
                   @click="favProperty(property)"
                   :style="
                     favProperties &&
-                    favProperties.some(fav => fav.id == property.id)
+                    favProperties.some((fav) => fav.id == property.id)
                       ? { color: 'red' }
                       : { color: 'white' }
                   "
@@ -281,7 +281,7 @@ export default Vue.extend({
     justify-content: space-around;
     padding: 5px 0;
     border-top: 1px solid #e2e8f0;
-    background: #f8fafc;
+    // background: #f8fafc;
     .property_img {
       width: 25px;
     }

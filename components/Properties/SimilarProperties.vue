@@ -4,6 +4,7 @@
       <el-col
         :xs="24"
         :sm="12"
+        :md="8"
         v-for="property in listings"
         :key="property.id"
         style="height: 400px"

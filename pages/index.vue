@@ -351,6 +351,9 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+$small_screen: 426px;
+$medium_screen: 769px;
+$laptop_screen: 1024px;
 .show_more_btn {
   background: var(--color-primary);
   color: white;
@@ -361,22 +364,38 @@ export default Vue.extend({
   .home_landing_page {
     background-image: url('~/assets/img/home.png');
     background-repeat: no-repeat;
-    background-size: 100% 400px;
-    height: 400px;
+    background-size: 100% 491px;
+    // background-size: cover;
+    background-position: center;
+    height: 491px;
     padding: 30px 0;
+
+    @media (max-width: $medium_screen) {
+      // background-size: 100% 500px;
+    }
+    @media (max-width: $small_screen) {
+      background-size: 100% 400px;
+      height: 400px;
+      // background-position: center;
+      // height: 300px;
+    }
     .landing_content {
+      padding-top: 80px;
       display: flex;
-      // width: 95%;
       flex-direction: column;
       justify-content: center;
+      @media (max-width: $small_screen) {
+        padding-top: 100px;
+      }
       h1 {
-        padding-top: 40px;
+        // padding-top: 20px;
         width: 100%;
         max-width: 490px;
         font-weight: 200;
         line-height: 34px;
         font-family: var(--font-primary-light);
         z-index: 10;
+
         span {
           font-weight: 700;
           font-size: 32px;
@@ -393,7 +412,8 @@ export default Vue.extend({
       }
       .search_container {
         background: #ffffff;
-        border-radius: 0px 10px 10px 10px;
+        margin-top: 60px;
+        border-radius: 6px 11px 6px 6px;
         display: flex;
         padding: 10px;
       }

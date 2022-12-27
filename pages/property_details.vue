@@ -20,7 +20,7 @@
           </div>
         </div>
         <p v-if="propertyDetails.listing_detail">
-          <b
+          <b class="property_details_name"
             >{{ propertyDetails.listing_detail.name }}
             -
             {{ propertyDetails.listing_detail.location }},
@@ -112,7 +112,7 @@
       <el-row :gutter="20">
         <el-col :xs="24" :sm="24" :md="18">
           <div>
-            <p class="pb-10"><b> Basic Information</b></p>
+            <p class="pb-10"><b class="title_color"> Basic Information</b></p>
 
             <div class="basic_specifications">
               <span
@@ -141,7 +141,7 @@
             </div>
 
             <div class="property_description mt-20">
-              <h4>Description</h4>
+              <h4 class="title_color">Description</h4>
               <p>
                 {{
                   propertyDetails.listing_detail &&
@@ -153,7 +153,7 @@
         </el-col>
         <el-col :xs="24" :sm="24" :md="6">
           <div class="info_side_card">
-            <el-card shadow="hover" class="p-10">
+            <el-card shadow="hover" class="p-10 message_card">
               <div style="height: 200px">
                 <p>
                   {{
@@ -214,9 +214,8 @@
       </el-row>
 
       <div class="amenities pb-20">
-        <hr class="hr_rule" />
         <div class="amenities_content">
-          <h4 class="mt-20">Amenities</h4>
+          <h4 class="mt-20 title_color">Amenities</h4>
           <ul class="amenites_list">
             <li
               v-for="amenity in propertyDetails.amenities"
@@ -227,6 +226,9 @@
           </ul>
         </div>
       </div>
+
+      <!-- Property Location -->
+
       <div class="mt-20 mb-20" v-if="propertyDetails.listing_detail">
         <section class="share_cordinates">
           <el-dropdown trigger="click" class="mb-20">
@@ -236,13 +238,13 @@
               ></el-button>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item
-                ><a
+              <el-dropdown-item>
+                <a
                   :href="`https://www.google.com/maps/search/?api=1&query=${propertyDetails.listing_detail.latitude},${propertyDetails.listing_detail.longitude}`"
                   target="_blank"
                   >Google Map</a
-                ></el-dropdown-item
-              >
+                >
+              </el-dropdown-item>
               <el-dropdown-item>Bolt</el-dropdown-item>
               <el-dropdown-item
                 ><a
@@ -332,7 +334,7 @@ export default Vue.extend({
       this.loading = true;
       try {
         const listings = await this.$listingApi.show(this.$route.query.id);
-
+        console.log(listings);
         this.propertyDetails = listings.data;
         const similarProperties = await this.$similarListingsApi.query(
           this.propertyDetails.property_type.name
@@ -408,6 +410,7 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+$laptop_screen: 1025px;
 $medium_screen: 768px;
 $small_screen: 426px;
 
@@ -419,16 +422,39 @@ $small_screen: 426px;
   }
 }
 
+.property_details_name {
+  font-size: 20px;
+  font-weight: 510;
+  line-height: 24px;
+  position: relative;
+  left: -55px;
+  @media (max-width: $laptop_screen) {
+    left: 0;
+  }
+}
+
+.title_color {
+  color: #1e293b;
+  font-weight: 510;
+  font-size: 16px;
+  line-height: 24px;
+}
+
 .arrow_back {
   width: 40px;
   padding-top: 5px;
   border: 1px solid #cbd5e1;
+  position: relative;
+  left: -55px;
   border-radius: 10px;
   display: flex;
   justify-content: center;
   cursor: pointer;
   align-items: center;
   margin-right: 20px;
+  @media (max-width: $laptop_screen) {
+    left: 0;
+  }
 }
 .has_more_photos {
   height: 700px;
@@ -437,15 +463,20 @@ $small_screen: 426px;
 .details_plot {
   display: flex;
   justify-content: space-between;
+  @media (max-width: $laptop_screen) {
+    padding-left: 55px;
+  }
   @media (max-width: $small_screen) {
     width: 100%;
     padding: 0 20px;
   }
   p {
-    font-size: 13px;
+    font-size: 14px;
+    line-height: 20px;
   }
   .material-icons {
     font-size: 18px;
+    color: #475569;
   }
 }
 
@@ -494,11 +525,12 @@ $small_screen: 426px;
   padding-top: 20px;
 
   .amenites_list {
-    padding-top: 20px;
+    padding-top: 30px;
     display: grid !important;
-    grid-template-columns: repeat(auto-fit, minmax(70px, 150px)) !important;
-    width: 100%;
-    max-width: 500px;
+    column-gap: 20px;
+    grid-template-columns: repeat(2, minmax(100px, 200px)) !important;
+    width: 50%;
+    // max-width: 500px;
 
     li {
       list-style: none;
@@ -522,6 +554,7 @@ $small_screen: 426px;
   p {
     font-size: 14px;
     margin-top: 10px;
+    color: #475569;
   }
 }
 

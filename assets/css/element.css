@@ -227,6 +227,11 @@
   font-weight: bold;
   font-family: var(--font-primary-md), sans-serif;
 }
+
+.el-card.message_card {
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
 .el-card__body {
   padding: 0;
 }

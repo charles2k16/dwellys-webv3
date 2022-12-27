@@ -257,6 +257,10 @@ $laptop_screen: 1024px;
 a {
   color: #334155;
 }
+.flash {
+  font-size: 14px;
+  line-height: 18px;
+}
 .header {
   padding: 0px 0 0;
   height: 95px;
@@ -276,6 +280,7 @@ a {
 .header_wrapper {
   display: flex;
   justify-content: space-between;
+  padding-top: 5px;
   @media (max-width: $laptop_screen) {
     padding-right: 10px;
     padding-left: 10px;
