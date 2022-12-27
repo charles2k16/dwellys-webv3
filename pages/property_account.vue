@@ -518,6 +518,13 @@ $small_screen: 426px;
   padding-left: 20px;
   padding-right: 20px;
 
+   h3 {
+      color: #1e293b;
+      font-size: 20px;
+      line-height: 24px;
+      letter-spacing: -0.03em;
+    }
+
   .account_form {
     padding-top: 20px;
     .profile_holder {

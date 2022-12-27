@@ -306,6 +306,12 @@ $small_screen: 426px;
   .social_register_container {
     display: flex;
     justify-content: space-between;
+    h3 {
+      color: #1e293b;
+      font-size: 20px;
+      line-height: 24px;
+      letter-spacing: -0.03em;
+    }
     @media (max-width: 768px) {
       flex-direction: column;
     }
@@ -339,6 +345,7 @@ $small_screen: 426px;
         p {
           flex: 1;
           text-align: center;
+          color: #475569;
         }
       }
     }

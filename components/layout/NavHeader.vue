@@ -12,9 +12,14 @@
             <img src="/logo.png" class="nav_logo" />
           </NuxtLink>
         </div>
+        <div class="header_content hidden-sm-and-down" v-if="!$auth.loggedIn">
+          <span class="pl-10 flash">
+            <NuxtLink to="/property_account">List your property now</NuxtLink>
+          </span>
+        </div>
         <div
           class="header_content hidden-sm-and-down"
-          v-if="!$auth.loggedIn || $auth.user.user_type == 'visitor'"
+          v-if="$auth.user.user_type == 'visitor'"
         >
           <span class="pl-10 flash">
             <NuxtLink to="/become_a_lister">List your property now</NuxtLink>
@@ -88,9 +93,12 @@
                   Property Upload
                 </p>
               </el-dropdown-item>
-              <el-dropdown-item
-                v-if="!$auth.loggedIn || $auth.user.user_type == 'visitor'"
-              >
+              <el-dropdown-item v-if="!$auth.loggedIn">
+                <p class="py-10" @click="$router.push('/property_account')">
+                  List your property now
+                </p>
+              </el-dropdown-item>
+              <el-dropdown-item v-if="$auth.user.user_type == 'visitor'">
                 <p class="py-10" @click="$router.push('/become_a_lister')">
                   List your property now
                 </p>
@@ -158,7 +166,16 @@
 
               <span
                 @click="drawer = false"
-                v-if="!$auth.loggedIn || $auth.user.user_type == 'visitor'"
+                v-if="!$auth.loggedIn"
+                class="mt-10 d-block"
+              >
+                <NuxtLink to="/property_account"
+                  >List your property now</NuxtLink
+                >
+              </span>
+              <span
+                @click="drawer = false"
+                v-if="$auth.user.user_type == 'visitor'"
                 class="mt-10 d-block"
               >
                 <NuxtLink to="/become_a_lister"
