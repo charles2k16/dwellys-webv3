@@ -1,5 +1,6 @@
 <template>
   <div class="new_lister_container section">
+    <h3 class="center py-20">Become a Lister</h3>
     <el-form class="new_lister_form">
       <el-form-item label="ID type" class="pb-20">
         <el-select
@@ -25,7 +26,7 @@
         </el-input>
       </el-form-item>
 
-      <el-form-item label="Upload ID" class="new_lister_upload">
+      <el-form-item label="Upload ID" class="">
         <el-upload
           drag
           action=""
@@ -91,45 +92,41 @@ export default Vue.extend({
         this.property_account.id_card_upload = reader.result;
       };
     },
-    submit_account() {
-      console.log('endpoint not ready');
-    },
-    // async submit_account(): Promise<void> {
-    //   try {
-    //     const property_account = {
-    //       id_card_type: this.property_account.id_card_type,
-    //       id_card_upload: this.property_account.id_card_upload,
-    //       id_card_number: this.property_account.id_card_number,
-    //       user_type: 'lister',
-    //     };
-    //     const response = await this.$registerApi.create(property_account);
-    //     console.log(response);
+    async submit_account(): Promise<void> {
+      try {
+        const property_account = {
+          id_card_type: this.property_account.id_card_type,
+          id_card_upload: this.property_account.id_card_upload,
+          id_card_number: this.property_account.id_card_number,
+        };
+        const response = await this.$transformtoLister.create(property_account);
+        console.log(response);
 
-    //     this.$confirm(response.message, {
-    //       confirmButtonText: 'OK',
-    //       cancelButtonText: 'Cancel',
-    //       type: 'success',
-    //     })
-    //       .then(() => {
-    //         this.btnLoading = false;
-    //         this.$router.push('/login');
-    //       })
-    //       .catch(() => {
-    //         this.btnLoading = false;
-    //       });
-    //     this.btnLoading = false;
-    //   } catch (error: any) {
-    //     this.btnLoading = false;
-    //     if (error?.response?.data) {
-    //       (this as any as IMixinState).$message({
-    //         showClose: true,
-    //         message: error.response.data.message,
-    //         type: 'error',
-    //       });
-    //     }
-    //     (this as any as IMixinState).catchError(error);
-    //   }
-    // },
+        this.$confirm(response.message, {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
+          type: 'success',
+        })
+          .then(() => {
+            this.btnLoading = false;
+            this.$router.push('/login');
+          })
+          .catch(() => {
+            this.btnLoading = false;
+          });
+        this.btnLoading = false;
+      } catch (error: any) {
+        this.btnLoading = false;
+        if (error?.response?.data) {
+          (this as any as IMixinState).$message({
+            showClose: true,
+            message: error.response.data.message,
+            type: 'error',
+          });
+        }
+        (this as any as IMixinState).catchError(error);
+      }
+    },
   },
 });
 </script>
@@ -140,6 +137,9 @@ export default Vue.extend({
   .new_lister_form {
     width: 60%;
     margin: 0 auto;
+    @media (max-width: 426px) {
+      width: 85%;
+    }
   }
 }
 </style>

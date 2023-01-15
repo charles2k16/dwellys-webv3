@@ -502,13 +502,14 @@ $small_screen: 426px;
   }
 }
 .basic_specifications {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(70px, 150px));
+  display: flex;
+  flex-wrap: wrap;
   .info_card {
     background: #f8fafc;
     padding: 5px 10px;
     border: 1px solid #e2e8f0;
     border-radius: 12px;
+    width: 150px;
     margin: 10px;
     display: flex;
 

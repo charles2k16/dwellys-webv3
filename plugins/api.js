@@ -35,6 +35,7 @@ export default (ctx, inject) => {
   inject('discountApi', apiService('/discounts'));
   inject('verifydiscountApi', apiService('/verifydiscount?discount_code='));
   inject('SelectdPlanApi', apiService('/listingselectedplans'));
+  inject('transformtoLister', apiService('/visitor/transformtolister'));
   inject('userFavoriteApi', apiService('/myfavoritelisting'));
   inject('querySearchApi', apiService('/searchlisting?search_query='));
   inject('propertySpecApi', apiService('/propertytypespecifications'));

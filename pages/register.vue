@@ -15,6 +15,7 @@
           <p>Register with Google</p>
         </div>
       </div>
+      
     </div>
 
     <hr class="hr_rule" />
@@ -297,6 +298,8 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
+$laptop_screen: 1024px;
+$medium_screen: 769px;
 $small_screen: 426px;
 .registerForm_content {
   padding-top: 40px;
@@ -312,12 +315,15 @@ $small_screen: 426px;
       line-height: 24px;
       letter-spacing: -0.03em;
     }
-    @media (max-width: 768px) {
+    @media (max-width: $medium_screen) {
       flex-direction: column;
     }
     .social_register {
       display: flex;
-      @media (max-width: 425px) {
+      @media (max-width: $medium_screen) {
+        justify-content: flex-end;
+      }
+      @media (max-width: $small_screen) {
         flex-direction: column;
       }
       // .facebook {
@@ -330,6 +336,8 @@ $small_screen: 426px;
       .google {
         background: #f1f5f9;
         display: flex;
+        min-width: 240px;
+        max-width: 250px;
         cursor: pointer;
         margin-bottom: 10px;
         padding: 20px;
@@ -339,12 +347,14 @@ $small_screen: 426px;
         border-radius: 8px;
         @media (max-width: $small_screen) {
           padding: 10px;
+          max-width: 100%;
           line-height: 0;
           font-size: 14px;
         }
         p {
           flex: 1;
           text-align: center;
+          padding-top: 5px;
           color: #475569;
         }
       }
