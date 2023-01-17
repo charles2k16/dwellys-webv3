@@ -324,7 +324,7 @@ export default Vue.extend({
           name: 'search',
           // params: { property: property.id },
           query: {
-            name: this.search_value,
+            property: this.search_value,
           },
         });
       }

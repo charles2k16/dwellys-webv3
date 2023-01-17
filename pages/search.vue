@@ -521,7 +521,7 @@ export default Vue.extend({
       // value: [null, null],
       modalImage: '' as any,
       search_property: {
-        search_query: '' as string,
+        search_query: '' as any,
         type: '' as string,
         category: '' as string,
         min_price: null,
@@ -549,12 +549,14 @@ export default Vue.extend({
     $route() {
       this.scrollToTop();
       this.fetchData();
-      this.$route.query.id;
     },
   },
   created() {
+     if(this.$route.query.property) {
+      this.search_property.search_query = this.$route.query.property;
+      this.queryProperty();
+    }
     this.fetchData();
-    console.log(screen.width);
   },
   computed: {
     hasMorePhotos() {
