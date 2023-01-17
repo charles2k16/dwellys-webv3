@@ -194,7 +194,7 @@ export default Vue.extend({
           id: property.id,
         },
       });
-      //   this.$emit('property', property);
+      this.$emit('property', property);
       console.log(property);
     },
   },
