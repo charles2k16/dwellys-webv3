@@ -270,6 +270,7 @@ export default Vue.extend({
     },
     async fetchData() {
       const listings = await this.$listingApi.query('?status=active');
+      console.log(listings.data);
       if (listings.data) {
         this.loadListing(listings.data);
       }
