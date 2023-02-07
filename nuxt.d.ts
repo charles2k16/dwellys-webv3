@@ -47,6 +47,7 @@ declare module 'vue/types/vue' {
     $userApi: apiService;
     $passwordApi: apiService;
     $userUpdateApi: apiService;
+    $transformtoLister: apiService;
     $querySearchApi: apiService;
     $discountApi: apiService;
     $SelectdPlanApi: apiService;

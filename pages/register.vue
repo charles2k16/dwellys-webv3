@@ -15,7 +15,6 @@
           <p>Register with Google</p>
         </div>
       </div>
-      
     </div>
 
     <hr class="hr_rule" />
@@ -229,7 +228,6 @@ export default Vue.extend({
         : ''
     );
     this.countries = countries.data;
-    console.log(this.countries);
   },
   methods: {
     onPhoneUpdate(e: any) {

@@ -27,7 +27,8 @@
                 v-for="category in categories"
                 :key="category.id"
                 :value="category.name"
-                class="py-10"
+                class="my-5"
+                style="text-align: center"
               >
               </el-option>
             </el-select>
@@ -145,7 +146,7 @@
                 </p>
               </div>
             </div>
-            <div class="d-flex justify_end">
+            <div class="d-flex justify_end mb-10">
               <el-button @click="addSpecSection"
                 ><i class="el-icon-plus mr-10"></i>Add another
                 section</el-button
@@ -898,6 +899,7 @@ $medium_screen: 769px;
   .category {
     width: 70%;
     margin: 0 auto;
+    text-align: center;
   }
   .uploadImgs {
     display: grid;

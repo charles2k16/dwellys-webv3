@@ -25,7 +25,14 @@
         >
         </el-input>
       </el-form-item>
-
+      <el-form-item label="Phone number">
+        <vue-phone-number-input
+          v-model="phone"
+          :border-radius="7"
+          default-country-code="GH"
+          @update="onPhoneUpdate"
+        />
+      </el-form-item>
       <el-form-item label="Upload ID" class="">
         <el-upload
           drag
@@ -67,24 +74,50 @@
 
 <script lang="ts">
 import Vue from 'vue';
-// import { IMixinState } from '@/types/mixinsTypes';
+import VuePhoneNumberInput from 'vue-phone-number-input';
+import 'vue-phone-number-input/dist/vue-phone-number-input.css';
+import { IMixinState } from '@/types/mixinsTypes';
 
 export default Vue.extend({
   name: 'NewLister',
+  components: {
+    VuePhoneNumberInput,
+  },
   data() {
     return {
       message: '' as string,
       contact: '' as string,
       btnLoading: false as boolean,
+      phone: '',
+      countries: [],
       options: ['SSNIT', 'PASSPORT', 'VOTER'],
       property_account: {
         id_card_type: '' as string,
         id_card_upload: '' as any,
         id_card_number: '' as string,
+        country_id: '' as string,
+        phone_number: '' as string,
       },
     };
   },
+  async created() {
+    const countries = await this.$countriesApi.index();
+    countries.data.filter((country: any) =>
+      country.short_name == 'GH'
+        ? (this.property_account.country_id = country.id)
+        : ''
+    );
+    this.countries = countries.data;
+  },
   methods: {
+    onPhoneUpdate(e: any) {
+      this.countries.filter((country: any) =>
+        country.short_name == e.countryCode
+          ? (this.property_account.country_id = country.id)
+          : ''
+      );
+      this.property_account.phone_number = e.formattedNumber;
+    },
     propertyCard(file: any) {
       let reader = new FileReader();
       reader.readAsDataURL(file.raw);
@@ -98,6 +131,8 @@ export default Vue.extend({
           id_card_type: this.property_account.id_card_type,
           id_card_upload: this.property_account.id_card_upload,
           id_card_number: this.property_account.id_card_number,
+          country_id: this.property_account.country_id,
+          phone_number: this.property_account.phone_number,
         };
         const response = await this.$transformtoLister.create(property_account);
         console.log(response);
