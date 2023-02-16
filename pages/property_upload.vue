@@ -313,7 +313,7 @@
       <div v-if="step === 6">
         <div class="center">
           <div class="property_upload_head">
-            <h3>Property name and price</h3>
+            <h3>Property price and description</h3>
             <!-- <small>Discount of the property</small> -->
           </div>
           <div class="block slider">
@@ -322,7 +322,7 @@
         </div>
         <div class="property_content_container pb-20">
           <el-row class="pb-20 d-flex_column">
-            <el-col :sm="12" class="pb-20 w-100 pr-5 d-flex_column">
+            <!-- <el-col :sm="12" class="pb-20 w-100 pr-5 d-flex_column">
               <span class="pb-10">Property Name</span>
               <el-input
                 v-model="propertyUpload.name"
@@ -330,7 +330,7 @@
                 placeholder="E.g Two bed room apartment"
               >
               </el-input>
-            </el-col>
+            </el-col> -->
             <el-col :sm="12" class="pb-20 pl-5 w-100 d-flex_column">
               <span class="pb-10">Property Price</span>
               <el-input
@@ -449,7 +449,7 @@ export default Vue.extend({
       listing_plan_id: '',
       listing_id: '',
       propertyUpload: {
-        name: '' as string,
+        // name: '' as string,
         property_type_id: '' as string,
         country_id: '39a40751-d7d2-4346-99e5-b0235b520ce5' as string,
         // "39a40751-d7d2-4346-99e5-b0235b520ce5"
@@ -557,7 +557,6 @@ export default Vue.extend({
       } else if (
         this.step == 6 &&
         this.propertyUpload.price != 0 &&
-        this.propertyUpload.name != '' &&
         this.propertyUpload.description != ''
       ) {
         valid = true;

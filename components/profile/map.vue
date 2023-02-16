@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue';
 // var geocoder;
 var map: any;
 
@@ -30,7 +30,7 @@ export default Vue.extend({
   data() {
     return {
       step: 1 as number,
-      searched: "",
+      searched: '',
       map: null,
     };
   },
@@ -41,8 +41,8 @@ export default Vue.extend({
       // { lat: -25.344, lng: 131.031 }
       const uluru = { lat: parseFloat(this.lat), lng: parseFloat(this.lng) };
       // The map, centered at Uluru
-      const map = new google.maps.Map(this.$refs["map"] as HTMLElement, {
-        zoom: 16,
+      const map = new google.maps.Map(this.$refs['map'] as HTMLElement, {
+        zoom: 20,
         center: uluru,
       });
 
