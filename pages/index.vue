@@ -375,10 +375,8 @@ $laptop_screen: 1024px;
       // background-size: 100% 500px;
     }
     @media (max-width: $small_screen) {
-      background-size: 100% 400px;
-      height: 400px;
-      // background-position: center;
-      // height: 300px;
+      background-size: 100% 420px;
+      height: 420px;
     }
     .landing_content {
       padding-top: 80px;
@@ -396,10 +394,17 @@ $laptop_screen: 1024px;
         line-height: 34px;
         font-family: var(--font-primary-light);
         z-index: 10;
-
+        @media (max-width: $small_screen) {
+          font-size: 30px;
+          // line-height: 34px;
+        }
         span {
           font-weight: 700;
           font-size: 32px;
+          @media (max-width: $small_screen) {
+            font-size: 30px;
+            line-height: 34px;
+          }
         }
       }
       .discover_line {

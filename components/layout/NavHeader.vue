@@ -19,7 +19,7 @@
         </div>
         <div
           class="header_content hidden-sm-and-down"
-          v-if="$auth.user.user_type == 'visitor'"
+          v-if="$auth.user && $auth.user.user_type == 'visitor'"
         >
           <span class="pl-10 flash">
             <NuxtLink to="/become_a_lister">List your property now</NuxtLink>
@@ -88,7 +88,7 @@
                 <p
                   class="py-10"
                   @click="$router.push('/property_upload')"
-                  v-if="$auth.user.user_type == 'lister'"
+                  v-if="$auth.user && $auth.user.user_type == 'lister'"
                 >
                   Property Upload
                 </p>
@@ -98,7 +98,9 @@
                   List your property now
                 </p>
               </el-dropdown-item>
-              <el-dropdown-item v-if="$auth.user.user_type == 'visitor'">
+              <el-dropdown-item
+                v-if="$auth.user && $auth.user.user_type == 'visitor'"
+              >
                 <p class="py-10" @click="$router.push('/become_a_lister')">
                   List your property now
                 </p>
@@ -175,7 +177,7 @@
               </span>
               <span
                 @click="drawer = false"
-                v-if="$auth.user.user_type == 'visitor'"
+                v-if="$auth.user && $auth.user.user_type == 'visitor'"
                 class="mt-10 d-block"
               >
                 <NuxtLink to="/become_a_lister"
@@ -192,7 +194,7 @@
               <hr class="hr_rule mt-10" />
 
               <span class="mt-10 d-block">
-                <span v-if="$auth.user.user_type == 'lister'">
+                <span v-if="$auth.user && $auth.user.user_type == 'lister'">
                   <NuxtLink to="/property_upload">Property Upload</NuxtLink>
                 </span>
               </span>
@@ -343,10 +345,4 @@ a {
   width: 24px;
   height: 24px;
 }
-
-/* @media (max-width: 768px) {
-  .header_content {
-    display: none;
-  }
-} */
 </style>
