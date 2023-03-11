@@ -363,19 +363,21 @@ $laptop_screen: 1024px;
 .home {
   color: var(--text-white);
   .home_landing_page {
-    background-image: url('~/assets/img/home.png');
+    background: url('~/assets/img/home1.png');
     background-repeat: no-repeat;
     background-size: 100% 491px;
-    // background-size: cover;
     background-position: center;
     height: 491px;
     padding: 30px 0;
 
     @media (max-width: $medium_screen) {
-      // background-size: 100% 500px;
+      background-size: 100% 500px;
+      height: 500px;
     }
     @media (max-width: $small_screen) {
+      background: url('~/assets/img/home2.png');
       background-size: 100% 420px;
+      background-position: center;
       height: 420px;
     }
     .landing_content {
@@ -395,16 +397,12 @@ $laptop_screen: 1024px;
         font-family: var(--font-primary-light);
         z-index: 10;
         @media (max-width: $small_screen) {
-          font-size: 30px;
-          // line-height: 34px;
+          font-size: 32px;
+          line-height: 36px;
         }
         span {
           font-weight: 700;
           font-size: 32px;
-          @media (max-width: $small_screen) {
-            font-size: 30px;
-            line-height: 34px;
-          }
         }
       }
       .discover_line {
