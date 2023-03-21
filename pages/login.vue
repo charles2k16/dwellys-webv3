@@ -110,7 +110,6 @@ export default Vue.extend({
 
       this.$auth.setUserToken(token);
       this.$auth.setUser(user);
-      // this.$router.push("/");
       (this as any as IMixinState).$message({
         showClose: true,
         message: response.data.message,
@@ -144,7 +143,7 @@ export default Vue.extend({
         .catch((error: any) => {
           this.btnLoading = false;
           (this as any as IMixinState).catchError(error);
-          if (error?.response?.data) {
+          if (error?.response) {
             (this as any as IMixinState).getNotification(
               error?.response?.data.message,
               'error'

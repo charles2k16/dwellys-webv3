@@ -164,12 +164,13 @@ export default Vue.extend({
         .catch((error: any) => {
           this.btnLoading = false;
           (this as any as IMixinState).catchError(error);
-          if (error?.response?.data) {
-            // this.errorInfo = "Invalid Credentials";
+          if (error?.response) {
+            this.errorInfo = 'Invalid Credentials';
             (this as any as IMixinState).getNotification(
               error?.response?.data.message,
               'error'
             );
+          } else {
           }
         });
     },
