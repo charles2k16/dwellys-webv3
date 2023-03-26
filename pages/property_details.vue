@@ -173,8 +173,15 @@
                 </p>
                 <div class="d-flex mt-20" v-if="propertyDetails.listing_detail">
                   <img
+                    v-if="propertyDetails.lister.avatar"
                     :src="propertyDetails.lister.avatar"
                     class="agent_avatar"
+                  />
+                  <img
+                    v-else
+                    src="~/assets/img/user_icon.png"
+                    class="agent_avatar"
+                    alt="icon"
                   />
                   <div class="ml-20">
                     <p>
