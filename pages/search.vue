@@ -660,7 +660,7 @@ export default Vue.extend({
     },
     async filterProperty() {
       let searched = this.search_property;
-      // this.loading = true;
+      this.loading = true;
       let type = searched.type && `property_type=${searched.type}`;
       let max_price = searched.max_price && `max_price=${searched.max_price}`;
       let min_price = searched.min_price && `min_price=${searched.min_price}`;
@@ -669,12 +669,8 @@ export default Vue.extend({
 
       let joined = filteredSearch.join('&');
 
-      console.log('query', joined);
-
       try {
-        const similarProperties = await this.$searchProperties.query(
-          this.search_property.type
-        );
+        const similarProperties = await this.$searchProperties.query(joined);
         console.log(similarProperties);
         this.propertyDetails = similarProperties.data[0];
         this.loadListing(similarProperties.data);
