@@ -87,7 +87,7 @@
           </div>
         </div>
         <div class="all_filters_btn">
-          <el-button type="primary" @click="queryProperty">Search</el-button>
+          <el-button type="primary" @click="filterProperty">Filter</el-button>
         </div>
       </div>
     </el-drawer>
@@ -343,7 +343,7 @@
           <div class="content_search">
             <el-input
               type="search"
-               @keyup.native.enter="queryProperty"
+              @keyup.native.enter="queryProperty"
               v-model="search_property.search_query"
               placeholder="search..."
             ></el-input>
@@ -480,9 +480,19 @@
               <span>All Filters</span>
             </div>
             <div class="pl-10 pb-10">
-              <el-button type="primary" @click="queryProperty"
+              <el-button type="primary" @click="filterProperty"
                 >Filter</el-button
               >
+            </div>
+          </div>
+          <div class="search_price_container">
+            <div
+              class="search_price el-dropdown"
+              style="color: rgba(96, 98, 102, 0.5); cursor: pointer"
+              @click="filter_drawer = true"
+            >
+              <span> <i class="el-icon-s-operation"></i> </span>
+              <span>All Filters</span>
             </div>
           </div>
         </div>
@@ -552,7 +562,7 @@ export default Vue.extend({
     },
   },
   created() {
-     if(this.$route.query.property) {
+    if (this.$route.query.property) {
       this.search_property.search_query = this.$route.query.property;
       this.queryProperty();
     }
@@ -582,7 +592,7 @@ export default Vue.extend({
         const categories = await this.$listingCategoriesApi.index();
         this.categories = categories.data;
 
-        const propertyTypes = await this.$propertyTypesApi.index();
+        const propertyTypes = await this.$showpropertytypesApi.index();
         console.log('types', propertyTypes);
         this.property_types = propertyTypes.data;
 
@@ -648,29 +658,41 @@ export default Vue.extend({
           .catch(() => {});
       }
     },
-    async queryProperty() {
+    async filterProperty() {
       let searched = this.search_property;
       // this.loading = true;
-      // let query =
-      //   searched.search_query && `search_query=${searched.search_query}&`;
-      let type = searched.type && `property_type_id=${searched.type}`;
-      // let max_price = searched.max_price && `max_price=${searched.max_price}`;
-      // let min_price = searched.min_price && `min_price=${searched.min_price}`;
-      // let category = searched.category && `category_id=${searched.category}`;
-      // let filteredSearch = [type, max_price, min_price, category];
+      let type = searched.type && `property_type=${searched.type}`;
+      let max_price = searched.max_price && `max_price=${searched.max_price}`;
+      let min_price = searched.min_price && `min_price=${searched.min_price}`;
+      let category = searched.category && `category_id=${searched.category}`;
+      let filteredSearch = [type, max_price, min_price, category];
 
-      // let joined = filteredSearch.join('&');
+      let joined = filteredSearch.join('&');
 
-      // console.log('query', joined);
+      console.log('query', joined);
 
+      try {
+        const similarProperties = await this.$searchProperties.query(
+          this.search_property.type
+        );
+        console.log(similarProperties);
+        this.propertyDetails = similarProperties.data[0];
+        this.loadListing(similarProperties.data);
+      } catch (error) {
+        this.loading = false;
+      }
+    },
+    async queryProperty() {
       try {
         const similarProperties = await this.$querySearchApi.query(
           this.search_property.search_query
         );
         console.log(similarProperties);
-        this.propertyDetails = similarProperties.data[0]
+        this.propertyDetails = similarProperties.data[0];
         this.loadListing(similarProperties.data);
       } catch (error) {
+        this.propertyDetails = {};
+        this.similarListings = [];
         this.loading = false;
       }
     },
@@ -744,9 +766,15 @@ $small_screen: 426px;
   display: flex;
   padding-left: 10px;
   padding-bottom: 10px;
+  @media (max-width: $small_screen) {
+    width: 100%;
+  }
   .search_btn {
     margin-left: 5px;
     width: 20%;
+    @media (max-width: $small_screen) {
+      width: 30%;
+    }
   }
 }
 .search_options {
@@ -754,16 +782,24 @@ $small_screen: 426px;
   flex-wrap: wrap;
   margin-bottom: 10px;
   padding-left: 10px;
+  @media (max-width: $small_screen) {
+    display: none;
+  }
   .search_option {
     margin-bottom: 5px;
     width: 25%;
     padding-right: 5px;
   }
-  .search_price {
-    .drop_link {
-      padding-top: 10px;
-      color: rgba(96, 98, 102, 0.5);
-    }
+}
+.search_price_container {
+  display: none;
+  @media (max-width: $small_screen) {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .drop_link {
+    padding-top: 10px;
+    color: rgba(96, 98, 102, 0.5);
   }
 }
 .all_filters {

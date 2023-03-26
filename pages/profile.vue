@@ -107,14 +107,14 @@
                     </el-col>
                   </el-row>
 
-                  <el-row :gutter="20">
+                  <el-row v-if="lister.is_id_card_verified == 0" :gutter="20">
                     <el-col :xs="24" :sm="24" :md="24">
                       <p class="info_label">Date of birth</p>
 
                       <p class="profile_info pb-10">
                         {{ lister.dob }}
                       </p>
-                      <el-input v-model="lister.date" type="date"> </el-input>
+                      <el-input v-model="lister.dob" type="date"> </el-input>
                     </el-col>
                   </el-row>
                 </div>
@@ -177,7 +177,7 @@
                     v-model="current_password"
                     type="password"
                     placeholder="Enter your current password"
-                    suffix-icon="el-icon-view"
+                    show-password
                   >
                   </el-input>
                 </div>
@@ -198,7 +198,7 @@
                         v-model="passwords.new_password"
                         type="password"
                         placeholder="Enter your new password"
-                        suffix-icon="el-icon-view"
+                        show-password
                         class="pb-10"
                       >
                       </el-input>
@@ -211,7 +211,7 @@
                         v-model="passwords.confirm_password"
                         type="password"
                         placeholder="Re-enter your new password"
-                        suffix-icon="el-icon-view"
+                        show-password
                       >
                       </el-input>
                     </el-form-item>
@@ -486,6 +486,8 @@ export default Vue.extend({
           new_password: this.passwords.new_password,
           confirm_password: this.passwords.confirm_password,
         });
+
+        console.log(response);
 
         (this as any as IMixinState).$confirm(
           'Password Changed Successfully!',

@@ -22,7 +22,7 @@
           v-model="loginForm.password"
           type="password"
           placeholder="Enter your password"
-          suffix-icon="el-icon-view"
+          show-password
         >
         </el-input>
       </el-form-item>
@@ -37,7 +37,7 @@
         >
       </div>
     </el-form>
-    <el-col class="separater py-20">
+    <!-- <el-col class="separater py-20">
       <div class="first_separater"></div>
       <div class="mx-10 bold">or</div>
       <div class="second_separater"></div>
@@ -51,7 +51,7 @@
         <img src="~/assets/img/google.png" />
         <p>Continue with Google</p>
       </div>
-    </el-col>
+    </el-col> -->
   </div>
 </template>
 

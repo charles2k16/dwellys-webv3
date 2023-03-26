@@ -17,7 +17,7 @@
         >
           <div
             class="property_image"
-            :style="background_style(property.photos)"
+            :style="background_style(property.feature_image_url)"
             @click.self="openPropertyDetails(property)"
           >
             <!-- :style="background_style(property.listing.photos)" -->
@@ -45,7 +45,7 @@
           <div class="card_body" @click="openPropertyDetails(property)">
             <!-- amount -->
             <p class="house_amount">
-              ${{ property.listing.listing_detail.price }}/mth
+              GH₵ {{ property.listing.listing_detail.price }}/mth
             </p>
             <p class="house_plot">
               {{ property.listing.listing_detail.region }},

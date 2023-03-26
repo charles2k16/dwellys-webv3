@@ -328,6 +328,12 @@ export default Vue.extend({
             property: this.search_value,
           },
         });
+      } else {
+        (this as any as IMixinState).$message({
+          showClose: true,
+          message: 'Enter property to search.',
+          type: 'error',
+        });
       }
     },
     loadQuery(properties: any) {

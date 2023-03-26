@@ -58,6 +58,7 @@ declare module 'vue/types/vue' {
     $filterPropertiesApi: apiService;
     $socialregisterApi: apiService;
     $searchProperties: apiService;
+    $showpropertytypesApi: apiService;
     $router: any;
     $auth: any;
     $alert: any;

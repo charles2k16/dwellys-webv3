@@ -27,15 +27,30 @@
                     <i class="el-icon-more" style="color: white"> </i>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item
-                      ><NuxtLink :to="`/edit_listing/${listing.id}`"
-                        >Edit</NuxtLink
-                      ></el-dropdown-item
+                    <el-dropdown-item style="padding: 0"
+                      ><p
+                        @click="$router.push(`/edit_listing/${listing.id}`)"
+                        style="
+                          width: 100%;
+                          text-align: center;
+                          padding: 10px 20px;
+                          color: blue;
+                        "
+                      >
+                        Edit
+                      </p></el-dropdown-item
                     >
-                    <el-dropdown-item style="color: red"
-                      ><span @click="deleteListingModal(listing.id)">
-                        Delete</span
-                      ></el-dropdown-item
+                    <el-dropdown-item style="color: red; padding: 0"
+                      ><p
+                        @click="deleteListingModal(listing.id)"
+                        style="
+                          width: 100%;
+                          text-align: center;
+                          padding: 10px 20px;
+                        "
+                      >
+                        Delete
+                      </p></el-dropdown-item
                     >
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -45,20 +60,26 @@
               <i class="el-icon-info"></i>
               <p class="pl-10">Pending Approval</p>
             </div> -->
-            <div class="card_body">
+            <div
+              class="card_body"
+              @click="$router.push(`/edit_listing/${listing.id}`)"
+            >
               <!-- amount -->
               <p style="font-weight: 600">
                 {{ listing.listing_detail.name }}
               </p>
               <p class="house_amount">
-                ${{ listing.listing_detail.price }}/mth
+                GH₵ {{ listing.listing_detail.price }}/mth
               </p>
               <p class="house_plot">
                 {{ listing.listing_detail.region }},
                 {{ listing.listing_detail.city }}
               </p>
             </div>
-            <div class="card_footer">
+            <div
+              class="card_footer"
+              @click="$router.push(`/edit_listing/${listing.id}`)"
+            >
               <div
                 class="pl-5"
                 v-for="specification in listing.property_specifications"

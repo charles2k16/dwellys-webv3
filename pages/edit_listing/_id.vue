@@ -1,6 +1,10 @@
 <template>
   <div class="section">
-    <el-dialog title="Add Property Image(s)" :visible.sync="dialogVisible" width="45%">
+    <el-dialog
+      title="Add Property Image(s)"
+      :visible.sync="dialogVisible"
+      width="45%"
+    >
       <el-upload
         id="category-image"
         class="image-upload"
@@ -9,9 +13,12 @@
         action="#"
         multiple
         :auto-upload="false"
-        accept="image/x-png,image/jpeg">
+        accept="image/x-png,image/jpeg"
+      >
         <i class="el-icon-upload"></i>
-        <div class="el-upload__text">Drop file here or <em>click to upload</em></div>
+        <div class="el-upload__text">
+          Drop file here or <em>click to upload</em>
+        </div>
       </el-upload>
       <div class="uploadImgs">
         <div v-for="image in photos" :key="image.photo">
@@ -29,7 +36,8 @@
     <el-dialog
       title="Add Property Specification(s)"
       :visible.sync="specVisible"
-      width="30%">
+      width="30%"
+    >
       <div v-for="spec in propertySpecs" :key="spec.id">
         <div class="property_main_content">
           <div class="d-flex_column">
@@ -55,11 +63,15 @@
     <el-dialog
       title="Add Other Specification(s)"
       :visible.sync="otherSpecVisible"
-      width="30%">
+      width="30%"
+    >
       <!-- <div v-for="spec in propertySpecs" :key="spec.id"> -->
       <div class="property_main_content">
         <div class="d-flex_column">
-          <el-input v-model="newOtherSpec.name" placeholder="E.g storage room" />
+          <el-input
+            v-model="newOtherSpec.name"
+            placeholder="E.g storage room"
+          />
         </div>
         <div class="d-flex">
           <el-input-number :min="0" size="small" v-model="newOtherSpec.number">
@@ -79,15 +91,19 @@
     <el-dialog
       title="Add Property Amenitie(s)"
       :visible.sync="amenityVisible"
-      width="45%">
+      width="45%"
+    >
       <div class="grid_container">
         <div v-for="(property, index) in amenities" :key="index">
           <div
             class="grid_content"
             @click="getAmenities(property)"
             :style="
-              checkAmenity(property) ? { background: '#E2E8F0' } : { background: '#fff' }
-            ">
+              checkAmenity(property)
+                ? { background: '#E2E8F0' }
+                : { background: '#fff' }
+            "
+          >
             <div class="">
               <!-- <img :src="getSvg(property.img)" class="pt-10" /> -->
               <p><i :class="'el-icon-' + property.icon"></i></p>
@@ -110,7 +126,8 @@
           <el-input
             class="listing_name"
             v-if="listing.listing_detail"
-            v-model="listing.listing_detail.name" />
+            v-model="listing.listing_detail.name"
+          />
         </section>
       </div>
     </div>
@@ -121,14 +138,19 @@
         <div
           v-for="img in listing.listing_detail.listing_images"
           :key="img.id"
-          class="pb-5">
+          class="pb-5"
+        >
           <img
             :src="img.photo"
             @click="getImage(img.id)"
             class="img_border"
-            :style="img.id == imageId && 'border: 1px solid green'" />
+            :style="img.id == imageId && 'border: 1px solid green'"
+          />
           <div class="d-flex justify_end pr-20 pt-5">
-            <i class="el-icon-delete-solid deleteImgIcon" @click="open(img.id)"></i>
+            <i
+              class="el-icon-delete-solid deleteImgIcon"
+              @click="open(img.id)"
+            ></i>
           </div>
         </div>
       </div>
@@ -142,14 +164,19 @@
       <div class="d-flex listing_location pt-30">
         <section class="pr-20">
           <p>Location</p>
-          <el-input v-if="listing.listing_detail" v-model="listing.listing_detail.city" />
+          <el-input
+            v-if="listing.listing_detail"
+            v-model="listing.listing_detail.city"
+          />
         </section>
         <section class="pl-20 date">
           <p>Upload Date</p>
           <div class="d-flex">
             <p class="pt-10 w-100 pr-10">
               <b>
-                {{ listing && $moment(listing.created_at).format('MMM DD, YY') }}
+                {{
+                  listing && $moment(listing.created_at).format('MMM DD, YY')
+                }}
               </b>
             </p>
             <!-- <el-input type="date" v-if="listing" v-model="listing.created_at" /> -->
@@ -159,7 +186,8 @@
       <div class="pt-10 pb-10" v-if="listing.listing_detail">
         <Map
           :lat="listing.listing_detail.latitude"
-          :lng="listing.listing_detail.longitude" />
+          :lng="listing.listing_detail.longitude"
+        />
       </div>
     </div>
     <section class="pt-30 listing_description">
@@ -168,14 +196,18 @@
         type="textarea"
         :rows="2"
         v-if="listing.listing_detail"
-        v-model="listing.listing_detail.description" />
+        v-model="listing.listing_detail.description"
+      />
     </section>
 
     <div class="pt-30">
       <h3>Basic information</h3>
       <section class="amount_bar mb-20 mt-20">
         <p>Amount</p>
-        <el-input v-if="listing.listing_detail" v-model="listing.listing_detail.price">
+        <el-input
+          v-if="listing.listing_detail"
+          v-model="listing.listing_detail.price"
+        >
           <template slot="prepend">GH&#8373; </template></el-input
         >
       </section>
@@ -184,17 +216,21 @@
         <li
           v-for="(specification, index) in listing.property_specifications"
           :key="specification.id"
-          class="py-10 d-flex">
+          class="py-10 d-flex"
+        >
           <el-input v-model="specification.number" class="px-10">
             <template slot="prepend"
               >{{
-                specification.name ? specification.name : specification.specification.name
+                specification.name
+                  ? specification.name
+                  : specification.specification.name
               }}
             </template></el-input
           >
           <i
             class="el-icon-close deleteImgIcon pt-10"
-            @click="removeSpec(index, specification.id)"></i>
+            @click="removeSpec(index, specification.id)"
+          ></i>
         </li>
       </ul>
       <el-button
@@ -211,17 +247,21 @@
         <li
           v-for="(specification, index) in listing.other_specifications"
           :key="specification.id"
-          class="py-10 d-flex">
+          class="py-10 d-flex"
+        >
           <el-input v-model="specification.number" class="px-10">
             <template slot="prepend"
               >{{
-                specification.name ? specification.name : specification.specification.name
+                specification.name
+                  ? specification.name
+                  : specification.specification.name
               }}
             </template></el-input
           >
           <i
             class="el-icon-close deleteImgIcon pt-10"
-            @click="removeOtherSpec(index, specification.id)"></i>
+            @click="removeOtherSpec(index, specification.id)"
+          ></i>
         </li>
       </ul>
       <el-button type="info" @click="otherSpecVisible = true" class="p-10 m-10"
@@ -234,7 +274,8 @@
         <li
           v-for="(amenity, index) in listing.amenities"
           :key="amenity.id"
-          class="d-flex">
+          class="d-flex"
+        >
           <!-- 0599610266 -->
           <!-- <img src="../assets/img/ac_unit.png" class="pr-5" /> -->
           <p class="pr-10" id="amenity_inner">
@@ -242,7 +283,8 @@
           </p>
           <i
             class="el-icon-close deleteImgIcon pl-5 pt-10"
-            @click="removeAmenity(index, amenity.id)"></i>
+            @click="removeAmenity(index, amenity.id)"
+          ></i>
         </li>
       </ul>
       <el-button
@@ -314,7 +356,9 @@ export default Vue.extend({
       const listing = await this.$listingApi.show(this.$route.params.id);
       this.listing = listing.data;
 
-      const property = await this.$propertyTypesApi.show(listing.data.property_type.id);
+      const property = await this.$propertyTypesApi.show(
+        listing.data.property_type.id
+      );
 
       const propertySpecs = property.data.specifications;
       const propertyAmenities = property.data.amenities;
@@ -341,10 +385,13 @@ export default Vue.extend({
     getImage(imageId: string) {
       this.imageId = imageId;
       this.checked = true;
-      this.$confirm('Are you sure you want to set this image as property cover?', {
-        cancelButtonText: 'No',
-        confirmButtonText: 'Yes',
-      })
+      this.$confirm(
+        'Are you sure you want to set this image as property cover?',
+        {
+          cancelButtonText: 'No',
+          confirmButtonText: 'Yes',
+        }
+      )
         .then(() => {
           this.setFeatureImage(imageId);
         })
@@ -484,15 +531,23 @@ export default Vue.extend({
       // }
     },
     addOtherSpecs() {
-      this.listing.other_specifications.push({
-        name: this.newOtherSpec.name,
-        number: this.newOtherSpec.number,
-        id: '',
-      });
-      this.otherSpecVisible = false;
-      this.newOtherSpec.name = '';
-      this.newOtherSpec.number = 0;
-      this.listing.other_specifications;
+      if (this.newOtherSpec.name === '' || this.newOtherSpec.number < 1) {
+        (this as any as IMixinState).$message({
+          showClose: true,
+          message: 'Enter other specification name and number to proceed.',
+          type: 'error',
+        });
+      } else {
+        this.listing.other_specifications.push({
+          name: this.newOtherSpec.name,
+          number: this.newOtherSpec.number,
+          id: '',
+        });
+        this.otherSpecVisible = false;
+        this.newOtherSpec.name = '';
+        this.newOtherSpec.number = 0;
+        this.listing.other_specifications;
+      }
     },
     async deleteImage(planId: string) {
       try {
@@ -509,7 +564,8 @@ export default Vue.extend({
     },
     async deleteSepcification(id: string) {
       try {
-        const SpecificationResponse = await this.$listingSpecificationApi.delete(id);
+        const SpecificationResponse =
+          await this.$listingSpecificationApi.delete(id);
         this.fetchData();
         (this as any as IMixinState).$message({
           showClose: true,
@@ -522,7 +578,8 @@ export default Vue.extend({
     },
     async deleteOtherSepcification(id: string) {
       try {
-        const SpecificationResponse = await this.$listingOtherSpecificationApi.delete(id);
+        const SpecificationResponse =
+          await this.$listingOtherSpecificationApi.delete(id);
         this.fetchData();
         (this as any as IMixinState).$message({
           showClose: true,
@@ -590,7 +647,9 @@ export default Vue.extend({
       const amenities = this.listing.amenities.map((amenity: any) => {
         return {
           id: amenity.amenity ? amenity.id : '',
-          property_type_amenity_id: amenity.amenity ? amenity.amenity.id : amenity.id,
+          property_type_amenity_id: amenity.amenity
+            ? amenity.amenity.id
+            : amenity.id,
           icon: amenity.icon,
         };
       });
@@ -743,6 +802,7 @@ $medium_screen: 769px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  overflow-x: hidden;
 }
 .listing_description {
   width: 70%;

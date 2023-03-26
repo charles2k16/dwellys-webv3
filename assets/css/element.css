@@ -97,10 +97,13 @@
 /* upload */
 
 @media (max-width: 1024px) {
+  .image-upload > .el-upload {
+    width: 100%;
+  }
   .image-upload > .el-upload > .el-upload-dragger {
     background: #f8fafc;
-    max-width: 420px;
-    /* width: 100%; */
+    /* max-width: 80%; */
+    width: 100%;
   }
 }
 
@@ -331,6 +334,10 @@
   line-height: 40px;
   outline: 0;
   padding: 0 15px;
+}
+
+.el-dropdown-menu__item .dropdown-nopadding {
+  padding: 0 !important;
 }
 
 .el-input--small .el-input__inner {

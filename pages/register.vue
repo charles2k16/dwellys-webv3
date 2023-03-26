@@ -1,6 +1,6 @@
 <template>
   <div class="section registerForm_content">
-    <div class="social_register_container">
+    <!-- <div class="social_register_container">
       <div class="pb-20">
         <h3>Create an account</h3>
         <p class="mt-10">Provide information about yourself for identity</p>
@@ -15,9 +15,9 @@
           <p>Register with Google</p>
         </div>
       </div>
-    </div>
+    </div> -->
 
-    <hr class="hr_rule" />
+    <!-- <hr class="hr_rule" /> -->
 
     <div class="registerForm_form">
       <el-form

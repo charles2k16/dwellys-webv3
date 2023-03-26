@@ -313,6 +313,9 @@ export default Vue.extend({
       this.fetchData();
     },
   },
+  mounted() {
+    this.scrollToTop();
+  },
   created() {
     this.fetchData();
   },

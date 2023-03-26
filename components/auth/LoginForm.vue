@@ -22,7 +22,7 @@
             v-model="loginForm.password"
             type="password"
             placeholder="Enter your password"
-            suffix-icon="el-icon-view"
+            show-password
           >
           </el-input>
         </el-form-item>
@@ -41,12 +41,12 @@
           >
         </div>
       </el-form>
-      <el-col class="separater py-20">
+      <!-- <el-col class="separater py-20">
         <div class="first_separater"></div>
         <div class="mx-10 bold">or</div>
         <div class="second_separater"></div>
-      </el-col>
-      <el-col class="media_login">
+      </el-col> -->
+      <!-- <el-col class="media_login">
         <div class="facebook" @click="facebookSignIn">
           <img src="~/assets/img/facebook.png" width="25px" />
           <p>Continue with Facebook</p>
@@ -55,7 +55,7 @@
           <img src="~/assets/img/google.png" />
           <p>Continue with Google</p>
         </div>
-      </el-col>
+      </el-col> -->
     </div>
     <div class="login_text">
       <div class="py-20">

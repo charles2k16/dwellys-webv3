@@ -12,6 +12,7 @@ export default (ctx, inject) => {
   inject('socialloginApi', apiService('/loginwithsocialmedia'));
   inject('countriesApi', apiService('/countries'));
   inject('propertyTypesApi', apiService('/propertytypes'));
+  inject('showpropertytypesApi', apiService('/showpropertytypes'));
   inject('listingPlansApi', apiService('/listingplans'));
   inject('listingSpecificationApi', apiService('/listingspecifications'));
   inject('listingAmenitiesApi', apiService('/listingamenities'));
@@ -31,7 +32,7 @@ export default (ctx, inject) => {
   inject('selectFavoriteApi', apiService('/toggleuserfavoritelisting'));
   inject('userApi', apiService('/users'));
   inject('userUpdateApi', apiService('/auth/account'));
-  inject('passwordApi', apiService('/updatepassword'));
+  inject('passwordApi', apiService('/user/updatepassword'));
   inject('discountApi', apiService('/discounts'));
   inject('verifydiscountApi', apiService('/verifydiscount?discount_code='));
   inject('SelectdPlanApi', apiService('/listingselectedplans'));
