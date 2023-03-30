@@ -9,16 +9,12 @@
           v-for="(listing, index) in user_listings"
           :key="index"
           class="pb-20"
-          style="height: 400px"
-        >
+          style="height: 400px">
           <el-card shadow="hover" class="property_container">
             <div
               class="property_image"
-              :style="
-                background_style(listing.listing_detail.feature_image_url)
-              "
-            >
-              <div class="d-flex justify_between property_labels p-10">
+              :style="background_style(listing.listing_detail.feature_image_url)">
+              <div class="d-flex justify_between">
                 <p style="color: #fff">
                   {{ listing.listing_detail.category.name }}
                 </p>
@@ -35,20 +31,14 @@
                           text-align: center;
                           padding: 10px 20px;
                           color: blue;
-                        "
-                      >
+                        ">
                         Edit
                       </p></el-dropdown-item
                     >
                     <el-dropdown-item style="color: red; padding: 0"
                       ><p
                         @click="deleteListingModal(listing.id)"
-                        style="
-                          width: 100%;
-                          text-align: center;
-                          padding: 10px 20px;
-                        "
-                      >
+                        style="width: 100%; text-align: center; padding: 10px 20px">
                         Delete
                       </p></el-dropdown-item
                     >
@@ -60,31 +50,22 @@
               <i class="el-icon-info"></i>
               <p class="pl-10">Pending Approval</p>
             </div> -->
-            <div
-              class="card_body"
-              @click="$router.push(`/edit_listing/${listing.id}`)"
-            >
+            <div class="card_body" @click="$router.push(`/edit_listing/${listing.id}`)">
               <!-- amount -->
               <p style="font-weight: 600">
                 {{ listing.listing_detail.name }}
               </p>
-              <p class="house_amount">
-                GH₵ {{ listing.listing_detail.price }}/mth
-              </p>
+              <p class="house_amount">GH₵ {{ listing.listing_detail.price }}/mth</p>
               <p class="house_plot">
                 {{ listing.listing_detail.region }},
                 {{ listing.listing_detail.city }}
               </p>
             </div>
-            <div
-              class="card_footer"
-              @click="$router.push(`/edit_listing/${listing.id}`)"
-            >
+            <div class="card_footer" @click="$router.push(`/edit_listing/${listing.id}`)">
               <div
                 class="pl-5"
                 v-for="specification in listing.property_specifications"
-                :key="specification.id"
-              >
+                :key="specification.id">
                 <div class="d-flex align_center">
                   <img src="~/assets/svg/bed.png" class="property_img pr-10" />
                   <b>{{ specification.number }} </b>
@@ -196,18 +177,6 @@ export default Vue.extend({
     height: 220px;
     background-repeat: no-repeat;
     background-size: 100%;
-
-    .property_labels {
-      width: 100%;
-      z-index: 20;
-      background: rgba(136, 136, 136, 0.7);
-
-      p {
-        // background: white;
-        padding: 2px 10px;
-        border-radius: 7.34885px;
-      }
-    }
   }
   .card_body {
     padding: 10px 20px;

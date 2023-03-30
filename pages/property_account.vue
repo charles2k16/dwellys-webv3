@@ -23,21 +23,13 @@
           ref="property_account"
           :rules="account_validation"
           :model="property_account"
-          label-position="top"
-        >
+          label-position="top">
           <div v-if="step == 1">
             <div class="d-flex pb-20">
               <div>
                 <div class="profile_holder mr-20">
-                  <i
-                    class="el-icon-user-solid"
-                    v-if="!property_account.avatar"
-                  ></i>
-                  <img
-                    :src="property_account.avatar"
-                    v-else
-                    class="property_avatar"
-                  />
+                  <i class="el-icon-user-solid" v-if="!property_account.avatar"></i>
+                  <img :src="property_account.avatar" v-else class="property_avatar" />
                 </div>
               </div>
               <div class="d-flex_column profile_text pl-20">
@@ -45,8 +37,8 @@
                   >Upload photo</el-button
                 >
                 <p class="mt-10">
-                  Must be an actual photo of you. Logos, clip-art, group photos,
-                  and digitally-altered images are not allowed
+                  Must be an actual photo of you. Logos, clip-art, group photos, and
+                  digitally-altered images are not allowed
                 </p>
               </div>
             </div>
@@ -62,8 +54,7 @@
                     <el-form-item label="First Name" prop="first_name">
                       <el-input
                         v-model="property_account.first_name"
-                        placeholder="First name"
-                      >
+                        placeholder="First name">
                       </el-input>
                     </el-form-item>
                   </el-col>
@@ -71,8 +62,7 @@
                     <el-form-item label="Last Name" prop="last_name">
                       <el-input
                         v-model="property_account.last_name"
-                        placeholder="Last Name"
-                      >
+                        placeholder="Last Name">
                       </el-input>
                     </el-form-item>
                   </el-col>
@@ -84,21 +74,16 @@
                       <el-input
                         v-model="property_account.password"
                         placeholder="Enter password"
-                        type="password"
-                      >
+                        type="password">
                       </el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :xs="24" :sm="24" :md="12">
-                    <el-form-item
-                      label="Confirm Password"
-                      prop="confirm_password"
-                    >
+                    <el-form-item label="Confirm Password" prop="confirm_password">
                       <el-input
                         v-model="property_account.confirm_password"
                         placeholder="confirm password"
-                        type="password"
-                      >
+                        type="password">
                       </el-input>
                     </el-form-item>
                   </el-col>
@@ -110,8 +95,7 @@
                       <el-date-picker
                         v-model="property_account.dob"
                         type="date"
-                        placeholder="Pick a day"
-                      >
+                        placeholder="Pick a day">
                       </el-date-picker>
                       <!-- </el-input> -->
                     </el-form-item>
@@ -130,21 +114,15 @@
                   <el-input
                     v-model="property_account.email"
                     type="email"
-                    placeholder="Enter email"
-                  >
+                    placeholder="Enter email">
                   </el-input>
                 </el-form-item>
-                <el-form-item
-                  label="Phone number"
-                  prop="phone"
-                  style="margin-top: 10px"
-                >
+                <el-form-item label="Phone number" prop="phone" style="margin-top: 10px">
                   <vue-phone-number-input
                     v-model="phone"
                     :border-radius="7"
                     default-country-code="GH"
-                    @update="onPhoneUpdate"
-                  />
+                    @update="onPhoneUpdate" />
                 </el-form-item>
                 <div class="mt-20 next_btn">
                   <el-button
@@ -162,8 +140,8 @@
               <div class="account_label">
                 <h4>Validatation</h4>
                 <p class="pt-5">
-                  We need to verify your information. Please submit a copy of
-                  your government ID to process your application
+                  We need to verify your information. Please submit a copy of your
+                  government ID to process your application
                 </p>
               </div>
               <div class="form_div">
@@ -172,14 +150,12 @@
                     <el-form-item label="ID type" prop="id_card_type">
                       <el-select
                         v-model="property_account.id_card_type"
-                        placeholder="Select ID type"
-                      >
+                        placeholder="Select ID type">
                         <el-option
                           v-for="item in options"
                           :key="item"
                           :label="item"
-                          :value="item"
-                        >
+                          :value="item">
                         </el-option>
                       </el-select>
                     </el-form-item>
@@ -188,8 +164,7 @@
                 <el-form-item label="ID card number" prop="id_card_number">
                   <el-input
                     v-model="property_account.id_card_number"
-                    placeholder="Enter ID number"
-                  >
+                    placeholder="Enter ID number">
                   </el-input>
                 </el-form-item>
                 <el-form-item label="Upload ID" prop="id_card_upload">
@@ -198,24 +173,19 @@
                     action=""
                     :on-change="propertyCard"
                     :multiple="false"
-                    class="upload_dragg w-100"
-                  >
+                    class="upload_dragg w-100">
                     <i class="el-icon-upload"></i>
                     <div class="el-upload__text w-100">
                       Upload a front photo of your ID
                     </div>
                   </el-upload>
                 </el-form-item>
-                <div
-                  v-if="property_account.id_card_upload"
-                  class="d-flex justify_center"
-                >
+                <div v-if="property_account.id_card_upload" class="d-flex justify_center">
                   <img
                     :src="property_account.id_card_upload"
                     width="80%"
                     height="200px"
-                    class="mx-10 mt-10"
-                  />
+                    class="mx-10 mt-10" />
                 </div>
                 <el-col>
                   <div class="terms_condition py-20">
@@ -272,9 +242,7 @@ export default Vue.extend({
         callback(new Error('Please input the password'));
       } else {
         if ((this as any).property_account.confirm_password !== '') {
-          (this as any).$refs.property_account.validateField(
-            'confirm_password'
-          );
+          (this as any).$refs.property_account.validateField('confirm_password');
         }
         callback();
       }
@@ -306,7 +274,7 @@ export default Vue.extend({
         id_card_type: '' as string,
         id_card_upload: '' as any,
         id_card_number: '' as string,
-        country_id: '' as String,
+        country_id: '' as string,
         user_type: 'lister',
       },
       account_validation: {
@@ -368,12 +336,8 @@ export default Vue.extend({
             trigger: 'change',
           },
         ],
-        password: [
-          { validator: validatePass, trigger: 'blur', required: true },
-        ],
-        confirm_password: [
-          { validator: validatePass2, trigger: 'blur', required: true },
-        ],
+        password: [{ validator: validatePass, trigger: 'blur', required: true }],
+        confirm_password: [{ validator: validatePass2, trigger: 'blur', required: true }],
       },
       options: ['SSNIT', 'PASSPORT', 'VOTER'],
       user: '' as string,
@@ -383,9 +347,7 @@ export default Vue.extend({
   async created() {
     const countries = await this.$countriesApi.index();
     countries.data.filter((country: any) =>
-      country.short_name == 'GH'
-        ? (this.property_account.country_id = country.id)
-        : ''
+      country.short_name == 'GH' ? (this.property_account.country_id = country.id) : ''
     );
     this.countries = countries.data;
   },
@@ -444,9 +406,7 @@ export default Vue.extend({
           avatar: this.property_account.avatar,
           first_name: this.property_account.first_name,
           last_name: this.property_account.last_name,
-          dob: this.$moment(this.property_account.dob).format(
-            'YYYY-MM-DD h:mm:ss'
-          ),
+          dob: this.$moment(this.property_account.dob).format('YYYY-MM-DD h:mm:ss'),
           sign_up_mode: 'email',
           email: this.property_account.email,
           password: this.property_account.password,
@@ -459,11 +419,11 @@ export default Vue.extend({
           user_type: 'lister',
         };
         const response = await this.$registerApi.create(property_account);
-        console.log(response);
 
         this.$confirm(response.message, {
           confirmButtonText: 'OK',
           type: 'success',
+          showCancelButton: false,
         })
           .then(() => {
             this.btnLoading = false;

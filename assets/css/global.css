@@ -2,12 +2,14 @@
   --text-base: #334155;
   --color-primary: #cf0100;
   --text-white: #ffffff;
+  --text-primary: #475569;
   --font-primary: Inter_regular;
   --font-primary-md: Inter_medium;
   --font-primary-light: Inter_light;
-  --circular_light: Inter_bold;
-  --font-header-reg: Inter_medium;
+  --font-primary-bold: Inter_bold;
+  --font-primary-semi: Inter_semibold;
   --disable-button: #de0b0b80;
+  --light-background: #f8fafc;
 }
 
 @font-face {
@@ -46,7 +48,7 @@ body {
   margin: 0;
   padding: 0;
   font-size: 16px;
-  line-height: 19px;
+  line-height: 20px;
   box-sizing: border-box;
 }
 a {
@@ -81,9 +83,8 @@ hr.hr_rule {
   border: 0.5px solid #e2e8f0;
 }
 p {
-  font-size: 15px;
   font-family: var(--font-primary-light), sans-serif;
-  line-height: 18px;
+  font-size: 15px;
   /* color: #64748B; */
 }
 
@@ -113,6 +114,9 @@ span {
 }
 .mt-10 {
   margin-top: 10px;
+}
+.mt-15 {
+  margin-top: 15px;
 }
 .mt-20 {
   margin-top: 20px;
@@ -317,6 +321,9 @@ span {
 .justify_end {
   justify-content: flex-end;
 }
+.justify_start {
+  justify-content: flex-start;
+}
 .justify_around {
   justify-content: space-around;
   align-items: center;
@@ -443,4 +450,10 @@ span {
   animation-duration: 4s;
   animation-delay: 8s;
   animation-iteration-count: infinite;
+}
+.vr {
+  width: 32.5px;
+  height: 0px;
+  border: 1px solid #e2e8f0;
+  transform: rotate(90deg);
 }

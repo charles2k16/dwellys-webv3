@@ -8,18 +8,12 @@
         v-for="(property, index) in listings"
         :key="index"
         class="pb-20"
-        style="height: 400px"
-      >
-        <el-card
-          v-if="property.listing"
-          shadow="hover"
-          class="property_container"
-        >
+        style="height: 400px">
+        <el-card v-if="property.listing" shadow="hover" class="property_container">
           <div
             class="property_image"
             :style="background_style(property.feature_image_url)"
-            @click.self="openPropertyDetails(property)"
-          >
+            @click.self="openPropertyDetails(property)">
             <!-- :style="background_style(property.listing.photos)" -->
             <div class="d-flex justify_between property_labels p-10">
               <p style="background: white">
@@ -32,8 +26,7 @@
                 <span
                   class="material-icons ml-5"
                   @click="favProperty(property.listing)"
-                  :style="{ color: 'red' }"
-                >
+                  :style="{ color: 'red' }">
                   favorite
                 </span>
               </span>
@@ -56,8 +49,7 @@
             <div
               class="pl-5"
               v-for="specification in property.listing.property_specifications"
-              :key="specification.id"
-            >
+              :key="specification.id">
               <div class="d-flex align_center">
                 <img src="~/assets/svg/bed.png" class="property_img pr-10" />
                 <b>{{ specification.number }} </b>
@@ -124,18 +116,6 @@ export default Vue.extend({
     height: 220px;
     background-repeat: no-repeat;
     background-size: 100%;
-
-    .property_labels {
-      width: 100%;
-      z-index: 20;
-      background: rgba(136, 136, 136, 0.7);
-
-      p {
-        // background: white;
-        padding: 2px 10px;
-        border-radius: 7.34885px;
-      }
-    }
   }
   .card_body {
     padding: 10px 20px;

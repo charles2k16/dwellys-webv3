@@ -34,6 +34,7 @@ export default {
     '~/assets/css/global.css',
     '~/assets/css/element.css',
     '~/assets/css/display.css',
+    '~/assets/css/material-icons.css',
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -64,14 +65,13 @@ export default {
     '@nuxtjs/pwa',
     '@nuxtjs/auth-next',
     // "@nuxtjs/auth",
-    'nuxt-material-design-icons-iconfont',
     '@nuxtjs/moment',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    // baseURL: `${process.env.API_URL}`,
-    baseURL: 'http://127.0.0.1:8000/api/v3',
+    baseURL: 'https://interface.dwellys.net/api/v3',
+    // baseURL: 'http://127.0.0.1:8000/api/v3',
 
     headers: {
       'Access-Control-Allow-Origin': '*',
