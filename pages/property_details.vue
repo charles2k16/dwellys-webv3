@@ -32,10 +32,7 @@
         <div class="details_plot details_area">
           <p class="align_center mr-20">
             <span class="material-icons mr-5"> room </span
-            >{{
-              propertyDetails.listing_detail &&
-              propertyDetails.listing_detail.city
-            }}
+            >{{ propertyDetails.listing_detail && propertyDetails.listing_detail.city }}
           </p>
 
           <p class="align_center">
@@ -61,8 +58,7 @@
                 favProperties.includes(propertyDetails)
                   ? { color: 'red' }
                   : { color: 'grey' }
-              "
-            >
+              ">
               favorite
             </span>
             <span class="pl-5">
@@ -77,10 +73,8 @@
         <el-col :xs="24" :sm="24" :md="hasMorePhotos ? 20 : 24">
           <el-carousel :interval="5000" arrow="always">
             <el-carousel-item
-              v-for="(image, index) in propertyDetails.listing_detail
-                .listing_images"
-              :key="index"
-            >
+              v-for="(image, index) in propertyDetails.listing_detail.listing_images"
+              :key="index">
               <img :src="image.photo" class="carousel_image" />
             </el-carousel-item>
           </el-carousel>
@@ -91,19 +85,12 @@
           :sm="8"
           :md="4"
           v-if="hasMorePhotos"
-          class="has_more_photos hidden-sm-and-down"
-        >
+          class="has_more_photos hidden-sm-and-down">
           <div
             class="thumbnail"
-            v-for="(image, index) in propertyDetails.listing_detail
-              .listing_images"
-            :key="index"
-          >
-            <img
-              :src="image.photo"
-              class="_image"
-              @click="showImage(image.photo)"
-            />
+            v-for="(image, index) in propertyDetails.listing_detail.listing_images"
+            :key="index">
+            <img :src="image.photo" class="_image" @click="showImage(image.photo)" />
           </div>
         </el-col>
       </el-row>
@@ -117,11 +104,8 @@
             <div class="basic_specifications">
               <span
                 class="info_card"
-                v-for="(
-                  specification, index
-                ) in propertyDetails.property_specifications"
-                :key="index"
-              >
+                v-for="(specification, index) in propertyDetails.property_specifications"
+                :key="index">
                 <p>
                   {{ specification.number }}
                   {{ specification.specification.name }}
@@ -131,8 +115,7 @@
               <span
                 class="info_card"
                 v-for="specification in propertyDetails.other_specifications"
-                :key="specification.id"
-              >
+                :key="specification.id">
                 <p class="d-flex">
                   {{ specification.number }}
                   {{ specification.name }}
@@ -164,10 +147,7 @@
                 <p class="mt-5 amout" v-if="propertyDetails.listing_detail">
                   <b style="font-size: 24px; line-height: 28px"
                     >GH₵{{ propertyDetails.listing_detail.price }}</b
-                  ><span
-                    v-if="
-                      propertyDetails.listing_detail.category.name == 'Rent'
-                    "
+                  ><span v-if="propertyDetails.listing_detail.category.name == 'Rent'"
                     >/month</span
                   >
                 </p>
@@ -175,14 +155,12 @@
                   <img
                     v-if="propertyDetails.lister.avatar"
                     :src="propertyDetails.lister.avatar"
-                    class="agent_avatar"
-                  />
+                    class="agent_avatar" />
                   <img
                     v-else
                     src="~/assets/img/user_icon.png"
                     class="agent_avatar"
-                    alt="icon"
-                  />
+                    alt="icon" />
                   <div class="ml-20">
                     <p>
                       <b
@@ -209,9 +187,7 @@
               <div>
                 <el-button type="primary" style="width: 100%" @click="showOwner"
                   ><p class="d-flex justify_between">
-                    Send a message<span class="material-icons">
-                      arrow_forward
-                    </span>
+                    Send a message<span class="material-icons"> arrow_forward </span>
                   </p></el-button
                 >
               </div>
@@ -224,10 +200,7 @@
         <div class="amenities_content">
           <h4 class="mt-20 title_color">Amenities</h4>
           <ul class="amenites_list">
-            <li
-              v-for="amenity in propertyDetails.amenities"
-              :key="amenity.amenity.name"
-            >
+            <li v-for="amenity in propertyDetails.amenities" :key="amenity.amenity.name">
               {{ amenity.amenity.name }}
             </li>
           </ul>
@@ -265,8 +238,7 @@
         </section>
         <Map
           :lat="propertyDetails.listing_detail.latitude"
-          :lng="propertyDetails.listing_detail.longitude"
-        />
+          :lng="propertyDetails.listing_detail.longitude" />
       </div>
       <div>
         <hr class="hr_rule" />
@@ -287,7 +259,6 @@ import { IMixinState } from '../types/mixinsTypes';
 import Map from '../components/profile/map.vue';
 
 export default Vue.extend({
-  scrollToTop: true,
   auth: false,
   name: 'PropertyDetails',
   components: {
@@ -316,12 +287,8 @@ export default Vue.extend({
 
   watch: {
     $route() {
-      this.scrollToTop();
       this.fetchData();
     },
-  },
-  mounted() {
-    this.scrollToTop();
   },
   created() {
     this.fetchData();
@@ -335,10 +302,6 @@ export default Vue.extend({
     showImage(image: string) {
       this.modalImage = image;
       this.dialogVisible = true;
-    },
-    scrollToTop() {
-      window.scrollTo(10, 10);
-      // window.scrollTo(0, 0);
     },
     async fetchData() {
       this.loading = true;
