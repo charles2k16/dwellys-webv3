@@ -107,10 +107,6 @@ export default Vue.extend({
       required: true,
       type: Object,
     },
-    type: {
-      required: false,
-      type: String,
-    },
     favProperties: {
       required: false,
       type: Array,

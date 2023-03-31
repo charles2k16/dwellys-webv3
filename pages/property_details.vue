@@ -19,25 +19,25 @@
       </div>
       <div class="d-flex justify_between flex-wrap pb-10">
         <div class="details_plot">
-          <p class="align_center mr-20">
+          <p class="align_center mr-20 p-text">
             <span class="material-icons mr-5"> location_on </span
             >{{ propertyDetails.listing_detail && propertyDetails.listing_detail.city }}
           </p>
 
-          <p class="align_center">
+          <p class="align_center p-text">
             <span class="material-icons mr-5"> schedule </span>Last updated,
             {{ $moment(propertyDetails.updated_at).format('MMMM Do YYYY') }}
           </p>
         </div>
         <div class="details_plot">
-          <p class="d-flex align-cennter pr-20">
+          <p class="d-flex align-cennter pr-20 p-text">
             <span class="material-icons mr-5"> visibility </span>
             {{ propertyDetails.listing_total_views }}
           </p>
-          <p class="align_center mr-20">
+          <p class="align_center mr-20 p-text">
             <span class="material-icons mr-5"> share </span>Share
           </p>
-          <p class="align_center">
+          <p class="align_center p-text">
             <span
               class="material-icons mr-5"
               @click="favProperty(propertyDetails)"
@@ -109,9 +109,9 @@
               </span> -->
             </div>
 
-            <div class="property_description mt-20">
+            <div class="mt-20">
               <h4 class="details_title">Description</h4>
-              <p>
+              <p class="p-text mt-10">
                 {{
                   propertyDetails.listing_detail &&
                   propertyDetails.listing_detail.description
@@ -133,8 +133,8 @@
                 <p class="mt-10 amout" v-if="propertyDetails.listing_detail">
                   <b style="font-size: 24px; line-height: 28px"
                     >GH₵{{ propertyDetails.listing_detail.price }}</b
-                  ><span v-if="propertyDetails.listing_detail.category.name == 'Rent'"
-                    >/month</span
+                  ><small v-if="propertyDetails.listing_detail.category.name == 'Rent'"></small>
+                    / month</small
                   >
                 </p>
                 <div class="d-flex mt-20" v-if="propertyDetails.listing_detail">
@@ -173,7 +173,9 @@
               <div>
                 <el-button type="primary" style="width: 100%" @click="showOwner"
                   ><p class="d-flex justify_between">
-                    Send a message<span class="material-icons"> arrow_forward </span>
+                    Send a message<span class="material-icons" style="color: white">
+                      arrow_forward
+                    </span>
                   </p></el-button
                 >
               </div>
@@ -227,7 +229,7 @@
           <el-col :xs="24" :sm="24" :md="18">
             <div class="d-flex justify_between">
               <h4 class="mt-20 details_title">Location</h4>
-              <p class="align_center mr-20">
+              <p class="align_center mr-20 p-text">
                 <span class="material-icons mr-5"> location_on </span
                 >{{
                   propertyDetails.listing_detail && propertyDetails.listing_detail.city
@@ -246,7 +248,22 @@
         <h4 class="mt-60">Similar properties</h4>
 
         <div class="pt-20">
-          <SimilarProperties :listings="similarListings" />
+          <el-row :gutter="20" v-if="similarListings.length > 0">
+              <el-col
+                :xs="24"
+                :sm="8"
+                v-for="property in similarListings"
+                :key="property.id"
+                class="mt-20">
+                <PropertyCard
+                
+                  :property="property"
+                 />
+              </el-col>
+            </el-row>
+            <div v-else class="d-flex justify_center p-20">
+              <p>No Properties found</p>
+            </div>
         </div>
       </div>
     </div>
@@ -291,7 +308,6 @@ export default Vue.extend({
       similarListings: [],
     };
   },
-
   watch: {
     $route() {
       this.fetchData();
@@ -314,7 +330,6 @@ export default Vue.extend({
       this.loading = true;
       try {
         const listings = await this.$listingApi.show(this.$route.query.id);
-        console.log(listings);
         this.propertyDetails = listings.data;
         const similarProperties = await this.$similarListingsApi.query(
           this.propertyDetails.property_type.name
@@ -453,11 +468,6 @@ $small_screen: 426px;
     padding: 0 20px;
     display: none;
   }
-  p {
-    font-size: 14px;
-    line-height: 20px;
-    color: #475569;
-  }
 }
 .carousel_image {
   width: 100%;
@@ -523,14 +533,6 @@ $small_screen: 426px;
   }
 }
 
-.property_description {
-  p {
-    font-size: 14px;
-    margin-top: 10px;
-    color: #475569;
-  }
-}
-
 .info_side_card {
   width: 100%;
 
@@ -550,5 +552,11 @@ $small_screen: 426px;
 .material-icons {
   font-size: 18px;
   color: #94a3b8;
+}
+
+.p-text{
+  font-size: 14px;
+  line-height: 20px;
+  color: #475569;
 }
 </style>

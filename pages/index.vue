@@ -99,10 +99,7 @@
                 v-for="property in listings"
                 :key="property.id"
                 class="mt-20">
-                <PropertyCard
-                  :type="tab.label"
-                  :property="property"
-                  :favProperties="favProperties" />
+                <PropertyCard :property="property" :favProperties="favProperties" />
               </el-col>
             </el-row>
             <div v-else class="d-flex justify_center p-20">
