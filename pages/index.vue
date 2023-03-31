@@ -91,26 +91,46 @@
           v-for="(tab, index) in tabOptions"
           :key="index"
           :name="tab.label">
-          <div class="section pt-20" v-loading="pageLoad">
-            <el-row :gutter="20" v-if="listings.length > 0">
-              <el-col
-                :xs="24"
-                :sm="8"
-                v-for="property in listings"
-                :key="property.id"
-                class="mt-20">
-                <PropertyCard :property="property" :favProperties="favProperties" />
-              </el-col>
-            </el-row>
-            <div v-else class="d-flex justify_center p-20">
-              <p>No Properties found</p>
-            </div>
+          <div class="section pt-20">
+            <el-skeleton :loading="pageLoad" animated>
+              <template slot="template">
+                <el-row :gutter="20">
+                  <el-col :xs="24" :sm="8" class="mt-20" v-for="i in 3" :key="i">
+                    <el-skeleton-item
+                      variant="image"
+                      style="width: 100%; height: 250px" />
+                    <div class="mt-10">
+                      <el-skeleton-item variant="h3" style="width: 60%; height: 25px" />
+                      <div class="d-flex-justify-between mt-10" style="height: 16px">
+                        <el-skeleton-item variant="text" class="mr-10" />
+                        <el-skeleton-item variant="text" style="width: 50%" />
+                      </div>
+                    </div>
+                  </el-col>
+                </el-row>
+              </template>
+              <template slot="">
+                <el-row :gutter="20" v-if="listings.length > 0">
+                  <el-col
+                    :xs="24"
+                    :sm="8"
+                    v-for="property in listings"
+                    :key="property.id"
+                    class="mt-20">
+                    <PropertyCard :property="property" :favProperties="favProperties" />
+                  </el-col>
+                </el-row>
+                <div v-else class="d-flex justify_center p-20">
+                  <p>No Properties found</p>
+                </div>
 
-            <div v-if="total > 30" class="d-flex justify_center">
-              <p class="p-10 show_more_btn" @click="getMoreProperties">
-                Show more<i class="el-icon-bottom pl-10" style="fontsize: 20px"></i>
-              </p>
-            </div>
+                <div v-if="total > 30" class="d-flex justify_center">
+                  <p class="p-10 show_more_btn" @click="getMoreProperties">
+                    Show more<i class="el-icon-bottom pl-10" style="fontsize: 20px"></i>
+                  </p>
+                </div>
+              </template>
+            </el-skeleton>
           </div>
           <!-- <div class="section pt-20" v-else v-loading="pageLoad">
             <PropertyList
@@ -253,7 +273,7 @@ export default Vue.extend({
       this.loadListing(listings.data);
     },
     async fetchListings() {
-      this.pageLoad = false;
+      this.pageLoad = true;
 
       try {
         const listings = await this.$listingApi.query('?status=active');

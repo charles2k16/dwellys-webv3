@@ -244,9 +244,7 @@
         </el-row>
       </div>
       <div>
-        <hr class="hr_rule" />
         <h4 class="mt-60">Similar properties</h4>
-
         <div class="pt-20">
           <el-row :gutter="20" v-if="similarListings.length > 0">
               <el-col

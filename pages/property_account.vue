@@ -37,8 +37,9 @@
                   >Upload photo</el-button
                 >
                 <p class="mt-10">
-                  Must be an actual photo of you. Logos, clip-art, group photos, and
-                  digitally-altered images are not allowed
+                  Must be an actual photo of you. <br />
+                  Logos, clip-art, group photos, and digitally-altered images are not
+                  allowed
                 </p>
               </div>
             </div>
@@ -510,7 +511,9 @@ $small_screen: 426px;
     }
     .profile_text {
       p {
-        width: 50%;
+        width: 80%;
+        color: #64748b;
+        font-size: 12px;
         @media (max-width: $small_screen) {
           width: 100%;
         }

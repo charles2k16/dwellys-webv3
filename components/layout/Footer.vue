@@ -6,7 +6,7 @@
         <p class="pb-20 right_reserved">&copy; Dwellys 2022, All rights reserved</p>
         <p class="trademark_text text-grey">
           Dwellys is a registered trademark and the trading name of Dwellys
-          Limited.(v-0.8.9)
+          Limited.(v-0.9.0)
         </p>
       </el-col>
       <el-col :md="8" :sm="24">
