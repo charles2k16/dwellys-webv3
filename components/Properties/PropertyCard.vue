@@ -1,74 +1,65 @@
 <template>
-  <div>
-    <el-row :gutter="20" v-if="listings.length > 0">
-      <el-col
-        :xs="24"
-        :sm="8"
-        v-for="property in listings"
-        :key="property.id"
-        class="mt-20">
-        <!-- v-if="property.listing_detail.name == type" -->
-        <el-card shadow="hover" class="property_container">
-          <div
-            class="property_image"
-            :style="background_style(property.photos)"
-            @click.self="openPropertyDetails(property)">
-            <div class="d-flex justify_between p-10">
-              <p class="property_type">
-                <span>{{ property.listing_detail.category.name }}</span>
-              </p>
-              <span class="fav">
-                <span
-                  class="material-icons fav-icon"
-                  :style="
-                    favProperties && favProperties.some(fav => fav.id == property.id)
-                      ? { color: 'red' }
-                      : { color: 'white' }
-                  "
-                  @click="favProperty(property)">
-                  favorite
-                </span>
-              </span>
-            </div>
-          </div>
-          <div class="card_body" @click="openPropertyDetails(property)">
-            <div class="d-flex justify_between">
-              <p class="property_amount">
-                GH₵ {{ property.listing_detail.price
-                }}<b v-if="property.listing_detail.category.name == 'Rent'">/mth</b>
-              </p>
-              <!-- <p class="property_name">House</p> -->
-            </div>
+  <el-card shadow="hover" class="property_container">
+    <div
+      class="property_image"
+      :style="background_style(property.photos)"
+      @click.self="openPropertyDetails(property)">
+      <div class="d-flex justify_between p-10">
+        <p class="property_type">
+          <span>{{ property.listing_detail.category.name }}</span>
+        </p>
+        <span class="fav">
+          <span
+            class="material-icons fav-icon"
+            :style="
+              favProperties && favProperties.some(fav => fav.id == property.id)
+                ? { color: 'red' }
+                : { color: 'white' }
+            "
+            @click="favProperty(property)">
+            favorite
+          </span>
+        </span>
+      </div>
+    </div>
+    <div class="card_body" @click="openPropertyDetails(property)">
+      <div class="d-flex justify_between">
+        <p class="property_amount">
+          GH₵ {{ property.listing_detail.price
+          }}<b v-if="property.listing_detail.category.name == 'Rent'">/mth</b>
+        </p>
+        <!-- <p class="property_name">House</p> -->
+      </div>
 
-            <div class="d-flex">
-              <p class="property_location">
-                {{ property.listing_detail.region }},
-                {{ property.listing_detail.location }}
-              </p>
-            </div>
-          </div>
-          <div class="card_footer" @click="openPropertyDetails(property)">
-            <div
-              class="pl-5 pt-5 d-flex justify_start"
-              v-for="specification in property.property_specifications"
-              :key="specification.id">
-              <div>
-                <span class="d-flex align_center">
-                  <span class="material-icons mr-5 speci_icon">bed</span>
-                  <b style="font-size: 14px">{{ specification.number }} </b>
-                </span>
-                <p class="d-block">{{ specification.specification.name }}</p>
-              </div>
-              <div class="vr mt-15"></div>
-              <div>
-                <span class="d-flex align_center">
-                  <span class="material-icons mr-5 speci_icon">bathtub</span>
-                  <b style="font-size: 14px">{{ specification.number }} </b>
-                </span>
-                <p class="d-block">Bathrooms</p>
-              </div>
+      <div class="d-flex">
+        <p class="property_location">
+          {{ property.listing_detail.region }},
+          {{ property.listing_detail.location }}
+        </p>
+      </div>
+    </div>
+    <div class="card_footer" @click="openPropertyDetails(property)">
+      <div
+        class="pl-5 pt-5 d-flex justify_start"
+        v-for="specification in property.property_specifications"
+        :key="specification.id">
+        <div>
+          <span class="d-flex align_center">
+            <span class="material-icons mr-5 speci_icon">bed</span>
+            <b style="font-size: 14px">{{ specification.number }} </b>
+          </span>
+          <p class="d-block">{{ specification.specification.name }}</p>
+        </div>
+        <div class="vr mt-15"></div>
+        <div>
+          <span class="d-flex align_center">
+            <span class="material-icons mr-5 speci_icon">bathtub</span>
+            <b style="font-size: 14px">{{ specification.number }} </b>
+          </span>
+          <p class="d-block">Bathrooms</p>
+        </div>
 
-              <!-- <img
+        <!-- <img
                   v-if="
                     specification.specification.name == 'Bed room' ||
                     specification.specification.name == 'Bedroom'
@@ -100,17 +91,10 @@
 
                 <b>{{ specification.number }} </b> -->
 
-              <!-- <p>{{ specification.specification.name }}</p> -->
-            </div>
-          </div>
-          <!-- </nuxt-link> -->
-        </el-card>
-      </el-col>
-    </el-row>
-    <div v-else class="d-flex justify_center p-20">
-      <p>No Properties found</p>
+        <!-- <p>{{ specification.specification.name }}</p> -->
+      </div>
     </div>
-  </div>
+  </el-card>
 </template>
 
 <script lang="ts">
@@ -119,24 +103,20 @@ import { IMixinState } from '../../types/mixinsTypes';
 
 export default Vue.extend({
   props: {
-    listings: {
+    property: {
       required: true,
-      type: Array,
+      type: Object,
     },
     type: {
       required: false,
       type: String,
-    },
-    fetchFavorites: {
-      required: false,
-      type: Function,
     },
     favProperties: {
       required: false,
       type: Array,
     },
   },
-  name: 'PropertyList',
+  name: 'PropertyCard',
   data() {
     return {
       // favProperties: [] as any,
@@ -180,7 +160,7 @@ export default Vue.extend({
             listing_id: fav.id,
           });
           console.log(favoriteResponse, fav);
-          this.fetchFavorites();
+          // this.fetchFavorites();
           (this as any as IMixinState).$message({
             showClose: true,
             message: 'Added property to favourite!',
@@ -205,7 +185,6 @@ export default Vue.extend({
       }
     },
     openPropertyDetails(property: any): void {
-      console.log(property);
       this.$router.push({
         name: 'property_details',
         // params: { property: property.id },

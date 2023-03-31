@@ -43,25 +43,24 @@
           </el-tab-pane>
         </el-tabs> -->
         <div class="search_container">
-          <p v-if="isQuery" class="to_properties" @click="closeQuery">
+          <!-- <p v-if="isQuery" class="to_properties" @click="closeQuery">
             <span class="material-icons">arrow_back</span>
-          </p>
+          </p> -->
           <el-input
             @keyup.native.enter="getQuery"
             v-model="search_value"
             class="search_input"
-            placeholder="Search for property"
-          >
+            placeholder="Search for property">
           </el-input>
           <el-button type="primary" class="hidden-sm-and-down" @click="getQuery"
             >Find your home</el-button
           >
           <el-button
+            @click="getQuery"
             icon="el-icon-search"
             type="primary"
             class="hidden-md-and-up"
-            round
-          ></el-button>
+            round></el-button>
         </div>
         <!-- <el-row class="d-flex pt-20">
           <div class="pr-20">
@@ -86,52 +85,44 @@
       </div>
     </div>
     <div>
-      <div v-if="isQuery" class="pt-20" v-loading="pageLoad">
-        <div v-if="queryList.length > 0">
-          <PropertyList :listings="queryList" />
-        </div>
-        <div v-else class="no_results_found">
-          <h3>No Result Found.</h3>
-          <br />
-          <el-button type="primary" size="mini" @click="closeQuery"
-            >Go back Home</el-button
-          >
-        </div>
-      </div>
-      <el-tabs v-else type="border-card" @tab-click="changeLabel">
+      <el-tabs type="border-card" @tab-click="changeLabel" v-model="activeName">
         <el-tab-pane
           :label="tab.label"
           v-for="(tab, index) in tabOptions"
           :key="index"
-        >
-          <div
-            class="section pt-20"
-            v-if="tab.label == 'All'"
-            v-loading="pageLoad"
-          >
-            <PropertyList
-              :type="tab.label"
-              :listings="listings"
-              :fetchFavorites="fetchFavorites"
-              :favProperties="favProperties"
-            />
+          :name="tab.label">
+          <div class="section pt-20" v-loading="pageLoad">
+            <el-row :gutter="20" v-if="listings.length > 0">
+              <el-col
+                :xs="24"
+                :sm="8"
+                v-for="property in listings"
+                :key="property.id"
+                class="mt-20">
+                <PropertyCard
+                  :type="tab.label"
+                  :property="property"
+                  :favProperties="favProperties" />
+              </el-col>
+            </el-row>
+            <div v-else class="d-flex justify_center p-20">
+              <p>No Properties found</p>
+            </div>
+
             <div v-if="total > 30" class="d-flex justify_center">
               <p class="p-10 show_more_btn" @click="getMoreProperties">
-                Show more<i
-                  class="el-icon-bottom pl-10"
-                  style="fontsize: 20px"
-                ></i>
+                Show more<i class="el-icon-bottom pl-10" style="fontsize: 20px"></i>
               </p>
             </div>
           </div>
-          <div class="section pt-20" v-else v-loading="pageLoad">
+          <!-- <div class="section pt-20" v-else v-loading="pageLoad">
             <PropertyList
               :type="tab.label"
               :listings="house_listings"
               :fetchFavorites="fetchFavorites"
               :favProperties="favProperties"
             />
-          </div>
+          </div> -->
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -140,36 +131,36 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { IMixinState } from '@/types/mixinsTypes';
+// import { IMixinState } from '@/types/mixinsTypes';
 
 export default Vue.extend({
   auth: false,
   name: 'IndexPage',
   data() {
     return {
-      house_listings: [],
       search_value: '' as string,
       total: 0 as number,
-      propertySearch: [
-        {
-          label: 'Buy',
-          value: 'buy',
-        },
-        {
-          label: 'Rent',
-          value: 'rent',
-        },
-        {
-          label: 'Lease',
-          value: 'lease',
-        },
-      ],
+      // propertySearch: [
+      //   {
+      //     label: 'Buy',
+      //     value: 'buy',
+      //   },
+      //   {
+      //     label: 'Rent',
+      //     value: 'rent',
+      //   },
+      //   {
+      //     label: 'Lease',
+      //     value: 'lease',
+      //   },
+      // ],
       listings: [] as Array<object>,
       page: 0 as number,
       pageLoad: true as boolean,
       queryList: [],
-      isQuery: false as boolean,
+      // isQuery: false as boolean,
       favProperties: [] as any,
+      activeName: 'All',
       tabOptions: [
         { label: 'All', title: 'Rent a home' },
         { label: 'House', title: 'Rent a house' },
@@ -181,76 +172,74 @@ export default Vue.extend({
     };
   },
   created() {
-    this.fetchData();
-    this.$auth.user &&
-    !this.$auth.user.user_type &&
-    this.$auth.state.strategy == 'facebook'
-      ? this.facebookAuth()
-      : '';
+    this.fetchListings();
+    // this.$auth.user && !this.$auth.user.user_type && this.$auth.state.strategy == 'facebook'
+    //   ? this.facebookAuth()
+    //   : '';
     this.$auth.loggedIn && this.fetchFavorites();
   },
   methods: {
-    async facebookAuth() {
-      const facebook_user = this.$auth.user;
-      try {
-        const socialsignup = {
-          first_name: facebook_user.first_name,
-          last_name: facebook_user.last_name,
-          email: facebook_user.email,
-          sign_up_mode: 'facebook',
-          avatar: facebook_user.picture.data.url,
-          user_type: 'visitor',
-          social_site_id: facebook_user.id,
-          dob: this.$moment(facebook_user.birthday).format(
-            'YYYY-MM-DD h:mm:ss'
-          ),
-        };
-        const social_response = await this.$socialregisterApi.create(
-          socialsignup
-        );
-        // console.log('facebook signup', social_response);
-        this.$confirm(social_response.message, 'Confirm Email Address', {
-          confirmButtonText: 'Continue',
-          type: 'success',
-        }).then(() => {
-          // this.$router.push('/login');
-          this.$router.push({
-            name: 'profile',
-          });
-        });
-      } catch (error: any) {
-        if (
-          error.response.data.errors.email ==
-          'The email has already been taken.'
-        ) {
-          const socialsignup = {
-            email: facebook_user.email,
-            sign_up_mode: 'facebook',
-            user_type: 'visitor',
-            social_site_id: facebook_user.id,
-          };
-          const social_response = await this.$socialloginApi.create(
-            socialsignup
-          );
+    // async facebookAuth() {
+    //   const facebook_user = this.$auth.user;
+    //   try {
+    //     const socialsignup = {
+    //       first_name: facebook_user.first_name,
+    //       last_name: facebook_user.last_name,
+    //       email: facebook_user.email,
+    //       sign_up_mode: 'facebook',
+    //       avatar: facebook_user.picture.data.url,
+    //       user_type: 'visitor',
+    //       social_site_id: facebook_user.id,
+    //       dob: this.$moment(facebook_user.birthday).format(
+    //         'YYYY-MM-DD h:mm:ss'
+    //       ),
+    //     };
+    //     const social_response = await this.$socialregisterApi.create(
+    //       socialsignup
+    //     );
+    //     // console.log('facebook signup', social_response);
+    //     this.$confirm(social_response.message, 'Confirm Email Address', {
+    //       confirmButtonText: 'Continue',
+    //       type: 'success',
+    //     }).then(() => {
+    //       // this.$router.push('/login');
+    //       this.$router.push({
+    //         name: 'profile',
+    //       });
+    //     });
+    //   } catch (error: any) {
+    //     if (
+    //       error.response.data.errors.email ==
+    //       'The email has already been taken.'
+    //     ) {
+    //       const socialsignup = {
+    //         email: facebook_user.email,
+    //         sign_up_mode: 'facebook',
+    //         user_type: 'visitor',
+    //         social_site_id: facebook_user.id,
+    //       };
+    //       const social_response = await this.$socialloginApi.create(
+    //         socialsignup
+    //       );
 
-          const { token, user } = social_response.data;
-          this.$auth.setUserToken(token);
-          this.$auth.setUser(user);
-          this.fetchFavorites();
-          // window.location.reload();
-          (this as any as IMixinState).$message({
-            showClose: true,
-            message: 'Logged-in successfully',
-            type: 'success',
-          });
-        } else {
-          (this as any as IMixinState).getNotification(
-            error.response.data.errors,
-            'error'
-          );
-        }
-      }
-    },
+    //       const { token, user } = social_response.data;
+    //       this.$auth.setUserToken(token);
+    //       this.$auth.setUser(user);
+    //       this.fetchFavorites();
+    //       // window.location.reload();
+    //       (this as any as IMixinState).$message({
+    //         showClose: true,
+    //         message: 'Logged-in successfully',
+    //         type: 'success',
+    //       });
+    //     } else {
+    //       (this as any as IMixinState).getNotification(
+    //         error.response.data.errors,
+    //         'error'
+    //       );
+    //     }
+    //   }
+    // },
     async fetchFavorites() {
       if (this.$auth.loggedIn) {
         const userFavorite = await this.$userFavoriteApi.index();
@@ -262,24 +251,27 @@ export default Vue.extend({
       }
     },
     async getMoreProperties() {
-      const listings = await this.$listingApi.query(
-        `?status=active?${this.page + 1}`
-      );
+      const listings = await this.$listingApi.query(`?status=active?${this.page + 1}`);
       this.page = listings.pagination.current_page;
       this.loadListing(listings.data);
     },
-    async fetchData() {
-      const listings = await this.$listingApi.query('?status=active');
-      console.log(listings.data);
-      if (listings.data) {
-        this.loadListing(listings.data);
-      }
-
+    async fetchListings() {
       this.pageLoad = false;
 
-      if (listings.pagination) {
-        this.total = listings.pagination.total;
-        this.page = listings.pagination.current_page;
+      try {
+        const listings = await this.$listingApi.query('?status=active');
+        if (listings.data) {
+          this.loadListing(listings.data);
+        }
+
+        if (listings.pagination) {
+          this.total = listings.pagination.total;
+          this.page = listings.pagination.current_page;
+        }
+
+        this.pageLoad = false;
+      } catch (error: any) {
+        this.pageLoad = false;
       }
     },
     loadListing(properties: any) {
@@ -291,35 +283,26 @@ export default Vue.extend({
         return property;
       });
       this.listings = data;
-    },
-    async changeLabel(tab: any) {
-      this.pageLoad = true;
-      try {
-        const property_type_response = await this.$similarListingsApi.query(
-          tab.label
-        );
-
-        this.loadOtherProperties(property_type_response.data);
-      } catch (error: any) {
-        if (error?.response?.data) {
-          this.house_listings = [];
-        }
-        this.pageLoad = false;
-      }
-    },
-    loadOtherProperties(properties: any) {
-      const data = properties.map((property: any) => {
-        property.photos =
-          property.listing_detail.feature_image_url != null
-            ? property.listing_detail.feature_image_url
-            : 'no photo';
-        return property;
-      });
-      this.house_listings = data;
       this.pageLoad = false;
     },
+    async changeLabel(tab: any) {
+      if (tab.label === 'All') {
+        this.fetchListings();
+      } else {
+        this.pageLoad = true;
+        try {
+          const response = await this.$similarListingsApi.query(tab.label);
+
+          this.loadListing(response.data);
+        } catch (error: any) {
+          if (error?.response?.data) {
+            this.listings = [];
+          }
+          this.pageLoad = false;
+        }
+      }
+    },
     getQuery() {
-      // this.pageLoad = true;
       if (this.search_value) {
         this.$router.push({
           name: 'search',
@@ -328,31 +311,25 @@ export default Vue.extend({
             property: this.search_value,
           },
         });
-      } else {
-        (this as any as IMixinState).$message({
-          showClose: true,
-          message: 'Enter property to search.',
-          type: 'error',
-        });
       }
     },
-    loadQuery(properties: any) {
-      const data = properties.map((property: any) => {
-        property.photos =
-          property.listing_detail.feature_image_url != null
-            ? property.listing_detail.feature_image_url
-            : 'no photo';
-        return property;
-      });
+    // loadQuery(properties: any) {
+    //   const data = properties.map((property: any) => {
+    //     property.photos =
+    //       property.listing_detail.feature_image_url != null
+    //         ? property.listing_detail.feature_image_url
+    //         : 'no photo';
+    //     return property;
+    //   });
 
-      this.queryList = data;
-      this.pageLoad = false;
-    },
-    closeQuery() {
-      this.isQuery = false;
-      this.queryList = [];
-      this.search_value = '';
-    },
+    //   this.queryList = data;
+    //   this.pageLoad = false;
+    // },
+    // closeQuery() {
+    //   this.isQuery = false;
+    //   this.queryList = [];
+    //   this.search_value = '';
+    // },
   },
 });
 </script>

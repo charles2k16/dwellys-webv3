@@ -1,37 +1,26 @@
 <template>
   <div v-loading="loading">
-    <div ref="property_details" class="section pt-20">
+    <div ref="property_details" class="section mt-30">
       <ApplicationHandler ref="propertyAction" />
-      <el-dialog :visible.sync="dialogVisible" width="50%">
-        <div>
-          <img :src="modalImage" class="carousel_image" />
-        </div>
-        <!-- <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="dialogVisible = false"
-            >Confirm</el-button
-          >
-        </span> -->
-      </el-dialog>
       <div class="align_center mb-10 pt-10">
         <div class="arrow_back">
           <div @click="$router.back()">
-            <span class="material-icons">arrow_back</span>
+            <span class="material-icons" style="color: #94a3b8">arrow_back</span>
           </div>
         </div>
         <p v-if="propertyDetails.listing_detail">
-          <b class="property_details_name"
+          <b class="property_name"
             >{{ propertyDetails.listing_detail.name }}
             -
-            {{ propertyDetails.listing_detail.location }},
-            {{ propertyDetails.listing_detail.region }}
+            {{ propertyDetails.listing_detail.location }}
+            <!-- {{ propertyDetails.listing_detail.region }} -->
           </b>
         </p>
       </div>
-      <div class="d-flex justify_between flex-wrap pb-10 text-grey">
-        <div class="details_plot details_area">
+      <div class="d-flex justify_between flex-wrap pb-10">
+        <div class="details_plot">
           <p class="align_center mr-20">
-            <span class="material-icons mr-5"> room </span
+            <span class="material-icons mr-5"> location_on </span
             >{{ propertyDetails.listing_detail && propertyDetails.listing_detail.city }}
           </p>
 
@@ -41,34 +30,30 @@
           </p>
         </div>
         <div class="details_plot">
-          <p class="d-flex pr-20">
+          <p class="d-flex align-cennter pr-20">
             <span class="material-icons mr-5"> visibility </span>
-            <span style="paddingtop: 2px; paddingleft: 2px"
-              ><b>{{ propertyDetails.listing_total_views }}</b>
-            </span>
+            {{ propertyDetails.listing_total_views }}
           </p>
           <p class="align_center mr-20">
             <span class="material-icons mr-5"> share </span>Share
           </p>
           <p class="align_center">
             <span
-              class="material-icons ml-5"
+              class="material-icons mr-5"
               @click="favProperty(propertyDetails)"
               :style="
                 favProperties.includes(propertyDetails)
                   ? { color: 'red' }
-                  : { color: 'grey' }
+                  : { color: '#c4c6c9' }
               ">
               favorite
             </span>
-            <span class="pl-5">
-              <b>{{ propertyDetails.listing_total_likes }}</b>
-            </span>
+            {{ propertyDetails.listing_total_likes }}
           </p>
         </div>
       </div>
     </div>
-    <div class="mob-margin section" style="height: 700px">
+    <div class="mob-margin section">
       <el-row :gutter="20" v-if="propertyDetails.listing_detail">
         <el-col :xs="24" :sm="24" :md="hasMorePhotos ? 20 : 24">
           <el-carousel :interval="5000" arrow="always">
@@ -99,20 +84,21 @@
       <el-row :gutter="20">
         <el-col :xs="24" :sm="24" :md="18">
           <div>
-            <p class="pb-10"><b class="title_color"> Basic Information</b></p>
+            <p class="pb-10 details_title"><b> Basic Information</b></p>
 
             <div class="basic_specifications">
               <span
                 class="info_card"
                 v-for="(specification, index) in propertyDetails.property_specifications"
                 :key="index">
-                <p>
+                <p class="align_center">
+                  <span class="material-icons mr-5">bed</span>
                   {{ specification.number }}
                   {{ specification.specification.name }}
                 </p>
               </span>
 
-              <span
+              <!-- <span
                 class="info_card"
                 v-for="specification in propertyDetails.other_specifications"
                 :key="specification.id">
@@ -120,11 +106,11 @@
                   {{ specification.number }}
                   {{ specification.name }}
                 </p>
-              </span>
+              </span> -->
             </div>
 
             <div class="property_description mt-20">
-              <h4 class="title_color">Description</h4>
+              <h4 class="details_title">Description</h4>
               <p>
                 {{
                   propertyDetails.listing_detail &&
@@ -136,15 +122,15 @@
         </el-col>
         <el-col :xs="24" :sm="24" :md="6">
           <div class="info_side_card">
-            <el-card shadow="hover" class="p-10 message_card">
+            <el-card shadow="hover" class="p-10">
               <div style="height: 200px">
-                <p>
+                <h4>
                   {{
                     propertyDetails.listing_detail &&
                     propertyDetails.listing_detail.category.name
                   }}
-                </p>
-                <p class="mt-5 amout" v-if="propertyDetails.listing_detail">
+                </h4>
+                <p class="mt-10 amout" v-if="propertyDetails.listing_detail">
                   <b style="font-size: 24px; line-height: 28px"
                     >GH₵{{ propertyDetails.listing_detail.price }}</b
                   ><span v-if="propertyDetails.listing_detail.category.name == 'Rent'"
@@ -196,9 +182,9 @@
         </el-col>
       </el-row>
 
-      <div class="amenities pb-20">
+      <div class="mt-20 pb-20">
         <div class="amenities_content">
-          <h4 class="mt-20 title_color">Amenities</h4>
+          <h4 class="mt-20 details_title">Amenities</h4>
           <ul class="amenites_list">
             <li v-for="amenity in propertyDetails.amenities" :key="amenity.amenity.name">
               {{ amenity.amenity.name }}
@@ -210,7 +196,7 @@
       <!-- Property Location -->
 
       <div class="mt-20 mb-20" v-if="propertyDetails.listing_detail">
-        <section class="share_cordinates">
+        <!-- <section class="share_cordinates">
           <el-dropdown trigger="click" class="mb-20">
             <span class="el-dropdown-link">
               <el-button type="primary">
@@ -235,10 +221,25 @@
               >
             </el-dropdown-menu>
           </el-dropdown>
-        </section>
-        <Map
-          :lat="propertyDetails.listing_detail.latitude"
-          :lng="propertyDetails.listing_detail.longitude" />
+        </section> -->
+
+        <el-row :gutter="20">
+          <el-col :xs="24" :sm="24" :md="18">
+            <div class="d-flex justify_between">
+              <h4 class="mt-20 details_title">Location</h4>
+              <p class="align_center mr-20">
+                <span class="material-icons mr-5"> location_on </span
+                >{{
+                  propertyDetails.listing_detail && propertyDetails.listing_detail.city
+                }}
+              </p>
+            </div>
+            <Map
+              class="mt-20"
+              :lat="propertyDetails.listing_detail.latitude"
+              :lng="propertyDetails.listing_detail.longitude" />
+          </el-col>
+        </el-row>
       </div>
       <div>
         <hr class="hr_rule" />
@@ -249,6 +250,12 @@
         </div>
       </div>
     </div>
+
+    <el-dialog :visible.sync="showImageModal" width="50%">
+      <div>
+        <img :src="modalImage" class="carousel_image" />
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -268,7 +275,7 @@ export default Vue.extend({
   data() {
     return {
       activeName: 'first' as string,
-      dialogVisible: false as boolean,
+      showImageModal: false as boolean,
       loading: true as boolean,
       image: '' as any,
       modalImage: '' as any,
@@ -301,7 +308,7 @@ export default Vue.extend({
   methods: {
     showImage(image: string) {
       this.modalImage = image;
-      this.dialogVisible = true;
+      this.showImageModal = true;
     },
     async fetchData() {
       this.loading = true;
@@ -388,29 +395,31 @@ $medium_screen: 768px;
 $small_screen: 426px;
 
 .share_cordinates {
-  display: none;
   @media (max-width: $small_screen) {
     display: flex;
     justify-content: flex-end;
   }
 }
 
-.property_details_name {
+.property_name {
   font-size: 20px;
   font-weight: 510;
   line-height: 24px;
   position: relative;
   left: -55px;
+  color: #1e293b;
+  letter-spacing: -0.03em;
   @media (max-width: $laptop_screen) {
     left: 0;
   }
 }
 
-.title_color {
+.details_title {
   color: #1e293b;
   font-weight: 510;
   font-size: 16px;
   line-height: 24px;
+  letter-spacing: -0.03em;
 }
 
 .arrow_back {
@@ -442,20 +451,12 @@ $small_screen: 426px;
   @media (max-width: $small_screen) {
     width: 100%;
     padding: 0 20px;
+    display: none;
   }
   p {
     font-size: 14px;
     line-height: 20px;
-  }
-  .material-icons {
-    font-size: 18px;
     color: #475569;
-  }
-}
-
-.details_area {
-  @media (max-width: $small_screen) {
-    display: none;
   }
 }
 .carousel_image {
@@ -478,52 +479,50 @@ $small_screen: 426px;
   display: flex;
   flex-wrap: wrap;
   .info_card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background: #f8fafc;
-    padding: 5px 10px;
+    padding: 10px;
     border: 1px solid #e2e8f0;
     border-radius: 12px;
-    width: 150px;
-    margin: 10px;
-    display: flex;
 
     p {
       font-size: 13px;
+      color: #334155;
     }
     .material-icons {
-      font-size: 22px;
-      color: grey;
+      font-size: 20px;
+      color: #94a3b8;
     }
   }
 }
-.amenities {
-  padding-top: 20px;
+.amenites_list {
+  padding-top: 30px;
+  display: grid !important;
+  column-gap: 20px;
+  grid-template-columns: repeat(2, minmax(100px, 200px)) !important;
+  width: 50%;
+  // max-width: 500px;
 
-  .amenites_list {
-    padding-top: 30px;
-    display: grid !important;
-    column-gap: 20px;
-    grid-template-columns: repeat(2, minmax(100px, 200px)) !important;
-    width: 50%;
-    // max-width: 500px;
+  li {
+    list-style: none;
+    padding-bottom: 20px;
+    font-size: 14px;
+    line-height: 20px;
+    margin-left: 15px;
 
-    li {
-      list-style: none;
-      padding-bottom: 20px;
-      font-size: 14px;
-      line-height: 20px;
-      margin-left: 15px;
-
-      &::before {
-        content: '\2022';
-        color: red;
-        font-weight: bold;
-        display: inline-block;
-        width: 1em;
-        margin-left: -1em;
-      }
+    &::before {
+      content: '\2022';
+      color: red;
+      font-weight: bold;
+      display: inline-block;
+      width: 1em;
+      margin-left: -1em;
     }
   }
 }
+
 .property_description {
   p {
     font-size: 14px;
@@ -540,11 +539,16 @@ $small_screen: 426px;
   }
 
   .agent_avatar {
-    width: 65px;
-    height: 65px;
+    width: 43.78px;
+    height: 43.78px;
     border-radius: 50%;
     object-fit: cover;
     margin-bottom: 20px;
   }
+}
+
+.material-icons {
+  font-size: 18px;
+  color: #94a3b8;
 }
 </style>

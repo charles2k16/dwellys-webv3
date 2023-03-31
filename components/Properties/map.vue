@@ -38,10 +38,7 @@ export default Vue.extend({
   methods: {
     newLocation() {
       // let geocoder = new google.maps.Geocoder();
-      var latlng = new google.maps.LatLng(
-        5.627703749893443,
-        -0.08697846429555343
-      );
+      var latlng = new google.maps.LatLng(5.627703749893443, -0.08697846429555343);
 
       var mapOptions = {
         zoom: 14,
@@ -70,9 +67,7 @@ export default Vue.extend({
         infoWindow = new google.maps.InfoWindow({
           position: mapsMouseEvent.latLng,
         });
-        infoWindow.setContent(
-          JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
-        );
+        infoWindow.setContent(JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2));
 
         const geoCode = {
           latitude: mapsMouseEvent.latLng.lat(),
@@ -92,6 +87,7 @@ export default Vue.extend({
 #map {
   height: 400px;
   width: 100%;
+  border-radius: 10px;
 }
 .controls {
   position: absolute !important;
