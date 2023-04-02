@@ -12,18 +12,6 @@
   border-radius: 8px;
 }
 
-.el-button--info:focus,
-.el-button--info:hover {
-  background: #f1f5f9;
-  color: #44556f;
-}
-.el-button--info {
-  color: #64748b;
-  background: #f1f5f9;
-  border: none;
-  border-radius: 8px;
-}
-
 /* form */
 .el-form-item__label {
   font-size: 15px;
@@ -219,9 +207,7 @@
   border-radius: 7px;
 }
 
-.el-tabs--border-card
-  > .el-tabs__header
-  .el-tabs__item:not(.is-disabled):hover {
+.el-tabs--border-card > .el-tabs__header .el-tabs__item:not(.is-disabled):hover {
   color: black;
 }
 
@@ -349,8 +335,9 @@
   border: none;
   border-radius: 8px;
 }
+.el-button--info:focus,
 .el-button--info:hover {
-  background: hsla(0, 100%, 41%, 0.6);
+  background: #de0b0b;
   color: white;
 }
 .el-drawer__open .el-drawer.rtl {

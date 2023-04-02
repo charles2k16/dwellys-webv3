@@ -32,8 +32,8 @@
                   <img :src="property_account.avatar" v-else class="property_avatar" />
                 </div>
               </div>
-              <div class="d-flex_column profile_text pl-20">
-                <el-button type="info btn_sm" @click="showPhotoModal"
+              <div class="profile_text pl-20">
+                <el-button type="info btn_default" @click="showPhotoModal"
                   >Upload photo</el-button
                 >
                 <p class="mt-10">
@@ -128,7 +128,7 @@
                 <div class="mt-20 next_btn">
                   <el-button
                     type="primary"
-                    class="btn_sm submit_register_button"
+                    class="btn_default submit_register_button"
                     @click="toNext"
                     >Next</el-button
                   >
