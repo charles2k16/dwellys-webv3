@@ -1,7 +1,7 @@
 <template>
   <div class="section profile">
     <div class="pt-20">
-      <div v-if="lister.is_id_card_verified == 0" class="not_approved_message">
+      <div v-if="!isVerified" class="not_approved_message">
         <p>
           {{ not_approved_message }}
         </p>
@@ -17,18 +17,17 @@
             "
             :src="lister.avatar"
             alt="avatar"
-            class="profile_img"
-          />
+            class="profile_img" />
 
           <img v-else :src="avatar" alt="avatar" class="profile_img" />
-          <div class="pl-20 pt-20">
-            <p class="pb-5" style="font-size: 22px; font-weight: 600">
+          <div class="ml-20 mt-20">
+            <h2>
               {{ lister.first_name }} {{ lister.last_name }}
               <el-tag size="mini" type="warning" effect="dark">
                 {{ lister.user_type }}</el-tag
               >
-            </p>
-            <p class="pb-10">
+            </h2>
+            <p class="pb-10 text-grey small_md">
               <span>{{ lister.email }} </span>
             </p>
 
@@ -38,16 +37,13 @@
               :multiple="false"
               :auto-upload="false"
               :on-change="getAvatar"
-              :show-file-list="false"
-            >
+              :show-file-list="false">
               <el-button type="info" size="mini">Update Photo</el-button>
             </el-upload>
           </div>
         </div>
         <p class="py-5 user_type">
-          <el-tag v-if="lister.is_id_card_verified == 0" type="danger"
-            >Not Verified</el-tag
-          >
+          <el-tag v-if="!isVerified" type="danger">Not Verified</el-tag>
         </p>
 
         <div>
@@ -55,8 +51,7 @@
             v-if="lister.user_type == 'visitor'"
             type="primary"
             class=""
-            @click="$router.push('/become_a_lister')"
-          >
+            @click="$router.push('/become_a_lister')">
             List your property now
           </el-button>
         </div>
@@ -66,12 +61,10 @@
           v-if="lister.user_type == 'lister'"
           label="My Listings"
           name="first"
-          class="new_tab"
-        >
+          class="new_tab">
           <ProfileListings
             :user_listings="user_listings"
-            :fetchListings="fetchListings"
-          />
+            :fetchListings="fetchListings" />
         </el-tab-pane>
         <el-tab-pane label="Profile" name="second" class="settings_body">
           <el-form class="profile_info_container d-flex">
@@ -88,10 +81,7 @@
                       <!-- <p v-if="!editInfo" class="profile_info">
                         {{ lister.first_name }}
                       </p> -->
-                      <el-input
-                        v-model="lister.first_name"
-                        placeholder="First name"
-                      >
+                      <el-input v-model="lister.first_name" placeholder="First name">
                       </el-input>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="12" class="last_name">
@@ -99,15 +89,12 @@
                       <!-- <p v-if="!editInfo" class="profile_info">
                         {{ lister.last_name }}
                       </p> -->
-                      <el-input
-                        v-model="lister.last_name"
-                        placeholder="Last Name"
-                      >
+                      <el-input v-model="lister.last_name" placeholder="Last Name">
                       </el-input>
                     </el-col>
                   </el-row>
 
-                  <el-row v-if="lister.is_id_card_verified == 0" :gutter="20">
+                  <el-row v-if="!isVerified" :gutter="20">
                     <el-col :xs="24" :sm="24" :md="24">
                       <p class="info_label">Date of birth</p>
 
@@ -127,11 +114,7 @@
                 <div class="details_div">
                   <p>Email address</p>
                   <!-- <p class="profile_info">{{ lister.email }}</p> -->
-                  <el-input
-                    v-model="lister.email"
-                    type="email"
-                    placeholder="Enter email"
-                  >
+                  <el-input v-model="lister.email" type="email" placeholder="Enter email">
                   </el-input>
                   <div class="pt-20 pb-10">
                     <p class="info_label pb-5">Phone number</p>
@@ -143,8 +126,7 @@
                     v-model="phone"
                     :border-radius="7"
                     default-country-code="GH"
-                    @update="onPhoneUpdate"
-                  />
+                    @update="onPhoneUpdate" />
                 </div>
               </div>
               <hr class="hr_rule" />
@@ -155,7 +137,7 @@
                 :loading="loading"
                 class="btn_sm"
                 @click="updateUser"
-                >Save information
+                >Update information
               </el-button>
             </div>
           </el-form>
@@ -177,42 +159,35 @@
                     v-model="current_password"
                     type="password"
                     placeholder="Enter your current password"
-                    show-password
-                  >
+                    show-password>
                   </el-input>
                 </div>
                 <hr class="hr_rule" />
                 <div class="pt-30">
-                  <p class="pb-10" style="font-size: 14px">
-                    Password must contain at least 1 letter, 1 number and a
-                    symbol with minimum length of 12 characters
+                  <p class="pb-10 small_md text-grey">
+                    Password must contain at least 1 letter, 1 number and a symbol with
+                    minimum length of 12 characters
                   </p>
                   <el-form
                     class="pb-30"
                     ref="passwords"
                     :rules="validation"
-                    :model="passwords"
-                  >
+                    :model="passwords">
                     <el-form-item label="New Password" prop="password">
                       <el-input
                         v-model="passwords.new_password"
                         type="password"
                         placeholder="Enter your new password"
                         show-password
-                        class="pb-10"
-                      >
+                        class="pb-10">
                       </el-input>
                     </el-form-item>
-                    <el-form-item
-                      label="Confirm Password"
-                      prop="confirm_password"
-                    >
+                    <el-form-item label="Confirm Password" prop="confirm_password">
                       <el-input
                         v-model="passwords.confirm_password"
                         type="password"
                         placeholder="Re-enter your new password"
-                        show-password
-                      >
+                        show-password>
                       </el-input>
                     </el-form-item>
                   </el-form>
@@ -241,7 +216,6 @@ import Vue from 'vue';
 import VuePhoneNumberInput from 'vue-phone-number-input';
 import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 import { IMixinState } from '@/types/mixinsTypes';
-import moment from '@nuxtjs/moment';
 
 export default Vue.extend({
   name: 'settings',
@@ -269,6 +243,7 @@ export default Vue.extend({
       }
     };
     return {
+      mixinState: this as any as IMixinState,
       drawer: false as boolean,
       activeName: 'second' as string,
       dummy_avatar: '../assets/img/avatar.png' as string,
@@ -302,12 +277,8 @@ export default Vue.extend({
       countries: [],
       userFavorites: [],
       validation: {
-        password: [
-          { validator: validatePass, trigger: 'blur', required: true },
-        ],
-        confirm_password: [
-          { validator: validatePass2, trigger: 'blur', required: true },
-        ],
+        password: [{ validator: validatePass, trigger: 'blur', required: true }],
+        confirm_password: [{ validator: validatePass2, trigger: 'blur', required: true }],
       },
     };
   },
@@ -317,23 +288,16 @@ export default Vue.extend({
     this.fetchListings();
     const countries = await this.$countriesApi.index();
     this.countries = countries.data;
-    if (this.lister.is_id_card_verified == 0) {
+    if (!this.isVerified) {
       this.not_approved_message = `Hi ${this.lister.first_name}, Your account is being approved. We will send you an email once it's approved, Thank you.`;
-
-      (this as any as IMixinState).$confirm(
-        `Hi ${this.lister.first_name}, Your account is being approved. We will send you an email once it's approved, Thank you.`,
-        {
-          confirmButtonText: 'OK',
-          cancelButtonText: 'Cancel',
-          type: 'warning',
-        }
-      );
     }
   },
-  methods: {
-    birthDate(date: any) {
-      this.$moment(date.format('MMM DD, YY'));
+  computed: {
+    isVerified() {
+      return this.$auth.user.is_id_card_verified !== 0;
     },
+  },
+  methods: {
     async fetchFavorites() {
       const userFavorite = await this.$userFavoriteApi.index();
 
@@ -352,7 +316,6 @@ export default Vue.extend({
     async fetchData() {
       const user = this.$auth.user;
 
-      console.log(user, 'user');
       this.lister = {
         id: user.id,
         first_name: user.first_name,
@@ -372,24 +335,21 @@ export default Vue.extend({
           listing_id: id,
         });
         console.log(favoriteResponse);
-        (this as any as IMixinState).$message({
+        this.mixinState.$message({
           showClose: true,
           message: 'Added property to favourite!',
           type: 'success',
         });
         this.fetchFavorites();
       } catch (error: any) {
-        (this as any as IMixinState).catchError(error);
+        this.mixinState.catchError(error);
         console.log(error?.response);
       }
     },
     onPhoneUpdate(e: any) {
-      console.log(e);
       this.lister.phone_number = e.formattedNumber;
       this.countries.filter((country: any) =>
-        country.short_name == e.countryCode
-          ? (this.lister.country_id = country.id)
-          : ''
+        country.short_name == e.countryCode ? (this.lister.country_id = country.id) : ''
       );
     },
     getAvatar(file: any) {
@@ -425,26 +385,17 @@ export default Vue.extend({
         user_type: this.lister.user_type,
       };
       try {
-        const profileResponse = await this.$userUpdateApi.update(
-          'update',
-          data
-        );
+        const profileResponse = await this.$userUpdateApi.update('update', data);
         this.$auth.setUser(profileResponse.data.user);
 
         this.loading = false;
-        (this as any as IMixinState).getNotification(
-          'Update successfull!',
-          'success'
-        );
+        this.mixinState.getNotification('Update successfull!', 'success');
       } catch (error: any) {
         if (error?.response?.data) {
-          (this as any as IMixinState).getNotification(
-            error.response.data.message,
-            'error'
-          );
+          this.mixinState.getNotification(error.response.data.message, 'error');
         }
         this.loading = false;
-        (this as any as IMixinState).catchError(error);
+        this.mixinState.catchError(error);
       }
     },
 
@@ -455,13 +406,13 @@ export default Vue.extend({
 
         this.loading = false;
         this.fetchData();
-        (this as any as IMixinState).$message({
+        this.mixinState.$message({
           showClose: true,
           message: ImageResponse.message,
           type: 'success',
         });
       } catch (error) {
-        (this as any as IMixinState).catchError(error);
+        this.mixinState.catchError(error);
       }
     },
     submit_password() {
@@ -471,7 +422,7 @@ export default Vue.extend({
           this.updatePassword();
         } else {
           this.loading = false;
-          (this as any as IMixinState).getNotification(
+          this.mixinState.getNotification(
             'Make sure all required fields are filled',
             'error'
           );
@@ -481,26 +432,21 @@ export default Vue.extend({
     },
     async updatePassword(): Promise<void> {
       try {
-        const response = await this.$passwordApi.create({
+        await this.$passwordApi.create({
           current_password: this.current_password,
           new_password: this.passwords.new_password,
           confirm_password: this.passwords.confirm_password,
         });
 
-        console.log(response);
-
-        (this as any as IMixinState).$confirm(
-          'Password Changed Successfully!',
-          {
-            confirmButtonText: 'OK',
-            cancelButtonText: 'Cancel',
-            type: 'success',
-          }
-        );
+        this.mixinState.$confirm('Password Changed Successfully!', {
+          confirmButtonText: 'OK',
+          showCancelButton: false,
+          type: 'success',
+        });
         this.loading = false;
       } catch (error) {
         this.loading = false;
-        (this as any as IMixinState).catchError(error);
+        this.mixinState.catchError(error);
       }
     },
   },
@@ -513,22 +459,9 @@ $medium_screen: 769px;
 .not_approved_message {
   text-align: center;
   color: white;
-  margin: 0 auto;
-  widows: 70%;
-  p {
-    background: hsla(0, 100%, 64%, 0.9);
-    // border: 2px solid hsla(0, 89%, 57%, 0.9);
-    border-radius: 20px;
-    padding: 10px 0;
-    i {
-      color: orange;
-      font-size: 20px;
-      padding-right: 10px;
-    }
-    @media (max-width: $medium_screen) {
-      padding: 10px;
-    }
-  }
+  background: hsla(0, 76%, 54%, 0.9);
+  border-radius: 20px;
+  padding: 10px;
 }
 .profile_header {
   padding: 20px 0;

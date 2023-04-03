@@ -1,9 +1,14 @@
 <template>
   <div class="login_content">
     <div class="login_form">
-      <p v-if="errorInfo" style="color: red">
-        {{ errorInfo }}
-      </p>
+      <el-alert
+        v-if="error"
+        title="Error with signing in"
+        type="error"
+        :description="errorMessage"
+        show-icon>
+      </el-alert>
+      <br />
       <el-form
         ref="loginForm"
         :model="loginForm"
@@ -76,8 +81,10 @@ export default Vue.extend({
   name: 'LoginForm',
   data() {
     return {
+      mixinState: this as any as IMixinState,
       btnLoading: false as boolean,
-      errorInfo: '' as string,
+      errorMessage: '' as string,
+      error: false,
       loginForm: {
         email: '' as string,
         password: '' as string,
@@ -107,24 +114,8 @@ export default Vue.extend({
           this.checkUserVerification();
         } else {
           this.btnLoading = false;
-          (this as any as IMixinState).getNotification(
-            'Make sure all required fields are filled',
-            'error'
-          );
+          return false;
         }
-      });
-    },
-    login(response: any) {
-      const { user, token } = response.data.data;
-
-      this.$auth.setUserToken(token);
-      this.$auth.setUser(user);
-      window.location.reload();
-      this.$emit('closeLoginModal');
-      (this as any as IMixinState).$message({
-        showClose: true,
-        message: response.data.message,
-        type: 'success',
       });
     },
     checkUserVerification() {
@@ -138,67 +129,60 @@ export default Vue.extend({
         .then((response: any) => {
           this.btnLoading = false;
           const message = response.data.message;
-          if (
-            message ==
-            'An email has been set to you in order to complete your registration'
-          ) {
-            this.errorInfo =
+          if (message.includes('email')) {
+            this.errorMessage =
               'An email has been set to you in order to complete your registration';
+            this.error = true;
             (this as any as IMixinState).getNotification(
               'Verify your email address to continue',
               'warning'
             );
           } else {
             this.login(response);
-            this.errorInfo = '';
+            this.errorMessage = '';
           }
         })
         .catch((error: any) => {
           this.btnLoading = false;
-          (this as any as IMixinState).catchError(error);
+          this.mixinState.catchError(error);
           if (error?.response) {
-            this.errorInfo = 'Invalid Credentials';
-            (this as any as IMixinState).getNotification(
-              error?.response?.data.message,
-              'error'
-            );
-          } else {
+            this.error = true;
+            this.errorMessage = 'Invalid Credentials';
           }
         });
     },
-    facebookSignIn() {
-      this.$auth
-        .loginWith('facebook')
-        .then((response: any) => {
-          console.log(response);
-        })
-        .catch((error: any) => {
-          console.log(error);
-          // this.btnLoading = false;
-          // (this as any as IMixinState).catchError(error);
-        });
-    },
-    googleSignIn() {
-      this.$auth
-        .loginWith('google')
-        .then((response: any) => {
-          // const { user, token } = response.data.data;
-          console.log(response);
+    login(response: any) {
+      const { user, token } = response.data.data;
 
-          // this.$auth.setUserToken(token);
-          // this.$auth.setUser(user);
-          // this.$emit("closeLoginModal");
-          // this.$message({
-          //   message: response.data.message,
-          //   type: "success",
-          // });
-        })
-        .catch((error: any) => {
-          console.log(error);
-          // this.btnLoading = false;
-          // (this as any as IMixinState).catchError(error);
-        });
+      this.$auth.setUserToken(token);
+      this.$auth.setUser(user);
+      window.location.reload();
+      this.$emit('closeLoginModal');
+      this.mixinState.$message({
+        showClose: true,
+        message: response.data.message,
+        type: 'success',
+      });
     },
+    // facebookSignIn() {
+    //   this.$auth
+    //     .loginWith('facebook')
+    //     .then((response: any) => {
+    //       console.log(response);
+    //     })
+    //     .catch((error: any) => {
+    //       console.log(error);
+    //     });
+    // },
+    // googleSignIn() {
+    //   this.$auth
+    //     .loginWith('google')
+    //     .then((response: any) => {
+    //     })
+    //     .catch((error: any) => {
+    //       console.log(error);
+    //     });
+    // },
   },
 });
 </script>

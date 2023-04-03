@@ -189,7 +189,7 @@ export default Vue.extend({
     };
   },
   created() {
-    this.fetchListings();
+    // this.fetchListings();
     // this.$auth.user && !this.$auth.user.user_type && this.$auth.state.strategy == 'facebook'
     //   ? this.facebookAuth()
     //   : '';

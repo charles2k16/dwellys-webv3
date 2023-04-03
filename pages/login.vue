@@ -1,38 +1,31 @@
 <template>
   <div class="login_form">
     <h2 class="center pb-20">Login</h2>
-    <p v-if="showVerifyInfo" style="color: red">
-      Verify your email address to continue
-    </p>
-    <el-form
-      ref="loginForm"
-      :model="loginForm"
-      label-position="top"
-      :rules="validation"
-    >
+    <el-alert
+      v-if="showVerifyInfo"
+      title="Error with signing in"
+      type="error"
+      description="Verify your email address to continue"
+      show-icon>
+    </el-alert>
+    <el-form ref="loginForm" :model="loginForm" label-position="top" :rules="validation">
       <el-form-item label="Email address" prop="email">
         <el-input
           v-model="loginForm.email"
           placeholder="Enter email"
-          prefix-icon="el-icon-message"
-        />
+          prefix-icon="el-icon-message" />
       </el-form-item>
       <el-form-item label="Password">
         <el-input
           v-model="loginForm.password"
           type="password"
           placeholder="Enter your password"
-          show-password
-        >
+          show-password>
         </el-input>
       </el-form-item>
       <NuxtLink to="/reset_password"><p>Forgotten password ?</p></NuxtLink>
       <div class="mt-20">
-        <el-button
-          type="primary"
-          class="btn_lg"
-          @click="signIn"
-          :loading="btnLoading"
+        <el-button type="primary" class="btn_lg" @click="signIn" :loading="btnLoading"
           >Continue</el-button
         >
       </div>
@@ -98,10 +91,7 @@ export default Vue.extend({
           this.checkUserVerification();
         } else {
           this.btnLoading = false;
-          (this as any as IMixinState).getNotification(
-            'Make sure all required fields are filled',
-            'error'
-          );
+          return false;
         }
       });
     },
@@ -127,15 +117,8 @@ export default Vue.extend({
         .then((response: any) => {
           this.btnLoading = false;
           const message = response.data.message;
-          if (
-            message ==
-            'An email has been set to you in order to complete your registration'
-          ) {
+          if (message.includes('email')) {
             this.showVerifyInfo = true;
-            (this as any as IMixinState).getNotification(
-              'Verify your email address to continue',
-              'warning'
-            );
           } else {
             this.login(response);
           }

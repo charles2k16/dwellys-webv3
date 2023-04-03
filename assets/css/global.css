@@ -63,9 +63,11 @@ b {
 small {
   font-size: 11px;
 }
+.small_md {
+  font-size: 14px;
+}
 h1 {
   font-family: var(--font-header-reg), sans-serif;
-
   font-size: 36px;
 }
 h2 {
