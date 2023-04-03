@@ -1,11 +1,11 @@
 <template>
   <div class="section registerForm_content">
-    <!-- <div class="social_register_container">
+    <div class="social_register_container">
       <div class="pb-20">
         <h3>Create an account</h3>
-        <p class="mt-10">Provide information about yourself for identity</p>
+        <p class="mt-10 text-grey">Provide information about yourself for identity</p>
       </div>
-      <div class="social_register">
+      <!-- <div class="social_register">
         <div class="facebook" @click="facebookSignIn">
           <img src="~/assets/img/facebook.png" width="25px" />
           <p class="pl-5">Register with Facebook</p>
@@ -14,18 +14,17 @@
           <img src="~/assets/img/google.png" />
           <p>Register with Google</p>
         </div>
-      </div>
-    </div> -->
+      </div> -->
+    </div>
 
-    <!-- <hr class="hr_rule" /> -->
+    <hr class="hr_rule" />
 
     <div class="registerForm_form">
       <el-form
         ref="registerForm"
         :model="registerForm"
         label-position="top"
-        :rules="validation"
-      >
+        :rules="validation">
         <div class="personal_info_section pb-20">
           <div class="registerForm_label">
             <h4>Name</h4>
@@ -35,19 +34,13 @@
             <el-row class="first_last">
               <el-col :xs="24" :sm="12" class="register_first_name">
                 <el-form-item label="First Name" prop="first_name">
-                  <el-input
-                    v-model="registerForm.first_name"
-                    placeholder="First name"
-                  >
+                  <el-input v-model="registerForm.first_name" placeholder="First name">
                   </el-input>
                 </el-form-item>
               </el-col>
               <el-col :xs="24" :sm="12">
                 <el-form-item label="Last Name" prop="last_nname">
-                  <el-input
-                    v-model="registerForm.last_name"
-                    placeholder="Last Name"
-                  >
+                  <el-input v-model="registerForm.last_name" placeholder="Last Name">
                   </el-input>
                 </el-form-item>
               </el-col>
@@ -59,8 +52,7 @@
                   <el-date-picker
                     v-model="registerForm.dob"
                     type="date"
-                    placeholder="Pick a day"
-                  >
+                    placeholder="Pick a day">
                   </el-date-picker>
                 </el-form-item>
               </el-col>
@@ -68,18 +60,14 @@
             <el-row :gutter="20">
               <el-col :xs="24" :sm="24" :md="24">
                 <el-form-item label="Password" prop="password">
-                  <el-input v-model="registerForm.password" type="password">
-                  </el-input>
+                  <el-input v-model="registerForm.password" type="password"> </el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row :gutter="20">
               <el-col :xs="24" :sm="24" :md="24">
                 <el-form-item label="Confirm Password" prop="confirm_password">
-                  <el-input
-                    v-model="registerForm.confirm_password"
-                    type="password"
-                  >
+                  <el-input v-model="registerForm.confirm_password" type="password">
                   </el-input>
                 </el-form-item>
               </el-col>
@@ -97,8 +85,7 @@
               <el-input
                 v-model="registerForm.email"
                 type="email"
-                placeholder="Enter email"
-              >
+                placeholder="Enter email">
               </el-input>
             </el-form-item>
             <el-form-item label="Phone number">
@@ -106,15 +93,14 @@
                 v-model="phone"
                 :border-radius="7"
                 default-country-code="GH"
-                @update="onPhoneUpdate"
-              />
+                @update="onPhoneUpdate" />
             </el-form-item>
 
             <div class="mt-10">
               <small>
-                By selecting Agree and continue, I agree to Dwellys Terms of
-                Service, Payments Terms of Service, and Nondiscrimination Policy
-                and acknowledge the Privacy Policy.</small
+                By selecting Agree and continue, I agree to Dwellys Terms of Service,
+                Payments Terms of Service, and Nondiscrimination Policy and acknowledge
+                the Privacy Policy.</small
               >
             </div>
             <div class="mt-20 register_btn">
@@ -134,10 +120,10 @@
       <div class="pb-10">
         <img src="~/assets/img/logo.jpg" class="user_img_logo" />
       </div>
-      <small>
-        Dwellys International Limited (dwellys) is a company registered in Ghana
-        with company registration number CS234262018 at 8th Floor, Silver Star
-        Tower, Airport City, Accra - Ghana.
+      <small class="text-grey">
+        Dwellys International Limited (dwellys) is a company registered in Ghana with
+        company registration number CS234262018 at 8th Floor, Silver Star Tower, Airport
+        City, Accra - Ghana.
       </small>
     </div>
   </div>
@@ -223,9 +209,7 @@ export default Vue.extend({
   async created() {
     const countries = await this.$countriesApi.index();
     countries.data.filter((country: any) =>
-      country.short_name == 'GH'
-        ? (this.registerForm.country_id = country.id)
-        : ''
+      country.short_name == 'GH' ? (this.registerForm.country_id = country.id) : ''
     );
     this.countries = countries.data;
   },
@@ -360,7 +344,7 @@ $small_screen: 426px;
   }
   .user_registerForm_footer {
     padding: 80px 0 30px;
-    width: 20%;
+    width: 25%;
     .user_img_logo {
       width: 100px;
       height: 20px;

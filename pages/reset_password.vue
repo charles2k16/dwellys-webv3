@@ -3,9 +3,9 @@
     <div>
       <div class="forgotten_text mb-20 mt-20">
         <h3>Have you forgotten your password?</h3>
-        <p>
-          Enter the e-mail address to which you registered your account in the
-          system, and we’ll send you reset instructions.
+        <p class="text-grey">
+          Enter the e-mail address to which you registered your account in the system, and
+          we’ll send you reset instructions.
         </p>
       </div>
       <hr class="hr_rule" />
@@ -16,14 +16,9 @@
           :model="name"
           class="client"
           :rules="validation"
-          label-position="top"
-        >
+          label-position="top">
           <el-form-item label="Email address" prop="email">
-            <el-input
-              v-model="name.email"
-              type="email"
-              placeholder="Enter email"
-            >
+            <el-input v-model="name.email" type="email" placeholder="Enter email">
             </el-input>
           </el-form-item>
         </el-form>
@@ -89,27 +84,19 @@ export default Vue.extend({
         const register = await this.$forgottenPassApi.create(this.name);
         console.log(register);
         this.loading = false;
-        this.$confirm(
-          register.message,
-          'Check your email for further instructions',
-          {
-            confirmButtonText: 'Continue',
-            type: 'success',
-          }
-        ).then(() => {
+        this.$confirm(register.message, 'Check your email for further instructions', {
+          confirmButtonText: 'Continue',
+          type: 'success',
+        }).then(() => {
           this.$router.push('/login');
         });
       } catch (error: any) {
         this.loading = false;
         if (error?.response?.data) {
-          this.$confirm(
-            error?.response?.data?.message,
-            'Your email is incorrect!',
-            {
-              confirmButtonText: 'Continue',
-              type: 'success',
-            }
-          );
+          this.$confirm(error?.response?.data?.message, 'Your email is incorrect!', {
+            confirmButtonText: 'Continue',
+            type: 'success',
+          });
         }
         this.name.email = '';
         (this as any as IMixinState).catchError(error);
