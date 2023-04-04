@@ -29,8 +29,6 @@
                 </el-option>
               </el-select>
             </div>
-
-            <!-- </el-col>  -->
           </div>
           <div class="property_content" v-loading="pageLoad">
             <div v-for="property in propertyTypes" :key="property.id">
@@ -40,9 +38,10 @@
                 :style="
                   selectedProperty == property.name && {
                     backgroundColor: '#F1F5F9',
+                    border: '1px solid #1E293B',
                   }
                 ">
-                <div class="d-flex_column">
+                <div>
                   <p class="text-grey">
                     <b> {{ property.name }} </b>
                   </p>
@@ -89,34 +88,37 @@
               v-for="(spec, index) in propertyUpload.other_specifications"
               :key="spec.id">
               <div class="other_specs">
-                <div>
-                  <div class="inner_specs">
-                    <el-input v-model="spec.name" placeholder="Please specify if other">
-                    </el-input>
+                <div class="inner_specs mb-10">
+                  <el-input
+                    v-model="spec.name"
+                    placeholder="Please specify if other"
+                    class="text">
+                  </el-input>
 
-                    <el-input-number
-                      :min="0"
-                      :disabled="!spec.name"
-                      size="small"
-                      v-model="spec.number">
-                      {{ spec.number }}
-                    </el-input-number>
-                  </div>
-                  <p
-                    v-if="index != 0"
-                    class="d-flex justify_end p-20"
-                    style="color: red"
-                    @click="removeSpec(index)">
-                    <i class="el-icon-delete-solid" style="font-weight: 600"></i>
-                  </p>
+                  <el-input-number
+                    :min="0"
+                    :disabled="!spec.name"
+                    size="small"
+                    v-model="spec.number">
+                    {{ spec.number }}
+                  </el-input-number>
                 </div>
+                <p
+                  v-if="index != 0"
+                  class="d-flex justify_end mt-10"
+                  style="color: red"
+                  @click="removeSpec(index)">
+                  <i class="el-icon-delete-solid"></i>
+                </p>
+
                 <p>For other living areas, please specify, eg, Patio, lounge, pool</p>
               </div>
             </div>
             <div class="d-flex justify_end mb-10">
-              <el-button @click="addSpecSection"
-                ><i class="el-icon-plus mr-10"></i>Add another section</el-button
-              >
+              <span class="add_button" @click="addSpecSection">
+                <span class="material-icons mr-5">add</span>
+                Add another section
+              </span>
             </div>
           </div>
         </div>
@@ -142,7 +144,7 @@
                     ? { background: '#E2E8F0' }
                     : { background: '#fff' }
                 ">
-                <div class="">
+                <div>
                   <!-- <img :src="getSvg(property.img)" class="pt-10" /> -->
                   <p class="mt-30">{{ property.name }}</p>
                 </div>
@@ -170,8 +172,12 @@
               id="img"
               accept="image/x-png,image/jpeg" />
             <label for="img" class="property_image_main d-flex_column justify_center">
-              <i class="el-icon-upload"></i><br />
-              Drop file here or <em>click to upload</em></label
+              <span class="material-icons" style="color: #cbd5e1">cloud_upload</span
+              ><br />
+              Drag and drop or browse to choose a file <br />
+              <small
+                >We advice you use high quality images with proper lighting</small
+              ></label
             >
           </div>
 
@@ -708,6 +714,7 @@ $medium_screen: 769px;
       .property_main_content {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         border: 1px solid #e2e8f0;
         border-radius: 12px;
         margin-bottom: 10px;
@@ -729,6 +736,18 @@ $medium_screen: 769px;
           height: 50px;
           width: 100%;
         }
+      }
+
+      .add_button {
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 8px 15px 8px 12px;
+        color: #64748b;
+        font-size: 14px;
+        cursor: pointer;
       }
     }
   }
@@ -771,6 +790,12 @@ $medium_screen: 769px;
         border-radius: 8px;
         text-align: center;
         padding: 20px;
+        height: 132.03px;
+        cursor: pointer;
+
+        p {
+          color: #64748b;
+        }
       }
     }
   }
@@ -801,6 +826,14 @@ $medium_screen: 769px;
   .inner_specs {
     display: flex;
     justify-content: space-between;
+
+    .el-input.text {
+      width: 50%;
+
+      .el-input__inner {
+        background: white;
+      }
+    }
   }
 
   .region {

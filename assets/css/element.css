@@ -365,6 +365,15 @@
   max-width: 800px !important;
 }
 
+.el-loading-spinner .path {
+  stroke-width: 3;
+  stroke: #ff0404;
+}
+
+.el-slider__runway.disabled .el-slider__bar {
+  background-color: #1e293b;
+}
+
 @media (max-width: 1024px) {
   .el-drawer__open .el-drawer.rtl {
     width: 40% !important;
