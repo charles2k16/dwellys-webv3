@@ -77,7 +77,7 @@
                 <div class="details_div">
                   <el-row :gutter="20" class="pb-20">
                     <el-col :xs="24" :sm="24" :md="12">
-                      <p class="info_label">First Name</p>
+                      <p class="info_label mb-10">First Name</p>
                       <!-- <p v-if="!editInfo" class="profile_info">
                         {{ lister.first_name }}
                       </p> -->
@@ -85,7 +85,7 @@
                       </el-input>
                     </el-col>
                     <el-col :xs="24" :sm="24" :md="12" class="last_name">
-                      <p class="info_label">Last Name</p>
+                      <p class="info_label mb-10">Last Name</p>
                       <!-- <p v-if="!editInfo" class="profile_info">
                         {{ lister.last_name }}
                       </p> -->
@@ -94,9 +94,9 @@
                     </el-col>
                   </el-row>
 
-                  <el-row v-if="!isVerified" :gutter="20">
+                  <el-row v-if="!isVerified" :gutter="20" class="mt-20">
                     <el-col :xs="24" :sm="24" :md="24">
-                      <p class="info_label">Date of birth</p>
+                      <p class="info_label mb-10">Date of birth</p>
 
                       <p class="profile_info pb-10">
                         {{ lister.dob }}
@@ -112,12 +112,13 @@
                   <p class="info_label">Contact information</p>
                 </div>
                 <div class="details_div">
-                  <p>Email address</p>
+                  <p class="mb-10">Email address</p>
                   <!-- <p class="profile_info">{{ lister.email }}</p> -->
                   <el-input v-model="lister.email" type="email" placeholder="Enter email">
                   </el-input>
-                  <div class="pt-20 pb-10">
-                    <p class="info_label pb-5">Phone number</p>
+                  <br /><br />
+                  <div class="mt-10 pb-10">
+                    <p class="info_label mb-10">Phone number</p>
                     <p class="profile_info">
                       {{ lister.phone_number }}
                     </p>
@@ -154,7 +155,7 @@
             <div class="security_details">
               <div>
                 <div class="pb-30">
-                  <p class="info_label">Current password</p>
+                  <p class="info_label mb-10">Current password</p>
                   <el-input
                     v-model="current_password"
                     type="password"
@@ -554,8 +555,9 @@ $medium_screen: 769px;
     padding-top: 0;
   }
   p {
-    color: #000000;
+    color: #334155;
     font-weight: 600;
+    font-size: 14px;
   }
 }
 .security {

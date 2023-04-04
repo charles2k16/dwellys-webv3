@@ -133,10 +133,6 @@ export default Vue.extend({
             this.errorMessage =
               'An email has been set to you in order to complete your registration';
             this.error = true;
-            (this as any as IMixinState).getNotification(
-              'Verify your email address to continue',
-              'warning'
-            );
           } else {
             this.login(response);
             this.errorMessage = '';

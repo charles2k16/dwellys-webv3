@@ -5,36 +5,34 @@
         <div class="center">
           <div class="property_upload_head">
             <h3>What kind of property do you want to upload?</h3>
-            <small
-              >Lorem ipsum dolor sit amet, consectetur adipiscing elit.</small
-            >
+            <small>This describes the kind of property you have or want to share.</small>
           </div>
           <div class="block slider">
             <el-slider v-model="step" disabled :min="1" :max="7"></el-slider>
           </div>
         </div>
 
-        <div class="property_content_container" v-loading="pageLoad">
-          <div class="d-flex_column pb-20 pt-20 justify_center">
-            <p><b>Select Category</b></p>
-            <el-select
-              v-model="category"
-              placeholder="Select"
-              class="category pt-10"
-              @change="getCategory($event)"
-            >
-              <el-option
-                v-for="category in categories"
-                :key="category.id"
-                :value="category.name"
-                class="my-5"
-                style="text-align: center"
-              >
-              </el-option>
-            </el-select>
+        <div class="property_content_container">
+          <div class="d-flex_column justify_center">
+            <p class="text-grey"><b>Do you want to rent or sell etc.?</b></p>
+            <div class="mt-10">
+              <el-select
+                v-model="category"
+                placeholder="Select category"
+                class="full_width"
+                @change="getCategory($event)">
+                <el-option
+                  v-for="category in categories"
+                  :key="category.id"
+                  :value="category.name"
+                  class="my-5">
+                </el-option>
+              </el-select>
+            </div>
+
             <!-- </el-col>  -->
           </div>
-          <div class="property_content">
+          <div class="property_content" v-loading="pageLoad">
             <div v-for="property in propertyTypes" :key="property.id">
               <div
                 class="property_main_content"
@@ -43,13 +41,12 @@
                   selectedProperty == property.name && {
                     backgroundColor: '#F1F5F9',
                   }
-                "
-              >
+                ">
                 <div class="d-flex_column">
-                  <p>
+                  <p class="text-grey">
                     <b> {{ property.name }} </b>
                   </p>
-                  <p class="property_description">
+                  <p class="property_description mt-5">
                     {{ property.description }}
                   </p>
                 </div>
@@ -74,82 +71,51 @@
           <div class="property_content pt-10">
             <div v-for="spec in propertySpecs.specifications" :key="spec.id">
               <div class="property_main_content">
-                <div class="d-flex_column">
-                  <p>
-                    <b> {{ spec.name }} </b>
-                  </p>
-                </div>
-                <div class="d-flex">
-                  <el-input-number
-                    :min="0"
-                    size="small"
-                    @change="getSpec(spec.number, spec.id, spec.name)"
-                    v-model="spec.number"
-                  >
-                    {{ spec.number ? spec.number : 0 }}
-                    <!-- v-model="propertyUpload.specifications.number" -->
-                  </el-input-number>
-                </div>
+                <p>
+                  <b> {{ spec.name }} </b>
+                </p>
+
+                <el-input-number
+                  :min="0"
+                  size="small"
+                  @change="getSpec(spec.number, spec.id, spec.name)"
+                  v-model="spec.number">
+                  {{ spec.number ? spec.number : 0 }}
+                  <!-- v-model="propertyUpload.specifications.number" -->
+                </el-input-number>
               </div>
             </div>
             <div
               v-for="(spec, index) in propertyUpload.other_specifications"
-              :key="spec.id"
-            >
+              :key="spec.id">
               <div class="other_specs">
                 <div>
                   <div class="inner_specs">
-                    <div class="d-flex_column">
-                      <el-input
-                        v-model="spec.name"
-                        placeholder="Please specify if other"
-                      >
-                      </el-input>
-                    </div>
-                    <div class="d-flex">
-                      <el-input-number
-                        :min="0"
-                        :disabled="!spec.name"
-                        size="small"
-                        v-model="spec.number"
-                      >
-                        {{ spec.number }}
-                      </el-input-number>
-                    </div>
-                    <!-- <p
-                    v-if="index != 0"
-                    class="w-50 d-flex justify_end m-10"
-                    style="color: red"
-                    @click="removeSpec(index)"
-                  >
-                    <i
-                      class="el-icon-delete-solid"
-                      style="font-weight: 600"
-                    ></i>
-                  </p> -->
+                    <el-input v-model="spec.name" placeholder="Please specify if other">
+                    </el-input>
+
+                    <el-input-number
+                      :min="0"
+                      :disabled="!spec.name"
+                      size="small"
+                      v-model="spec.number">
+                      {{ spec.number }}
+                    </el-input-number>
                   </div>
                   <p
                     v-if="index != 0"
                     class="d-flex justify_end p-20"
                     style="color: red"
-                    @click="removeSpec(index)"
-                  >
-                    <i
-                      class="el-icon-delete-solid"
-                      style="font-weight: 600"
-                    ></i>
+                    @click="removeSpec(index)">
+                    <i class="el-icon-delete-solid" style="font-weight: 600"></i>
                   </p>
                 </div>
-                <p>
-                  For other living areas, please specify, eg, Patio, lounge,
-                  pool
-                </p>
+                <p>For other living areas, please specify, eg, Patio, lounge, pool</p>
               </div>
             </div>
             <div class="d-flex justify_end mb-10">
               <el-button @click="addSpecSection"
-                ><i class="el-icon-plus mr-10"></i>Add another
-                section</el-button
+                ><i class="el-icon-plus mr-10"></i>Add another section</el-button
               >
             </div>
           </div>
@@ -175,8 +141,7 @@
                   propertyUpload.property_amenities_id.includes(property.id)
                     ? { background: '#E2E8F0' }
                     : { background: '#fff' }
-                "
-              >
+                ">
                 <div class="">
                   <!-- <img :src="getSvg(property.img)" class="pt-10" /> -->
                   <p class="mt-30">{{ property.name }}</p>
@@ -203,12 +168,8 @@
               @change="toggleUpload"
               style="display: none"
               id="img"
-              accept="image/x-png,image/jpeg"
-            />
-            <label
-              for="img"
-              class="property_image_main d-flex_column justify_center"
-            >
+              accept="image/x-png,image/jpeg" />
+            <label for="img" class="property_image_main d-flex_column justify_center">
               <i class="el-icon-upload"></i><br />
               Drop file here or <em>click to upload</em></label
             >
@@ -219,8 +180,7 @@
               <img :src="image.photo" width="70px" class="mx-10 my-10" />
               <i
                 class="el-icon-delete-solid deleteImgIcon"
-                @click="removeUpload(index)"
-              ></i>
+                @click="removeUpload(index)"></i>
             </div>
           </div>
           <p v-if="imageErr" style="color: red">{{ imageErr }}</p>
@@ -241,17 +201,12 @@
           <el-row class="pb-20">
             <el-col :sm="12" class="pb-20 d-flex_column pr-20">
               <span>Country</span>
-              <el-select
-                v-model="country"
-                placeholder="Select"
-                class="region pt-10"
-              >
+              <el-select v-model="country" placeholder="Select" class="region pt-10">
                 <el-option
                   v-for="(country, index) in countries"
                   :key="index"
                   :value="country.id"
-                  :label="country.full_name"
-                >
+                  :label="country.full_name">
                 </el-option>
               </el-select>
               <!-- <el-input v-model="country" placeholder="Country"> </el-input> -->
@@ -261,13 +216,11 @@
               <el-select
                 v-model="propertyUpload.region"
                 placeholder="Select"
-                class="region pt-10"
-              >
+                class="region pt-10">
                 <el-option
                   v-for="region in Object.keys(regions)"
                   :key="region"
-                  :value="region"
-                >
+                  :value="region">
                 </el-option>
               </el-select>
             </el-col>
@@ -296,13 +249,11 @@
               <el-select
                 v-model="propertyUpload.location"
                 placeholder="Location"
-                class="region pt-10"
-              >
+                class="region pt-10">
                 <el-option
                   v-for="region in regions[propertyUpload.region]"
                   :key="region"
-                  :value="region"
-                >
+                  :value="region">
                 </el-option>
               </el-select>
             </el-col>
@@ -333,15 +284,9 @@
             </el-col> -->
             <el-col :sm="12" class="pb-20 pl-5 w-100 d-flex_column">
               <span class="pb-10">Property Price</span>
-              <el-input
-                v-model="propertyUpload.price"
-                type="number"
-                placeholder="200"
-              >
+              <el-input v-model="propertyUpload.price" type="number" placeholder="200">
                 <template slot="prepend">GH&#8373; </template>
-                <template slot="append" v-if="category == 'Rent'"
-                  >per month</template
-                >
+                <template slot="append" v-if="category == 'Rent'">per month</template>
               </el-input>
             </el-col>
           </el-row>
@@ -351,8 +296,7 @@
               type="textarea"
               :rows="2"
               placeholder="Please property description"
-              v-model="propertyUpload.description"
-            >
+              v-model="propertyUpload.description">
             </el-input>
           </div>
         </div>
@@ -373,9 +317,7 @@
       </div>
       <hr class="hr_rule" />
       <div class="property_upload_btns pt-10">
-        <el-button type="info" @click="toPrev" :disabled="step === 1"
-          >Back</el-button
-        >
+        <el-button type="info" @click="toPrev" :disabled="step === 1">Back</el-button>
         <el-button
           type="primary"
           class="btn_sm submit_register_button"
@@ -390,8 +332,7 @@
           class="btn_sm submit_register_button"
           @click="toNext"
           :disabled="!isValid"
-          v-else
-        >
+          v-else>
           Next</el-button
         >
       </div>
@@ -419,7 +360,7 @@ export default Vue.extend({
       step: 1 as number,
       // regions: {},
       category: '' as string,
-      pageLoad: false as boolean,
+      pageLoad: true as boolean,
       country: 'Ghana' as string,
       propLoad: false as boolean,
       propertySelected: false as boolean,
@@ -484,11 +425,8 @@ export default Vue.extend({
       const authors = await regionsAndCities;
       this.regions = authors;
 
-      const getOne = Object.keys(authors);
-      const values = authors['Ahafo'];
-      // console.log(getOne);
-
-      console.log(values);
+      // const getOne = Object.keys(authors);
+      // const values = authors['Ahafo'];
 
       const propertyTypes = await this.$propertyTypesApi.index();
       this.propertyTypes = propertyTypes.data;
@@ -496,27 +434,21 @@ export default Vue.extend({
 
       const listingPlans = await this.$listingPlansApi.index();
 
-      const plans = listingPlans.data.filter(
-        (plan: any) => plan.is_active == 1
-      );
-      console.log(plans);
+      const plans = listingPlans.data.filter((plan: any) => plan.is_active == 1);
+
       this.pricingPlans = plans;
 
       const countries = await this.$countriesApi.index();
       countries.data.filter((country: any) =>
-        country.short_name == 'GH'
-          ? (this.propertyUpload.country_id = country.id)
-          : ''
+        country.short_name == 'GH' ? (this.propertyUpload.country_id = country.id) : ''
       );
       // this.countries = countries.data;
       // this.propertyTypes.country
-      console.log(this.countries);
 
       // if (navigator.geolocation) {
       //   navigator.geolocation.getCurrentPosition(this.showPosition);
       // }
     } catch (error: any) {
-      console.log(error);
       if (error?.response?.data) {
         (this as any as IMixinState).getNotification(
           'Please, login as an agent!',
@@ -534,15 +466,9 @@ export default Vue.extend({
         this.propertyUpload.listing_category_id != ''
       ) {
         valid = true;
-      } else if (
-        this.step == 2 &&
-        this.propertyUpload.specifications.length > 0
-      ) {
+      } else if (this.step == 2 && this.propertyUpload.specifications.length > 0) {
         valid = true;
-      } else if (
-        this.step == 3 &&
-        this.propertyUpload.property_amenities_id.length > 0
-      ) {
+      } else if (this.step == 3 && this.propertyUpload.property_amenities_id.length > 0) {
         valid = true;
       } else if (this.step == 4 && this.listing_photos.length > 0) {
         valid = true;
@@ -635,35 +561,23 @@ export default Vue.extend({
       this.propertySpecs = property.data;
       this.amenities = property.data.amenities;
       this.propertySpecs ? (this.propLoad = false) : (this.propLoad = true);
-
-      console.log(property);
     },
     getAmenities(property: any): void {
-      let singlePlan = Object.assign(
-        [],
-        this.propertyUpload.property_amenities_id
-      );
+      let singlePlan = Object.assign([], this.propertyUpload.property_amenities_id);
       if (this.propertyUpload.property_amenities_id) {
-        let amenityIndex = this.propertyUpload.property_amenities_id.indexOf(
-          property.id
-        );
+        let amenityIndex = this.propertyUpload.property_amenities_id.indexOf(property.id);
         singlePlan.includes(property.id)
           ? this.propertyUpload.property_amenities_id.splice(amenityIndex, 1)
           : this.propertyUpload.property_amenities_id.push(property.id);
       }
-
-      console.log(this.propertyUpload.property_amenities_id);
     },
     getSpec(num: Number, specId: string, name: string) {
-      let specifications = Object.assign(
-        [],
-        this.propertyUpload.specifications
-      );
+      let specifications = Object.assign([], this.propertyUpload.specifications);
 
       let specIndex = specifications.findIndex(
         (spec: any) => spec.property_type_specification_id == specId
       );
-      console.log(specIndex);
+
       if (specIndex == -1) {
         this.propertyUpload.specifications.push({
           number: num,
@@ -673,21 +587,16 @@ export default Vue.extend({
       } else {
         this.propertyUpload.specifications[specIndex].number = num;
       }
-      console.log(this.propertyUpload.specifications);
     },
     toPrev(): void {
       this.step--;
     },
     toNext() {
       this.step++;
-      console.log(this.propertyUpload);
     },
     getCategory(e: any) {
-      console.log(e);
       this.categories.filter((category: any) =>
-        category.name == e
-          ? (this.propertyUpload.listing_category_id = category.id)
-          : ''
+        category.name == e ? (this.propertyUpload.listing_category_id = category.id) : ''
       );
     },
 
@@ -696,9 +605,7 @@ export default Vue.extend({
       try {
         // console.log(this.propertyUpload);
 
-        const propertyResponse = await this.$listingApi.create(
-          this.propertyUpload
-        );
+        const propertyResponse = await this.$listingApi.create(this.propertyUpload);
         console.log('property upload', propertyResponse);
         // const imageListing = await this.$listingImagesApi.create({
         //   listing_id: propertyResponse.data.id,
@@ -753,9 +660,11 @@ $medium_screen: 769px;
   .property_upload_head {
     padding-bottom: 30px;
     h3 {
-      font-size: 20px;
+      font-size: 24px;
       padding-bottom: 5px;
-      line-height: 27px;
+      line-height: 28px;
+      letter-spacing: -0.02em;
+      color: #1e293b;
 
       @media (max-width: $small_screen) {
         text-align: left;
@@ -792,6 +701,7 @@ $medium_screen: 769px;
       }
     }
     .property_content {
+      margin-top: 20px;
       height: 400px;
       overflow-y: scroll;
 
@@ -803,13 +713,15 @@ $medium_screen: 769px;
         margin-bottom: 10px;
         padding: 15px;
         cursor: pointer;
+        margin-right: 10px;
         @media (max-width: $small_screen) {
           img {
             display: none;
           }
         }
         .property_description {
-          font-size: 12px;
+          font-size: 14px;
+          color: #475569;
         }
         .property_upload_photo {
           border-radius: 7px;
@@ -893,12 +805,6 @@ $medium_screen: 769px;
 
   .region {
     width: 100%;
-  }
-
-  .category {
-    width: 70%;
-    margin: 0 auto;
-    text-align: center;
   }
   .uploadImgs {
     display: grid;
