@@ -6,4 +6,8 @@
   .mob-margin {
     padding: 0px !important;
   }
+
+  .el-dialog.login_modal {
+    background: white !important;
+  }
 }

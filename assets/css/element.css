@@ -259,6 +259,10 @@
   background: linear-gradient(90deg, #ffffff 50%, #cf0100 50%);
 }
 
+.el-dialog__body {
+  padding: 14px 20px;
+}
+
 @media (max-width: 426px) {
   .el-dialog {
     width: 100% !important;

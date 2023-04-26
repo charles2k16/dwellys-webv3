@@ -115,16 +115,16 @@
       <div class="px-20">
         <span class="login-avatar" v-if="$auth.loggedIn">
           <span class="d-flex align_center">
-            <span class="mr-5">
-              {{ $auth.user.first_name }}
-            </span>
-
             <img
               v-if="$auth.user.avatar"
               :src="$auth.user.avatar"
               alt="avatar"
               class="user_avatar" />
             <img src="~/assets/img/user_icon.png" alt="icon" v-else />
+
+            <span class="ml-5">
+              {{ $auth.user.first_name }}
+            </span>
           </span>
         </span>
 
@@ -145,21 +145,20 @@
         </div>
 
         <div v-if="$auth.loggedIn">
-          <ul>
-            <li @click="drawer = false">
-              <NuxtLink to="/profile">Profile</NuxtLink>
-            </li>
+          <hr class="hr_rule mt-10" />
+          <div @click="drawer = false" class="mt-10">
+            <NuxtLink to="/profile">Profile</NuxtLink>
+          </div>
 
-            <!-- <hr class="hr_rule mt-10" /> -->
+          <hr class="hr_rule mt-10" />
 
-            <li v-if="$auth.user.user_type == 'lister'">
-              <NuxtLink to="/property_upload">Property Upload</NuxtLink>
-            </li>
+          <div v-if="$auth.user.user_type == 'lister'" class="mt-10">
+            <NuxtLink to="/property_upload">Property Upload</NuxtLink>
+          </div>
 
-            <!-- <hr class="hr_rule mt-10" /> -->
+          <hr class="hr_rule mt-10" />
 
-            <li @click="$auth.logout()">Logout</li>
-          </ul>
+          <div @click="$auth.logout()" class="mt-10">Logout</div>
         </div>
       </div>
     </el-drawer>
