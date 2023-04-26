@@ -113,8 +113,8 @@
       :before-close="handleClose"
       :append-to-body="true">
       <div class="px-20">
-        <span class="login-avatar">
-          <span v-if="$auth.loggedIn" class="d-flex align_center">
+        <span class="login-avatar" v-if="$auth.loggedIn">
+          <span class="d-flex align_center">
             <span class="mr-5">
               {{ $auth.user.first_name }}
             </span>
@@ -126,27 +126,22 @@
               class="user_avatar" />
             <img src="~/assets/img/user_icon.png" alt="icon" v-else />
           </span>
-
-          <span v-else class="align_center">
-            <span class="mr-10">Login</span>
-            <img src="~/assets/img/user_icon.png" alt="icon" />
-          </span>
         </span>
 
         <div v-if="!$auth.loggedIn">
-          <span @click="showLoginModal" class="py-10 mb-10">Login</span>
+          <div @click="showLoginModal" class="py-10">Login</div>
 
-          <hr class="hr_rule mt-10" />
+          <hr class="hr_rule" />
 
-          <span @click="drawer = false" class="mt-10 d-block">
+          <div @click="drawer = false" class="mt-10 d-block">
             <NuxtLink to="/register">Register</NuxtLink>
-          </span>
+          </div>
 
           <hr class="hr_rule mt-10" />
 
-          <span @click="drawer = false" class="mt-10 d-block">
+          <div @click="drawer = false" class="mt-10 d-block">
             <NuxtLink to="/property_account">List your property now</NuxtLink>
-          </span>
+          </div>
         </div>
 
         <div v-if="$auth.loggedIn">
