@@ -593,11 +593,13 @@ export default Vue.extend({
     async filterProperty() {
       let searched = this.search_property;
       this.loading = true;
-      let type = searched.type && `property_type=${searched.type}`;
+      let type = searched.type && `property_type_id=${searched.type}`;
       let max_price = searched.max_price && `max_price=${searched.max_price}`;
       let min_price = searched.min_price && `min_price=${searched.min_price}`;
       let category = searched.category && `category_id=${searched.category}`;
-      let filteredSearch = [type, max_price, min_price, category];
+      let bathroom = searched.bathroom && `bathroom_count=${searched.bathroom}`;
+      let bed = searched.bed && `beds_count=${searched.bed}`;
+      let filteredSearch = [type, max_price, min_price, category, bathroom, bed];
 
       let joined = filteredSearch.join('&');
 
