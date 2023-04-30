@@ -9,7 +9,7 @@
       custom-class="login_modal"
     >
       <template slot="title">
-        <h3 class="">Login or sign in</h3>
+        <h3 class="">Login or Sign in</h3>
       </template>
       <LoginForm @closeLoginModal="showLoginModal = false" />
     </el-dialog>

@@ -6,26 +6,30 @@
         title="Error with signing in"
         type="error"
         :description="errorMessage"
-        show-icon>
+        show-icon
+      >
       </el-alert>
       <br />
       <el-form
         ref="loginForm"
         :model="loginForm"
         label-position="top"
-        :rules="validation">
+        :rules="validation"
+      >
         <el-form-item label="Email address" prop="email">
           <el-input
             v-model="loginForm.email"
             placeholder="Enter email"
-            prefix-icon="el-icon-message" />
+            prefix-icon="el-icon-message"
+          />
         </el-form-item>
         <el-form-item label="Password">
           <el-input
             v-model="loginForm.password"
             type="password"
             placeholder="Enter your password"
-            show-password>
+            show-password
+          >
           </el-input>
         </el-form-item>
 
@@ -34,17 +38,21 @@
         </p>
 
         <div class="mt-20">
-          <el-button type="primary" class="btn_lg" @click="signIn" :loading="btnLoading"
+          <el-button
+            type="primary"
+            class="btn_lg"
+            @click="signIn"
+            :loading="btnLoading"
             >Continue</el-button
           >
         </div>
       </el-form>
-      <!-- <el-col class="separater py-20">
+      <el-col class="separater py-20">
         <div class="first_separater"></div>
         <div class="mx-10 bold">or</div>
         <div class="second_separater"></div>
-      </el-col> -->
-      <!-- <el-col class="media_login">
+      </el-col>
+      <el-col class="media_login">
         <div class="facebook" @click="facebookSignIn">
           <img src="~/assets/img/facebook.png" width="25px" />
           <p>Continue with Facebook</p>
@@ -53,7 +61,7 @@
           <img src="~/assets/img/google.png" />
           <p>Continue with Google</p>
         </div>
-      </el-col> -->
+      </el-col>
     </div>
     <div class="login_text">
       <div class="py-20">
@@ -65,8 +73,9 @@
           <span class="bold">properties</span> for sale and rent
         </p>
         <p class="text-white">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut metus risus aenean
-          mattis. Odio accumsan viverra ipsum tristique lectus pellentesque erat.
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut metus
+          risus aenean mattis. Odio accumsan viverra ipsum tristique lectus
+          pellentesque erat.
         </p>
       </div>
     </div>
@@ -160,25 +169,24 @@ export default Vue.extend({
         type: 'success',
       });
     },
-    // facebookSignIn() {
-    //   this.$auth
-    //     .loginWith('facebook')
-    //     .then((response: any) => {
-    //       console.log(response);
-    //     })
-    //     .catch((error: any) => {
-    //       console.log(error);
-    //     });
-    // },
-    // googleSignIn() {
-    //   this.$auth
-    //     .loginWith('google')
-    //     .then((response: any) => {
-    //     })
-    //     .catch((error: any) => {
-    //       console.log(error);
-    //     });
-    // },
+    facebookSignIn() {
+      this.$auth
+        .loginWith('facebook')
+        .then((response: any) => {
+          console.log(response);
+        })
+        .catch((error: any) => {
+          console.log(error);
+        });
+    },
+    googleSignIn() {
+      this.$auth
+        .loginWith('google')
+        .then((response: any) => {})
+        .catch((error: any) => {
+          console.log(error);
+        });
+    },
   },
 });
 </script>

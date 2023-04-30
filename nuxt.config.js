@@ -83,6 +83,13 @@ export default {
 
   router: {
     middleware: ['auth'],
+    scrollBehavior(to, from, savedPosition) {
+      if (to.hash) {
+        return { selector: to.hash };
+      } else {
+        return { x: 0, y: 0 };
+      }
+    },
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa

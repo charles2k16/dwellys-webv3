@@ -5,7 +5,9 @@
       <div class="align_center mb-10 pt-10">
         <div class="arrow_back">
           <div @click="$router.back()">
-            <span class="material-icons" style="color: #94a3b8">arrow_back</span>
+            <span class="material-icons" style="color: #94a3b8"
+              >arrow_back</span
+            >
           </div>
         </div>
         <p v-if="propertyDetails.listing_detail">
@@ -21,7 +23,10 @@
         <div class="details_plot">
           <p class="align_center mr-20 p-text">
             <span class="material-icons mr-5"> location_on </span
-            >{{ propertyDetails.listing_detail && propertyDetails.listing_detail.city }}
+            >{{
+              propertyDetails.listing_detail &&
+              propertyDetails.listing_detail.city
+            }}
           </p>
 
           <p class="align_center p-text">
@@ -45,7 +50,8 @@
                 favProperties.includes(propertyDetails)
                   ? { color: 'red' }
                   : { color: '#c4c6c9' }
-              ">
+              "
+            >
               favorite
             </span>
             {{ propertyDetails.listing_total_likes }}
@@ -58,8 +64,10 @@
         <el-col :xs="24" :sm="24" :md="hasMorePhotos ? 20 : 24">
           <el-carousel :interval="5000" arrow="always">
             <el-carousel-item
-              v-for="(image, index) in propertyDetails.listing_detail.listing_images"
-              :key="index">
+              v-for="(image, index) in propertyDetails.listing_detail
+                .listing_images"
+              :key="index"
+            >
               <img :src="image.photo" class="carousel_image" />
             </el-carousel-item>
           </el-carousel>
@@ -70,12 +78,19 @@
           :sm="8"
           :md="4"
           v-if="hasMorePhotos"
-          class="has_more_photos hidden-sm-and-down">
+          class="has_more_photos hidden-sm-and-down"
+        >
           <div
             class="thumbnail"
-            v-for="(image, index) in propertyDetails.listing_detail.listing_images"
-            :key="index">
-            <img :src="image.photo" class="_image" @click="showImage(image.photo)" />
+            v-for="(image, index) in propertyDetails.listing_detail
+              .listing_images"
+            :key="index"
+          >
+            <img
+              :src="image.photo"
+              class="_image"
+              @click="showImage(image.photo)"
+            />
           </div>
         </el-col>
       </el-row>
@@ -89,8 +104,11 @@
             <div class="basic_specifications">
               <span
                 class="info_card"
-                v-for="(specification, index) in propertyDetails.property_specifications"
-                :key="index">
+                v-for="(
+                  specification, index
+                ) in propertyDetails.property_specifications"
+                :key="index"
+              >
                 <p class="align_center">
                   <span class="material-icons mr-5">bed</span>
                   {{ specification.number }}
@@ -133,20 +151,25 @@
                 <p class="mt-10 amout" v-if="propertyDetails.listing_detail">
                   <b style="font-size: 24px; line-height: 28px"
                     >GH₵{{ propertyDetails.listing_detail.price }}</b
-                  ><small v-if="propertyDetails.listing_detail.category.name == 'Rent'"></small>
-                    / month</small
+                  ><small
+                    v-if="
+                      propertyDetails.listing_detail.category.name == 'Rent'
+                    "
+                    >/ month</small
                   >
                 </p>
                 <div class="d-flex mt-20" v-if="propertyDetails.listing_detail">
                   <img
                     v-if="propertyDetails.lister.avatar"
                     :src="propertyDetails.lister.avatar"
-                    class="agent_avatar" />
+                    class="agent_avatar"
+                  />
                   <img
                     v-else
                     src="~/assets/img/user_icon.png"
                     class="agent_avatar"
-                    alt="icon" />
+                    alt="icon"
+                  />
                   <div class="ml-20">
                     <p>
                       <b
@@ -173,7 +196,10 @@
               <div>
                 <el-button type="primary" style="width: 100%" @click="showOwner"
                   ><p class="d-flex justify_between">
-                    Send a message<span class="material-icons" style="color: white">
+                    Send a message<span
+                      class="material-icons"
+                      style="color: white"
+                    >
                       arrow_forward
                     </span>
                   </p></el-button
@@ -188,7 +214,10 @@
         <div class="amenities_content">
           <h4 class="mt-20 details_title">Amenities</h4>
           <ul class="amenites_list">
-            <li v-for="amenity in propertyDetails.amenities" :key="amenity.amenity.name">
+            <li
+              v-for="amenity in propertyDetails.amenities"
+              :key="amenity.amenity.name"
+            >
               {{ amenity.amenity.name }}
             </li>
           </ul>
@@ -232,14 +261,16 @@
               <p class="align_center mr-20 p-text">
                 <span class="material-icons mr-5"> location_on </span
                 >{{
-                  propertyDetails.listing_detail && propertyDetails.listing_detail.city
+                  propertyDetails.listing_detail &&
+                  propertyDetails.listing_detail.city
                 }}
               </p>
             </div>
             <Map
               class="mt-20"
               :lat="propertyDetails.listing_detail.latitude"
-              :lng="propertyDetails.listing_detail.longitude" />
+              :lng="propertyDetails.listing_detail.longitude"
+            />
           </el-col>
         </el-row>
       </div>
@@ -247,21 +278,19 @@
         <h4 class="mt-60">Similar properties</h4>
         <div class="pt-20">
           <el-row :gutter="20" v-if="similarListings.length > 0">
-              <el-col
-                :xs="24"
-                :sm="8"
-                v-for="property in similarListings"
-                :key="property.id"
-                class="mt-20">
-                <PropertyCard
-                
-                  :property="property"
-                 />
-              </el-col>
-            </el-row>
-            <div v-else class="d-flex justify_center p-20">
-              <p>No Properties found</p>
-            </div>
+            <el-col
+              :xs="24"
+              :sm="8"
+              v-for="property in similarListings"
+              :key="property.id"
+              class="mt-20"
+            >
+              <PropertyCard :property="property" />
+            </el-col>
+          </el-row>
+          <div v-else class="d-flex justify_center p-20">
+            <p>No Properties found</p>
+          </div>
         </div>
       </div>
     </div>
@@ -303,16 +332,19 @@ export default Vue.extend({
         payment_method: '' as string,
       },
       user: '',
-      similarListings: [],
+      similarListings: [] as any,
     };
   },
   watch: {
     $route() {
-      this.fetchData();
+      //  refresh page so created runs again
+      // this helps resolve the pagescroll to top issue
+      this.$router.go();
     },
   },
   created() {
     this.fetchData();
+    this.scrollToTop();
   },
   computed: {
     hasMorePhotos() {
@@ -320,6 +352,11 @@ export default Vue.extend({
     },
   },
   methods: {
+    scrollToTop() {
+      if (process.client) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    },
     showImage(image: string) {
       this.modalImage = image;
       this.showImageModal = true;
@@ -552,7 +589,7 @@ $small_screen: 426px;
   color: #94a3b8;
 }
 
-.p-text{
+.p-text {
   font-size: 14px;
   line-height: 20px;
   color: #475569;

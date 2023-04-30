@@ -9,7 +9,9 @@
     "sourceMap": true,
     "strict": true,
     "noEmit": true,
+    "noImplicitThis": false,
     "experimentalDecorators": true,
+    "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
       "~/*": ["./*"],
@@ -17,8 +19,8 @@
     },
     "types": ["@nuxt/types", "@nuxtjs/axios", "@types/node", "@nuxtjs/auth-next"]
   },
-  "include": [
-    "./**/*.ts"
-  ],
+  // "include": [
+  //   "./**/*.ts"
+  // ],
   "exclude": ["node_modules", ".nuxt", "dist"]
 }

@@ -63,6 +63,7 @@ declare module 'vue/types/vue' {
     $auth: any;
     $alert: any;
     $confirm: any;
+    $moment: any;
     // $refs: { [key: string]: Vue | Element | (Vue | Element)[] | Function | undefined; }
   }
 }

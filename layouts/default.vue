@@ -1,8 +1,19 @@
 <template>
-  <el-container style="height: 100vh">
-    <el-main style="display: flex; flex-direction: column; padding: 0">
-      <NavHeader />
-      <Nuxt />
+  <el-container>
+    <el-main
+      style="
+        height: 100vh;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      "
+    >
+      <div>
+        <NavHeader />
+        <Nuxt />
+      </div>
+
       <Footer />
     </el-main>
   </el-container>
@@ -15,5 +26,17 @@ import global from '~/mixins/global.ts';
 Vue.mixin(global);
 export default {
   name: 'App',
+  mounted() {
+    this.$router.afterEach(() => {
+      this.scrollToTop();
+    });
+  },
+  methods: {
+    scrollToTop() {
+      if (process.client) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    },
+  },
 };
 </script>

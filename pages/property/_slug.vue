@@ -292,7 +292,7 @@ export default Vue.extend({
       } else {
         (this as any as IMixinState).getNotification(
           'Login to send agent a message!',
-          'warning'
+          'error'
         );
       }
     },

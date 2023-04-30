@@ -211,7 +211,9 @@
   border-radius: 7px;
 }
 
-.el-tabs--border-card > .el-tabs__header .el-tabs__item:not(.is-disabled):hover {
+.el-tabs--border-card
+  > .el-tabs__header
+  .el-tabs__item:not(.is-disabled):hover {
   color: black;
 }
 
@@ -317,6 +319,13 @@
   background-color: #ffecec;
   color: #cf0100;
 }
+
+.search_dropdown .el-dropdown-menu__item:focus,
+.search_dropdown .el-dropdown-menu__item:not(.is-disabled):hover {
+  background-color: transparent;
+  color: inherit;
+}
+
 .search_price.el-dropdown {
   border: 1px solid #e2e8f0;
   height: 43px;

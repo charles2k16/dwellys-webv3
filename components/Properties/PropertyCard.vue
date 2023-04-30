@@ -3,7 +3,8 @@
     <div
       class="property_image"
       :style="background_style(property.photos)"
-      @click.self="openPropertyDetails(property)">
+      @click.self="openPropertyDetails(property)"
+    >
       <div class="d-flex justify_between p-10">
         <p class="property_type">
           <span>{{ property.listing_detail.category.name }}</span>
@@ -16,7 +17,8 @@
                 ? { color: 'red' }
                 : { color: 'white' }
             "
-            @click="favProperty(property)">
+            @click="favProperty(property)"
+          >
             favorite
           </span>
         </span>
@@ -42,7 +44,8 @@
       <div
         class="pl-5 pt-5 d-flex justify_start"
         v-for="specification in property.property_specifications"
-        :key="specification.id">
+        :key="specification.id"
+      >
         <div>
           <span class="d-flex align_center">
             <span class="material-icons mr-5 speci_icon">bed</span>
@@ -145,7 +148,9 @@ export default Vue.extend({
       if (this.$auth.loggedIn) {
         let singleProperty = Object.assign([], this.favProperties);
         if (this.favProperties) {
-          let favIndex = this.favProperties.findIndex((prop: any) => prop.id == fav.id);
+          let favIndex = this.favProperties.findIndex(
+            (prop: any) => prop.id == fav.id
+          );
 
           singleProperty.includes(fav)
             ? this.favProperties.splice(favIndex, 1)
@@ -181,6 +186,7 @@ export default Vue.extend({
       }
     },
     openPropertyDetails(property: any): void {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       this.$router.push({
         name: 'property_details',
         // params: { property: property.id },

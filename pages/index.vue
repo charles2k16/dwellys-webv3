@@ -50,7 +50,8 @@
             @keyup.native.enter="getQuery"
             v-model="search_value"
             class="search_input"
-            placeholder="Search for property">
+            placeholder="Search for property"
+          >
           </el-input>
           <el-button type="primary" class="hidden-sm-and-down" @click="getQuery"
             >Find your home</el-button
@@ -60,7 +61,8 @@
             icon="el-icon-search"
             type="primary"
             class="hidden-md-and-up"
-            round></el-button>
+            round
+          ></el-button>
         </div>
         <!-- <el-row class="d-flex pt-20">
           <div class="pr-20">
@@ -90,18 +92,32 @@
           :label="tab.label"
           v-for="(tab, index) in tabOptions"
           :key="index"
-          :name="tab.label">
+          :name="tab.label"
+        >
           <div class="section pt-20">
             <el-skeleton :loading="pageLoad" animated>
               <template slot="template">
                 <el-row :gutter="20">
-                  <el-col :xs="24" :sm="8" class="mt-20" v-for="i in 3" :key="i">
+                  <el-col
+                    :xs="24"
+                    :sm="8"
+                    class="mt-20"
+                    v-for="i in 3"
+                    :key="i"
+                  >
                     <el-skeleton-item
                       variant="image"
-                      style="width: 100%; height: 250px" />
+                      style="width: 100%; height: 250px"
+                    />
                     <div class="mt-10">
-                      <el-skeleton-item variant="h3" style="width: 60%; height: 25px" />
-                      <div class="d-flex-justify-between mt-10" style="height: 16px">
+                      <el-skeleton-item
+                        variant="h3"
+                        style="width: 60%; height: 25px"
+                      />
+                      <div
+                        class="d-flex-justify-between mt-10"
+                        style="height: 16px"
+                      >
                         <el-skeleton-item variant="text" class="mr-10" />
                         <el-skeleton-item variant="text" style="width: 50%" />
                       </div>
@@ -116,8 +132,12 @@
                     :sm="8"
                     v-for="property in listings"
                     :key="property.id"
-                    class="mt-20">
-                    <PropertyCard :property="property" :favProperties="favProperties" />
+                    class="mt-20"
+                  >
+                    <PropertyCard
+                      :property="property"
+                      :favProperties="favProperties"
+                    />
                   </el-col>
                 </el-row>
                 <div v-else class="d-flex justify_center p-20">
@@ -126,7 +146,10 @@
 
                 <div v-if="total > 30" class="d-flex justify_center">
                   <p class="p-10 show_more_btn" @click="getMoreProperties">
-                    Show more<i class="el-icon-bottom pl-10" style="fontsize: 20px"></i>
+                    Show more<i
+                      class="el-icon-bottom pl-10"
+                      style="fontsize: 20px"
+                    ></i>
                   </p>
                 </div>
               </template>
@@ -171,7 +194,7 @@ export default Vue.extend({
       //     value: 'lease',
       //   },
       // ],
-      listings: [] as Array<object>,
+      listings: [] as Array<any>,
       page: 0 as number,
       pageLoad: true as boolean,
       queryList: [],
@@ -189,11 +212,28 @@ export default Vue.extend({
     };
   },
   created() {
-    this.fetchListings();
+    // this.fetchListings();
     // this.$auth.user && !this.$auth.user.user_type && this.$auth.state.strategy == 'facebook'
     //   ? this.facebookAuth()
     //   : '';
     this.$auth.loggedIn && this.fetchFavorites();
+  },
+  async fetch() {
+    try {
+      const listings = await this.$listingApi.query('?status=active');
+      if (listings.data) {
+        this.loadListing(listings.data);
+      }
+
+      if (listings.pagination) {
+        this.total = listings.pagination.total;
+        this.page = listings.pagination.current_page;
+      }
+
+      this.pageLoad = false;
+    } catch (error: any) {
+      this.pageLoad = false;
+    }
   },
   methods: {
     // async facebookAuth() {
@@ -268,12 +308,14 @@ export default Vue.extend({
       }
     },
     async getMoreProperties() {
-      const listings = await this.$listingApi.query(`?status=active?${this.page + 1}`);
+      const listings = await this.$listingApi.query(
+        `?status=active?${this.page + 1}`
+      );
       this.page = listings.pagination.current_page;
       this.loadListing(listings.data);
     },
     async fetchListings() {
-      this.pageLoad = true;
+      // this.pageLoad = true;
 
       try {
         const listings = await this.$listingApi.query('?status=active');

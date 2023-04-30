@@ -4,15 +4,20 @@
       :visible.sync="filter_drawer"
       direction="rtl"
       :before-close="handleClose"
-      class="filter_drawer">
+      class="filter_drawer"
+    >
       <div class="all_filters">
         <div class="filter_prop_type">
-          <el-radio-group v-model="search_property.category" style="margin-bottom: 30px">
+          <el-radio-group
+            v-model="search_property.category"
+            style="margin-bottom: 30px"
+          >
             <el-radio-button
               v-for="item in categories"
               :key="item.id"
               :value="item.id"
-              :label="item.name">
+              :label="item.name"
+            >
               {{ item.name }}
             </el-radio-button>
           </el-radio-group>
@@ -24,14 +29,16 @@
               <el-input
                 placeholder="min"
                 type="number"
-                v-model="search_property.min_price">
+                v-model="search_property.min_price"
+              >
                 <template slot="prepend">GH&#8373; </template></el-input
               ><span class="px-10 pt-10 price_divider">-</span>
               <el-input
                 placeholder="max"
                 type="number"
                 class="max_price"
-                v-model="search_property.max_price">
+                v-model="search_property.max_price"
+              >
                 <template slot="prepend">GH&#8373; </template>
               </el-input>
             </div>
@@ -45,8 +52,11 @@
                 v-for="(type, index) in property_types"
                 :key="index"
                 @click="getPropertyType(type)"
-                :style="search_property.type == type.id && 'background:#de0b0b80'"
-                class="center">
+                :style="
+                  search_property.type == type.id && 'background:#de0b0b80'
+                "
+                class="center"
+              >
                 <!-- <img :src="apiUrl + '/' + type.photo" alt="" /> -->
                 <span>{{ type.name }} </span>
               </div>
@@ -61,7 +71,8 @@
               class="w-100"
               placeholder="max"
               v-model="search_property.bed"
-              type="number">
+              type="number"
+            >
             </el-input>
           </div>
           <div class="d-flex_column">
@@ -71,7 +82,8 @@
               class="w-100"
               placeholder="max"
               v-model="search_property.bathroom"
-              type="number"></el-input>
+              type="number"
+            ></el-input>
           </div>
         </div>
         <div class="all_filters_btn">
@@ -81,7 +93,8 @@
     </el-drawer>
     <div
       class="search_property_details"
-      :style="similarListings.length < 1 && 'display:none'">
+      :style="similarListings.length < 1 && 'display:none'"
+    >
       <div ref="property_details" class="">
         <ApplicationHandler ref="propertyAction" />
         <el-dialog :visible.sync="dialogVisible" width="50%">
@@ -114,7 +127,10 @@
           <div class="details_plot">
             <p class="align_center mr-20">
               <span class="material-icons mr-5"> room </span
-              >{{ propertyDetails.listing_detail && propertyDetails.listing_detail.city }}
+              >{{
+                propertyDetails.listing_detail &&
+                propertyDetails.listing_detail.city
+              }}
             </p>
 
             <p class="align_center">
@@ -140,7 +156,8 @@
                   favProperties.includes(propertyDetails)
                     ? { color: 'red' }
                     : { color: 'grey' }
-                ">
+                "
+              >
                 favorite
               </span>
               <span class="pl-5">
@@ -155,8 +172,10 @@
           <el-col :xs="24" :sm="24" :md="hasMorePhotos ? 20 : 24">
             <el-carousel :interval="5000" arrow="always">
               <el-carousel-item
-                v-for="(image, index) in propertyDetails.listing_detail.listing_images"
-                :key="index">
+                v-for="(image, index) in propertyDetails.listing_detail
+                  .listing_images"
+                :key="index"
+              >
                 <img :src="image.photo" class="carousel_image" />
               </el-carousel-item>
             </el-carousel>
@@ -167,12 +186,19 @@
             :sm="8"
             :md="4"
             v-if="hasMorePhotos"
-            class="has_more_photos hidden-sm-and-down">
+            class="has_more_photos hidden-sm-and-down"
+          >
             <div
               class="thumbnail"
-              v-for="(image, index) in propertyDetails.listing_detail.listing_images"
-              :key="index">
-              <img :src="image.photo" class="_image" @click="showImage(image.photo)" />
+              v-for="(image, index) in propertyDetails.listing_detail
+                .listing_images"
+              :key="index"
+            >
+              <img
+                :src="image.photo"
+                class="_image"
+                @click="showImage(image.photo)"
+              />
             </div>
           </el-col>
         </el-row>
@@ -190,7 +216,8 @@
                   v-for="(
                     specification, index
                   ) in propertyDetails.property_specifications"
-                  :key="index">
+                  :key="index"
+                >
                   <p>
                     {{ specification.number }}
                     {{ specification.specification.name }}
@@ -200,7 +227,8 @@
                 <span
                   class="info_card"
                   v-for="specification in propertyDetails.other_specifications"
-                  :key="specification.id">
+                  :key="specification.id"
+                >
                   <p class="d-flex">
                     {{ specification.number }}
                     {{ specification.name }}
@@ -228,7 +256,8 @@
             <ul class="amenites_list">
               <li
                 v-for="amenity in propertyDetails.amenities"
-                :key="amenity.amenity.name">
+                :key="amenity.amenity.name"
+              >
                 {{ amenity.amenity.name }}
               </li>
             </ul>
@@ -237,7 +266,8 @@
         <div class="mt-20 mb-20" v-if="propertyDetails.listing_detail">
           <Map
             :lat="propertyDetails.listing_detail.latitude"
-            :lng="propertyDetails.listing_detail.longitude" />
+            :lng="propertyDetails.listing_detail.longitude"
+          />
         </div>
       </div>
       <el-row>
@@ -254,12 +284,18 @@
                 <p class="mt-5 amout" v-if="propertyDetails.listing_detail">
                   <b style="font-size: 24px; line-height: 28px"
                     >GH₵{{ propertyDetails.listing_detail.price }}</b
-                  ><span v-if="propertyDetails.listing_detail.category.name == 'Rent'"
+                  ><span
+                    v-if="
+                      propertyDetails.listing_detail.category.name == 'Rent'
+                    "
                     >/month</span
                   >
                 </p>
                 <div class="d-flex mt-20" v-if="propertyDetails.listing_detail">
-                  <img :src="propertyDetails.lister.avatar" class="agent_avatar" />
+                  <img
+                    :src="propertyDetails.lister.avatar"
+                    class="agent_avatar"
+                  />
                   <div class="ml-20">
                     <p>
                       <b
@@ -286,7 +322,9 @@
               <div>
                 <el-button type="primary" style="width: 100%" @click="showOwner"
                   ><p class="d-flex justify_between">
-                    Send a message<span class="material-icons"> arrow_forward </span>
+                    Send a message<span class="material-icons">
+                      arrow_forward
+                    </span>
                   </p></el-button
                 >
               </div>
@@ -298,7 +336,8 @@
 
     <div
       class="search_property_similar"
-      :style="similarListings.length < 1 && 'width:100%'">
+      :style="similarListings.length < 1 && 'width:100%'"
+    >
       <div class="pt-20">
         <div>
           <div class="content_search">
@@ -306,8 +345,13 @@
               type="search"
               @keyup.native.enter="queryProperty"
               v-model="search_property.search_query"
-              placeholder="search..."></el-input>
-            <el-button type="primary" class="search_btn" @click="queryProperty"
+              placeholder="search..."
+            ></el-input>
+            <el-button
+              type="primary"
+              class="search_btn"
+              size="mini"
+              @click="queryProperty"
               >Search</el-button
             >
           </div>
@@ -315,12 +359,14 @@
             <el-select
               v-model="search_property.category"
               placeholder="Category"
-              class="search_option">
+              class="search_option"
+            >
               <el-option
                 v-for="item in categories"
                 :key="item.id"
                 :label="item.name"
-                :value="item.id">
+                :value="item.id"
+              >
               </el-option>
             </el-select>
 
@@ -329,34 +375,41 @@
               trigger="click"
               :hide-on-click="hidePrice"
               placeholder="Price"
-              class="search_price mr-5">
-              <span class="el-dropdown-link drop_link d-flex justify_between">
+              class="search_price mr-5"
+            >
+              <span class="el-dropdown-link drop_label">
                 Price<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
               <el-dropdown-menu
                 slot="dropdown"
+                class="search_dropdown"
                 style="max-width: 300px"
-                class="price_dropdown">
+              >
                 <el-dropdown-item>
-                  <!-- <div class="block">
-                  <el-slider v-model="value" range :max="10000000"> </el-slider>
-                </div> -->
                   <div class="price_drop_options">
                     <el-input
                       placeholder="min"
                       type="number"
-                      v-model="search_property.min_price">
+                      v-model="search_property.min_price"
+                    >
                       <template slot="prepend">GH&#8373; </template></el-input
-                    ><span class="px-10 pt-10">-</span>
+                    >
                     <el-input
+                      class="mt-20"
                       placeholder="max"
                       type="number"
-                      v-model="search_property.max_price">
+                      v-model="search_property.max_price"
+                    >
                       <template slot="prepend">GH&#8373; </template>
                     </el-input>
                   </div>
                   <div class="d-flex justify_end pt-10">
-                    <el-button @click="hidePrice = true" type="primary">Done</el-button>
+                    <el-button
+                      @click="hidePrice = true"
+                      type="primary"
+                      size="mini"
+                      >Done</el-button
+                    >
                   </div>
                 </el-dropdown-item>
               </el-dropdown-menu>
@@ -367,15 +420,13 @@
               trigger="click"
               :hide-on-click="hideSelect"
               class="search_price mr-5"
-              placeholder="Bed/Baths">
-              <span class="el-dropdown-link drop_link d-flex justify_between">
+              placeholder="Bed/Baths"
+            >
+              <span class="el-dropdown-link drop_label">
                 Bed/Baths<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
-              <el-dropdown-menu slot="dropdown" style="width: 200px">
+              <el-dropdown-menu slot="dropdown" class="search_dropdown">
                 <el-dropdown-item>
-                  <!-- <div class="block">
-                  <el-slider v-model="value" range :max="10000000"> </el-slider>
-                </div> -->
                   <div class="">
                     <div class="d-flex_column pb-10">
                       <label for="bed" class="pb-5">Bed(s)</label>
@@ -384,7 +435,8 @@
                         class="w-100"
                         placeholder="max"
                         v-model="search_property.bed"
-                        type="number">
+                        type="number"
+                      >
                       </el-input>
                     </div>
                     <div class="d-flex_column">
@@ -394,11 +446,17 @@
                         class="w-100"
                         placeholder="max"
                         v-model="search_property.bathroom"
-                        type="number"></el-input>
+                        type="number"
+                      ></el-input>
                     </div>
                   </div>
                   <div class="d-flex justify_end pt-10">
-                    <el-button @click="hideSelect = true" type="primary">Done</el-button>
+                    <el-button
+                      @click="hideSelect = true"
+                      type="primary"
+                      size="mini"
+                      >Done</el-button
+                    >
                   </div>
                 </el-dropdown-item>
               </el-dropdown-menu>
@@ -406,38 +464,47 @@
             <el-select
               v-model="search_property.type"
               class="search_option"
-              placeholder="Select Type">
+              placeholder="Select Type"
+            >
               <!-- multiple -->
               <!-- collapse-tags -->
               <el-option
                 v-for="item in property_types"
                 :key="item.id"
                 :label="item.name"
-                :value="item.id">
+                :value="item.id"
+              >
               </el-option>
             </el-select>
             <div
               class="search_price el-dropdown"
               style="color: rgba(96, 98, 102, 0.5); cursor: pointer"
-              @click="filter_drawer = true">
+              @click="filter_drawer = true"
+            >
               <span> <i class="el-icon-s-operation"></i> </span>
               <span>All Filters</span>
             </div>
             <div class="pl-10 pb-10">
-              <el-button type="primary" @click="filterProperty">Filter</el-button>
+              <el-button type="primary" @click="filterProperty" size="small"
+                >Filter</el-button
+              >
             </div>
           </div>
           <div class="search_price_container">
             <div
               class="search_price el-dropdown"
               style="color: rgba(96, 98, 102, 0.5); cursor: pointer"
-              @click="filter_drawer = true">
+              @click="filter_drawer = true"
+            >
               <span> <i class="el-icon-s-operation"></i> </span>
               <span>All Filters</span>
             </div>
           </div>
         </div>
-        <SearchProperties :listings="similarListings" @property="showProperty" />
+        <SearchProperties
+          :listings="similarListings"
+          @property="showProperty"
+        />
       </div>
     </div>
   </div>
@@ -475,10 +542,9 @@ export default Vue.extend({
         max_price: null,
         bed: 0 as number,
         bathroom: 0 as number,
-      },
-
-      categories: [],
-      property_types: [],
+      } as any,
+      categories: [] as any,
+      property_types: [] as any,
       propertyDetails: {} as any,
       home: '' as string,
       favProperties: [] as Array<object>,
@@ -488,7 +554,7 @@ export default Vue.extend({
         payment_method: '' as string,
       },
       user: '',
-      similarListings: [],
+      similarListings: [] as any,
     };
   },
 
@@ -599,7 +665,14 @@ export default Vue.extend({
       let category = searched.category && `category_id=${searched.category}`;
       let bathroom = searched.bathroom && `bathroom_count=${searched.bathroom}`;
       let bed = searched.bed && `beds_count=${searched.bed}`;
-      let filteredSearch = [type, max_price, min_price, category, bathroom, bed];
+      let filteredSearch = [
+        type,
+        max_price,
+        min_price,
+        category,
+        bathroom,
+        bed,
+      ];
 
       let joined = filteredSearch.join('&');
 
@@ -670,11 +743,11 @@ $small_screen: 426px;
   .search_property_similar {
     margin-left: 5px;
     .price_dropdown {
-      // // width: 300px !important;
-      // background: green;
-      // @media (max-width: $small_screen) {
-      //   max-width: 200px;
-      // }
+      width: 300px !important;
+
+      @media (max-width: $small_screen) {
+        max-width: 200px;
+      }
       .price_drop_options {
         display: flex;
 
@@ -712,6 +785,7 @@ $small_screen: 426px;
   flex-wrap: wrap;
   margin-bottom: 10px;
   padding-left: 10px;
+  margin-top: 20px;
   @media (max-width: $small_screen) {
     display: none;
   }
@@ -726,10 +800,6 @@ $small_screen: 426px;
   @media (max-width: $small_screen) {
     display: flex;
     justify-content: flex-end;
-  }
-  .drop_link {
-    padding-top: 10px;
-    color: rgba(96, 98, 102, 0.5);
   }
 }
 .all_filters {
@@ -901,5 +971,10 @@ $small_screen: 426px;
     object-fit: cover;
     margin-bottom: 20px;
   }
+}
+
+.drop_label {
+  color: #aaabae;
+  font-weight: 400;
 }
 </style>

@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
+
     "baseUrl": ".",
-    "types": ["@nuxtjs/auth-next"],
     "paths": {
       "~/*": ["./*"],
       "@/*": ["./*"],
       "~~/*": ["./*"],
       "@@/*": ["./*"]
-    }
+    },
   },
   "exclude": ["node_modules", ".nuxt", "dist"]
 }
