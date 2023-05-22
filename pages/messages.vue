@@ -184,7 +184,7 @@ export default Vue.extend({
           lastSeen: '2 mins ago',
           img: 'customer3.png',
         },
-      ],
+      ] as any,
       customer: {} as any,
     };
   },

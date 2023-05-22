@@ -16,6 +16,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import { google } from 'google-maps';
 
 export default Vue.extend({
   name: 'map',
