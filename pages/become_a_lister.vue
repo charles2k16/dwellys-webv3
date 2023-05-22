@@ -1,7 +1,12 @@
 <template>
   <div class="new_lister_container section">
     <h3 class="center py-20">Become a Lister</h3>
-    <el-form class="new_lister_form">
+    <p class="center">
+      Please provide the following information to become a verified lister. You
+      will be able to list your property after verification.
+    </p>
+    <br />
+    <el-form class="new_lister_form mt-20">
       <el-form-item label="ID type" class="pb-20">
         <el-select
           v-model="property_account.id_card_type"
@@ -25,14 +30,14 @@
         >
         </el-input>
       </el-form-item>
-      <el-form-item label="Phone number">
+      <!-- <el-form-item label="Phone number">
         <vue-phone-number-input
           v-model="phone"
           :border-radius="7"
           default-country-code="GH"
           @update="onPhoneUpdate"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="Upload ID" class="">
         <el-upload
           drag
@@ -55,6 +60,11 @@
           height="200px"
           class="mx-10 mt-10"
         />
+        <i
+          class="el-icon-delete"
+          style="color: red; font-size: 30px; cursor: pointer"
+          @click="property_account.id_card_upload = null"
+        ></i>
       </div>
 
       <div class="mt-20 d-flex justify_end">
@@ -74,15 +84,12 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import VuePhoneNumberInput from 'vue-phone-number-input';
-import 'vue-phone-number-input/dist/vue-phone-number-input.css';
+// import VuePhoneNumberInput from 'vue-phone-number-input';
+// import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 import { IMixinState } from '@/types/mixinsTypes';
 
 export default Vue.extend({
   name: 'NewLister',
-  components: {
-    VuePhoneNumberInput,
-  },
   data() {
     return {
       message: '' as string,
@@ -96,7 +103,7 @@ export default Vue.extend({
         id_card_upload: '' as any,
         id_card_number: '' as string,
         country_id: '' as string,
-        phone_number: '' as string,
+        // phone_number: '' as string,
       },
     };
   },
@@ -110,14 +117,14 @@ export default Vue.extend({
     this.countries = countries.data;
   },
   methods: {
-    onPhoneUpdate(e: any) {
-      this.countries.filter((country: any) =>
-        country.short_name == e.countryCode
-          ? (this.property_account.country_id = country.id)
-          : ''
-      );
-      this.property_account.phone_number = e.formattedNumber;
-    },
+    // onPhoneUpdate(e: any) {
+    //   this.countries.filter((country: any) =>
+    //     country.short_name == e.countryCode
+    //       ? (this.property_account.country_id = country.id)
+    //       : ''
+    //   );
+    //   this.property_account.phone_number = e.formattedNumber;
+    // },
     propertyCard(file: any) {
       let reader = new FileReader();
       reader.readAsDataURL(file.raw);
@@ -132,7 +139,7 @@ export default Vue.extend({
           id_card_upload: this.property_account.id_card_upload,
           id_card_number: this.property_account.id_card_number,
           country_id: this.property_account.country_id,
-          phone_number: this.property_account.phone_number,
+          // phone_number: this.property_account.phone_number,
         };
         const response = await this.$transformtoLister.create(property_account);
         console.log(response);
