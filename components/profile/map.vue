@@ -7,12 +7,8 @@
 <script lang="ts">
 import Vue from 'vue';
 // var geocoder;
-var map: any;
 
 export default Vue.extend({
-  // watch() {
-
-  // },
   props: {
     lat: {
       type: String,

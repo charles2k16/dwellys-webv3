@@ -53,6 +53,10 @@
         <div class="second_separater"></div>
       </el-col>
       <el-col class="media_login">
+        <div class="facebook" @click="openRegister">
+          <p>Register</p>
+        </div>
+
         <div class="facebook" @click="facebookSignIn">
           <img src="~/assets/img/facebook.png" width="25px" />
           <p>Continue with Facebook</p>
@@ -168,6 +172,10 @@ export default Vue.extend({
         message: response.data.message,
         type: 'success',
       });
+    },
+    openRegister() {
+      this.$emit('closeLoginModal');
+      this.$router.push('/register');
     },
     facebookSignIn() {
       this.$auth

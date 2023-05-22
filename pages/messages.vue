@@ -16,24 +16,31 @@
             ></el-input>
           </section>
         </div>
-        <div class="customers mt-20" >
+        <div class="customers mt-20">
           <!-- customers -->
-          <div class="customer p-10" v-for="(customer, index) in customers" :key="index" @click="getCustomer(customer)" :style="customer.isSelect && {'border-left': '3px solid #de0b0b'}">
+          <div
+            class="customer p-10"
+            v-for="(customer, index) in customers"
+            :key="index"
+            @click="getCustomer(customer)"
+            :style="customer.isSelect && { 'border-left': '3px solid #de0b0b' }"
+          >
             <div class="">
               <div class="d-flex justify_between pb-10">
                 <div class="d-flex justify_between">
                   <img :src="getImage(customer.img)" />
                   <div class="customer_message_seen"></div>
-                  <p class="pl-10"> {{customer.name}} </p>
+                  <p class="pl-10">{{ customer.name }}</p>
                 </div>
-                <span style="color: #64748b; font-size: 11px"> {{customer.lastSeen}} </span>
+                <span style="color: #64748b; font-size: 11px">
+                  {{ customer.lastSeen }}
+                </span>
               </div>
               <p style="color: #64748b; font-size: 11px">
-                {{customer.newMessage}}
+                {{ customer.newMessage }}
               </p>
             </div>
           </div>
-        
         </div>
       </div>
       <div class="chats ml-20" v-if="customer.name">
@@ -42,8 +49,10 @@
             <img :src="getImage(customer.img)" />
             <div class="chat_seen"></div>
             <div class="pl-10">
-              <p>{{customer.name}} </p>
-              <span style="color: #64748b; font-size: 11px">{{customer.lastSeen}} </span>
+              <p>{{ customer.name }}</p>
+              <span style="color: #64748b; font-size: 11px"
+                >{{ customer.lastSeen }}
+              </span>
             </div>
           </div>
           <div>
@@ -93,57 +102,109 @@
           </div>
         </div>
       </div>
-       <div class="w-100 d-flex justify_center" v-else>
-      <h4>Click a client to view chats</h4>
+      <div class="w-100 d-flex justify_center" v-else>
+        <h4>Click a client to view chats</h4>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue';
 
- interface property {
-  name: String,
-  newMessage: String,
-  img: String,
-  lastSeen: String,
-  isSelect: Boolean,
-  }
+interface property {
+  name: String;
+  newMessage: String;
+  img: String;
+  lastSeen: String;
+  isSelect: Boolean;
+}
 
 export default Vue.extend({
-  name: "AccountPage",
+  name: 'AccountPage',
 
   data() {
     return {
-      search: "" as string,
-      text: "" as string,
+      search: '' as string,
+      text: '' as string,
       customers: [
-        {name: "James Babatunde", newMessage: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Risus a nunc, etiam ut ut vitae mattis.', isSelect: false, lastSeen: '2 mins ago', img: 'customer1.png'},
-        {name: "Martin Yeboah", newMessage: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Risus a nunc, etiam ut ut vitae mattis.', isSelect: false, lastSeen: '2 mins ago', img: 'customer2.png'},
-        {name: "Kwadwo Asare", newMessage: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Risus a nunc, etiam ut ut vitae mattis.', isSelect: false, lastSeen: '2 mins ago', img: 'customer3.png'},
-        {name: "Agbeko Sly", newMessage: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Risus a nunc, etiam ut ut vitae mattis.', isSelect: false, lastSeen: '2 mins ago', img: 'customer1.png'},
-        {name: " Joyce Kutah", newMessage: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Risus a nunc, etiam ut ut vitae mattis.', isSelect: false, lastSeen: '2 mins ago', img: 'customer1.png'},
-        {name: "Agbeko Sly", newMessage: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Risus a nunc, etiam ut ut vitae mattis.', isSelect: false, lastSeen: '2 mins ago', img: 'customer2.png'},
-        {name: "Agbeko Sly", newMessage: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Risus a nunc, etiam ut ut vitae mattis.', isSelect: false, lastSeen: '2 mins ago', img: 'customer3.png'},
+        {
+          name: 'James Babatunde',
+          newMessage:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Risus a nunc, etiam ut ut vitae mattis.',
+          isSelect: false,
+          lastSeen: '2 mins ago',
+          img: 'customer1.png',
+        },
+        {
+          name: 'Martin Yeboah',
+          newMessage:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Risus a nunc, etiam ut ut vitae mattis.',
+          isSelect: false,
+          lastSeen: '2 mins ago',
+          img: 'customer2.png',
+        },
+        {
+          name: 'Kwadwo Asare',
+          newMessage:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Risus a nunc, etiam ut ut vitae mattis.',
+          isSelect: false,
+          lastSeen: '2 mins ago',
+          img: 'customer3.png',
+        },
+        {
+          name: 'Agbeko Sly',
+          newMessage:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Risus a nunc, etiam ut ut vitae mattis.',
+          isSelect: false,
+          lastSeen: '2 mins ago',
+          img: 'customer1.png',
+        },
+        {
+          name: ' Joyce Kutah',
+          newMessage:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Risus a nunc, etiam ut ut vitae mattis.',
+          isSelect: false,
+          lastSeen: '2 mins ago',
+          img: 'customer1.png',
+        },
+        {
+          name: 'Agbeko Sly',
+          newMessage:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Risus a nunc, etiam ut ut vitae mattis.',
+          isSelect: false,
+          lastSeen: '2 mins ago',
+          img: 'customer2.png',
+        },
+        {
+          name: 'Agbeko Sly',
+          newMessage:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Risus a nunc, etiam ut ut vitae mattis.',
+          isSelect: false,
+          lastSeen: '2 mins ago',
+          img: 'customer3.png',
+        },
       ],
-      customer: {}
-
+      customer: {} as any,
     };
   },
   computed: {
     isValid() {},
   },
   methods: {
-      getImage(pic: string): string {
-      return require("../assets/img/" + pic);
+    getImage(pic: string): string {
+      return require('../assets/img/' + pic);
     },
-    getCustomer(newCustomer:property ) {
-       this.customers.filter(customer => customer.name === newCustomer.name ? customer.isSelect = true : customer.isSelect = false);
-       this.customer = newCustomer
+    getCustomer(newCustomer: property) {
+      this.customers.filter((customer: { name: String; isSelect: boolean }) =>
+        customer.name === newCustomer.name
+          ? (customer.isSelect = true)
+          : (customer.isSelect = false)
+      );
+      this.customer = newCustomer;
     },
     submitAccount() {
-      console.log("submit");
+      console.log('submit');
     },
   },
 });
@@ -181,8 +242,7 @@ export default Vue.extend({
       .customer {
         border-bottom: 1px solid #e2e8f0;
         cursor: pointer;
-       
-          
+
         .customer_message_seen {
           width: 7px;
           height: 7px;
@@ -192,7 +252,6 @@ export default Vue.extend({
           left: -12px;
           top: 15px;
         }
-        
       }
     }
   }

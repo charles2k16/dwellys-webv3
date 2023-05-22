@@ -6,26 +6,38 @@
       title="Error with signing in"
       type="error"
       description="Verify your email address to continue"
-      show-icon>
+      show-icon
+    >
     </el-alert>
-    <el-form ref="loginForm" :model="loginForm" label-position="top" :rules="validation">
+    <el-form
+      ref="loginForm"
+      :model="loginForm"
+      label-position="top"
+      :rules="validation"
+    >
       <el-form-item label="Email address" prop="email">
         <el-input
           v-model="loginForm.email"
           placeholder="Enter email"
-          prefix-icon="el-icon-message" />
+          prefix-icon="el-icon-message"
+        />
       </el-form-item>
       <el-form-item label="Password">
         <el-input
           v-model="loginForm.password"
           type="password"
           placeholder="Enter your password"
-          show-password>
+          show-password
+        >
         </el-input>
       </el-form-item>
       <NuxtLink to="/reset_password"><p>Forgotten password ?</p></NuxtLink>
       <div class="mt-20">
-        <el-button type="primary" class="btn_lg" @click="signIn" :loading="btnLoading"
+        <el-button
+          type="primary"
+          class="btn_lg"
+          @click="signIn"
+          :loading="btnLoading"
           >Continue</el-button
         >
       </div>

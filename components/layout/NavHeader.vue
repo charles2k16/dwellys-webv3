@@ -18,7 +18,8 @@
         </div>
         <div
           class="header_content hidden-sm-and-down"
-          v-if="$auth.user && $auth.user.user_type == 'visitor'">
+          v-if="$auth.user && $auth.user.user_type == 'visitor'"
+        >
           <span class="pl-10 flash">
             <NuxtLink to="/become_a_lister">List your property now</NuxtLink>
           </span>
@@ -35,7 +36,8 @@
             stroke="currentColor"
             fill="none"
             stroke-linecap="round"
-            stroke-linejoin="round">
+            stroke-linejoin="round"
+          >
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <line x1="4" y1="6" x2="20" y2="6" />
             <line x1="10" y1="12" x2="20" y2="12" />
@@ -58,13 +60,14 @@
                     v-if="$auth.user.avatar"
                     :src="$auth.user.avatar"
                     alt="avatar"
-                    class="user_avatar" />
-                  <img src="~/assets/img/user_icon.png" alt="icon" v-else />
+                    class="user_avatar"
+                  />
+                  <img src="/user.png" alt="icon" width="25px" v-else />
                 </span>
 
                 <span v-else class="align_center">
                   <span class="mr-10">Login</span>
-                  <img src="~/assets/img/user_icon.png" alt="icon" />
+                  <img src="/user.png" alt="icon" width="25px" />
                 </span>
               </span>
             </span>
@@ -84,7 +87,8 @@
                 <p
                   class="py-10"
                   @click="$router.push('/property_upload')"
-                  v-if="$auth.user && $auth.user.user_type == 'lister'">
+                  v-if="$auth.user && $auth.user.user_type == 'lister'"
+                >
                   Property Upload
                 </p>
               </el-dropdown-item>
@@ -93,7 +97,9 @@
                   List your property now
                 </p>
               </el-dropdown-item>
-              <el-dropdown-item v-if="$auth.user && $auth.user.user_type == 'visitor'">
+              <el-dropdown-item
+                v-if="$auth.user && $auth.user.user_type == 'visitor'"
+              >
                 <p class="py-10" @click="$router.push('/become_a_lister')">
                   List your property now
                 </p>
@@ -111,7 +117,8 @@
       :visible.sync="drawer"
       :direction="direction"
       :before-close="handleClose"
-      :append-to-body="true">
+      :append-to-body="true"
+    >
       <div class="px-20">
         <span class="login-avatar" v-if="$auth.loggedIn">
           <span class="d-flex align_center">
@@ -119,7 +126,8 @@
               v-if="$auth.user.avatar"
               :src="$auth.user.avatar"
               alt="avatar"
-              class="user_avatar" />
+              class="user_avatar"
+            />
             <img src="~/assets/img/user_icon.png" alt="icon" v-else />
 
             <span class="ml-5">
