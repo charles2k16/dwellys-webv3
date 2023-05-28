@@ -4,3 +4,5 @@ declare module '*.vue' {
 }
 
 declare module 'vue-phone-number-input'
+
+declare module 'google-maps'

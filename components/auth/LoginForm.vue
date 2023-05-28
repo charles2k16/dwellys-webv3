@@ -1,14 +1,16 @@
 <template>
   <div class="login_content">
     <div class="login_form">
-      <el-alert
-        v-if="error"
-        title="Error with signing in"
-        type="error"
-        :description="errorMessage"
-        show-icon
-      >
-      </el-alert>
+      <div v-if="error">
+        <el-alert
+          title="Error with signing in"
+          type="error"
+          :description="errorMessage"
+          show-icon
+        >
+        </el-alert>
+        <el-button size="mini" type="primary">Resend Email</el-button>
+      </div>
       <br />
       <el-form
         ref="loginForm"
@@ -155,8 +157,11 @@ export default Vue.extend({
           this.btnLoading = false;
           this.mixinState.catchError(error);
           if (error?.response) {
-            this.error = true;
-            this.errorMessage = 'Invalid Credentials';
+            this.$notify({
+              title: 'Error',
+              message: 'Error with signing in',
+              type: 'error',
+            });
           }
         });
     },

@@ -3,7 +3,9 @@
     <hr class="hr_rule" />
     <el-row class="mt-10">
       <el-col :md="8" :sm="24">
-        <p class="pb-20 right_reserved">&copy; Dwellys 2022, All rights reserved</p>
+        <p class="pb-20 right_reserved">
+          &copy; Dwellys 2022, All rights reserved
+        </p>
         <p class="trademark_text text-grey">
           Dwellys is a registered trademark and the trading name of Dwellys
           Limited.(v-1.0.0)
@@ -17,9 +19,9 @@
         </ul>
       </el-col>
       <el-col class="media_holder" :md="8" :sm="24">
-        <span> <img src="~/assets/img/media_instagram.png" /></span>
-        <span> <img src="~/assets/img/media_facebook.png" /></span>
-        <span> <img src="~/assets/img/media_twitter.png" /></span>
+        <span> <img src="/instagram.png" width="25px" /></span>
+        <span> <img src="/facebook.png" width="25px" /></span>
+        <span> <img src="/twitter.png" width="25px" /></span>
       </el-col>
     </el-row>
   </footer>
@@ -61,9 +63,6 @@ p {
 
     span {
       margin-right: 20px;
-    }
-    .img {
-      width: 35px;
     }
   }
 

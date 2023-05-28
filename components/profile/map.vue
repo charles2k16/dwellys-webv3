@@ -37,7 +37,7 @@ export default Vue.extend({
       // { lat: -25.344, lng: 131.031 }
       const uluru = { lat: parseFloat(this.lat), lng: parseFloat(this.lng) };
       // The map, centered at Uluru
-      const map = new google.maps.Map(this.$refs['map'] as HTMLElement, {
+      const map: any = new google.maps.Map(this.$refs['map'] as HTMLElement, {
         zoom: 20,
         center: uluru,
       });

@@ -19,9 +19,9 @@
         </ul>
       </el-col>
       <el-col class="media_holder" :md="8" :sm="24">
-        <span> <img src="~/assets/img/media_instagram.jpg" /></span>
-        <span> <img src="~/assets/img/media_facebook.jpg" /></span>
-        <span> <img src="~/assets/img/media_twitter.jpg" /></span>
+        <span> <img src="/instagram.png" width="25px" /></span>
+        <span> <img src="/facebook.png" width="25px" /></span>
+        <span> <img src="/twitter.png" width="25px" /></span>
       </el-col>
     </el-row>
   </footer>
@@ -63,9 +63,6 @@ p {
 
     span {
       margin-right: 20px;
-    }
-    .img {
-      width: 35px;
     }
   }
 

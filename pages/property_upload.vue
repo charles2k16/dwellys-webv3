@@ -325,6 +325,7 @@
                 v-model="propertyUpload.price"
                 type="number"
                 placeholder="200"
+                @input="onAmountChange"
               >
                 <template slot="prepend">GH&#8373; </template>
                 <template slot="append" v-if="category == 'Rent'"
@@ -393,7 +394,7 @@ import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 import { IMixinState } from '@/types/mixinsTypes';
 import ApplicationHandler from '@/handlers/ApplicationHandler.vue';
 import regionsAndCities from '@/static/regions.json';
-import Map from '../components/Properties/map.vue';
+import Map from '@/components/Properties/map.vue';
 // const apiKey = process.env.GOOGLE_API_KEY;
 
 export default Vue.extend({
@@ -577,7 +578,6 @@ export default Vue.extend({
       // this.propertyUpload.plan = plan.price;
     },
     toggleUpload(event: any) {
-      console.log(event.target.files[0]);
       const file = event.target.files[0];
       if (file.size >= 5000000) {
         this.imageErr = 'Each image must not exceed 5 Mb.';
@@ -607,7 +607,23 @@ export default Vue.extend({
     },
     addSpecSection() {
       let newSection = { name: '', number: 0 };
-      this.propertyUpload.other_specifications.push(newSection);
+      // check if there are no name duplicates in the this.propertyUpload.other_specifications array
+      if (this.propertyUpload.other_specifications.length > 0) {
+        let specNames = this.propertyUpload.other_specifications.map(
+          (spec: any) => spec.name
+        );
+        if (specNames.includes(newSection.name)) {
+          (this as any as IMixinState).getNotification(
+            'Specification name already exists!',
+            'warning'
+          );
+          return;
+        } else {
+          this.propertyUpload.other_specifications.push(newSection);
+        }
+      } else {
+        this.propertyUpload.other_specifications.push(newSection);
+      }
     },
     async getProperty(newProperty: any) {
       this.propertyUpload.property_type_id = newProperty.id;
@@ -675,7 +691,7 @@ export default Vue.extend({
         const propertyResponse = await this.$listingApi.create(
           this.propertyUpload
         );
-        console.log('property upload', propertyResponse);
+
         // const imageListing = await this.$listingImagesApi.create({
         //   listing_id: propertyResponse.data.id,
         //   listing_photos: this.listing_photos,
@@ -709,6 +725,12 @@ export default Vue.extend({
           });
         }
         // (this as any as IMixinState).catchError(error);
+      }
+    },
+    onAmountChange(amount: number) {
+      if (amount < 0) {
+        amount = 0;
+        this.propertyUpload.price = amount;
       }
     },
   },

@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { google } from 'google-maps';
+import {} from 'google-maps';
 
 export default Vue.extend({
   name: 'map',
@@ -39,7 +39,10 @@ export default Vue.extend({
   methods: {
     newLocation() {
       // let geocoder = new google.maps.Geocoder();
-      var latlng = new google.maps.LatLng(5.627703749893443, -0.08697846429555343);
+      var latlng = new google.maps.LatLng(
+        5.627703749893443,
+        -0.08697846429555343
+      );
 
       var mapOptions = {
         zoom: 14,
@@ -68,7 +71,9 @@ export default Vue.extend({
         infoWindow = new google.maps.InfoWindow({
           position: mapsMouseEvent.latLng,
         });
-        infoWindow.setContent(JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2));
+        infoWindow.setContent(
+          JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
+        );
 
         const geoCode = {
           latitude: mapsMouseEvent.latLng.lat(),

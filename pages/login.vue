@@ -1,14 +1,17 @@
 <template>
   <div class="login_form">
     <h2 class="center pb-20">Login</h2>
-    <el-alert
-      v-if="showVerifyInfo"
-      title="Error with signing in"
-      type="error"
-      description="Verify your email address to continue"
-      show-icon
-    >
-    </el-alert>
+    <div v-if="showVerifyInfo">
+      <el-alert
+        title="Error with signing in"
+        type="error"
+        description="Verify your email address to continue"
+        show-icon
+      >
+      </el-alert>
+      <el-button size="mini" type="primary">Resend Email</el-button>
+    </div>
+
     <el-form
       ref="loginForm"
       :model="loginForm"

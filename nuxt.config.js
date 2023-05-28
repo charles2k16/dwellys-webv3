@@ -1,3 +1,5 @@
+// eslint-disable-next-line nuxt/no-cjs-in-config
+const webpack = require('webpack');
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
@@ -102,6 +104,16 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     transpile: [/^element-ui/],
+    extend(config, { isDev, isClient }) {
+      // Disable displaying error page in production
+      if (!isDev && isClient) {
+        config.plugins.push(
+          new webpack.DefinePlugin({
+            'process.env.DISABLE_ERROR_PAGE': JSON.stringify(true),
+          })
+        );
+      }
+    },
   },
   auth: {
     strategies: {
@@ -111,6 +123,11 @@ export default {
           global: true,
           required: true,
           type: 'Bearer',
+          maxAge: 10800,
+        },
+        refreshToken: {
+          property: false,
+          maxAge: 60 * 60 * 24 * 30,
         },
         user: {
           property: false,
