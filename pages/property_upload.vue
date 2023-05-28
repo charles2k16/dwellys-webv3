@@ -606,22 +606,28 @@ export default Vue.extend({
       this.propertyUpload.longitude = position.coords.longitude;
     },
     addSpecSection() {
-      let newSection = { name: '', number: 0 };
-      // check if there are no name duplicates in the this.propertyUpload.other_specifications array
-      if (this.propertyUpload.other_specifications.length > 0) {
-        let specNames = this.propertyUpload.other_specifications.map(
-          (spec: any) => spec.name
-        );
-        if (specNames.includes(newSection.name)) {
-          (this as any as IMixinState).getNotification(
-            'Specification name already exists!',
-            'warning'
-          );
-          return;
+      const specData = this.propertyUpload.other_specifications;
+      const duplicateNames = [];
+      const nameSet = new Set();
+
+      for (const obj of specData) {
+        const { name } = obj;
+
+        if (nameSet.has(name)) {
+          duplicateNames.push(name);
         } else {
-          this.propertyUpload.other_specifications.push(newSection);
+          nameSet.add(name);
         }
+      }
+
+      if (duplicateNames.length > 0) {
+        this.$notify({
+          type: 'error',
+          title: 'Error!',
+          message: 'Duplicate specification name',
+        });
       } else {
+        let newSection = { name: '', number: 0 };
         this.propertyUpload.other_specifications.push(newSection);
       }
     },
