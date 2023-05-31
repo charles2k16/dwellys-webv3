@@ -15,12 +15,17 @@
       <el-input
         v-model="message"
         placeholder="Write a message to send"
-        type="textarea"></el-input>
+        type="textarea"
+      ></el-input>
     </el-form>
     <div class="d-flex justify_end pt-20">
       <el-button type="info" @click="cancelMessage">Cancel</el-button>
-      <a :href="`https://wa.me/${contact}?text=${message}?url${user.url}`" target="_blank"
-        ><el-button type="primary" @click="sendMessage">Send message</el-button></a
+      <a
+        :href="`https://wa.me/${contact}?text=${message}?url${user.url}`"
+        target="_blank"
+        ><el-button type="primary" @click="sendMessage"
+          >Whatsapp Agent</el-button
+        ></a
       >
     </div>
   </el-row>

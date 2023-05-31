@@ -101,12 +101,6 @@
           <div>
             <img :src="modalImage" class="carousel_image" />
           </div>
-          <!-- <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="dialogVisible = false"
-            >Confirm</el-button
-          >
-        </span> -->
         </el-dialog>
         <div class="align_center mb-10 pt-10">
           <div class="arrow_back">
@@ -687,7 +681,7 @@ export default Vue.extend({
     },
     async queryProperty() {
       try {
-        const similarProperties = await this.$querySearchApi.query(
+        const similarProperties = await this.$querySearchApi.searchProperty(
           this.search_property.search_query
         );
         console.log(similarProperties);

@@ -196,7 +196,7 @@
               <div>
                 <el-button type="primary" style="width: 100%" @click="showOwner"
                   ><p class="d-flex justify_between">
-                    Send a message<span
+                    Whatsapp Agent<span
                       class="material-icons"
                       style="color: white"
                     >
