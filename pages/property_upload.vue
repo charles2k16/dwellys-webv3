@@ -186,6 +186,7 @@
               style="display: none"
               id="img"
               accept="image/x-png,image/jpeg"
+              multiple
             />
             <label
               for="img"
@@ -692,16 +693,16 @@ export default Vue.extend({
     async submitUpload() {
       this.btnLoading = true;
       try {
-        // console.log(this.propertyUpload);
+        console.log(this.propertyUpload);
 
         const propertyResponse = await this.$listingApi.create(
           this.propertyUpload
         );
 
-        // const imageListing = await this.$listingImagesApi.create({
-        //   listing_id: propertyResponse.data.id,
-        //   listing_photos: this.listing_photos,
-        // });
+        await this.$listingImagesApi.create({
+          listing_id: propertyResponse.data.id,
+          listing_photos: this.listing_photos,
+        });
         this.btnLoading = false;
         if (this.percentage_fraction != 100) {
           this.$router.replace({
