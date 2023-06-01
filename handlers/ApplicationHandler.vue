@@ -32,7 +32,7 @@
       custom-class="mobile-modal"
     >
       <template slot="title">
-        <h3>Send a message</h3>
+        <h3>Whatsapp Agent</h3>
       </template>
       <SendMessage :user="user" @closeMessageModal="messageModal = false" />
     </el-dialog>

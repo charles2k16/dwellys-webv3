@@ -316,7 +316,7 @@
               <div>
                 <el-button type="primary" style="width: 100%" @click="showOwner"
                   ><p class="d-flex justify_between">
-                    Send a message<span class="material-icons">
+                    Whatsapp Agent<span class="material-icons">
                       arrow_forward
                     </span>
                   </p></el-button
