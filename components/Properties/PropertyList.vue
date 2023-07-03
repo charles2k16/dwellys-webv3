@@ -6,13 +6,15 @@
         :sm="8"
         v-for="property in listings"
         :key="property.id"
-        class="mt-20">
+        class="mt-20"
+      >
         <!-- v-if="property.listing_detail.name == type" -->
         <el-card shadow="hover" class="property_container">
           <div
             class="property_image"
             :style="background_style(property.photos)"
-            @click.self="openPropertyDetails(property)">
+            @click.self="openPropertyDetails(property)"
+          >
             <div class="d-flex justify_between p-10">
               <p class="property_type">
                 <span>{{ property.listing_detail.category.name }}</span>
@@ -21,11 +23,13 @@
                 <span
                   class="material-icons fav-icon"
                   :style="
-                    favProperties && favProperties.some(fav => fav.id == property.id)
+                    favProperties &&
+                    favProperties.some(fav => fav.id == property.id)
                       ? { color: 'red' }
                       : { color: 'white' }
                   "
-                  @click="favProperty(property)">
+                  @click="favProperty(property)"
+                >
                   favorite
                 </span>
               </span>
@@ -35,7 +39,9 @@
             <div class="d-flex justify_between">
               <p class="property_amount">
                 GH₵ {{ property.listing_detail.price
-                }}<b v-if="property.listing_detail.category.name == 'Rent'">/mth</b>
+                }}<b v-if="property.listing_detail.category.name == 'Rent'"
+                  >/mth</b
+                >
               </p>
               <!-- <p class="property_name">House</p> -->
             </div>
@@ -51,7 +57,8 @@
             <div
               class="pl-5 pt-5 d-flex justify_start"
               v-for="specification in property.property_specifications"
-              :key="specification.id">
+              :key="specification.id"
+            >
               <div>
                 <span class="d-flex align_center">
                   <span class="material-icons mr-5 speci_icon">bed</span>
@@ -60,13 +67,13 @@
                 <p class="d-block">{{ specification.specification.name }}</p>
               </div>
               <div class="vr mt-15"></div>
-              <div>
+              <!-- <div>
                 <span class="d-flex align_center">
                   <span class="material-icons mr-5 speci_icon">bathtub</span>
                   <b style="font-size: 14px">{{ specification.number }} </b>
                 </span>
                 <p class="d-block">Bathrooms</p>
-              </div>
+              </div> -->
 
               <!-- <img
                   v-if="
@@ -169,7 +176,9 @@ export default Vue.extend({
       if (this.$auth.loggedIn) {
         let singleProperty = Object.assign([], this.favProperties);
         if (this.favProperties) {
-          let favIndex = this.favProperties.findIndex((prop: any) => prop.id == fav.id);
+          let favIndex = this.favProperties.findIndex(
+            (prop: any) => prop.id == fav.id
+          );
 
           singleProperty.includes(fav)
             ? this.favProperties.splice(favIndex, 1)
